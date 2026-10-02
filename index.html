@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus Home Finance</title>
+<style>
+:root{
+  --bg:#0b0a12;--panel:#12101b;--panel2:#181523;--line:#292438;--text:#f6f3ff;--muted:#9c96ad;
+  --purple:#8b5cf6;--purple2:#a78bfa;--orange:#fb923c;--green:#34d399;--red:#fb7185;--blue:#60a5fa;
+  --shadow:0 18px 45px rgba(0,0,0,.28);--radius:20px
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 20% -10%,#211642 0,#0b0a12 35%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{display:flex;min-height:100vh}
+.sidebar{width:250px;background:rgba(12,10,19,.92);border-right:1px solid var(--line);padding:22px 16px;position:fixed;inset:0 auto 0 0;z-index:20}
+.logo{font-weight:900;font-size:20px;display:flex;align-items:center;gap:10px;padding:10px 8px 25px}.logo-mark{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--purple),var(--orange));display:grid;place-items:center;font-weight:900}
+.nav button{width:100%;text-align:left;background:transparent;color:var(--muted);padding:13px 14px;border-radius:12px;margin:3px 0}.nav button:hover,.nav button.active{background:#1c1729;color:#fff}.nav i{display:inline-block;width:25px;font-style:normal}
+.main{margin-left:250px;width:calc(100% - 250px);padding:25px;max-width:1800px;margin-right:auto}.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:22px}.title h1{font-size:27px;margin:0 0 5px}.title p{margin:0;color:var(--muted);font-size:13px}.actions{display:flex;gap:9px;flex-wrap:wrap}.btn{background:#211c2d;color:#fff;border:1px solid var(--line);padding:10px 14px;border-radius:12px;font-weight:700}.btn:hover{border-color:#5c4c79}.btn.primary{background:linear-gradient(135deg,#7c3aed,#9b6cff);border-color:transparent}.btn.ghost{background:transparent}.btn.danger{color:#ff9aaa}
+.filterbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;background:rgba(18,16,27,.78);border:1px solid var(--line);padding:12px;border-radius:16px;margin-bottom:18px}.filterbar label{font-size:11px;color:var(--muted)}.field{display:flex;flex-direction:column;gap:6px}.input,.select,.textarea{background:#0d0b14;color:#fff;border:1px solid #302a3d;border-radius:10px;padding:10px 11px;outline:none;width:100%}.input:focus,.select:focus,.textarea:focus{border-color:var(--purple)}.filterbar .field{min-width:140px}
+.grid{display:grid;gap:16px}.kpis{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:16px}.card{background:linear-gradient(180deg,rgba(24,21,35,.96),rgba(16,14,24,.96));border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}.kpi{min-height:140px;position:relative;overflow:hidden}.kpi:after{content:"";position:absolute;width:90px;height:90px;border-radius:50%;right:-30px;top:-30px;background:rgba(139,92,246,.1)}.kpi .label{font-size:12px;color:var(--muted)}.kpi .value{font-size:28px;font-weight:900;margin-top:16px}.kpi .sub{font-size:11px;color:var(--muted);margin-top:7px}.income .value{color:#c4b5fd}.expense .value{color:#fb923c}.saving .value{color:#34d399}.available .value{color:#60a5fa}
+.section-grid{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:16px}.section-grid.full{grid-template-columns:1fr}.section-grid > .card:first-child{align-self:start}.wide{grid-column:1/-1}.card-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:15px}.card-head h2{font-size:16px;margin:0}.card-head span{font-size:11px;color:var(--muted)}.head-actions{display:flex;gap:7px}.mini-btn{padding:7px 9px;border-radius:9px;background:#211c2d;color:#ddd;border:1px solid var(--line);font-size:11px}
+.people{display:grid;grid-template-columns:1fr 1fr;gap:12px}.person{background:#0e0c15;border:1px solid #272233;border-radius:15px;padding:14px}.person .name{font-size:12px;color:var(--muted)}.person .amount{font-size:20px;font-weight:800;margin:6px 0 10px}.person button{width:100%}
+.chart-wrap{min-height:190px;position:relative}.donut{width:150px;height:150px;border-radius:50%;margin:auto;position:relative;background:conic-gradient(var(--purple) 0 50%,var(--orange) 50% 100%)}.donut:after{content:"";position:absolute;inset:30px;background:#13101c;border-radius:50%}.donut-center{position:absolute;inset:0;display:grid;place-items:center;z-index:2;font-weight:800;font-size:12px}.donut-layout{display:grid;grid-template-columns:180px 1fr;align-items:center;gap:20px}.legend{display:grid;gap:9px}.legend-row{display:flex;justify-content:space-between;gap:10px;font-size:12px}.dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:7px}.bar-chart{display:flex;align-items:flex-end;gap:8px;height:190px;padding:10px 2px;border-bottom:1px solid #2a2534}.bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px;height:100%}.bar-fill{width:70%;max-width:34px;border-radius:8px 8px 2px 2px;background:linear-gradient(180deg,var(--purple2),var(--purple));min-height:3px}.bar small{color:var(--muted);font-size:9px}.bar em{font-style:normal;font-size:9px;color:#ddd}
+.list{display:grid;gap:8px}.list-row{display:grid;grid-template-columns:1fr 90px 80px 36px;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #211d2b;font-size:12px}.list-row:last-child{border-bottom:0}.pct{color:var(--muted);font-size:10px}.category-btn{background:#211c2d;color:#fff;border:1px solid var(--line);border-radius:8px;padding:6px}
+.savings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.saving-card{background:#0e0c15;border:1px solid #272233;border-radius:15px;padding:13px}.saving-card h3{font-size:12px;margin:0 0 10px}.progress{height:9px;background:#272332;border-radius:20px;overflow:hidden}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--green),#7dd3fc);border-radius:20px}.saving-meta{display:flex;justify-content:space-between;margin-top:8px;font-size:10px;color:var(--muted)}.target{display:flex;gap:8px;margin-top:12px}
+.availability{display:grid;grid-template-columns:1fr 1fr;gap:12px}.availability .person-card{background:#0e0c15;border:1px solid #272233;border-radius:15px;padding:15px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.stat{background:#171321;border-radius:10px;padding:9px}.stat b{display:block;font-size:13px;margin-top:3px}.stat small{color:var(--muted);font-size:9px}.detail-btn{font-size:10px;background:none;color:var(--purple2);padding:0}.future-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.goal{background:#0e0c15;border:1px solid #272233;border-radius:15px;padding:14px}.goal h3{margin:0;font-size:14px}.goal p{font-size:10px;color:var(--muted);min-height:30px}.goal .money{font-weight:800;margin:8px 0}.goal-actions{display:flex;gap:6px;margin-top:12px}.empty{padding:25px;text-align:center;color:var(--muted);font-size:12px}.hidden{display:none!important}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(7px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}.modal.show{display:flex}.modal-box{width:min(780px,100%);max-height:92vh;overflow:auto;background:#14111e;border:1px solid #332c43;border-radius:20px;box-shadow:0 30px 80px #000;padding:20px}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.modal-head h3{margin:0}.close{background:#211c2d;color:#fff;width:34px;height:34px;border-radius:10px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.form-grid .full{grid-column:1/-1}.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.history{margin-top:18px}.history-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:9px}.history-list{display:grid;gap:6px}.record{display:grid;grid-template-columns:100px 1fr 120px 70px;gap:7px;align-items:center;background:#0d0b14;border:1px solid #25202f;padding:9px;border-radius:10px;font-size:11px}.record-actions{display:flex;gap:4px}.record-actions button{padding:5px 6px;border-radius:7px;background:#211c2d;color:#fff;font-size:10px}
+.toast{position:fixed;right:22px;bottom:22px;background:#1d1829;border:1px solid #493b61;padding:12px 15px;border-radius:12px;z-index:300;box-shadow:var(--shadow);font-size:12px;transform:translateY(20px);opacity:0;transition:.25s}.toast.show{transform:none;opacity:1}
+.mobile-menu{display:none}.small{font-size:10px;color:var(--muted)}.positive{color:var(--green)}.negative{color:var(--red)}
+@media(max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}.future-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:800px){
+ .sidebar{transform:translateX(-100%);transition:.25s}.sidebar.open{transform:none}.main{margin-left:0;width:100%;padding:16px}.mobile-menu{display:block}.topbar{align-items:flex-start}.section-grid{grid-template-columns:1fr}.people,.availability{grid-template-columns:1fr}.savings-grid{grid-template-columns:1fr}.donut-layout{grid-template-columns:1fr}.future-grid{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:auto}.record{grid-template-columns:1fr 1fr}.record .record-actions{grid-column:1/-1}.kpis{grid-template-columns:1fr 1fr}
+}
+@media(max-width:520px){.kpis{grid-template-columns:1fr}.future-grid{grid-template-columns:1fr}.filterbar .field{min-width:100px;flex:1}.actions{width:100%}.actions .btn{flex:1}.stats{grid-template-columns:1fr}.title h1{font-size:22px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="logo"><div class="logo-mark">₿</div><div>Nexus Finance<div class="small">Hogar & Personal</div></div></div>
+  <nav class="nav">
+    <button class="active" onclick="scrollToId('dashboard')"><i>⌂</i>Dashboard</button>
+    <button onclick="openIncome('me')"><i>↗</i>Mis ingresos</button>
+    <button onclick="openIncome('partner')"><i>↗</i>Ingresos pareja</button>
+    <button onclick="openExpensePicker()"><i>↘</i>Gastos del hogar</button>
+    <button onclick="openSavingPicker()"><i>◈</i>Ahorros</button>
+    <button onclick="scrollToId('goals')"><i>◎</i>Metas a futuro</button>
+    <button onclick="openSettings()"><i>⚙</i>Configuración</button>
+  </nav>
+</aside>
+
+<main class="main" id="dashboard">
+<header class="topbar">
+  <div class="title"><h1>Dashboard General</h1><p>Control de tus finanzas personales y del hogar.</p></div>
+  <div class="actions">
+    <button class="btn mobile-menu" onclick="toggleSidebar()">☰</button>
+    <button class="btn" onclick="refreshDashboard()">↻ Refrescar</button>
+  </div>
+</header>
+
+<div class="filterbar">
+  <div class="field"><label>Año</label><select class="select" id="filterYear" onchange="renderAll()"></select></div>
+  <div class="field"><label>Periodo</label><select class="select" id="filterMonth" onchange="renderAll()"><option value="all">Año completo</option><option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option><option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option><option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option></select></div>
+  <button class="btn ghost" onclick="clearGeneralFilter()">Limpiar filtro</button>
+  <span class="small" id="periodLabel"></span>
+</div>
+
+<section class="grid kpis">
+ <div class="card kpi income"><div class="label">INGRESOS</div><div class="value" id="kpiIncome">$0</div><div class="sub">Total del periodo</div></div>
+ <div class="card kpi expense"><div class="label">GASTOS · HOGAR</div><div class="value" id="kpiExpense">$0</div><div class="sub">Total del periodo</div></div>
+ <div class="card kpi saving"><div class="label">AHORROS</div><div class="value" id="kpiSaving">$0</div><div class="sub">Financiero + imprevistos + emergencias</div></div>
+ <div class="card kpi available"><div class="label">DISPONIBLE</div><div class="value" id="kpiAvailable">$0</div><div class="sub">Después de hogar y ahorros</div></div>
+</section>
+
+<section class="grid section-grid">
+ <div class="card">
+  <div class="card-head"><div><h2>▣ Detalles de ingresos</h2><span>Aportes de ambos</span></div></div>
+  <div class="donut-layout">
+   <div class="donut" id="incomeDonut"><div class="donut-center">Aportes</div></div>
+   <div class="people">
+    <div class="person"><div class="name" id="meNameIncome">Yo</div><div class="amount" id="meIncome">$0</div><button class="mini-btn" onclick="openIncome('me')">+ Registrar</button></div>
+    <div class="person"><div class="name" id="partnerNameIncome">Mi pareja</div><div class="amount" id="partnerIncome">$0</div><button class="mini-btn" onclick="openIncome('partner')">+ Registrar</button></div>
+   </div>
+  </div>
+  <div style="margin-top:18px"><div class="card-head"><h2>Comparativo mensual</h2><span id="incomeComparison"></span></div><div class="bar-chart" id="incomeBars"></div></div>
+ </div>
+
+ <div class="card">
+  <div class="card-head"><div><h2>▣ Detalles gastos · Hogar</h2><span>Distribución por categoría</span></div><button class="mini-btn" onclick="openExpensePicker()">+ Gasto</button></div>
+  <div class="donut-layout">
+   <div class="donut" id="expenseDonut"><div class="donut-center">Hogar</div></div>
+   <div class="list" id="expenseList"></div>
+  </div>
+  <div style="margin-top:18px"><div class="card-head"><h2>Comparativo mensual</h2><span id="expenseComparison"></span></div><div class="bar-chart" id="expenseBars"></div></div>
+ </div>
+
+ <div class="card wide">
+  <div class="card-head"><div><h2>▣ Detalles de ahorros</h2><span>Seguimiento por objetivo</span></div><button class="mini-btn" onclick="openSavingPicker()">+ Ahorro</button></div>
+  <div class="savings-grid" id="savingsGrid"></div>
+  <div class="target"><input class="input" id="savingTarget" type="text" inputmode="numeric" placeholder="Meta mensual de ahorro"><button class="btn primary" onclick="saveSavingTarget()">Guardar meta</button></div>
+  <div style="margin-top:10px" class="small" id="savingTargetStatus"></div>
+ </div>
+
+ <div class="card wide">
+  <div class="card-head"><div><h2>▣ Detalles disponible</h2><span>Asignado · gastado · saldo</span></div></div>
+  <div class="donut-layout">
+   <div class="donut" id="availableDonut"><div class="donut-center">Disponible</div></div>
+   <div class="people" id="availablePeople"></div>
+  </div>
+ </div>
+
+ <div class="card wide">
+  <div class="card-head"><div><h2>▣ Evolución mensual</h2><span>Resumen del año seleccionado</span></div></div>
+  <div class="bar-chart" id="evolutionBars"></div>
+  <div class="small">Las barras muestran ingresos, gastos y ahorros de cada mes. Los valores aparecen al pasar el cursor.</div>
+ </div>
+</section>
+
+<section class="card" id="goals">
+ <div class="card-head"><div><h2>◎ Metas a futuro</h2><span>Máximo 4 metas</span></div><button class="btn primary" onclick="openGoal()">+ Crear meta</button></div>
+ <div class="future-grid" id="goalsGrid"></div>
+</section>
+</main>
+</div>
+
+<div class="modal" id="modal"><div class="modal-box" id="modalBox"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const CATS=["Arriendo","Mercado","Luz","Agua","Gas","Internet","Transporte","Otros"];
+const SAVINGS=[["financial","Ahorro Financiero"],["unexpected","Imprevistos"],["emergency","Emergencias"]];
+const MONTHS=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+const KEY="nexus_home_finance_v1";
+const defaultState={
+  people:{me:"Yo",partner:"Mi pareja"},
+  incomes:[],expenses:[],savings:[],
+  savingTarget:0,
+  goals:[]
+};
+let state=loadState();
+let activeModal={type:null,key:null};
+
+function loadState(){try{return {...defaultState,...JSON.parse(localStorage.getItem(KEY)||"{}")}}catch(e){return structuredClone(defaultState)}}
+function saveState(){localStorage.setItem(KEY,JSON.stringify(state))}
+function money(n){return new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(Math.round(Number(n)||0))}
+function num(v){return Number(String(v??"").replace(/[^\d]/g,""))||0}
+function dateNow(){return new Date().toISOString().slice(0,10)}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function fmtInput(v){let n=num(v);return n?new Intl.NumberFormat("es-CO").format(n):""}
+function setupYears(){
+ const sel=document.getElementById("filterYear"), old=sel.value;
+ const years=new Set([new Date().getFullYear(),...state.incomes.map(x=>new Date(x.date+"T00:00:00").getFullYear()),...state.expenses.map(x=>new Date(x.date+"T00:00:00").getFullYear()),...state.savings.map(x=>new Date(x.date+"T00:00:00").getFullYear())]);
+ sel.innerHTML=[...years].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join("");
+ sel.value=years.has(Number(old))?old:new Date().getFullYear();
+}
+function getFilter(){return {year:Number(document.getElementById("filterYear").value),month:document.getElementById("filterMonth").value}}
+function inPeriod(date,year,month="all"){let d=new Date(date+"T00:00:00");return d.getFullYear()===year&&(month==="all"||d.getMonth()+1===Number(month))}
+function filtered(arr){let f=getFilter();return arr.filter(x=>inPeriod(x.date,f.year,f.month))}
+function sum(arr){return arr.reduce((a,x)=>a+Number(x.amount||0),0)}
+function renderAll(){
+ setupYears(); const f=getFilter();
+ const inc=filtered(state.incomes), exp=filtered(state.expenses), sav=filtered(state.savings);
+ const income=sum(inc), expense=sum(exp), saving=sum(sav), available=income-exp-saving;
+ document.getElementById("kpiIncome").textContent=money(income);
+ document.getElementById("kpiExpense").textContent=money(expense);
+ document.getElementById("kpiSaving").textContent=money(saving);
+ document.getElementById("kpiAvailable").textContent=money(available);
+ document.getElementById("periodLabel").textContent=f.month==="all"?`Mostrando ${f.year}`:`Mostrando ${MONTHS[Number(f.month)-1]} ${f.year}`;
+ document.getElementById("meNameIncome").textContent=state.people.me;
+ document.getElementById("partnerNameIncome").textContent=state.people.partner;
+ document.getElementById("meIncome").textContent=money(sum(inc.filter(x=>x.person==="me")));
+ document.getElementById("partnerIncome").textContent=money(sum(inc.filter(x=>x.person==="partner")));
+ renderDonut("incomeDonut",sum(inc.filter(x=>x.person==="me")),sum(inc.filter(x=>x.person==="partner")));
+ renderExpenseList(exp);
+ renderDonut("expenseDonut",expense,0,true);
+ renderSavings(sav);
+ renderAvailable(inc,exp,sav);
+ renderBars("incomeBars",f.year,1);
+ renderBars("expenseBars",f.year,2);
+ renderEvolution(f.year);
+ renderGoals();
+ document.getElementById("savingTarget").value=state.savingTarget?fmtInput(state.savingTarget):"";
+ let target=Number(state.savingTarget)||0; document.getElementById("savingTargetStatus").textContent=target?`Meta: ${money(target)} · Avance del periodo: ${money(saving)} · ${target?Math.min(100,saving/target*100).toFixed(0):0}%`:"Sin meta mensual configurada.";
+}
+function renderDonut(id,a,b,expense=false){
+ const el=document.getElementById(id); let total=a+b;
+ if(expense){let cats=CATS.map(c=>sum(state.expenses.filter(x=>x.category===c&&inPeriod(x.date,getFilter().year,getFilter().month))));total=cats.reduce((x,y)=>x+y,0); a=cats[0]||0;b=total-a}
+ let p=total?Math.max(0,Math.min(100,a/total*100)):50;
+ el.style.background=`conic-gradient(var(--purple) 0 ${p}%,var(--orange) ${p}% 100%)`;
+}
+function renderExpenseList(exp){
+ const total=sum(exp), box=document.getElementById("expenseList");
+ box.innerHTML=CATS.map(c=>{let n=sum(exp.filter(x=>x.category===c)),p=total?n/total*100:0;return `<div class="list-row"><div><b>${c}</b><div class="pct">${p.toFixed(1)}%</div></div><b>${money(n)}</b><span class="pct">${p.toFixed(0)}%</span><button class="category-btn" onclick="openExpense('${c}')">+</button></div>`}).join("");
+}
+function renderSavings(sav){
+ const box=document.getElementById("savingsGrid"); const total=sum(sav);
+ box.innerHTML=SAVINGS.map(([key,name])=>{let n=sum(sav.filter(x=>x.type===key)),p=total?n/total*100:0;return `<div class="saving-card"><h3>${name}</h3><div style="font-size:20px;font-weight:800">${money(n)}</div><div class="small">${p.toFixed(1)}% del ahorro general</div><div class="progress" style="margin-top:10px"><i style="width:${p}%"></i></div><div class="saving-meta"><span>${p.toFixed(0)}%</span><button class="mini-btn" onclick="openSaving('${key}')">Registrar</button></div></div>`}).join("");
+}
+function renderAvailable(inc,exp,sav){
+ const meI=sum(inc.filter(x=>x.person==="me")), paI=sum(inc.filter(x=>x.person==="partner"));
+ const meE=sum(exp.flatMap(x=>[{person:"me",amount:x.meAmount}])).toFixed(0)*1;
+ const paE=sum(exp.flatMap(x=>[{person:"partner",amount:x.partnerAmount}])).toFixed(0)*1;
+ const meS=sum(sav.filter(x=>x.person==="me")),paS=sum(sav.filter(x=>x.person==="partner"));
+ const meA=meI-meE-meS,paA=paI-paE-paS;
+ renderDonut("availableDonut",Math.max(0,meA),Math.max(0,paA));
+ const box=document.getElementById("availablePeople");
+ box.innerHTML=personCard("me",state.people.me,meA)+personCard("partner",state.people.partner,paA);
+}
+function personCard(person,name,assigned){
+ const spent=state.personalSpending?sum(state.personalSpending.filter(x=>x.person===person&&inPeriod(x.date,getFilter().year,getFilter().month))):0;
+ const balance=assigned-spent, pct=assigned>0?Math.max(0,Math.min(100,balance/assigned*100)):0;
+ return `<div class="person-card"><b>${esc(name)}</b><div class="stats"><div class="stat"><small>Asignado</small><b>${money(assigned)}</b></div><div class="stat"><small>Gastado</small><b>${money(spent)} <button class="detail-btn" onclick="openPersonalSpending('${person}')">ver detalles</button></b></div><div class="stat"><small>Saldo disponible</small><b class="${balance<0?'negative':'positive'}">${money(balance)}</b></div></div><div class="progress"><i style="width:${pct}%"></i></div><div class="small" style="margin-top:6px">${pct.toFixed(0)}% del asignado disponible</div></div>`;
+}
+function renderBars(id,year,type){
+ const box=document.getElementById(id), vals=MONTHS.map((_,i)=>{
+   let arr=type===1?state.incomes:state.expenses;return sum(arr.filter(x=>{let d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i}))
+ });
+ const max=Math.max(...vals,1);
+ box.innerHTML=vals.map((v,i)=>`<div class="bar" title="${MONTHS[i]}: ${money(v)}"><em>${v?money(v).replace(/\s/g,""):''}</em><div class="bar-fill" style="height:${Math.max(v?4:1,v/max*145)}px"></div><small>${MONTHS[i].slice(0,3)}</small></div>`).join("");
+}
+function renderEvolution(year){
+ const box=document.getElementById("evolutionBars");
+ const inc=MONTHS.map((_,i)=>sum(state.incomes.filter(x=>{let d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i})));
+ const exp=MONTHS.map((_,i)=>sum(state.expenses.filter(x=>{let d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i})));
+ const sav=MONTHS.map((_,i)=>sum(state.savings.filter(x=>{let d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i})));
+ const max=Math.max(...inc,...exp,...sav,1);
+ box.innerHTML=MONTHS.map((m,i)=>`<div class="bar" title="${m} | Ingresos ${money(inc[i])} | Gastos ${money(exp[i])} | Ahorros ${money(sav[i])}"><em>${inc[i]?'●':''}</em><div class="bar-fill" style="height:${Math.max(3,inc[i]/max*145)}px"></div><small>${m.slice(0,3)}</small></div>`).join("");
+}
+function comparison(arr){
+ const f=getFilter(); if(f.month==="all")return "";
+ let m=Number(f.month), y=f.year, prev=m-1, py=y;if(prev===0){prev=12;py--}
+ const cur=sum(arr.filter(x=>inPeriod(x.date,y,m))), old=sum(arr.filter(x=>inPeriod(x.date,py,prev)));
+ if(!old)return cur?"Nuevo periodo":"Sin datos";
+ let p=(cur-old)/old*100;return `${p>=0?"▲":"▼"} ${Math.abs(p).toFixed(1)}% vs mes anterior`;
+}
+function refreshDashboard(){state=loadState();renderAll();toast("Datos actualizados desde el almacenamiento local.")}
+function clearGeneralFilter(){document.getElementById("filterYear").value=new Date().getFullYear();document.getElementById("filterMonth").value="all";renderAll()}
+function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:"smooth"});document.getElementById("sidebar").classList.remove("open")}
+function toggleSidebar(){document.getElementById("sidebar").classList.toggle("open")}
+
+function openModal(title,body){document.getElementById("modalBox").innerHTML=`<div class="modal-head"><h3>${title}</h3><button class="close" onclick="closeModal()">×</button></div>${body}`;document.getElementById("modal").classList.add("show")}
+function closeModal(){document.getElementById("modal").classList.remove("show");activeModal={type:null,key:null};renderAll()}
+document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+
+function openIncome(person,editId=null){
+ activeModal={type:"income",key:person};
+ let rec=state.incomes.find(x=>x.id===editId);
+ const title=`Ingresos · ${esc(state.people[person])}`;
+ openModal(title,`<form onsubmit="saveIncome(event,'${person}','${editId||""}')"><div class="form-grid">
+ <div class="field"><label>Fecha</label><input class="input" id="rDate" type="date" value="${rec?.date||dateNow()}" required></div>
+ <div class="field"><label>Monto</label><input class="input money-input" id="rAmount" inputmode="numeric" value="${rec?fmtInput(rec.amount):""}" placeholder="$ 0" required></div>
+ </div><div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary">${editId?"Guardar cambios":"Registrar ingreso"}</button></div></form>
+ <div class="history"><div class="history-head"><b>Historial</b><div style="display:flex;gap:6px"><select class="select" id="histYear" onchange="renderIncomeHistory('${person}')"></select><select class="select" id="histMonth" onchange="renderIncomeHistory('${person}')"><option value="all">Todo el año</option>${MONTHS.map((m,i)=>`<option value="${i+1}">${m}</option>`).join("")}</select></div></div><div class="history-list" id="historyList"></div></div>`);
+ document.getElementById("rAmount").addEventListener("input",e=>e.target.value=fmtInput(e.target.value));
+ populateHistoryYear("histYear",state.incomes);renderIncomeHistory(person);
+}
+function populateHistoryYear(id,arr){
+ const years=new Set([new Date().getFullYear(),...arr.map(x=>new Date(x.date+"T00:00:00").getFullYear())]);document.getElementById(id).innerHTML=[...years].sort((a,b)=>b-a).map(y=>`<option>${y}</option>`).join("");
+}
+function renderIncomeHistory(person){
+ const y=Number(document.getElementById("histYear").value),m=document.getElementById("histMonth").value;
+ const rows=state.incomes.filter(x=>x.person===person&&inPeriod(x.date,y,m)).sort((a,b)=>b.date.localeCompare(a.date));
+ document.getElementById("historyList").innerHTML=rows.length?rows.map(x=>`<div class="record"><span>${x.date}</span><b>${money(x.amount)}</b><span>${esc(state.people[person])}</span><div class="record-actions"><button onclick="openIncome('${person}','${x.id}')">Editar</button><button onclick="deleteRecord('income','${x.id}')">Eliminar</button></div></div>`).join(""):`<div class="empty">No hay registros para este filtro.</div>`;
+}
+function saveIncome(e,person,id){e.preventDefault();let amount=num(document.getElementById("rAmount").value);if(!amount)return toast("Ingresa un monto válido.");let rec={id:id||crypto.randomUUID(),date:document.getElementById("rDate").value,amount,person};if(id)state.incomes=state.incomes.map(x=>x.id===id?rec:x);else state.incomes.push(rec);saveState();toast(id?"Ingreso actualizado":"Ingreso registrado");openIncome(person)}
+
+function openExpensePicker(){openModal("Registrar gasto del hogar",`<div class="small" style="margin-bottom:12px">Selecciona la categoría que deseas administrar.</div><div class="future-grid">${CATS.map(c=>`<button class="btn" onclick="openExpense('${c}')">${c}</button>`).join("")}</div>`)}
+function openExpense(category,editId=null){
+ activeModal={type:"expense",key:category};let rec=state.expenses.find(x=>x.id===editId);
+ openModal(`Gastos · ${category}`,`<form onsubmit="saveExpense(event,'${category}','${editId||""}')"><div class="form-grid">
+ <div class="field"><label>Fecha</label><input class="input" id="eDate" type="date" value="${rec?.date||dateNow()}" required></div>
+ <div class="field"><label>Monto total</label><input class="input money-input" id="eAmount" inputmode="numeric" value="${rec?fmtInput(rec.amount):""}" placeholder="$ 0" required></div>
+ <div class="field full"><label>Distribución</label><select class="select" id="eDist" onchange="toggleManualDist()" required><option value="auto" ${!rec||rec.distribution==="auto"?"selected":""}>Automática · 50 / 50</option><option value="manual" ${rec?.distribution==="manual"?"selected":""}>Manual</option></select></div>
+ <div class="field manual-field ${rec?.distribution==="manual"?"":"hidden"}"><label>${esc(state.people.me)}</label><input class="input money-input" id="eMe" inputmode="numeric" value="${rec?fmtInput(rec.meAmount):""}"></div>
+ <div class="field manual-field ${rec?.distribution==="manual"?"":"hidden"}"><label>${esc(state.people.partner)}</label><input class="input money-input" id="ePartner" inputmode="numeric" value="${rec?fmtInput(rec.partnerAmount):""}"></div>
+ </div><div class="small" id="distHelp" style="margin-top:9px">En automática se descuenta la mitad a cada persona.</div>
+ <div class="form-actions"><button type="button" class="btn" onclick="openExpensePicker()">Volver</button><button class="btn primary">${editId?"Guardar cambios":"Registrar gasto"}</button></div></form>
+ <div class="history"><div class="history-head"><b>Historial · ${category}</b><div style="display:flex;gap:6px"><select class="select" id="histYear" onchange="renderExpenseHistory('${category}')"></select><select class="select" id="histMonth" onchange="renderExpenseHistory('${category}')"><option value="all">Todo el año</option>${MONTHS.map((m,i)=>`<option value="${i+1}">${m}</option>`).join("")}</select></div></div><div class="history-list" id="historyList"></div></div>`);
+ ["eAmount","eMe","ePartner"].forEach(id=>document.getElementById(id)?.addEventListener("input",e=>e.target.value=fmtInput(e.target.value)));
+ populateHistoryYear("histYear",state.expenses);renderExpenseHistory(category);
+}
+function toggleManualDist(){document.querySelectorAll(".manual-field").forEach(x=>x.classList.toggle("hidden",document.getElementById("eDist").value!=="manual"))}
+function renderExpenseHistory(category){
+ const y=Number(document.getElementById("histYear").value),m=document.getElementById("histMonth").value;
+ const rows=state.expenses.filter(x=>x.category===category&&inPeriod(x.date,y,m)).sort((a,b)=>b.date.localeCompare(a.date));
+ document.getElementById("historyList").innerHTML=rows.length?rows.map(x=>`<div class="record"><span>${x.date}</span><b>${money(x.amount)}</b><span>${x.distribution==="auto"?"50/50":money(x.meAmount)+" / "+money(x.partnerAmount)}</span><div class="record-actions"><button onclick="openExpense('${category}','${x.id}')">Editar</button><button onclick="deleteRecord('expense','${x.id}')">Eliminar</button></div></div>`).join(""):`<div class="empty">No hay registros para este filtro.</div>`;
+}
+function saveExpense(e,category,id){e.preventDefault();let amount=num(document.getElementById("eAmount").value),dist=document.getElementById("eDist").value;if(!amount)return toast("Ingresa un monto válido.");let me,pa;if(dist==="auto"){me=amount/2;pa=amount/2}else{me=num(document.getElementById("eMe").value);pa=num(document.getElementById("ePartner").value);if(Math.abs(me+pa-amount)>0.01)return toast("La distribución manual debe sumar exactamente el monto total.");}
+let rec={id:id||crypto.randomUUID(),date:document.getElementById("eDate").value,amount,category,distribution:dist,meAmount:me,partnerAmount:pa};if(id)state.expenses=state.expenses.map(x=>x.id===id?rec:x);else state.expenses.push(rec);saveState();toast(id?"Gasto actualizado":"Gasto registrado");openExpense(category)}
+
+function openSavingPicker(){openModal("Registrar ahorro",`<div class="future-grid">${SAVINGS.map(([k,n])=>`<button class="btn" onclick="openSaving('${k}')">${n}</button>`).join("")}</div>`)}
+function openSaving(type,editId=null){
+ let name=SAVINGS.find(x=>x[0]===type)?.[1]||type;let rec=state.savings.find(x=>x.id===editId);
+ openModal(`Ahorro · ${name}`,`<form onsubmit="saveSaving(event,'${type}','${editId||""}')"><div class="form-grid">
+ <div class="field"><label>Fecha</label><input class="input" id="sDate" type="date" value="${rec?.date||dateNow()}" required></div>
+ <div class="field"><label>Monto</label><input class="input money-input" id="sAmount" inputmode="numeric" value="${rec?fmtInput(rec.amount):""}" placeholder="$ 0" required></div>
+ <div class="field full"><label>Persona que realiza el abono</label><select class="select" id="sPerson"><option value="me" ${rec?.person!=="partner"?"selected":""}>${esc(state.people.me)}</option><option value="partner" ${rec?.person==="partner"?"selected":""}>${esc(state.people.partner)}</option></select></div>
+ </div><div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary">${editId?"Guardar cambios":"Registrar ahorro"}</button></div></form>
+ <div class="history"><div class="history-head"><b>Historial · ${name}</b><div style="display:flex;gap:6px"><select class="select" id="histYear" onchange="renderSavingHistory('${type}')"></select><select class="select" id="histMonth" onchange="renderSavingHistory('${type}')"><option value="all">Todo el año</option>${MONTHS.map((m,i)=>`<option value="${i+1}">${m}</option>`).join("")}</select></div></div><div class="history-list" id="historyList"></div></div>`);
+ document.getElementById("sAmount").addEventListener("input",e=>e.target.value=fmtInput(e.target.value));populateHistoryYear("histYear",state.savings);renderSavingHistory(type);
+}
+function renderSavingHistory(type){const y=Number(document.getElementById("histYear").value),m=document.getElementById("histMonth").value;const rows=state.savings.filter(x=>x.type===type&&inPeriod(x.date,y,m)).sort((a,b)=>b.date.localeCompare(a.date));document.getElementById("historyList").innerHTML=rows.length?rows.map(x=>`<div class="record"><span>${x.date}</span><b>${money(x.amount)}</b><span>${esc(state.people[x.person])}</span><div class="record-actions"><button onclick="openSaving('${type}','${x.id}')">Editar</button><button onclick="deleteRecord('saving','${x.id}')">Eliminar</button></div></div>`).join(""):`<div class="empty">No hay registros para este filtro.</div>`}
+function saveSaving(e,type,id){e.preventDefault();let amount=num(document.getElementById("sAmount").value);if(!amount)return toast("Ingresa un monto válido.");let rec={id:id||crypto.randomUUID(),date:document.getElementById("sDate").value,amount,type,person:document.getElementById("sPerson").value};if(id)state.savings=state.savings.map(x=>x.id===id?rec:x);else state.savings.push(rec);saveState();toast(id?"Ahorro actualizado":"Ahorro registrado");openSaving(type)}
+
+function saveSavingTarget(){state.savingTarget=num(document.getElementById("savingTarget").value);saveState();renderAll();toast("Meta mensual de ahorro guardada.")}
+function openPersonalSpending(person){
+ state.personalSpending=state.personalSpending||[];
+ openModal(`Gastos personales · ${state.people[person]}`,`<form onsubmit="savePersonalSpending(event,'${person}')"><div class="form-grid"><div class="field"><label>Fecha</label><input class="input" id="pDate" type="date" value="${dateNow()}"></div><div class="field"><label>Monto</label><input class="input money-input" id="pAmount" inputmode="numeric"></div><div class="field full"><label>Descripción</label><input class="input" id="pDesc" placeholder="Ej. comida, salida, compra..."></div></div><div class="form-actions"><button class="btn primary">Registrar gasto personal</button></div></form><div class="history"><b>Historial</b><div class="history-list" style="margin-top:10px">${state.personalSpending.filter(x=>x.person===person).sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="record"><span>${x.date}</span><b>${money(x.amount)}</b><span>${esc(x.desc)}</span><div class="record-actions"><button onclick="deleteRecord('personal','${x.id}')">Eliminar</button></div></div>`).join("")||'<div class="empty">Sin gastos personales.</div>'}</div></div>`);document.getElementById("pAmount").addEventListener("input",e=>e.target.value=fmtInput(e.target.value));
+}
+function savePersonalSpending(e,person){e.preventDefault();let a=num(document.getElementById("pAmount").value);if(!a)return toast("Ingresa un monto.");state.personalSpending=state.personalSpending||[];state.personalSpending.push({id:crypto.randomUUID(),person,date:document.getElementById("pDate").value,amount:a,desc:document.getElementById("pDesc").value});saveState();toast("Gasto personal registrado");openPersonalSpending(person)}
+function deleteRecord(type,id){
+ if(!confirm("¿Eliminar este registro?"))return;
+ if(type==="income")state.incomes=state.incomes.filter(x=>x.id!==id);
+ if(type==="expense")state.expenses=state.expenses.filter(x=>x.id!==id);
+ if(type==="saving")state.savings=state.savings.filter(x=>x.id!==id);
+ if(type==="personal")state.personalSpending=(state.personalSpending||[]).filter(x=>x.id!==id);
+ saveState();toast("Registro eliminado");
+ if(activeModal.type==="income")openIncome(activeModal.key); else if(activeModal.type==="expense")openExpense(activeModal.key); else if(activeModal.type==="saving")openSaving(activeModal.key); else closeModal();
+}
+
+function openGoal(editId=null){
+ if(!editId&&state.goals.length>=4)return toast("Ya tienes el máximo de 4 metas.");
+ let rec=state.goals.find(x=>x.id===editId);
+ openModal(editId?"Editar meta":"Nueva meta",`<form onsubmit="saveGoal(event,'${editId||""}')"><div class="form-grid">
+ <div class="field"><label>Nombre</label><input class="input" id="gName" value="${esc(rec?.name||"")}" placeholder="Ej. Viaje"></div>
+ <div class="field"><label>Meta de ahorro</label><input class="input money-input" id="gTarget" inputmode="numeric" value="${rec?fmtInput(rec.target):""}" placeholder="$ 0"></div>
+ <div class="field full"><label>Descripción</label><textarea class="textarea" id="gDesc" rows="3" placeholder="Describe tu objetivo">${esc(rec?.desc||"")}</textarea></div>
+ <div class="field"><label>Ahorro actual</label><input class="input money-input" id="gCurrent" inputmode="numeric" value="${rec?fmtInput(rec.current):""}"></div>
+ </div><div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary">Guardar meta</button></div></form>`);["gTarget","gCurrent"].forEach(id=>document.getElementById(id).addEventListener("input",e=>e.target.value=fmtInput(e.target.value)));
+}
+function saveGoal(e,id){e.preventDefault();let rec={id:id||crypto.randomUUID(),name:document.getElementById("gName").value.trim()||"Meta sin nombre",desc:document.getElementById("gDesc").value,target:num(document.getElementById("gTarget").value),current:num(document.getElementById("gCurrent").value)};if(id)state.goals=state.goals.map(x=>x.id===id?rec:x);else state.goals.push(rec);saveState();closeModal();toast("Meta guardada")}
+function renderGoals(){let box=document.getElementById("goalsGrid");box.innerHTML=state.goals.length?state.goals.map(g=>{let p=g.target?Math.min(100,g.current/g.target*100):0;return `<div class="goal"><h3>${esc(g.name)}</h3><p>${esc(g.desc)}</p><div class="money">${money(g.current)} <span class="small">/ ${money(g.target)}</span></div><div class="progress"><i style="width:${p}%"></i></div><div class="saving-meta"><span>${p.toFixed(0)}%</span><span>${p>=100?"Meta cumplida":"En progreso"}</span></div><div class="goal-actions"><button class="mini-btn" onclick="openGoal('${g.id}')">Editar</button><button class="mini-btn" onclick="deleteGoal('${g.id}')">Eliminar</button></div></div>`}).join(""):`<div class="empty" style="grid-column:1/-1">Crea hasta 4 metas para hacer seguimiento a tus objetivos.</div>`}
+function deleteGoal(id){if(confirm("¿Eliminar esta meta?")){state.goals=state.goals.filter(x=>x.id!==id);saveState();renderAll();toast("Meta eliminada")}}
+
+function openSettings(){openModal("Configuración",`<form onsubmit="saveSettings(event)"><div class="form-grid"><div class="field"><label>Tu nombre</label><input class="input" id="setMe" value="${esc(state.people.me)}"></div><div class="field"><label>Nombre de tu pareja</label><input class="input" id="setPartner" value="${esc(state.people.partner)}"></div></div><div class="form-actions"><button class="btn primary">Guardar configuración</button></div></form><div style="margin-top:20px;padding-top:15px;border-top:1px solid var(--line)"><b>Datos locales</b><p class="small">Los registros se guardan en este navegador mediante localStorage. Usa exportar para crear una copia de seguridad.</p><div class="actions"><button class="btn" onclick="exportData()">Exportar respaldo</button><button class="btn" onclick="importData()">Importar respaldo</button><button class="btn danger" onclick="resetAll()">Borrar todos los datos</button></div></div>`)}
+function saveSettings(e){e.preventDefault();state.people.me=document.getElementById("setMe").value.trim()||"Yo";state.people.partner=document.getElementById("setPartner").value.trim()||"Mi pareja";saveState();closeModal();toast("Configuración guardada")}
+function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`nexus-finance-respaldo-${dateNow()}.json`;a.click();URL.revokeObjectURL(a.href)}
+function importData(){let input=document.createElement("input");input.type="file";input.accept=".json,application/json";input.onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{state={...defaultState,...JSON.parse(r.result)};saveState();closeModal();renderAll();toast("Respaldo importado")}catch(_){toast("El archivo no es válido.")}};r.readAsText(f)};input.click()}
+function resetAll(){if(confirm("Esto eliminará todos los registros guardados en este navegador. ¿Continuar?")){state=structuredClone(defaultState);saveState();closeModal();renderAll();toast("Datos eliminados")}}
+function toast(msg){let t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.remove("show"),2600)}
+
+document.getElementById("filterMonth").addEventListener("change",()=>{let f=getFilter();document.getElementById("incomeComparison").textContent=comparison(state.incomes);document.getElementById("expenseComparison").textContent=comparison(state.expenses)});
+setInterval(()=>{document.getElementById("incomeComparison").textContent=comparison(state.incomes);document.getElementById("expenseComparison").textContent=comparison(state.expenses)},1000);
+setupYears();renderAll();
+</script>
+</body>
+</html>
