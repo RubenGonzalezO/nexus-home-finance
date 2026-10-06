@@ -131,17 +131,162 @@ const CATS=["Arriendo","Mercado","Luz","Agua","Gas","Internet","Transporte","Otr
 const SAVINGS=[["financial","Ahorro Financiero"],["unexpected","Imprevistos"],["emergency","Emergencias"]];
 const MONTHS=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 const KEY="nexus_home_finance_v1";
+
+/* Nexus · Google Apps Script */
+const API_URL="https://script.google.com/macros/s/AKfycbz897X-GuvfrTn-iT8egt4YkjOTvul1hlB4Rsb2ofuW4LN7IlvZXYv3LFQWY2QjPtOQtA/exec";
+let cloudSyncing=false;
+let cloudReady=false;
+
 const defaultState={
   people:{me:"Yo",partner:"Mi pareja"},
-  incomes:[],expenses:[],savings:[],
+  incomes:[],
+  expenses:[],
+  savings:[],
   savingTarget:0,
-  goals:[]
+  goals:[],
+  personalSpending:[]
 };
+
 let state=loadState();
 let activeModal={type:null,key:null};
 
-function loadState(){try{return {...defaultState,...JSON.parse(localStorage.getItem(KEY)||"{}")}}catch(e){return structuredClone(defaultState)}}
-function saveState(){localStorage.setItem(KEY,JSON.stringify(state))}
+function loadState(){
+  try{
+    const local=JSON.parse(localStorage.getItem(KEY)||"{}");
+
+    return {
+      ...structuredClone(defaultState),
+      ...local,
+      people:{
+        ...defaultState.people,
+        ...(local.people||{})
+      },
+      personalSpending:Array.isArray(local.personalSpending)
+        ? local.personalSpending
+        : []
+    };
+
+  }catch(e){
+    return structuredClone(defaultState);
+  }
+}
+
+function saveState(){
+  localStorage.setItem(KEY,JSON.stringify(state));
+  saveStateCloud();
+}
+
+/* PASO 4 · Guardar en Google Sheets mediante Apps Script */
+function saveStateCloud(){
+  if(cloudSyncing)return;
+
+  cloudSyncing=true;
+
+  const payload=JSON.stringify(state);
+  const iframeName="nexus_save_frame_"+Date.now();
+
+  const iframe=document.createElement("iframe");
+  iframe.name=iframeName;
+  iframe.style.display="none";
+  document.body.appendChild(iframe);
+
+  const form=document.createElement("form");
+  form.method="POST";
+  form.action=API_URL;
+  form.target=iframeName;
+  form.style.display="none";
+
+  const action=document.createElement("input");
+  action.type="hidden";
+  action.name="action";
+  action.value="save";
+
+  const stateInput=document.createElement("input");
+  stateInput.type="hidden";
+  stateInput.name="state";
+  stateInput.value=payload;
+
+  form.appendChild(action);
+  form.appendChild(stateInput);
+  document.body.appendChild(form);
+  form.submit();
+
+  setTimeout(()=>{
+    form.remove();
+    iframe.remove();
+    cloudSyncing=false;
+    cloudReady=true;
+  },1200);
+}
+
+/* PASO 5 · Cargar desde Google Sheets mediante JSONP */
+function loadStateCloud(){
+  return new Promise((resolve)=>{
+    const callbackName="nexusCallback_"+Date.now()+"_"+Math.random().toString(36).slice(2);
+    const script=document.createElement("script");
+
+    window[callbackName]=function(response){
+      try{
+        if(response && response.success && response.state){
+          const remote=response.state;
+          let personalSpending=[];
+
+          /* Compatibilidad con la versión anterior que guardaba este campo como objeto */
+          if(Array.isArray(remote.personalSpending)){
+            personalSpending=remote.personalSpending;
+          }else if(remote.personalSpending && typeof remote.personalSpending==="object"){
+            Object.entries(remote.personalSpending).forEach(([person,items])=>{
+              if(Array.isArray(items)){
+                items.forEach(item=>{
+                  personalSpending.push({
+                    ...item,
+                    person:item.person||person
+                  });
+                });
+              }
+            });
+          }
+
+          state={
+            ...structuredClone(defaultState),
+            ...remote,
+            people:{
+              ...defaultState.people,
+              ...(remote.people||{})
+            },
+            personalSpending
+          };
+
+          localStorage.setItem(KEY,JSON.stringify(state));
+          cloudReady=true;
+          resolve(true);
+        }else{
+          resolve(false);
+        }
+      }catch(error){
+        console.error("Error procesando datos Nexus:",error);
+        resolve(false);
+      }finally{
+        delete window[callbackName];
+        script.remove();
+      }
+    };
+
+    script.onerror=function(){
+      delete window[callbackName];
+      script.remove();
+      resolve(false);
+    };
+
+    script.src=
+      API_URL+
+      "?action=get&callback="+
+      encodeURIComponent(callbackName);
+
+    document.body.appendChild(script);
+  });
+}
+
 function money(n){return new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(Math.round(Number(n)||0))}
 function num(v){return Number(String(v??"").replace(/[^\d]/g,""))||0}
 function dateNow(){return new Date().toISOString().slice(0,10)}
@@ -233,7 +378,18 @@ function comparison(arr){
  if(!old)return cur?"Nuevo periodo":"Sin datos";
  let p=(cur-old)/old*100;return `${p>=0?"▲":"▼"} ${Math.abs(p).toFixed(1)}% vs mes anterior`;
 }
-function refreshDashboard(){state=loadState();renderAll();toast("Datos actualizados desde el almacenamiento local.")}
+async function refreshDashboard(){
+  const ok=await loadStateCloud();
+  if(ok){
+    setupYears();
+    renderAll();
+    toast("☁ Datos actualizados desde Google Sheets");
+  }else{
+    state=loadState();
+    renderAll();
+    toast("⚠ No se pudo sincronizar. Usando datos locales.");
+  }
+}
 function clearGeneralFilter(){document.getElementById("filterYear").value=new Date().getFullYear();document.getElementById("filterMonth").value="all";renderAll()}
 function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:"smooth"});document.getElementById("sidebar").classList.remove("open")}
 function toggleSidebar(){document.getElementById("sidebar").classList.toggle("open")}
@@ -337,12 +493,24 @@ function openSettings(){openModal("Configuración",`<form onsubmit="saveSettings
 function saveSettings(e){e.preventDefault();state.people.me=document.getElementById("setMe").value.trim()||"Yo";state.people.partner=document.getElementById("setPartner").value.trim()||"Mi pareja";saveState();closeModal();toast("Configuración guardada")}
 function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`nexus-finance-respaldo-${dateNow()}.json`;a.click();URL.revokeObjectURL(a.href)}
 function importData(){let input=document.createElement("input");input.type="file";input.accept=".json,application/json";input.onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{state={...defaultState,...JSON.parse(r.result)};saveState();closeModal();renderAll();toast("Respaldo importado")}catch(_){toast("El archivo no es válido.")}};r.readAsText(f)};input.click()}
-function resetAll(){if(confirm("Esto eliminará todos los registros guardados en este navegador. ¿Continuar?")){state=structuredClone(defaultState);saveState();closeModal();renderAll();toast("Datos eliminados")}}
+function resetAll(){if(confirm("Esto eliminará todos los registros de Nexus. ¿Continuar?")){state=structuredClone(defaultState);saveState();closeModal();renderAll();toast("Datos eliminados")}}
 function toast(msg){let t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.remove("show"),2600)}
 
 document.getElementById("filterMonth").addEventListener("change",()=>{let f=getFilter();document.getElementById("incomeComparison").textContent=comparison(state.incomes);document.getElementById("expenseComparison").textContent=comparison(state.expenses)});
 setInterval(()=>{document.getElementById("incomeComparison").textContent=comparison(state.incomes);document.getElementById("expenseComparison").textContent=comparison(state.expenses)},1000);
-setupYears();renderAll();
+/* PASO 6 · Arranque y sincronización inicial */
+setupYears();
+renderAll();
+
+loadStateCloud().then(ok=>{
+  if(ok){
+    setupYears();
+    renderAll();
+    toast("☁ Datos sincronizados con Nexus");
+  }else{
+    toast("⚠ No se pudo sincronizar. Usando datos locales.");
+  }
+});
 </script>
 </body>
 </html>
