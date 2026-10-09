@@ -236,7 +236,7 @@ function apiRequest(action,data={}){
   const cleanup=()=>{window.removeEventListener("message",listener);form.remove();frame.remove()};
   const timer=setTimeout(()=>{if(finished)return;finished=true;cleanup();reject(new Error("Nexus no respondió. Revisa la conexión e inténtalo de nuevo."))},25000);
   const listener=(event)=>{
-   if(event.source!==frame.contentWindow||!event.data||event.data.type!=="nexus-api-response"||event.data.nonce!==nonce)return;
+   if(!event.data||event.data.type!=="nexus-api-response"||event.data.nonce!==nonce)return;
    if(finished)return;finished=true;clearTimeout(timer);cleanup();
    const result=event.data.result||{};if(result.success)resolve(result);else reject(new Error(result.error||"No se pudo completar la operación."));
   };
