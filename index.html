@@ -41,19 +41,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
 .app.auth-locked{filter:blur(2px);pointer-events:none;user-select:none}.account-strip{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:11px}.account-strip strong{color:#fff}.module-section{margin-top:8px}.module-section .card{margin-bottom:15px}.module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.module-grid .wide{grid-column:1/-1}.table-wrap{overflow:auto}.data-table{width:100%;border-collapse:collapse;font-size:12px;min-width:560px}.data-table th,.data-table td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line)}.data-table th{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em}.pill{display:inline-block;padding:4px 8px;border-radius:99px;background:#241d33;color:#d8ccff;font-size:10px}.module-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.module-form .field{min-width:0}.module-form .full{grid-column:1/-1}.month-list{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}.calendar-day{min-height:82px;border:1px solid var(--line);background:#0e0c15;border-radius:10px;padding:7px;font-size:10px}.calendar-day .daynum{font-weight:800;color:#d8ccff}.calendar-day.today{border-color:var(--orange)}.calendar-day.has-task{background:#20172d}.calendar-task{margin-top:4px;padding:3px;border-radius:4px;background:#5b3d83;overflow-wrap:anywhere}.account-card{background:#0e0c15;border:1px solid #2d263b;border-radius:14px;padding:16px}.account-card h3{margin:0 0 9px;font-size:13px}.account-card .balance{font-size:22px;font-weight:900;color:#c4b5fd}.account-card small{color:var(--muted)}.report-bars{display:grid;gap:12px}.report-row{display:grid;grid-template-columns:100px 1fr 110px;align-items:center;gap:10px;font-size:11px}.report-track{height:10px;background:#272332;border-radius:99px;overflow:hidden}.report-track i{display:block;height:100%;background:linear-gradient(90deg,var(--purple),var(--orange));border-radius:99px}
 @media(max-width:800px){.module-grid{grid-template-columns:1fr}.module-form{grid-template-columns:1fr 1fr}.module-form .full{grid-column:1/-1}.month-list{gap:4px}.calendar-day{min-height:65px;padding:4px}.calendar-task{font-size:8px}.account-strip{display:none}}
 @media(max-width:520px){.auth-card{padding:21px}.module-form{grid-template-columns:1fr}.report-row{grid-template-columns:72px 1fr 82px;gap:6px}.calendar-day{min-height:53px;font-size:9px}}
-.sync-status{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:#12101b;font-size:10px;color:var(--muted);max-width:100%}
-.sync-dot{width:8px;height:8px;border-radius:50%;background:#fb7185;flex:0 0 auto}
-.sync-status.synced .sync-dot{background:#34d399}.sync-status.syncing .sync-dot{background:#fbbf24;animation:nexusPulse 1s infinite}
-.sync-status.offline .sync-dot,.sync-status.conflict .sync-dot{background:#fb7185}
-.sync-status button{background:transparent;color:#c4b5fd;font-weight:800;font-size:10px;padding:0 2px}
-@keyframes nexusPulse{50%{opacity:.25;transform:scale(.75)}}
-.loading-overlay{position:fixed;inset:0;z-index:900;background:rgba(7,5,12,.82);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:20px}
-.loading-overlay.hidden{display:none!important}
-.loading-card{width:min(340px,100%);text-align:center;padding:30px 24px;border:1px solid #392d4e;border-radius:24px;background:linear-gradient(160deg,#1a1428,#100d18);box-shadow:0 30px 90px #0009}
-.loading-logo{width:58px;height:58px;margin:0 auto 18px;border-radius:18px;display:grid;place-items:center;font-size:25px;font-weight:900;background:linear-gradient(135deg,var(--purple),var(--orange));box-shadow:0 8px 30px #8b5cf644}
-.loading-spinner{width:26px;height:26px;border:3px solid #3c3152;border-top-color:var(--orange);border-radius:50%;margin:18px auto 0;animation:nexusSpin .8s linear infinite}
-@keyframes nexusSpin{to{transform:rotate(360deg)}}
-@media(max-width:800px){.sync-status{font-size:9px}.topbar{flex-wrap:wrap}.actions{align-items:center}}
+
 </style>
 </head>
 <body>
@@ -80,7 +68,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
   <div class="title"><h1>Dashboard General</h1><p>Control de tus finanzas personales y del hogar.</p></div>
   <div class="actions">
     <button class="btn mobile-menu" onclick="toggleSidebar()">☰</button>
-    <span class="account-strip">Sesión: <strong id="signedUserName">—</strong></span><div id="syncStatus" class="sync-status offline" role="status" aria-live="polite"><span class="sync-dot"></span><span id="syncStatusText">Conexión no disponible</span><button id="syncRetryButton" type="button" onclick="retryCloudSync()">Reintentar</button><button id="syncResolveButton" type="button" class="hidden" onclick="resolveSyncConflict()">Resolver</button></div><button class="btn" onclick="refreshDashboard()">↻ Refrescar</button><button class="btn ghost" onclick="logoutNexus()">Salir</button>
+    <span class="account-strip">Sesión: <strong id="signedUserName">—</strong></span><button class="btn" onclick="refreshDashboard()">↻ Refrescar</button><button class="btn ghost" onclick="logoutNexus()">Salir</button>
   </div>
 </header>
 
@@ -187,9 +175,6 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
 </main>
 </div>
 
-<div id="loadingOverlay" class="loading-overlay hidden" role="status" aria-live="polite">
- <div class="loading-card"><div class="loading-logo">N</div><strong>Nexus Finance</strong><div id="loadingMessage" class="small" style="margin-top:8px">Preparando tu espacio financiero…</div><div class="loading-spinner"></div></div>
-</div>
 <div id="authScreen">
  <div class="auth-card">
   <div class="auth-brand"><div class="logo-mark">N</div><div><h1>Nexus Finance</h1><div class="small">Hogar & Personal · nube segura</div></div></div>
@@ -227,7 +212,6 @@ let authToken=(localStorage.getItem(AUTH_KEEP_KEY)==="yes"?localStorage.getItem(
 let authUser=(()=>{try{return JSON.parse(localStorage.getItem(AUTH_USER_KEY)||"null")}catch(_){return null}})();
 let authMode="login";
 let cloudSyncing=false,cloudReady=false,cloudSavePending=false,activeModule="dashboard";
-let cloudUpdatedAt=0,localDirty=false,localRevision=0,syncConflict=false,conflictRemoteUpdatedAt=0;
 let calendarCursor=new Date();
 const defaultState={people:{me:"Ruben",partner:"Mauren"},incomes:[],expenses:[],savings:[],savingTarget:0,goals:[],personalSpending:[],debts:[],tasks:[],accounts:[],transactions:[]};
 let state=structuredClone(defaultState);
@@ -240,143 +224,117 @@ function normalizeClientState(remote){
  ["incomes","expenses","savings","goals","personalSpending","debts","tasks","accounts","transactions"].forEach(k=>{if(!Array.isArray(out[k]))out[k]=[]});
  return out;
 }
-function apiRequest(action,data={}){
- return new Promise((resolve,reject)=>{
-  const nonce="nx_"+crypto.randomUUID().replace(/-/g,"");
-  const frameName="nexus_api_"+nonce;
-  const frame=document.createElement("iframe");frame.name=frameName;frame.style.display="none";document.body.appendChild(frame);
-  const form=document.createElement("form");form.method="POST";form.action=API_URL;form.target=frameName;form.style.display="none";
-  const values={...data,action,nonce};
-  Object.entries(values).forEach(([key,value])=>{const input=document.createElement("input");input.type="hidden";input.name=key;input.value=typeof value==="string"?value:JSON.stringify(value);form.appendChild(input)});
-  let finished=false;
-  const cleanup=()=>{window.removeEventListener("message",listener);form.remove();frame.remove()};
-  const timer=setTimeout(()=>{if(finished)return;finished=true;cleanup();reject(new Error("Nexus no respondió. Revisa la conexión e inténtalo de nuevo."))},25000);
-  const listener=(event)=>{
-   if(event.source!==frame.contentWindow||!event.data||event.data.type!=="nexus-api-response"||event.data.nonce!==nonce)return;
-   if(finished)return;finished=true;clearTimeout(timer);cleanup();
-   const result=event.data.result||{};if(result.success)resolve(result);else reject(new Error(result.error||"No se pudo completar la operación."));
-  };
-  window.addEventListener("message",listener);document.body.appendChild(form);form.submit();
- });
+
+function apiRequest(action, data = {}) {
+  return new Promise((resolve, reject) => {
+    const nonce = "nx_" + crypto.randomUUID().replace(/-/g, "");
+    const frameName = "nexus_api_" + nonce;
+
+    const frame = document.createElement("iframe");
+    frame.name = frameName;
+    frame.style.display = "none";
+    document.body.appendChild(frame);
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = API_URL;
+    form.target = frameName;
+    form.style.display = "none";
+
+    const values = { ...data, action, nonce };
+
+    Object.entries(values).forEach(([key, value]) => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = key;
+      input.value =
+        typeof value === "string" ? value : JSON.stringify(value);
+      form.appendChild(input);
+    });
+
+    let finished = false;
+
+    const cleanup = () => {
+      window.removeEventListener("message", listener);
+      clearTimeout(timer);
+      form.remove();
+      frame.remove();
+    };
+
+    const timer = setTimeout(() => {
+      if (finished) return;
+
+      finished = true;
+      cleanup();
+
+      reject(
+        new Error(
+          "Nexus tardó demasiado en responder. Intenta nuevamente."
+        )
+      );
+    }, 25000);
+
+    const listener = (event) => {
+      let message = event.data;
+
+      // Aceptar respuestas como objeto o como texto JSON.
+      if (typeof message === "string") {
+        try {
+          message = JSON.parse(message);
+        } catch (_) {
+          return;
+        }
+      }
+
+      // Ignorar mensajes que no pertenezcan a esta solicitud.
+      if (
+        !message ||
+        message.type !== "nexus-api-response" ||
+        message.nonce !== nonce
+      ) {
+        return;
+      }
+
+      if (finished) return;
+      finished = true;
+
+      cleanup();
+
+      const result = message.result || {};
+
+      if (result.success) {
+        resolve(result);
+      } else {
+        reject(
+          new Error(result.error || "No se pudo completar la operación.")
+        );
+      }
+    };
+
+    window.addEventListener("message", listener);
+    document.body.appendChild(form);
+    form.submit();
+  });
 }
-function localStateKey(){return authUser?KEY+"_"+authUser.id:""}
-function syncMetaKey(){return localStateKey()+"_syncmeta"}
-function persistLocalState(){
- if(!authUser)return;
- try{
-  localStorage.setItem(localStateKey(),JSON.stringify(state));
-  localStorage.setItem(syncMetaKey(),JSON.stringify({dirty:localDirty,cloudUpdatedAt:cloudUpdatedAt,revision:localRevision}));
- }catch(err){console.warn("No se pudo guardar la copia local de Nexus",err)}
-}
-function restoreLocalState(){
- if(!authUser)return false;
- try{
-  const cached=localStorage.getItem(localStateKey());
-  const meta=JSON.parse(localStorage.getItem(syncMetaKey())||"null");
-  if(cached){state=normalizeClientState(JSON.parse(cached));localDirty=!!(meta&&meta.dirty);cloudUpdatedAt=Number(meta&&meta.cloudUpdatedAt)||0;localRevision=Number(meta&&meta.revision)||0;return true}
- }catch(err){console.warn("No se pudo recuperar la copia local",err)}
- state=structuredClone(defaultState);localDirty=false;cloudUpdatedAt=0;localRevision=0;return false;
-}
-function updateSyncStatus(status,message){
- const box=document.getElementById("syncStatus"),label=document.getElementById("syncStatusText"),retry=document.getElementById("syncRetryButton"),resolve=document.getElementById("syncResolveButton");
- if(!box||!label)return;
- box.classList.remove("synced","syncing","offline","conflict");box.classList.add(status);
- label.textContent=message||({synced:"Sincronizado",syncing:"Sincronizando…",offline:"Conexión no disponible",conflict:"Conflicto de datos"}[status]||"Sincronizando…");
- if(retry)retry.classList.toggle("hidden",status==="synced");
- if(resolve)resolve.classList.toggle("hidden",status!=="conflict");
-}
-function showLoading(message="Preparando tu espacio financiero…"){
- const overlay=document.getElementById("loadingOverlay"),label=document.getElementById("loadingMessage");
- if(label)label.textContent=message;if(overlay)overlay.classList.remove("hidden");
-}
-function hideLoading(){document.getElementById("loadingOverlay")?.classList.add("hidden")}
 function saveState(){
  if(!authToken||!authUser)return;
- localDirty=true;localRevision++;
- persistLocalState();
+ const localKey=KEY+"_"+authUser.id;
+ try{localStorage.setItem(localKey,JSON.stringify(state))}catch(_){}
  saveStateCloud();
  renderExtendedModules();
 }
 async function saveStateCloud(){
- if(!authToken||!authUser)return;
- if(syncConflict){updateSyncStatus("conflict","Conflicto: revisa los datos");return}
+ if(!authToken)return;
  if(cloudSyncing){cloudSavePending=true;return}
  cloudSyncing=true;
- const snapshot=JSON.stringify(state),revisionAtStart=localRevision,baseUpdatedAt=cloudUpdatedAt;
- updateSyncStatus("syncing","Sincronizando…");
- try{
-  const result=await apiRequest("save",{token:authToken,state:snapshot,baseUpdatedAt:String(baseUpdatedAt||"")});
-  cloudUpdatedAt=Number(result.updatedAt||result.savedAt)||Date.now();
-  cloudReady=true;
-  if(localRevision===revisionAtStart)localDirty=false;else cloudSavePending=true;
-  persistLocalState();
-  if(!localDirty)updateSyncStatus("synced","Sincronizado");
- }catch(err){
-  if(String(err.message||"").startsWith("CONFLICTO_NEXUS:")){
-   syncConflict=true;conflictRemoteUpdatedAt=Number(String(err.message).split(":")[1])||0;
-   updateSyncStatus("conflict","Conflicto: no se sobrescribieron datos");
-   toast("⚠ Nexus detectó cambios en otro dispositivo. Tus datos locales están protegidos.");
-  }else{
-   updateSyncStatus("offline","Conexión no disponible");
-  }
- }finally{
-  cloudSyncing=false;
-  if(cloudSavePending&&!syncConflict){cloudSavePending=false;saveStateCloud()}
- }
+ try{await apiRequest("save",{token:authToken,state:JSON.stringify(state)});cloudReady=true}
+ catch(err){toast("⚠ No se pudo sincronizar: "+err.message)}
+ finally{cloudSyncing=false;if(cloudSavePending){cloudSavePending=false;saveStateCloud()}}
 }
-async function loadStateCloud(options={}){
+async function loadStateCloud(){
  if(!authToken)return false;
- const forceCloud=!!options.forceCloud;
- try{
-  updateSyncStatus("syncing","Sincronizando…");
-  const result=await apiRequest("get",{token:authToken});
-  const remoteUpdatedAt=Number(result.updatedAt)||0;
-  if(localDirty&&!forceCloud){
-   if(cloudUpdatedAt&&remoteUpdatedAt&&cloudUpdatedAt!==remoteUpdatedAt){
-    syncConflict=true;conflictRemoteUpdatedAt=remoteUpdatedAt;
-    updateSyncStatus("conflict","Conflicto: no se sobrescribieron datos");
-    return false;
-   }
-   if(!cloudUpdatedAt&&remoteUpdatedAt){
-    syncConflict=true;conflictRemoteUpdatedAt=remoteUpdatedAt;
-    updateSyncStatus("conflict","Conflicto: revisa los datos locales");
-    return false;
-   }
-   cloudUpdatedAt=remoteUpdatedAt||cloudUpdatedAt;
-   await saveStateCloud();
-   return !syncConflict;
-  }
-  state=normalizeClientState(result.state);
-  cloudUpdatedAt=remoteUpdatedAt;
-  localDirty=false;syncConflict=false;conflictRemoteUpdatedAt=0;cloudReady=true;
-  persistLocalState();
-  updateSyncStatus("synced","Sincronizado");
-  return true;
- }catch(err){
-  if(/sesión venció|inicia sesión/i.test(err.message)){clearAuth();return false}
-  updateSyncStatus("offline","Conexión no disponible");
-  throw err;
- }
-}
-async function retryCloudSync(){
- if(!authToken)return;
- try{
-  if(localDirty)await loadStateCloud();
-  else await loadStateCloud();
-  setupYears();renderAll();renderExtendedModules();
-  if(!syncConflict&&cloudReady)toast("☁ Nexus está sincronizado.");
- }catch(err){updateSyncStatus("offline","Conexión no disponible");toast("No fue posible conectar con Google. Tus datos locales se conservaron.")}
-}
-async function resolveSyncConflict(){
- if(!syncConflict)return;
- const choice=prompt("Se detectaron cambios en la nube y en este dispositivo. Escribe LOCAL para conservar y subir tus datos de este dispositivo, o NUBE para reemplazarlos por la versión de Google. No se hará nada si cancelas.");
- if(!choice)return;
- if(choice.trim().toLowerCase()==="local"){
-  cloudUpdatedAt=conflictRemoteUpdatedAt;syncConflict=false;conflictRemoteUpdatedAt=0;persistLocalState();await saveStateCloud();
- }else if(choice.trim().toLowerCase()==="nube"){
-  if(!confirm("Esto reemplazará la copia local por la versión de Google Sheets. ¿Continuar?"))return;
-  syncConflict=false;localDirty=false;await loadStateCloud({forceCloud:true});setupYears();renderAll();renderExtendedModules();
- }else{toast("Escribe LOCAL o NUBE para elegir.");}
+ try{const result=await apiRequest("get",{token:authToken});state=normalizeClientState(result.state);localStorage.setItem(KEY+"_"+authUser.id,JSON.stringify(state));cloudReady=true;return true}
+ catch(err){if(/sesión venció|inicia sesión/i.test(err.message)){clearAuth();return false}throw err}
 }
 function toggleAuthMode(){
  authMode=authMode==="login"?"register":"login";
@@ -395,13 +353,10 @@ function toggleAuthMode(){
  document.getElementById("authMessage").textContent="";
 }
 async function submitAuth(event){
- event.preventDefault();
- const btn=document.getElementById("authSubmit"),msg=document.getElementById("authMessage");
- btn.disabled=true;btn.textContent="Validando acceso…";msg.textContent="";
- showLoading("Validando usuario y contraseña…");
+ event.preventDefault();const btn=document.getElementById("authSubmit"),msg=document.getElementById("authMessage");btn.disabled=true;btn.textContent="Conectando…";msg.textContent="";
  try{
   const identifier=document.getElementById("authEmail").value.trim();
-  const data={identifier,email:identifier,password:document.getElementById("authPassword").value};
+  const data={identifier,password:document.getElementById("authPassword").value};
   if(authMode==="register"){
    data.email=identifier;data.name=document.getElementById("authName").value.trim();data.username=document.getElementById("authUsername").value.trim();data.setupCode=document.getElementById("authSetupCode").value.trim();
   }
@@ -410,30 +365,11 @@ async function submitAuth(event){
   const keep=document.getElementById("keepSignedIn").checked;
   if(remember)localStorage.setItem(AUTH_REMEMBER_KEY,identifier);else localStorage.removeItem(AUTH_REMEMBER_KEY);
   if(keep)localStorage.setItem(AUTH_KEEP_KEY,"yes");else localStorage.removeItem(AUTH_KEEP_KEY);
-  setAuth(result.token,result.user,keep);
-  if(authMode==="register"){
-   state=normalizeClientState(result.state);cloudUpdatedAt=Number(result.updatedAt)||0;localDirty=false;localRevision=0;persistLocalState();
-  }else{
-   restoreLocalState();
-  }
-  document.getElementById("authScreen").style.display="none";
-  document.querySelector(".app").classList.remove("auth-locked");
-  updateSignedUserLabel();setupYears();renderAll();renderExtendedModules();
-  updateSyncStatus("syncing","Sincronizando…");
-  hideLoading();
-  if(authMode==="register"&&result.state){
-   cloudUpdatedAt=Number(result.updatedAt)||cloudUpdatedAt;localDirty=false;persistLocalState();
-   updateSyncStatus("synced","Sincronizado");
-  }else{
-   // El login ya no descarga todo el estado: el dashboard aparece y la consulta va en segundo plano.
-   loadStateCloud().then(ok=>{if(ok){setupYears();renderAll();renderExtendedModules()}}).catch(()=>updateSyncStatus("offline","Conexión no disponible"));
-  }
-  toast(result.migratedLegacy?"Cuenta creada. Los datos anteriores se conservaron.":"Sesión iniciada.");
- }catch(err){
-  hideLoading();msg.textContent=err.message||"No se pudo iniciar sesión.";
- }finally{
-  btn.disabled=false;btn.textContent=authMode==="register"?"Crear cuenta":"Iniciar sesión";
- }
+  setAuth(result.token,result.user,keep);state=normalizeClientState(result.state);localStorage.setItem(KEY+"_shared",JSON.stringify(state));
+  document.getElementById("authScreen").style.display="none";document.querySelector(".app").classList.remove("auth-locked");updateSignedUserLabel();
+  setupYears();renderAll();renderExtendedModules();toast(result.migratedLegacy?"Cuenta creada. Los datos anteriores se conservaron.":"Sesión iniciada y datos sincronizados con Nexus.");
+ }catch(err){msg.textContent=err.message||"No se pudo iniciar sesión."}
+ finally{btn.disabled=false;btn.textContent=authMode==="register"?"Crear cuenta":"Iniciar sesión"}
 }
 function setAuth(token,user,keep=localStorage.getItem(AUTH_KEEP_KEY)==="yes"){
  authToken=token;authUser=user;sessionStorage.removeItem(AUTH_TOKEN_KEY);localStorage.removeItem(AUTH_TOKEN_KEY);
@@ -445,21 +381,10 @@ function updateSignedUserLabel(){const role=authUser?.role||"admin";const fallba
 async function logoutNexus(){if(authToken){try{await apiRequest("logout",{token:authToken})}catch(_){}}clearAuth();document.getElementById("authScreen").style.display="flex";document.querySelector(".app").classList.add("auth-locked");document.getElementById("authPassword").value="";document.getElementById("authMessage").textContent="Sesión cerrada.";}
 async function bootstrapAuth(){
  document.querySelector(".app").classList.add("auth-locked");
- const remembered=localStorage.getItem(AUTH_REMEMBER_KEY)||"";
- document.getElementById("authEmail").value=remembered;
- document.getElementById("rememberAccount").checked=!!remembered;
- document.getElementById("keepSignedIn").checked=localStorage.getItem(AUTH_KEEP_KEY)==="yes";
- if(!authToken||!authUser){document.getElementById("authScreen").style.display="flex";updateSyncStatus("offline","Conexión no disponible");return}
- showLoading("Preparando tu espacio financiero…");
- restoreLocalState();
- document.getElementById("authScreen").style.display="none";
- document.querySelector(".app").classList.remove("auth-locked");
- updateSignedUserLabel();setupYears();renderAll();renderExtendedModules();
- // La interfaz ya está disponible; Google se consulta después sin bloquear la navegación.
- setTimeout(()=>hideLoading(),350);
- loadStateCloud().then(ok=>{
-  if(ok){setupYears();renderAll();renderExtendedModules()}
- }).catch(()=>updateSyncStatus("offline","Conexión no disponible"));
+ const remembered=localStorage.getItem(AUTH_REMEMBER_KEY)||"";document.getElementById("authEmail").value=remembered;document.getElementById("rememberAccount").checked=!!remembered;document.getElementById("keepSignedIn").checked=localStorage.getItem(AUTH_KEEP_KEY)==="yes";
+ if(!authToken||!authUser){document.getElementById("authScreen").style.display="flex";return}
+ try{const ok=await loadStateCloud();if(!ok){document.getElementById("authScreen").style.display="flex";return}document.getElementById("authScreen").style.display="none";document.querySelector(".app").classList.remove("auth-locked");updateSignedUserLabel();setupYears();renderAll();renderExtendedModules();}
+ catch(err){document.getElementById("authScreen").style.display="flex";document.getElementById("authMessage").textContent=err.message;clearAuth()}
 }
 
 function money(n){return new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(Math.round(Number(n)||0))}
@@ -554,13 +479,8 @@ function comparison(arr){
  let p=(cur-old)/old*100;return `${p>=0?"▲":"▼"} ${Math.abs(p).toFixed(1)}% vs mes anterior`;
 }
 async function refreshDashboard(){
- showLoading("Actualizando tu espacio financiero…");
- // La ventana es visual y breve; la consulta continúa sin bloquear el dashboard.
- setTimeout(hideLoading,450);
- try{
-  const ok=await loadStateCloud();
-  if(ok){setupYears();renderAll();renderExtendedModules();if(!localDirty)toast("☁ Datos actualizados desde Google Sheets")}
- }catch(err){updateSyncStatus("offline","Conexión no disponible");toast("No fue posible conectar con Google. Tus datos locales se conservaron.")}
+  try{const ok=await loadStateCloud();if(ok){setupYears();renderAll();renderExtendedModules();toast("☁ Datos actualizados desde Google Sheets")}}
+  catch(err){toast("⚠ No se pudo actualizar: "+err.message)}
 }
 function clearGeneralFilter(){document.getElementById("filterYear").value=new Date().getFullYear();document.getElementById("filterMonth").value="all";renderAll()}
 function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:"smooth"});document.getElementById("sidebar").classList.remove("open")}
@@ -701,11 +621,7 @@ function monthlyReportData(){const year=Number(document.getElementById("filterYe
 function renderReports(){const box=document.getElementById("reportChart");if(!box)return;const data=monthlyReportData(),max=Math.max(1,...data.flatMap(x=>[x.income,x.expenses,x.savings]));box.innerHTML=data.map(d=>`<div class="report-row"><strong>${d.name}</strong><div><div class="report-track" title="Ingresos ${money(d.income)}"><i style="width:${d.income/max*100}%"></i></div><div class="report-track" style="margin-top:4px" title="Gastos ${money(d.expenses)}"><i style="width:${d.expenses/max*100}%;background:linear-gradient(90deg,#fb923c,#fda4af)"></i></div><div class="report-track" style="margin-top:4px" title="Ahorros ${money(d.savings)}"><i style="width:${d.savings/max*100}%;background:linear-gradient(90deg,#34d399,#7dd3fc)"></i></div></div><div style="text-align:right"><b>${money(d.balance)}</b><div class="small">saldo neto</div></div></div>`).join("");const year=Number(document.getElementById("filterYear").value)||new Date().getFullYear(),sumKey=k=>data.reduce((s,d)=>s+d[k],0);document.getElementById("reportSummary").innerHTML=[ ["Ingresos",sumKey("income")],["Gastos del hogar",sumKey("expenses")],["Ahorros",sumKey("savings")],["Saldo neto",sumKey("balance")],["Deudas pendientes",state.debts.reduce((s,d)=>s+(Number(d.balance)||0),0)] ].map(([n,v])=>`<div class="list-row" style="grid-template-columns:1fr auto"><span>${n}</span><strong>${money(v)}</strong></div>`).join("");const alerts=[];const pending=state.tasks.filter(t=>t.status!=="done"&&t.date&&t.date<dateNow());if(pending.length)alerts.push(`${pending.length} recordatorio(s) vencido(s)`);const due=state.debts.filter(d=>d.status!=="paid"&&d.due&&d.due<=dateNow());if(due.length)alerts.push(`${due.length} deuda(s) con vencimiento hoy o anterior`);if(sumKey("expenses")>sumKey("income"))alerts.push("Los gastos del hogar superan los ingresos registrados este año");document.getElementById("financialAlerts").innerHTML=alerts.length?alerts.map(a=>`<div class="list-row" style="grid-template-columns:1fr"><span class="negative">⚠ ${esc(a)}</span></div>`).join(""):'<div class="empty">No hay alertas con los datos actuales.</div>'}
 function exportReportCsv(){const rows=[["Mes","Ingresos","Gastos hogar","Ahorros","Saldo neto"],...monthlyReportData().map(d=>[d.name,d.income,d.expenses,d.savings,d.balance])];const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")).join("\n");const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`nexus-reporte-${document.getElementById("filterYear").value||new Date().getFullYear()}.csv`;a.click();URL.revokeObjectURL(a.href)}
 
-/* Recupera la conexión cuando vuelve internet sin sobrescribir datos a ciegas. */
-window.addEventListener("offline",()=>{if(authToken)updateSyncStatus("offline","Conexión no disponible")});
-window.addEventListener("online",()=>{if(authToken)retryCloudSync()});
-
-/* Arranque: mostrar interfaz y consultar la nube en segundo plano */
+/* Arranque: primero autenticar; luego cargar los datos privados de la cuenta */
 setupYears();
 document.querySelector(".app").classList.add("auth-locked");
 document.getElementById("authScreen").style.display="flex";
