@@ -33,18 +33,19 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
 }
 @media(max-width:520px){.kpis{grid-template-columns:1fr}.future-grid{grid-template-columns:1fr}.filterbar .field{min-width:100px;flex:1}.actions{width:100%}.actions .btn{flex:1}.stats{grid-template-columns:1fr}.title h1{font-size:22px}}
 
-.auth-screen{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 20% -10%,#211642 0,#0b0a12 55%);}
-.auth-card{width:min(440px,100%);background:#14111e;border:1px solid #332c43;border-radius:22px;padding:28px;box-shadow:0 30px 80px #000}
-.auth-brand{display:flex;align-items:center;gap:12px;margin-bottom:22px}.auth-brand .logo-mark{flex:none}.auth-card h1{font-size:24px;margin:0 0 8px}.auth-card p{color:var(--muted);font-size:13px;line-height:1.5}.auth-card .field{margin:14px 0}.auth-card .btn{width:100%;margin-top:8px}.auth-switch{background:none;color:var(--purple2);padding:12px 0;width:100%}.auth-error{color:#fb7185;font-size:12px;min-height:18px;margin-top:8px}.auth-note{font-size:11px!important}
-body.auth-locked .app,body.auth-locked #modal,body.auth-locked #toast{display:none!important}
+/* Autenticación y módulos ampliados Nexus */
+.auth-options{display:grid;gap:9px;margin:4px 0 14px;font-size:13px;color:var(--muted)}.remember-option{display:flex;align-items:center;gap:9px}.remember-option input{accent-color:var(--accent);width:15px;height:15px}
+#authScreen{position:fixed;inset:0;z-index:500;background:radial-gradient(circle at 20% -10%,#302052 0,#0b0a12 55%);display:flex;align-items:center;justify-content:center;padding:20px}
+.auth-card{width:min(460px,100%);padding:28px;background:rgba(18,16,27,.97);border:1px solid #392d4e;border-radius:24px;box-shadow:0 28px 90px #0009}
+.auth-brand{display:flex;align-items:center;gap:12px;margin-bottom:22px}.auth-brand .logo-mark{width:48px;height:48px;font-size:21px}.auth-card h1{margin:0;font-size:25px}.auth-card p{color:var(--muted);font-size:12px;line-height:1.6}.auth-card form{display:grid;gap:13px}.auth-card label{display:grid;gap:6px;font-size:11px;color:var(--muted)}.auth-card .input{padding:12px}.auth-message{min-height:18px;color:#fda4af;font-size:11px}.auth-switch{width:100%;margin-top:14px;background:transparent;color:#c4b5fd;padding:10px}
+.app.auth-locked{filter:blur(2px);pointer-events:none;user-select:none}.account-strip{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:11px}.account-strip strong{color:#fff}.module-section{margin-top:8px}.module-section .card{margin-bottom:15px}.module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.module-grid .wide{grid-column:1/-1}.table-wrap{overflow:auto}.data-table{width:100%;border-collapse:collapse;font-size:12px;min-width:560px}.data-table th,.data-table td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line)}.data-table th{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em}.pill{display:inline-block;padding:4px 8px;border-radius:99px;background:#241d33;color:#d8ccff;font-size:10px}.module-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.module-form .field{min-width:0}.module-form .full{grid-column:1/-1}.month-list{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}.calendar-day{min-height:82px;border:1px solid var(--line);background:#0e0c15;border-radius:10px;padding:7px;font-size:10px}.calendar-day .daynum{font-weight:800;color:#d8ccff}.calendar-day.today{border-color:var(--orange)}.calendar-day.has-task{background:#20172d}.calendar-task{margin-top:4px;padding:3px;border-radius:4px;background:#5b3d83;overflow-wrap:anywhere}.account-card{background:#0e0c15;border:1px solid #2d263b;border-radius:14px;padding:16px}.account-card h3{margin:0 0 9px;font-size:13px}.account-card .balance{font-size:22px;font-weight:900;color:#c4b5fd}.account-card small{color:var(--muted)}.report-bars{display:grid;gap:12px}.report-row{display:grid;grid-template-columns:100px 1fr 110px;align-items:center;gap:10px;font-size:11px}.report-track{height:10px;background:#272332;border-radius:99px;overflow:hidden}.report-track i{display:block;height:100%;background:linear-gradient(90deg,var(--purple),var(--orange));border-radius:99px}
+@media(max-width:800px){.module-grid{grid-template-columns:1fr}.module-form{grid-template-columns:1fr 1fr}.module-form .full{grid-column:1/-1}.month-list{gap:4px}.calendar-day{min-height:65px;padding:4px}.calendar-task{font-size:8px}.account-strip{display:none}}
+@media(max-width:520px){.auth-card{padding:21px}.module-form{grid-template-columns:1fr}.report-row{grid-template-columns:72px 1fr 82px;gap:6px}.calendar-day{min-height:53px;font-size:9px}}
+
 </style>
 </head>
-<body class="auth-locked">
-<div class="auth-screen" id="authScreen"><div class="auth-card">
- <div class="auth-brand"><div class="logo-mark">₿</div><div><b>Nexus Finance</b><div class="small">Hogar & Personal</div></div></div>
- <div id="authFormArea"></div><div class="auth-error" id="authError" role="status"></div>
-</div></div>
-<div class="app" id="nexusApp">
+<body>
+<div class="app">
 <aside class="sidebar" id="sidebar">
   <div class="logo"><div class="logo-mark">₿</div><div>Nexus Finance<div class="small">Hogar & Personal</div></div></div>
   <nav class="nav">
@@ -53,7 +54,11 @@ body.auth-locked .app,body.auth-locked #modal,body.auth-locked #toast{display:no
     <button onclick="openIncome('partner')"><i>↗</i>Ingresos pareja</button>
     <button onclick="openExpensePicker()"><i>↘</i>Gastos del hogar</button>
     <button onclick="openSavingPicker()"><i>◈</i>Ahorros</button>
-    <button onclick="scrollToId('goals')"><i>◎</i>Metas a futuro</button>
+    <button onclick="showModule('dashboard');scrollToId('goals')"><i>◎</i>Metas a futuro</button>
+    <button onclick="showModule('calendar')"><i>▦</i>Calendario & recordatorios</button>
+    <button onclick="showModule('debts')"><i>▤</i>Deudas</button>
+    <button onclick="showModule('accounts')"><i>◉</i>Cuentas separadas</button>
+    <button onclick="showModule('reports')"><i>▥</i>Reportes avanzados</button>
     <button onclick="openSettings()"><i>⚙</i>Configuración</button>
   </nav>
 </aside>
@@ -63,10 +68,11 @@ body.auth-locked .app,body.auth-locked #modal,body.auth-locked #toast{display:no
   <div class="title"><h1>Dashboard General</h1><p>Control de tus finanzas personales y del hogar.</p></div>
   <div class="actions">
     <button class="btn mobile-menu" onclick="toggleSidebar()">☰</button>
-    <button class="btn" onclick="refreshDashboard()">↻ Refrescar</button>
+    <span class="account-strip">Sesión: <strong id="signedUserName">—</strong></span><button class="btn" onclick="refreshDashboard()">↻ Refrescar</button><button class="btn ghost" onclick="logoutNexus()">Salir</button>
   </div>
 </header>
 
+<div id="dashboardModule" class="module-section">
 <div class="filterbar">
   <div class="field"><label>Año</label><select class="select" id="filterYear" onchange="renderAll()"></select></div>
   <div class="field"><label>Periodo</label><select class="select" id="filterMonth" onchange="renderAll()"><option value="all">Año completo</option><option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option><option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option><option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option></select></div>
@@ -129,9 +135,64 @@ body.auth-locked .app,body.auth-locked #modal,body.auth-locked #toast{display:no
  <div class="card-head"><div><h2>◎ Metas a futuro</h2><span>Máximo 4 metas</span></div><button class="btn primary" onclick="openGoal()">+ Crear meta</button></div>
  <div class="future-grid" id="goalsGrid"></div>
 </section>
+</div>
+
+<section id="calendarModule" class="module-section hidden">
+ <div class="card"><div class="card-head"><div><h2>▦ Calendario y recordatorios</h2><span>Compromisos del hogar y personales</span></div><button class="btn primary" onclick="openTaskForm()">+ Recordatorio</button></div>
+  <div class="actions" style="margin-bottom:12px"><button class="btn" onclick="shiftCalendar(-1)">← Anterior</button><strong id="calendarMonthLabel"></strong><button class="btn" onclick="shiftCalendar(1)">Siguiente →</button></div>
+  <div class="month-list" id="calendarGrid"></div>
+ </div>
+ <div class="card"><div class="card-head"><h2>Próximos pendientes</h2><span>Marca cada tarea al completarla</span></div><div id="taskList" class="list"></div></div>
+</section>
+
+<section id="debtsModule" class="module-section hidden">
+ <div class="card"><div class="card-head"><div><h2>▤ Gestión de deudas</h2><span>Saldo pendiente, cuotas y vencimientos</span></div><div><span class="small">Total pendiente</span><div class="money" id="debtTotal" style="font-size:22px;font-weight:900;color:var(--orange)">$0</div></div></div>
+  <form class="module-form" id="debtForm" onsubmit="addDebt(event)">
+   <div class="field"><label>Entidad / acreedor</label><input class="input" id="debtName" required placeholder="Ej. préstamo, tarjeta"></div>
+   <div class="field"><label>Monto inicial</label><input class="input" id="debtOriginal" type="number" min="1" required></div>
+   <div class="field"><label>Saldo pendiente</label><input class="input" id="debtBalance" type="number" min="0" required></div>
+   <div class="field"><label>Cuota mensual</label><input class="input" id="debtInstallment" type="number" min="0" value="0"></div>
+   <div class="field"><label>Próximo vencimiento</label><input class="input" id="debtDue" type="date"></div>
+   <div class="field"><label>Responsable</label><select class="select" id="debtOwner"><option value="me">Personal: mío</option><option value="partner">Personal: pareja</option><option value="home">Hogar</option></select></div>
+   <div class="field full"><label>Notas</label><input class="input" id="debtNotes" placeholder="Tasa, número de cuotas, detalles"></div>
+   <div class="full"><button class="btn primary">Registrar deuda</button></div>
+  </form>
+ </div>
+ <div class="card"><div class="card-head"><h2>Historial de obligaciones</h2><span>Actualiza saldo o marca pagada</span></div><div class="table-wrap" id="debtTable"></div></div>
+</section>
+
+<section id="accountsModule" class="module-section hidden">
+ <div class="card"><div class="card-head"><div><h2>◉ Cuentas separadas</h2><span>Hogar · Ahorros · Mío · Ella</span></div><button class="btn primary" onclick="openAccountMovement()">+ Movimiento</button></div>
+  <div class="grid savings-grid" id="accountsGrid"></div>
+ </div>
+ <div class="card"><div class="card-head"><h2>Movimientos de cuentas</h2><span>Registro de ingresos y egresos manuales</span></div><div class="table-wrap" id="accountMovementTable"></div></div>
+</section>
+
+<section id="reportsModule" class="module-section hidden">
+ <div class="card"><div class="card-head"><div><h2>▥ Reportes avanzados</h2><span>Comparativo anual de ingresos, gastos, ahorros y saldo</span></div><button class="btn" onclick="exportReportCsv()">Exportar CSV</button></div><div id="reportChart" class="report-bars"></div></div>
+ <div class="module-grid"><div class="card"><h2>Resumen del periodo</h2><div id="reportSummary" class="list"></div></div><div class="card"><h2>Alertas financieras</h2><div id="financialAlerts" class="list"></div></div></div>
+</section>
 </main>
 </div>
 
+<div id="authScreen">
+ <div class="auth-card">
+  <div class="auth-brand"><div class="logo-mark">N</div><div><h1>Nexus Finance</h1><div class="small">Hogar & Personal · nube segura</div></div></div>
+  <p id="authIntro">Inicia sesión para acceder a tus finanzas. Los dos perfiles del hogar comparten la misma información financiera.</p>
+  <form id="authForm" onsubmit="submitAuth(event)">
+   <label id="authNameWrap" class="hidden">Nombre del perfil<input class="input" id="authName" autocomplete="name" placeholder="Ruben o Mauren"></label>
+   <label id="authUsernameWrap" class="hidden">Nombre de usuario<input class="input" id="authUsername" autocomplete="username" placeholder="Ej. ruben"></label>
+   <label id="authCodeWrap" class="hidden">Código de invitación del perfil 2 <span class="small">Lo genera el administrador desde Apps Script y se usa una sola vez</span><input class="input" id="authSetupCode" autocomplete="off" placeholder="Código de invitación"></label>
+   <label id="authIdentifierLabel">Correo o nombre de usuario<input class="input" id="authEmail" type="text" autocomplete="username" required placeholder="Correo o usuario"></label>
+   <label>Contraseña<input class="input" id="authPassword" type="password" autocomplete="current-password" minlength="10" required placeholder="Mínimo 10 caracteres"></label>
+   <div class="auth-options"><label class="remember-option"><input type="checkbox" id="rememberAccount" checked> Recordar mi usuario</label><label class="remember-option"><input type="checkbox" id="keepSignedIn"> Mantener sesión iniciada</label></div>
+   <div class="auth-message" id="authMessage" aria-live="polite"></div>
+   <button class="btn primary" id="authSubmit">Iniciar sesión</button>
+  </form>
+  <button type="button" class="auth-switch" id="authSwitch" onclick="toggleAuthMode()">¿Primera vez? Crear cuenta</button>
+  <p class="small">No uses una contraseña que ya utilices en tu banco o correo.</p>
+ </div>
+</div>
 <div class="modal" id="modal"><div class="modal-box" id="modalBox"></div></div>
 <div class="toast" id="toast"></div>
 
@@ -141,116 +202,116 @@ const SAVINGS=[["financial","Ahorro Financiero"],["unexpected","Imprevistos"],["
 const MONTHS=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 const KEY="nexus_home_finance_v1";
 
-/* Nexus · Google Apps Script */
+/* Nexus · API Apps Script con autenticación real */
 const API_URL="https://script.google.com/macros/s/AKfycbz897X-GuvfrTn-iT8egt4YkjOTvul1hlB4Rsb2ofuW4LN7IlvZXYv3LFQWY2QjPtOQtA/exec";
-let cloudSyncing=false;
-let cloudReady=false;
-
-const defaultState={
-  people:{me:"Yo",partner:"Mi pareja"},
-  incomes:[],
-  expenses:[],
-  savings:[],
-  savingTarget:0,
-  goals:[],
-  personalSpending:[]
-};
-
-let state=loadState();
-let activeModal={type:null,key:null};
-
-function loadState(){
-  try{
-    const local=JSON.parse(localStorage.getItem(KEY)||"{}");
-
-    return {
-      ...structuredClone(defaultState),
-      ...local,
-      people:{
-        ...defaultState.people,
-        ...(local.people||{})
-      },
-      personalSpending:Array.isArray(local.personalSpending)
-        ? local.personalSpending
-        : []
-    };
-
-  }catch(e){
-    return structuredClone(defaultState);
-  }
-}
-
-let nexusToken=localStorage.getItem("nexus_auth_token")||"";
-let nexusUser=JSON.parse(localStorage.getItem("nexus_auth_user")||"null");
+const AUTH_TOKEN_KEY="nexus_auth_token_v2";
+const AUTH_USER_KEY="nexus_auth_user_v2";
+const AUTH_REMEMBER_KEY="nexus_auth_remembered_identifier_v1";
+const AUTH_KEEP_KEY="nexus_auth_keep_session_v1";
+let authToken=(localStorage.getItem(AUTH_KEEP_KEY)==="yes"?localStorage.getItem(AUTH_TOKEN_KEY):sessionStorage.getItem(AUTH_TOKEN_KEY))||"";
+let authUser=(()=>{try{return JSON.parse(localStorage.getItem(AUTH_USER_KEY)||"null")}catch(_){return null}})();
 let authMode="login";
-let authBusy=false;
-function saveState(){
-  localStorage.setItem(KEY+":"+(nexusUser?.id||"guest"),JSON.stringify(state));
-  if(nexusToken) saveStateCloud();
+let cloudSyncing=false,cloudReady=false,cloudSavePending=false,activeModule="dashboard";
+let calendarCursor=new Date();
+const defaultState={people:{me:"Ruben",partner:"Mauren"},incomes:[],expenses:[],savings:[],savingTarget:0,goals:[],personalSpending:[],debts:[],tasks:[],accounts:[],transactions:[]};
+let state=structuredClone(defaultState);
+let activeModal={type:null,key:null};
+function normalizeClientState(remote){
+ const s=remote&&typeof remote==="object"?remote:{};
+ const out={...structuredClone(defaultState),...s,people:{...defaultState.people,...(s.people||{})}};
+ if(out.people.me==="Yo")out.people.me="Ruben";if(out.people.partner==="Mi pareja")out.people.partner="Mauren";
+ if(out.personalSpending&&!Array.isArray(out.personalSpending)&&typeof out.personalSpending==="object")out.personalSpending=Object.entries(out.personalSpending).flatMap(([person,items])=>(Array.isArray(items)?items.map(x=>({...x,person:x.person||person})):[]));
+ ["incomes","expenses","savings","goals","personalSpending","debts","tasks","accounts","transactions"].forEach(k=>{if(!Array.isArray(out[k]))out[k]=[]});
+ return out;
 }
-function authRequest(action,fields={}){
+function apiRequest(action,data={}){
  return new Promise((resolve,reject)=>{
-  const nonce="nx_"+Date.now()+"_"+Math.random().toString(36).slice(2);
-  const frameName="nx_auth_frame_"+nonce;
-  const iframe=document.createElement("iframe");iframe.name=frameName;iframe.style.display="none";
+  const nonce="nx_"+crypto.randomUUID().replace(/-/g,"");
+  const frameName="nexus_api_"+nonce;
+  const frame=document.createElement("iframe");frame.name=frameName;frame.style.display="none";document.body.appendChild(frame);
   const form=document.createElement("form");form.method="POST";form.action=API_URL;form.target=frameName;form.style.display="none";
-  const data={action,nonce,...fields};
-  Object.entries(data).forEach(([k,v])=>{const i=document.createElement("input");i.type="hidden";i.name=k;i.value=String(v??"");form.appendChild(i)});
-  const timer=setTimeout(()=>{cleanup();reject(new Error("El servidor no respondió. Revisa la implementación de Apps Script."))},20000);
-  function cleanup(){clearTimeout(timer);window.removeEventListener("message",listener);form.remove();iframe.remove()}
-  function listener(ev){const d=ev.data;if(!d||d.type!=="nexus-api-response"||d.nonce!==nonce)return;cleanup();if(d.result?.success)resolve(d.result);else reject(new Error(d.result?.error||"No se pudo completar la solicitud."))}
-  window.addEventListener("message",listener);document.body.appendChild(iframe);document.body.appendChild(form);form.submit();
+  const values={...data,action,nonce};
+  Object.entries(values).forEach(([key,value])=>{const input=document.createElement("input");input.type="hidden";input.name=key;input.value=typeof value==="string"?value:JSON.stringify(value);form.appendChild(input)});
+  let finished=false;
+  const cleanup=()=>{window.removeEventListener("message",listener);form.remove();frame.remove()};
+  const timer=setTimeout(()=>{if(finished)return;finished=true;cleanup();reject(new Error("Nexus no respondió. Revisa la conexión e inténtalo de nuevo."))},25000);
+  const listener=(event)=>{
+   if(event.source!==frame.contentWindow||!event.data||event.data.type!=="nexus-api-response"||event.data.nonce!==nonce)return;
+   if(finished)return;finished=true;clearTimeout(timer);cleanup();
+   const result=event.data.result||{};if(result.success)resolve(result);else reject(new Error(result.error||"No se pudo completar la operación."));
+  };
+  window.addEventListener("message",listener);document.body.appendChild(form);form.submit();
  });
 }
-function saveStateCloud(){
- if(cloudSyncing||!nexusToken)return;
+function saveState(){
+ if(!authToken||!authUser)return;
+ const localKey=KEY+"_"+authUser.id;
+ try{localStorage.setItem(localKey,JSON.stringify(state))}catch(_){}
+ saveStateCloud();
+ renderExtendedModules();
+}
+async function saveStateCloud(){
+ if(!authToken)return;
+ if(cloudSyncing){cloudSavePending=true;return}
  cloudSyncing=true;
- authRequest("saveAuthState",{token:nexusToken,state:JSON.stringify(state)})
-  .then(()=>{cloudReady=true;})
-  .catch(err=>{if(String(err.message).toLowerCase().includes("sesión")){logoutLocal(false);showAuth("login");}else console.error("Error guardando Nexus:",err);})
-  .finally(()=>{cloudSyncing=false;});
+ try{await apiRequest("save",{token:authToken,state:JSON.stringify(state)});cloudReady=true}
+ catch(err){toast("⚠ No se pudo sincronizar: "+err.message)}
+ finally{cloudSyncing=false;if(cloudSavePending){cloudSavePending=false;saveStateCloud()}}
 }
-function loadStateCloud(){
- if(!nexusToken)return Promise.resolve(false);
- return authRequest("getAuthState",{token:nexusToken}).then(r=>{state=normalizeRemoteState(r.state);localStorage.setItem(KEY+":"+nexusUser.id,JSON.stringify(state));cloudReady=true;return true;}).catch(()=>false);
+async function loadStateCloud(){
+ if(!authToken)return false;
+ try{const result=await apiRequest("get",{token:authToken});state=normalizeClientState(result.state);localStorage.setItem(KEY+"_"+authUser.id,JSON.stringify(state));cloudReady=true;return true}
+ catch(err){if(/sesión venció|inicia sesión/i.test(err.message)){clearAuth();return false}throw err}
 }
-function normalizeRemoteState(remote){
- const personalSpending=Array.isArray(remote?.personalSpending)?remote.personalSpending:[];
- return {...structuredClone(defaultState),...(remote||{}),people:{...defaultState.people,...(remote?.people||{})},personalSpending};
+function toggleAuthMode(){
+ authMode=authMode==="login"?"register":"login";
+ document.getElementById("authEmail").value=authMode==="register"?"":(localStorage.getItem(AUTH_REMEMBER_KEY)||"");
+ document.getElementById("authNameWrap").classList.toggle("hidden",authMode!=="register");
+ document.getElementById("authUsernameWrap").classList.toggle("hidden",authMode!=="register");
+ document.getElementById("authCodeWrap").classList.toggle("hidden",authMode!=="register");
+ document.getElementById("authEmail").type=authMode==="register"?"email":"text";
+ document.getElementById("authEmail").placeholder=authMode==="register"?"correo@ejemplo.com":"Correo o usuario";
+ document.getElementById("authIdentifierLabel").firstChild.textContent=authMode==="register"?"Correo electrónico":"Correo o nombre de usuario";
+ document.getElementById("authPassword").autocomplete=authMode==="register"?"new-password":"current-password";
+ document.getElementById("authPassword").minLength=10;
+ document.getElementById("authSubmit").textContent=authMode==="register"?"Crear cuenta":"Iniciar sesión";
+ document.getElementById("authSwitch").textContent=authMode==="register"?"Ya tengo cuenta · Iniciar sesión":"Crear la segunda cuenta";
+ document.getElementById("authIntro").textContent=authMode==="register"?"Registra el segundo perfil del hogar. Solo se permiten dos cuentas Nexus.":"Ingresa con tu correo o nombre de usuario. Tus dos perfiles comparten la misma información financiera del hogar.";
+ document.getElementById("authMessage").textContent="";
 }
-function showAuth(mode="login"){
- authMode=mode;document.body.classList.add("auth-locked");document.getElementById("authScreen").style.display="grid";document.getElementById("authError").textContent="";
- const register=mode==="register";
- document.getElementById("authFormArea").innerHTML=`<h1>${register?"Crear cuenta Nexus":"Bienvenido de nuevo"}</h1><p>${register?"Crea tu acceso personal. Tus datos quedarán separados de los de otras cuentas.":"Inicia sesión para abrir tu panel financiero desde cualquier dispositivo."}</p>
- <form id="authForm"><div class="field"><label>Correo electrónico</label><input class="input" id="authEmail" type="email" autocomplete="username" required placeholder="tu@correo.com"></div>
- ${register?`<div class="field"><label>Nombre</label><input class="input" id="authName" autocomplete="name" required placeholder="Tu nombre"></div>`:""}
- <div class="field"><label>Contraseña ${register?"(mínimo 10 caracteres)":""}</label><input class="input" id="authPassword" type="password" autocomplete="${register?"new-password":"current-password"}" minlength="${register?10:1}" required placeholder="Contraseña"></div>
- ${register?`<div class="field"><label>Código inicial de configuración</label><input class="input" id="authSetupCode" autocomplete="off" required placeholder="Código generado en Apps Script"><div class="small">Solo se solicita para crear la primera cuenta.</div></div>`:""}
- <button class="btn primary" id="authSubmit" type="submit">${register?"Crear cuenta":"Iniciar sesión"}</button></form>
- <button class="auth-switch" type="button" id="authSwitch">${register?"Ya tengo cuenta · Iniciar sesión":"¿Primera vez en Nexus? Crear cuenta"}</button>
- <p class="auth-note">La primera cuenta migra los datos actuales de Nexus. No borres la hoja NEXUS_DATA.</p>`;
- document.getElementById("authSwitch").onclick=()=>showAuth(register?"login":"register");
- document.getElementById("authForm").onsubmit=submitAuth;
-}
-async function submitAuth(e){
- e.preventDefault();if(authBusy)return;authBusy=true;const btn=document.getElementById("authSubmit");btn.disabled=true;btn.textContent="Conectando…";document.getElementById("authError").textContent="";
+async function submitAuth(event){
+ event.preventDefault();const btn=document.getElementById("authSubmit"),msg=document.getElementById("authMessage");btn.disabled=true;btn.textContent="Conectando…";msg.textContent="";
  try{
-  const fields={email:document.getElementById("authEmail").value.trim(),password:document.getElementById("authPassword").value};
-  let result;
-  if(authMode==="register") {fields.name=document.getElementById("authName").value.trim();fields.setupCode=document.getElementById("authSetupCode").value.trim();result=await authRequest("register",fields);}
-  else result=await authRequest("login",fields);
-  nexusToken=result.token;nexusUser=result.user;localStorage.setItem("nexus_auth_token",nexusToken);localStorage.setItem("nexus_auth_user",JSON.stringify(nexusUser));
-  state=normalizeRemoteState(result.state||defaultState);localStorage.setItem(KEY+":"+nexusUser.id,JSON.stringify(state));
-  document.body.classList.remove("auth-locked");document.getElementById("authScreen").style.display="none";setupYears();renderAll();toast("Sesión iniciada · Nexus sincronizado");
- }catch(err){document.getElementById("authError").textContent=err.message||"No se pudo iniciar sesión.";}
- finally{authBusy=false;const b=document.getElementById("authSubmit");if(b){b.disabled=false;b.textContent=authMode==="register"?"Crear cuenta":"Iniciar sesión"}}
+  const identifier=document.getElementById("authEmail").value.trim();
+  const data={identifier,password:document.getElementById("authPassword").value};
+  if(authMode==="register"){
+   data.email=identifier;data.name=document.getElementById("authName").value.trim();data.username=document.getElementById("authUsername").value.trim();data.setupCode=document.getElementById("authSetupCode").value.trim();
+  }
+  const result=await apiRequest(authMode==="register"?"register":"login",data);
+  const remember=document.getElementById("rememberAccount").checked;
+  const keep=document.getElementById("keepSignedIn").checked;
+  if(remember)localStorage.setItem(AUTH_REMEMBER_KEY,identifier);else localStorage.removeItem(AUTH_REMEMBER_KEY);
+  if(keep)localStorage.setItem(AUTH_KEEP_KEY,"yes");else localStorage.removeItem(AUTH_KEEP_KEY);
+  setAuth(result.token,result.user,keep);state=normalizeClientState(result.state);localStorage.setItem(KEY+"_shared",JSON.stringify(state));
+  document.getElementById("authScreen").style.display="none";document.querySelector(".app").classList.remove("auth-locked");updateSignedUserLabel();
+  setupYears();renderAll();renderExtendedModules();toast(result.migratedLegacy?"Cuenta creada. Los datos anteriores se conservaron.":"Sesión iniciada y datos sincronizados con Nexus.");
+ }catch(err){msg.textContent=err.message||"No se pudo iniciar sesión."}
+ finally{btn.disabled=false;btn.textContent=authMode==="register"?"Crear cuenta":"Iniciar sesión"}
 }
-function logoutLocal(callServer=true){const token=nexusToken;nexusToken="";nexusUser=null;localStorage.removeItem("nexus_auth_token");localStorage.removeItem("nexus_auth_user");if(callServer&&token)authRequest("logout",{token}).catch(()=>{});}
-function logoutNexus(){if(confirm("¿Cerrar tu sesión de Nexus?")){logoutLocal(true);showAuth("login");}}
-async function bootNexusAuth(){
- if(!nexusToken||!nexusUser){showAuth("login");return;}
- const ok=await loadStateCloud();if(!ok){logoutLocal(false);showAuth("login");return;}
- document.body.classList.remove("auth-locked");document.getElementById("authScreen").style.display="none";setupYears();renderAll();toast("Datos sincronizados con Nexus");
+function setAuth(token,user,keep=localStorage.getItem(AUTH_KEEP_KEY)==="yes"){
+ authToken=token;authUser=user;sessionStorage.removeItem(AUTH_TOKEN_KEY);localStorage.removeItem(AUTH_TOKEN_KEY);
+ (keep?localStorage:sessionStorage).setItem(AUTH_TOKEN_KEY,token);localStorage.setItem(AUTH_USER_KEY,JSON.stringify(user));
+}
+function clearAuth(){authToken="";authUser=null;sessionStorage.removeItem(AUTH_TOKEN_KEY);localStorage.removeItem(AUTH_TOKEN_KEY);localStorage.removeItem(AUTH_USER_KEY)}
+function updateSignedUserLabel(){const role=authUser?.role||"admin";const fallback=role==="partner"?state.people.partner:state.people.me;const label=document.getElementById("signedUserName");if(label)label.textContent=fallback||authUser?.username||authUser?.name||authUser?.email||"Usuario"}
+
+async function logoutNexus(){if(authToken){try{await apiRequest("logout",{token:authToken})}catch(_){}}clearAuth();document.getElementById("authScreen").style.display="flex";document.querySelector(".app").classList.add("auth-locked");document.getElementById("authPassword").value="";document.getElementById("authMessage").textContent="Sesión cerrada.";}
+async function bootstrapAuth(){
+ document.querySelector(".app").classList.add("auth-locked");
+ const remembered=localStorage.getItem(AUTH_REMEMBER_KEY)||"";document.getElementById("authEmail").value=remembered;document.getElementById("rememberAccount").checked=!!remembered;document.getElementById("keepSignedIn").checked=localStorage.getItem(AUTH_KEEP_KEY)==="yes";
+ if(!authToken||!authUser){document.getElementById("authScreen").style.display="flex";return}
+ try{const ok=await loadStateCloud();if(!ok){document.getElementById("authScreen").style.display="flex";return}document.getElementById("authScreen").style.display="none";document.querySelector(".app").classList.remove("auth-locked");updateSignedUserLabel();setupYears();renderAll();renderExtendedModules();}
+ catch(err){document.getElementById("authScreen").style.display="flex";document.getElementById("authMessage").textContent=err.message;clearAuth()}
 }
 
 function money(n){return new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(Math.round(Number(n)||0))}
@@ -345,16 +406,8 @@ function comparison(arr){
  let p=(cur-old)/old*100;return `${p>=0?"▲":"▼"} ${Math.abs(p).toFixed(1)}% vs mes anterior`;
 }
 async function refreshDashboard(){
-  const ok=await loadStateCloud();
-  if(ok){
-    setupYears();
-    renderAll();
-    toast("☁ Datos actualizados desde Google Sheets");
-  }else{
-    state=loadState();
-    renderAll();
-    toast("⚠ No se pudo sincronizar. Usando datos locales.");
-  }
+  try{const ok=await loadStateCloud();if(ok){setupYears();renderAll();renderExtendedModules();toast("☁ Datos actualizados desde Google Sheets")}}
+  catch(err){toast("⚠ No se pudo actualizar: "+err.message)}
 }
 function clearGeneralFilter(){document.getElementById("filterYear").value=new Date().getFullYear();document.getElementById("filterMonth").value="all";renderAll()}
 function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:"smooth"});document.getElementById("sidebar").classList.remove("open")}
@@ -455,8 +508,8 @@ function saveGoal(e,id){e.preventDefault();let rec={id:id||crypto.randomUUID(),n
 function renderGoals(){let box=document.getElementById("goalsGrid");box.innerHTML=state.goals.length?state.goals.map(g=>{let p=g.target?Math.min(100,g.current/g.target*100):0;return `<div class="goal"><h3>${esc(g.name)}</h3><p>${esc(g.desc)}</p><div class="money">${money(g.current)} <span class="small">/ ${money(g.target)}</span></div><div class="progress"><i style="width:${p}%"></i></div><div class="saving-meta"><span>${p.toFixed(0)}%</span><span>${p>=100?"Meta cumplida":"En progreso"}</span></div><div class="goal-actions"><button class="mini-btn" onclick="openGoal('${g.id}')">Editar</button><button class="mini-btn" onclick="deleteGoal('${g.id}')">Eliminar</button></div></div>`}).join(""):`<div class="empty" style="grid-column:1/-1">Crea hasta 4 metas para hacer seguimiento a tus objetivos.</div>`}
 function deleteGoal(id){if(confirm("¿Eliminar esta meta?")){state.goals=state.goals.filter(x=>x.id!==id);saveState();renderAll();toast("Meta eliminada")}}
 
-function openSettings(){openModal("Configuración",`<form onsubmit="saveSettings(event)"><div class="form-grid"><div class="field"><label>Tu nombre</label><input class="input" id="setMe" value="${esc(state.people.me)}"></div><div class="field"><label>Nombre de tu pareja</label><input class="input" id="setPartner" value="${esc(state.people.partner)}"></div></div><div class="form-actions"><button class="btn primary">Guardar configuración</button></div></form><div style="margin-top:20px;padding-top:15px;border-top:1px solid var(--line)"><b>Cuenta y respaldo</b><p class="small">Los datos se sincronizan con tu cuenta Nexus en Google Sheets. Puedes exportar una copia de seguridad.</p><div class="actions"><button class="btn" onclick="exportData()">Exportar respaldo</button><button class="btn" onclick="importData()">Importar respaldo</button><button class="btn" onclick="logoutNexus()">Cerrar sesión</button><button class="btn danger" onclick="resetAll()">Borrar todos los datos</button></div></div>`)}
-function saveSettings(e){e.preventDefault();state.people.me=document.getElementById("setMe").value.trim()||"Yo";state.people.partner=document.getElementById("setPartner").value.trim()||"Mi pareja";saveState();closeModal();toast("Configuración guardada")}
+function openSettings(){openModal("Configuración",`<form onsubmit="saveSettings(event)"><div class="form-grid"><div class="field"><label>Nombre del perfil administrador</label><input class="input" id="setMe" value="${esc(state.people.me)}" maxlength="60"></div><div class="field"><label>Nombre del segundo perfil</label><input class="input" id="setPartner" value="${esc(state.people.partner)}" maxlength="60"></div><div class="field full"><label>Tu nombre de usuario para iniciar sesión</label><input class="input" id="setUsername" value="${esc(authUser?.username||authUser?.name||"")}" maxlength="40" required><small class="small">Puedes cambiarlo aquí. El correo seguirá funcionando como alternativa.</small></div></div><div class="form-actions"><button class="btn primary">Guardar configuración</button></div></form><div style="margin-top:20px;padding-top:15px;border-top:1px solid var(--line)"><b>Datos del hogar compartidos</b><p class="small">Ruben y Mauren trabajan sobre la misma información financiera. Los cambios se sincronizan en la nube.</p><div class="actions"><button class="btn" onclick="exportData()">Exportar respaldo</button><button class="btn" onclick="importData()">Importar respaldo</button><button class="btn danger" onclick="resetAll()">Borrar todos los datos</button></div></div>`)}
+async function saveSettings(e){e.preventDefault();const username=document.getElementById("setUsername").value.trim();try{const result=await apiRequest("updateUsername",{token:authToken,username});authUser=result.user;localStorage.setItem(AUTH_USER_KEY,JSON.stringify(authUser));state.people.me=document.getElementById("setMe").value.trim()||"Ruben";state.people.partner=document.getElementById("setPartner").value.trim()||"Mauren";saveState();updateSignedUserLabel();closeModal();toast("Configuración guardada")}catch(err){toast("No se pudo guardar: "+err.message)}}
 function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`nexus-finance-respaldo-${dateNow()}.json`;a.click();URL.revokeObjectURL(a.href)}
 function importData(){let input=document.createElement("input");input.type="file";input.accept=".json,application/json";input.onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{state={...defaultState,...JSON.parse(r.result)};saveState();closeModal();renderAll();toast("Respaldo importado")}catch(_){toast("El archivo no es válido.")}};r.readAsText(f)};input.click()}
 function resetAll(){if(confirm("Esto eliminará todos los registros de Nexus. ¿Continuar?")){state=structuredClone(defaultState);saveState();closeModal();renderAll();toast("Datos eliminados")}}
@@ -464,10 +517,42 @@ function toast(msg){let t=document.getElementById("toast");t.textContent=msg;t.c
 
 document.getElementById("filterMonth").addEventListener("change",()=>{let f=getFilter();document.getElementById("incomeComparison").textContent=comparison(state.incomes);document.getElementById("expenseComparison").textContent=comparison(state.expenses)});
 setInterval(()=>{document.getElementById("incomeComparison").textContent=comparison(state.incomes);document.getElementById("expenseComparison").textContent=comparison(state.expenses)},1000);
-/* Inicio con autenticación: cada usuario carga su propio estado desde Sheets. */
+/* ===== MÓDULOS EXTRA: calendario, deudas, cuentas e informes ===== */
+function showModule(name){
+ activeModule=name;
+ ["dashboard","calendar","debts","accounts","reports"].forEach(m=>{const el=document.getElementById(m+"Module");if(el)el.classList.toggle("hidden",m!==name)});
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+ const title={dashboard:"Dashboard General",calendar:"Calendario y recordatorios",debts:"Gestión de deudas",accounts:"Cuentas separadas",reports:"Reportes avanzados"};
+ const h=document.querySelector(".title h1");if(h)h.textContent=title[name]||"Nexus Finance";
+ if(name!=="dashboard")renderExtendedModules();
+}
+function renderExtendedModules(){renderCalendar();renderTasks();renderDebts();renderAccounts();renderReports()}
+function openTaskForm(){openModal("Nuevo recordatorio",`<form onsubmit="saveTask(event)"><div class="form-grid"><div class="field"><label>Fecha</label><input class="input" id="taskDate" type="date" value="${dateNow()}" required></div><div class="field"><label>Hora (opcional)</label><input class="input" id="taskTime" type="time"></div><div class="field full"><label>Compromiso</label><input class="input" id="taskTitle" required placeholder="Ej. Pagar internet"></div><div class="field"><label>Responsable</label><select class="select" id="taskOwner"><option value="home">Hogar</option><option value="me">${esc(state.people.me)}</option><option value="partner">${esc(state.people.partner)}</option></select></div><div class="field"><label>Recordatorio</label><select class="select" id="taskReminder"><option value="none">Solo en calendario</option><option value="on-day">Recordar el día</option><option value="one-day">Un día antes</option></select></div><div class="field full"><label>Notas</label><textarea class="textarea" id="taskNotes" rows="2"></textarea></div></div><div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary">Guardar recordatorio</button></div></form>`)}
+function saveTask(e){e.preventDefault();state.tasks.push({id:crypto.randomUUID(),date:document.getElementById("taskDate").value,time:document.getElementById("taskTime").value,title:document.getElementById("taskTitle").value.trim(),owner:document.getElementById("taskOwner").value,reminder:document.getElementById("taskReminder").value,notes:document.getElementById("taskNotes").value,status:"pending",createdAt:new Date().toISOString()});saveState();closeModal();renderExtendedModules();toast("Recordatorio guardado en la nube")}
+function shiftCalendar(delta){calendarCursor=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()+delta,1);renderCalendar()}
+function renderCalendar(){const grid=document.getElementById("calendarGrid");if(!grid)return;const y=calendarCursor.getFullYear(),m=calendarCursor.getMonth(),first=new Date(y,m,1),days=new Date(y,m+1,0).getDate();document.getElementById("calendarMonthLabel").textContent=first.toLocaleDateString("es-CO",{month:"long",year:"numeric"});const offset=(first.getDay()+6)%7;const names=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];let html=names.map(x=>`<div class="small" style="text-align:center;padding:5px">${x}</div>`).join("");for(let i=0;i<offset;i++)html+='<div></div>';for(let d=1;d<=days;d++){const date=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`,items=state.tasks.filter(t=>t.date===date&&t.status!=="done"),today=date===dateNow();html+=`<div class="calendar-day ${today?'today':''} ${items.length?'has-task':''}"><div class="daynum">${d}</div>${items.slice(0,2).map(t=>`<div class="calendar-task" title="${esc(t.title)}">${esc(t.title)}</div>`).join("")}${items.length>2?`<small>+${items.length-2}</small>`:""}</div>`}grid.innerHTML=html}
+function renderTasks(){const box=document.getElementById("taskList");if(!box)return;const tasks=[...state.tasks].sort((a,b)=>(a.date||"").localeCompare(b.date||""));if(!tasks.length){box.innerHTML='<div class="empty">Todavía no tienes recordatorios.</div>';return}box.innerHTML=tasks.map(t=>`<div class="list-row" style="grid-template-columns:26px 1fr 95px 80px"><input type="checkbox" ${t.status==="done"?"checked":""} onchange="toggleTask('${t.id}')"><div><strong style="${t.status==='done'?'text-decoration:line-through;color:var(--muted)':''}">${esc(t.title)}</strong><div class="small">${esc(t.date||"Sin fecha")} ${esc(t.time||"")} · ${esc(t.owner||"home")} ${t.notes?"· "+esc(t.notes):""}</div></div><span class="pill">${t.status==="done"?"Completado":"Pendiente"}</span><button class="mini-btn" onclick="deleteTask('${t.id}')">Eliminar</button></div>`).join("")}
+function toggleTask(id){const t=state.tasks.find(x=>x.id===id);if(t){t.status=t.status==="done"?"pending":"done";saveState();renderExtendedModules()}}
+function deleteTask(id){if(confirm("¿Eliminar este recordatorio?")){state.tasks=state.tasks.filter(t=>t.id!==id);saveState();renderExtendedModules()}}
+function addDebt(e){e.preventDefault();const original=Number(document.getElementById("debtOriginal").value),balance=Number(document.getElementById("debtBalance").value);if(balance>original){toast("El saldo pendiente no puede superar el monto inicial.");return}state.debts.push({id:crypto.randomUUID(),name:document.getElementById("debtName").value.trim(),original,balance,installment:Number(document.getElementById("debtInstallment").value)||0,due:document.getElementById("debtDue").value,owner:document.getElementById("debtOwner").value,notes:document.getElementById("debtNotes").value,status:balance===0?"paid":"pending",createdAt:dateNow()});saveState();document.getElementById("debtForm").reset();renderDebts();renderReports();toast("Deuda registrada")}
+function renderDebts(){const total=state.debts.filter(d=>d.status!=="paid").reduce((a,d)=>a+(Number(d.balance)||0),0),el=document.getElementById("debtTotal");if(!el)return;el.textContent=money(total);const box=document.getElementById("debtTable");if(!state.debts.length){box.innerHTML='<div class="empty">No hay deudas registradas. Puedes añadir préstamos, tarjetas o compromisos.</div>';return}box.innerHTML=`<table class="data-table"><thead><tr><th>Acreedor</th><th>Responsable</th><th>Saldo</th><th>Cuota</th><th>Vence</th><th>Estado / acciones</th></tr></thead><tbody>${state.debts.map(d=>`<tr><td><strong>${esc(d.name)}</strong><div class="small">Inicial: ${money(d.original)} ${d.notes?"· "+esc(d.notes):""}</div></td><td>${esc(d.owner==="me"?state.people.me:d.owner==="partner"?state.people.partner:"Hogar")}</td><td>${money(d.balance)}</td><td>${money(d.installment)}</td><td>${esc(d.due||"—")}</td><td><span class="pill">${d.status==="paid"?"Pagada":"Pendiente"}</span><div class="actions" style="margin-top:5px"><button class="mini-btn" onclick="payDebt('${d.id}')">Abonar</button><button class="mini-btn" onclick="deleteDebt('${d.id}')">Eliminar</button></div></td></tr>`).join("")}</tbody></table>`}
+function payDebt(id){const d=state.debts.find(x=>x.id===id);if(!d)return;const amount=Number(prompt(`Saldo pendiente: ${money(d.balance)}\n¿Cuánto vas a abonar?`,String(d.installment||"")));if(!amount||amount<=0)return;d.balance=Math.max(0,d.balance-amount);d.status=d.balance===0?"paid":"pending";d.payments=Array.isArray(d.payments)?d.payments:[];d.payments.push({date:dateNow(),amount});saveState();renderDebts();renderReports();toast(d.status==="paid"?"Deuda saldada":"Abono registrado")}
+function deleteDebt(id){if(confirm("¿Eliminar esta deuda y su historial de abonos?")){state.debts=state.debts.filter(d=>d.id!==id);saveState();renderDebts();renderReports()}}
+const ACCOUNT_TYPES=[{id:"home",name:"Cuenta del hogar"},{id:"savings",name:"Cuenta de ahorros"},{id:"me",name:"Cuenta personal · Mía"},{id:"partner",name:"Cuenta personal · Pareja"}];
+function accountBalance(id){return state.transactions.filter(t=>t.account===id).reduce((s,t)=>s+(t.type==="income"?1:-1)*(Number(t.amount)||0),0)}
+function renderAccounts(){const grid=document.getElementById("accountsGrid");if(!grid)return;grid.innerHTML=ACCOUNT_TYPES.map(a=>`<div class="account-card"><h3>${a.name}</h3><div class="balance">${money(accountBalance(a.id))}</div><small>${state.transactions.filter(t=>t.account===a.id).length} movimientos registrados</small></div>`).join("");const box=document.getElementById("accountMovementTable");if(!state.transactions.length){box.innerHTML='<div class="empty">Aún no hay movimientos de cuentas. Registra un ingreso o egreso para iniciar los saldos.</div>';return}box.innerHTML=`<table class="data-table"><thead><tr><th>Fecha</th><th>Cuenta</th><th>Tipo</th><th>Descripción</th><th>Valor</th><th></th></tr></thead><tbody>${[...state.transactions].sort((a,b)=>(b.date||"").localeCompare(a.date||"")).map(t=>`<tr><td>${esc(t.date)}</td><td>${esc((ACCOUNT_TYPES.find(a=>a.id===t.account)||{}).name||t.account)}</td><td><span class="pill">${t.type==="income"?"Ingreso":"Egreso"}</span></td><td>${esc(t.description)}</td><td>${t.type==="income"?"+":"−"}${money(t.amount)}</td><td><button class="mini-btn" onclick="deleteAccountMovement('${t.id}')">Eliminar</button></td></tr>`).join("")}</tbody></table>`}
+function openAccountMovement(){openModal("Movimiento de cuenta",`<form onsubmit="saveAccountMovement(event)"><div class="form-grid"><div class="field"><label>Fecha</label><input class="input" id="amDate" type="date" value="${dateNow()}" required></div><div class="field"><label>Cuenta</label><select class="select" id="amAccount">${ACCOUNT_TYPES.map(a=>`<option value="${a.id}">${a.name}</option>`).join("")}</select></div><div class="field"><label>Tipo</label><select class="select" id="amType"><option value="income">Ingreso / abono</option><option value="expense">Egreso / retiro</option></select></div><div class="field"><label>Valor</label><input class="input" id="amAmount" type="number" min="1" required></div><div class="field full"><label>Descripción</label><input class="input" id="amDescription" required placeholder="Ej. transferencia, pago de servicio"></div></div><div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary">Guardar movimiento</button></div></form>`)}
+function saveAccountMovement(e){e.preventDefault();state.transactions.push({id:crypto.randomUUID(),date:document.getElementById("amDate").value,account:document.getElementById("amAccount").value,type:document.getElementById("amType").value,amount:Number(document.getElementById("amAmount").value),description:document.getElementById("amDescription").value.trim()});saveState();closeModal();renderAccounts();toast("Movimiento guardado")}
+function deleteAccountMovement(id){if(confirm("¿Eliminar este movimiento?")){state.transactions=state.transactions.filter(t=>t.id!==id);saveState();renderAccounts()}}
+function monthlyReportData(){const year=Number(document.getElementById("filterYear").value)||new Date().getFullYear();return MONTHS.map((name,i)=>{const month=String(i+1).padStart(2,"0"),key=`${year}-${month}`,matches=arr=>arr.filter(x=>String(x.date||"").slice(0,7)===key).reduce((s,x)=>s+(Number(x.amount)||0),0);const income=matches(state.incomes),expenses=matches(state.expenses),savings=matches(state.savings);return {name:name.slice(0,3),income,expenses,savings,balance:income-expenses-savings}})}
+function renderReports(){const box=document.getElementById("reportChart");if(!box)return;const data=monthlyReportData(),max=Math.max(1,...data.flatMap(x=>[x.income,x.expenses,x.savings]));box.innerHTML=data.map(d=>`<div class="report-row"><strong>${d.name}</strong><div><div class="report-track" title="Ingresos ${money(d.income)}"><i style="width:${d.income/max*100}%"></i></div><div class="report-track" style="margin-top:4px" title="Gastos ${money(d.expenses)}"><i style="width:${d.expenses/max*100}%;background:linear-gradient(90deg,#fb923c,#fda4af)"></i></div><div class="report-track" style="margin-top:4px" title="Ahorros ${money(d.savings)}"><i style="width:${d.savings/max*100}%;background:linear-gradient(90deg,#34d399,#7dd3fc)"></i></div></div><div style="text-align:right"><b>${money(d.balance)}</b><div class="small">saldo neto</div></div></div>`).join("");const year=Number(document.getElementById("filterYear").value)||new Date().getFullYear(),sumKey=k=>data.reduce((s,d)=>s+d[k],0);document.getElementById("reportSummary").innerHTML=[ ["Ingresos",sumKey("income")],["Gastos del hogar",sumKey("expenses")],["Ahorros",sumKey("savings")],["Saldo neto",sumKey("balance")],["Deudas pendientes",state.debts.reduce((s,d)=>s+(Number(d.balance)||0),0)] ].map(([n,v])=>`<div class="list-row" style="grid-template-columns:1fr auto"><span>${n}</span><strong>${money(v)}</strong></div>`).join("");const alerts=[];const pending=state.tasks.filter(t=>t.status!=="done"&&t.date&&t.date<dateNow());if(pending.length)alerts.push(`${pending.length} recordatorio(s) vencido(s)`);const due=state.debts.filter(d=>d.status!=="paid"&&d.due&&d.due<=dateNow());if(due.length)alerts.push(`${due.length} deuda(s) con vencimiento hoy o anterior`);if(sumKey("expenses")>sumKey("income"))alerts.push("Los gastos del hogar superan los ingresos registrados este año");document.getElementById("financialAlerts").innerHTML=alerts.length?alerts.map(a=>`<div class="list-row" style="grid-template-columns:1fr"><span class="negative">⚠ ${esc(a)}</span></div>`).join(""):'<div class="empty">No hay alertas con los datos actuales.</div>'}
+function exportReportCsv(){const rows=[["Mes","Ingresos","Gastos hogar","Ahorros","Saldo neto"],...monthlyReportData().map(d=>[d.name,d.income,d.expenses,d.savings,d.balance])];const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")).join("\n");const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`nexus-reporte-${document.getElementById("filterYear").value||new Date().getFullYear()}.csv`;a.click();URL.revokeObjectURL(a.href)}
+
+/* Arranque: primero autenticar; luego cargar los datos privados de la cuenta */
 setupYears();
-renderAll();
-bootNexusAuth();
+document.querySelector(".app").classList.add("auth-locked");
+document.getElementById("authScreen").style.display="flex";
+bootstrapAuth();
 </script>
 </body>
 </html>
