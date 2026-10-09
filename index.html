@@ -224,24 +224,97 @@ function normalizeClientState(remote){
  ["incomes","expenses","savings","goals","personalSpending","debts","tasks","accounts","transactions"].forEach(k=>{if(!Array.isArray(out[k]))out[k]=[]});
  return out;
 }
-function apiRequest(action,data={}){
- return new Promise((resolve,reject)=>{
-  const nonce="nx_"+crypto.randomUUID().replace(/-/g,"");
-  const frameName="nexus_api_"+nonce;
-  const frame=document.createElement("iframe");frame.name=frameName;frame.style.display="none";document.body.appendChild(frame);
-  const form=document.createElement("form");form.method="POST";form.action=API_URL;form.target=frameName;form.style.display="none";
-  const values={...data,action,nonce};
-  Object.entries(values).forEach(([key,value])=>{const input=document.createElement("input");input.type="hidden";input.name=key;input.value=typeof value==="string"?value:JSON.stringify(value);form.appendChild(input)});
-  let finished=false;
-  const cleanup=()=>{window.removeEventListener("message",listener);form.remove();frame.remove()};
-  const timer=setTimeout(()=>{if(finished)return;finished=true;cleanup();reject(new Error("Nexus no respondió. Revisa la conexión e inténtalo de nuevo."))},25000);
-  const listener=(event)=>{
-   if(!event.data||event.data.type!=="nexus-api-response"||event.data.nonce!==nonce)return;
-   if(finished)return;finished=true;clearTimeout(timer);cleanup();
-   const result=event.data.result||{};if(result.success)resolve(result);else reject(new Error(result.error||"No se pudo completar la operación."));
-  };
-  window.addEventListener("message",listener);document.body.appendChild(form);form.submit();
- });
+
+function apiRequest(action, data = {}) {
+  return new Promise((resolve, reject) => {
+    const nonce = "nx_" + crypto.randomUUID().replace(/-/g, "");
+    const frameName = "nexus_api_" + nonce;
+
+    const frame = document.createElement("iframe");
+    frame.name = frameName;
+    frame.style.display = "none";
+    document.body.appendChild(frame);
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = API_URL;
+    form.target = frameName;
+    form.style.display = "none";
+
+    const values = { ...data, action, nonce };
+
+    Object.entries(values).forEach(([key, value]) => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = key;
+      input.value =
+        typeof value === "string" ? value : JSON.stringify(value);
+      form.appendChild(input);
+    });
+
+    let finished = false;
+
+    const cleanup = () => {
+      window.removeEventListener("message", listener);
+      clearTimeout(timer);
+      form.remove();
+      frame.remove();
+    };
+
+    const timer = setTimeout(() => {
+      if (finished) return;
+
+      finished = true;
+      cleanup();
+
+      reject(
+        new Error(
+          "Nexus tardó demasiado en responder. Intenta nuevamente."
+        )
+      );
+    }, 25000);
+
+    const listener = (event) => {
+      let message = event.data;
+
+      // Aceptar respuestas como objeto o como texto JSON.
+      if (typeof message === "string") {
+        try {
+          message = JSON.parse(message);
+        } catch (_) {
+          return;
+        }
+      }
+
+      // Ignorar mensajes que no pertenezcan a esta solicitud.
+      if (
+        !message ||
+        message.type !== "nexus-api-response" ||
+        message.nonce !== nonce
+      ) {
+        return;
+      }
+
+      if (finished) return;
+      finished = true;
+
+      cleanup();
+
+      const result = message.result || {};
+
+      if (result.success) {
+        resolve(result);
+      } else {
+        reject(
+          new Error(result.error || "No se pudo completar la operación.")
+        );
+      }
+    };
+
+    window.addEventListener("message", listener);
+    document.body.appendChild(form);
+    form.submit();
+  });
 }
 function saveState(){
  if(!authToken||!authUser)return;
