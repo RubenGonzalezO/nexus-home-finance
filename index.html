@@ -32,10 +32,19 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
  .sidebar{transform:translateX(-100%);transition:.25s}.sidebar.open{transform:none}.main{margin-left:0;width:100%;padding:16px}.mobile-menu{display:block}.topbar{align-items:flex-start}.section-grid{grid-template-columns:1fr}.people,.availability{grid-template-columns:1fr}.savings-grid{grid-template-columns:1fr}.donut-layout{grid-template-columns:1fr}.future-grid{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:auto}.record{grid-template-columns:1fr 1fr}.record .record-actions{grid-column:1/-1}.kpis{grid-template-columns:1fr 1fr}
 }
 @media(max-width:520px){.kpis{grid-template-columns:1fr}.future-grid{grid-template-columns:1fr}.filterbar .field{min-width:100px;flex:1}.actions{width:100%}.actions .btn{flex:1}.stats{grid-template-columns:1fr}.title h1{font-size:22px}}
+
+.auth-screen{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 20% -10%,#211642 0,#0b0a12 55%);}
+.auth-card{width:min(440px,100%);background:#14111e;border:1px solid #332c43;border-radius:22px;padding:28px;box-shadow:0 30px 80px #000}
+.auth-brand{display:flex;align-items:center;gap:12px;margin-bottom:22px}.auth-brand .logo-mark{flex:none}.auth-card h1{font-size:24px;margin:0 0 8px}.auth-card p{color:var(--muted);font-size:13px;line-height:1.5}.auth-card .field{margin:14px 0}.auth-card .btn{width:100%;margin-top:8px}.auth-switch{background:none;color:var(--purple2);padding:12px 0;width:100%}.auth-error{color:#fb7185;font-size:12px;min-height:18px;margin-top:8px}.auth-note{font-size:11px!important}
+body.auth-locked .app,body.auth-locked #modal,body.auth-locked #toast{display:none!important}
 </style>
 </head>
-<body>
-<div class="app">
+<body class="auth-locked">
+<div class="auth-screen" id="authScreen"><div class="auth-card">
+ <div class="auth-brand"><div class="logo-mark">₿</div><div><b>Nexus Finance</b><div class="small">Hogar & Personal</div></div></div>
+ <div id="authFormArea"></div><div class="auth-error" id="authError" role="status"></div>
+</div></div>
+<div class="app" id="nexusApp">
 <aside class="sidebar" id="sidebar">
   <div class="logo"><div class="logo-mark">₿</div><div>Nexus Finance<div class="small">Hogar & Personal</div></div></div>
   <nav class="nav">
@@ -171,120 +180,77 @@ function loadState(){
   }
 }
 
+let nexusToken=localStorage.getItem("nexus_auth_token")||"";
+let nexusUser=JSON.parse(localStorage.getItem("nexus_auth_user")||"null");
+let authMode="login";
+let authBusy=false;
 function saveState(){
-  localStorage.setItem(KEY,JSON.stringify(state));
-  saveStateCloud();
+  localStorage.setItem(KEY+":"+(nexusUser?.id||"guest"),JSON.stringify(state));
+  if(nexusToken) saveStateCloud();
 }
-
-/* PASO 4 · Guardar en Google Sheets mediante Apps Script */
+function authRequest(action,fields={}){
+ return new Promise((resolve,reject)=>{
+  const nonce="nx_"+Date.now()+"_"+Math.random().toString(36).slice(2);
+  const frameName="nx_auth_frame_"+nonce;
+  const iframe=document.createElement("iframe");iframe.name=frameName;iframe.style.display="none";
+  const form=document.createElement("form");form.method="POST";form.action=API_URL;form.target=frameName;form.style.display="none";
+  const data={action,nonce,...fields};
+  Object.entries(data).forEach(([k,v])=>{const i=document.createElement("input");i.type="hidden";i.name=k;i.value=String(v??"");form.appendChild(i)});
+  const timer=setTimeout(()=>{cleanup();reject(new Error("El servidor no respondió. Revisa la implementación de Apps Script."))},20000);
+  function cleanup(){clearTimeout(timer);window.removeEventListener("message",listener);form.remove();iframe.remove()}
+  function listener(ev){const d=ev.data;if(!d||d.type!=="nexus-api-response"||d.nonce!==nonce)return;cleanup();if(d.result?.success)resolve(d.result);else reject(new Error(d.result?.error||"No se pudo completar la solicitud."))}
+  window.addEventListener("message",listener);document.body.appendChild(iframe);document.body.appendChild(form);form.submit();
+ });
+}
 function saveStateCloud(){
-  if(cloudSyncing)return;
-
-  cloudSyncing=true;
-
-  const payload=JSON.stringify(state);
-  const iframeName="nexus_save_frame_"+Date.now();
-
-  const iframe=document.createElement("iframe");
-  iframe.name=iframeName;
-  iframe.style.display="none";
-  document.body.appendChild(iframe);
-
-  const form=document.createElement("form");
-  form.method="POST";
-  form.action=API_URL;
-  form.target=iframeName;
-  form.style.display="none";
-
-  const action=document.createElement("input");
-  action.type="hidden";
-  action.name="action";
-  action.value="save";
-
-  const stateInput=document.createElement("input");
-  stateInput.type="hidden";
-  stateInput.name="state";
-  stateInput.value=payload;
-
-  form.appendChild(action);
-  form.appendChild(stateInput);
-  document.body.appendChild(form);
-  form.submit();
-
-  setTimeout(()=>{
-    form.remove();
-    iframe.remove();
-    cloudSyncing=false;
-    cloudReady=true;
-  },1200);
+ if(cloudSyncing||!nexusToken)return;
+ cloudSyncing=true;
+ authRequest("saveAuthState",{token:nexusToken,state:JSON.stringify(state)})
+  .then(()=>{cloudReady=true;})
+  .catch(err=>{if(String(err.message).toLowerCase().includes("sesión")){logoutLocal(false);showAuth("login");}else console.error("Error guardando Nexus:",err);})
+  .finally(()=>{cloudSyncing=false;});
 }
-
-/* PASO 5 · Cargar desde Google Sheets mediante JSONP */
 function loadStateCloud(){
-  return new Promise((resolve)=>{
-    const callbackName="nexusCallback_"+Date.now()+"_"+Math.random().toString(36).slice(2);
-    const script=document.createElement("script");
-
-    window[callbackName]=function(response){
-      try{
-        if(response && response.success && response.state){
-          const remote=response.state;
-          let personalSpending=[];
-
-          /* Compatibilidad con la versión anterior que guardaba este campo como objeto */
-          if(Array.isArray(remote.personalSpending)){
-            personalSpending=remote.personalSpending;
-          }else if(remote.personalSpending && typeof remote.personalSpending==="object"){
-            Object.entries(remote.personalSpending).forEach(([person,items])=>{
-              if(Array.isArray(items)){
-                items.forEach(item=>{
-                  personalSpending.push({
-                    ...item,
-                    person:item.person||person
-                  });
-                });
-              }
-            });
-          }
-
-          state={
-            ...structuredClone(defaultState),
-            ...remote,
-            people:{
-              ...defaultState.people,
-              ...(remote.people||{})
-            },
-            personalSpending
-          };
-
-          localStorage.setItem(KEY,JSON.stringify(state));
-          cloudReady=true;
-          resolve(true);
-        }else{
-          resolve(false);
-        }
-      }catch(error){
-        console.error("Error procesando datos Nexus:",error);
-        resolve(false);
-      }finally{
-        delete window[callbackName];
-        script.remove();
-      }
-    };
-
-    script.onerror=function(){
-      delete window[callbackName];
-      script.remove();
-      resolve(false);
-    };
-
-    script.src=
-      API_URL+
-      "?action=get&callback="+
-      encodeURIComponent(callbackName);
-
-    document.body.appendChild(script);
-  });
+ if(!nexusToken)return Promise.resolve(false);
+ return authRequest("getAuthState",{token:nexusToken}).then(r=>{state=normalizeRemoteState(r.state);localStorage.setItem(KEY+":"+nexusUser.id,JSON.stringify(state));cloudReady=true;return true;}).catch(()=>false);
+}
+function normalizeRemoteState(remote){
+ const personalSpending=Array.isArray(remote?.personalSpending)?remote.personalSpending:[];
+ return {...structuredClone(defaultState),...(remote||{}),people:{...defaultState.people,...(remote?.people||{})},personalSpending};
+}
+function showAuth(mode="login"){
+ authMode=mode;document.body.classList.add("auth-locked");document.getElementById("authScreen").style.display="grid";document.getElementById("authError").textContent="";
+ const register=mode==="register";
+ document.getElementById("authFormArea").innerHTML=`<h1>${register?"Crear cuenta Nexus":"Bienvenido de nuevo"}</h1><p>${register?"Crea tu acceso personal. Tus datos quedarán separados de los de otras cuentas.":"Inicia sesión para abrir tu panel financiero desde cualquier dispositivo."}</p>
+ <form id="authForm"><div class="field"><label>Correo electrónico</label><input class="input" id="authEmail" type="email" autocomplete="username" required placeholder="tu@correo.com"></div>
+ ${register?`<div class="field"><label>Nombre</label><input class="input" id="authName" autocomplete="name" required placeholder="Tu nombre"></div>`:""}
+ <div class="field"><label>Contraseña ${register?"(mínimo 10 caracteres)":""}</label><input class="input" id="authPassword" type="password" autocomplete="${register?"new-password":"current-password"}" minlength="${register?10:1}" required placeholder="Contraseña"></div>
+ ${register?`<div class="field"><label>Código inicial de configuración</label><input class="input" id="authSetupCode" autocomplete="off" required placeholder="Código generado en Apps Script"><div class="small">Solo se solicita para crear la primera cuenta.</div></div>`:""}
+ <button class="btn primary" id="authSubmit" type="submit">${register?"Crear cuenta":"Iniciar sesión"}</button></form>
+ <button class="auth-switch" type="button" id="authSwitch">${register?"Ya tengo cuenta · Iniciar sesión":"¿Primera vez en Nexus? Crear cuenta"}</button>
+ <p class="auth-note">La primera cuenta migra los datos actuales de Nexus. No borres la hoja NEXUS_DATA.</p>`;
+ document.getElementById("authSwitch").onclick=()=>showAuth(register?"login":"register");
+ document.getElementById("authForm").onsubmit=submitAuth;
+}
+async function submitAuth(e){
+ e.preventDefault();if(authBusy)return;authBusy=true;const btn=document.getElementById("authSubmit");btn.disabled=true;btn.textContent="Conectando…";document.getElementById("authError").textContent="";
+ try{
+  const fields={email:document.getElementById("authEmail").value.trim(),password:document.getElementById("authPassword").value};
+  let result;
+  if(authMode==="register") {fields.name=document.getElementById("authName").value.trim();fields.setupCode=document.getElementById("authSetupCode").value.trim();result=await authRequest("register",fields);}
+  else result=await authRequest("login",fields);
+  nexusToken=result.token;nexusUser=result.user;localStorage.setItem("nexus_auth_token",nexusToken);localStorage.setItem("nexus_auth_user",JSON.stringify(nexusUser));
+  state=normalizeRemoteState(result.state||defaultState);localStorage.setItem(KEY+":"+nexusUser.id,JSON.stringify(state));
+  document.body.classList.remove("auth-locked");document.getElementById("authScreen").style.display="none";setupYears();renderAll();toast("Sesión iniciada · Nexus sincronizado");
+ }catch(err){document.getElementById("authError").textContent=err.message||"No se pudo iniciar sesión.";}
+ finally{authBusy=false;const b=document.getElementById("authSubmit");if(b){b.disabled=false;b.textContent=authMode==="register"?"Crear cuenta":"Iniciar sesión"}}
+}
+function logoutLocal(callServer=true){const token=nexusToken;nexusToken="";nexusUser=null;localStorage.removeItem("nexus_auth_token");localStorage.removeItem("nexus_auth_user");if(callServer&&token)authRequest("logout",{token}).catch(()=>{});}
+function logoutNexus(){if(confirm("¿Cerrar tu sesión de Nexus?")){logoutLocal(true);showAuth("login");}}
+async function bootNexusAuth(){
+ if(!nexusToken||!nexusUser){showAuth("login");return;}
+ const ok=await loadStateCloud();if(!ok){logoutLocal(false);showAuth("login");return;}
+ document.body.classList.remove("auth-locked");document.getElementById("authScreen").style.display="none";setupYears();renderAll();toast("Datos sincronizados con Nexus");
 }
 
 function money(n){return new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(Math.round(Number(n)||0))}
@@ -489,7 +455,7 @@ function saveGoal(e,id){e.preventDefault();let rec={id:id||crypto.randomUUID(),n
 function renderGoals(){let box=document.getElementById("goalsGrid");box.innerHTML=state.goals.length?state.goals.map(g=>{let p=g.target?Math.min(100,g.current/g.target*100):0;return `<div class="goal"><h3>${esc(g.name)}</h3><p>${esc(g.desc)}</p><div class="money">${money(g.current)} <span class="small">/ ${money(g.target)}</span></div><div class="progress"><i style="width:${p}%"></i></div><div class="saving-meta"><span>${p.toFixed(0)}%</span><span>${p>=100?"Meta cumplida":"En progreso"}</span></div><div class="goal-actions"><button class="mini-btn" onclick="openGoal('${g.id}')">Editar</button><button class="mini-btn" onclick="deleteGoal('${g.id}')">Eliminar</button></div></div>`}).join(""):`<div class="empty" style="grid-column:1/-1">Crea hasta 4 metas para hacer seguimiento a tus objetivos.</div>`}
 function deleteGoal(id){if(confirm("¿Eliminar esta meta?")){state.goals=state.goals.filter(x=>x.id!==id);saveState();renderAll();toast("Meta eliminada")}}
 
-function openSettings(){openModal("Configuración",`<form onsubmit="saveSettings(event)"><div class="form-grid"><div class="field"><label>Tu nombre</label><input class="input" id="setMe" value="${esc(state.people.me)}"></div><div class="field"><label>Nombre de tu pareja</label><input class="input" id="setPartner" value="${esc(state.people.partner)}"></div></div><div class="form-actions"><button class="btn primary">Guardar configuración</button></div></form><div style="margin-top:20px;padding-top:15px;border-top:1px solid var(--line)"><b>Datos locales</b><p class="small">Los registros se guardan en este navegador mediante localStorage. Usa exportar para crear una copia de seguridad.</p><div class="actions"><button class="btn" onclick="exportData()">Exportar respaldo</button><button class="btn" onclick="importData()">Importar respaldo</button><button class="btn danger" onclick="resetAll()">Borrar todos los datos</button></div></div>`)}
+function openSettings(){openModal("Configuración",`<form onsubmit="saveSettings(event)"><div class="form-grid"><div class="field"><label>Tu nombre</label><input class="input" id="setMe" value="${esc(state.people.me)}"></div><div class="field"><label>Nombre de tu pareja</label><input class="input" id="setPartner" value="${esc(state.people.partner)}"></div></div><div class="form-actions"><button class="btn primary">Guardar configuración</button></div></form><div style="margin-top:20px;padding-top:15px;border-top:1px solid var(--line)"><b>Cuenta y respaldo</b><p class="small">Los datos se sincronizan con tu cuenta Nexus en Google Sheets. Puedes exportar una copia de seguridad.</p><div class="actions"><button class="btn" onclick="exportData()">Exportar respaldo</button><button class="btn" onclick="importData()">Importar respaldo</button><button class="btn" onclick="logoutNexus()">Cerrar sesión</button><button class="btn danger" onclick="resetAll()">Borrar todos los datos</button></div></div>`)}
 function saveSettings(e){e.preventDefault();state.people.me=document.getElementById("setMe").value.trim()||"Yo";state.people.partner=document.getElementById("setPartner").value.trim()||"Mi pareja";saveState();closeModal();toast("Configuración guardada")}
 function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`nexus-finance-respaldo-${dateNow()}.json`;a.click();URL.revokeObjectURL(a.href)}
 function importData(){let input=document.createElement("input");input.type="file";input.accept=".json,application/json";input.onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{state={...defaultState,...JSON.parse(r.result)};saveState();closeModal();renderAll();toast("Respaldo importado")}catch(_){toast("El archivo no es válido.")}};r.readAsText(f)};input.click()}
@@ -498,19 +464,10 @@ function toast(msg){let t=document.getElementById("toast");t.textContent=msg;t.c
 
 document.getElementById("filterMonth").addEventListener("change",()=>{let f=getFilter();document.getElementById("incomeComparison").textContent=comparison(state.incomes);document.getElementById("expenseComparison").textContent=comparison(state.expenses)});
 setInterval(()=>{document.getElementById("incomeComparison").textContent=comparison(state.incomes);document.getElementById("expenseComparison").textContent=comparison(state.expenses)},1000);
-/* PASO 6 · Arranque y sincronización inicial */
+/* Inicio con autenticación: cada usuario carga su propio estado desde Sheets. */
 setupYears();
 renderAll();
-
-loadStateCloud().then(ok=>{
-  if(ok){
-    setupYears();
-    renderAll();
-    toast("☁ Datos sincronizados con Nexus");
-  }else{
-    toast("⚠ No se pudo sincronizar. Usando datos locales.");
-  }
-});
+bootNexusAuth();
 </script>
 </body>
 </html>
