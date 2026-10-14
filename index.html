@@ -42,6 +42,14 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
 @media(max-width:800px){.module-grid{grid-template-columns:1fr}.module-form{grid-template-columns:1fr 1fr}.module-form .full{grid-column:1/-1}.month-list{gap:4px}.calendar-day{min-height:65px;padding:4px}.calendar-task{font-size:8px}.account-strip{display:none}}
 @media(max-width:520px){.auth-card{padding:21px}.module-form{grid-template-columns:1fr}.report-row{grid-template-columns:72px 1fr 82px;gap:6px}.calendar-day{min-height:53px;font-size:9px}}
 
+
+.personal-summary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin:12px 0 16px}
+.personal-summary .summary-box{background:var(--panel-2,rgba(255,255,255,.04));border:1px solid var(--line);border-radius:12px;padding:11px;min-width:0}
+.personal-summary small{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}
+.personal-summary strong{font-size:15px;overflow-wrap:anywhere}
+.personal-kind{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:3px 7px;font-size:11px;color:var(--muted);white-space:nowrap}
+@media(max-width:640px){.personal-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.personal-summary strong{font-size:14px}}
+
 </style>
 </head>
 <body>
@@ -475,10 +483,29 @@ function renderAvailable(inc,exp,sav){
  const box=document.getElementById("availablePeople");
  box.innerHTML=personCard("me",state.people.me,meA)+personCard("partner",state.people.partner,paA);
 }
+function personalMovementType(x){
+ // Los registros antiguos no tenían tipo: se conservan como gastos.
+ return x.type||"expense";
+}
+function personalAssigned(person,year=getFilter().year,month=getFilter().month){
+ const matches=arr=>sum(arr.filter(x=>x.person===person&&inPeriod(x.date,year,month)));
+ const income=matches(state.incomes);
+ const householdShare=sum(state.expenses.filter(x=>inPeriod(x.date,year,month)).map(x=>({amount:person==="me"?x.meAmount:x.partnerAmount})));
+ const generalSavings=matches(state.savings);
+ return income-householdShare-generalSavings;
+}
+function personalStats(person,year=getFilter().year,month=getFilter().month){
+ const rows=(state.personalSpending||[]).filter(x=>x.person===person&&inPeriod(x.date,year,month));
+ const amountOf=x=>Math.abs(Number(x.amount)||0);
+ const spent=sum(rows.filter(x=>["expense","debt","other-expense"].includes(personalMovementType(x))).map(x=>({amount:amountOf(x)})));
+ const saved=sum(rows.filter(x=>personalMovementType(x)==="saving").map(x=>({amount:amountOf(x)})));
+ const extraIncome=sum(rows.filter(x=>personalMovementType(x)==="income").map(x=>({amount:amountOf(x)})));
+ return {rows,spent,saved,extraIncome};
+}
 function personCard(person,name,assigned){
- const spent=state.personalSpending?sum(state.personalSpending.filter(x=>x.person===person&&inPeriod(x.date,getFilter().year,getFilter().month))):0;
- const balance=assigned-spent, pct=assigned>0?Math.max(0,Math.min(100,balance/assigned*100)):0;
- return `<div class="person-card"><b>${esc(name)}</b><div class="stats"><div class="stat"><small>Asignado</small><b>${money(assigned)}</b></div><div class="stat"><small>Gastado</small><b>${money(spent)} <button class="detail-btn" onclick="openPersonalSpending('${person}')">ver detalles</button></b></div><div class="stat"><small>Saldo disponible</small><b class="${balance<0?'negative':'positive'}">${money(balance)}</b></div></div><div class="progress"><i style="width:${pct}%"></i></div><div class="small" style="margin-top:6px">${pct.toFixed(0)}% del asignado disponible</div></div>`;
+ const stats=personalStats(person), balance=assigned+stats.extraIncome-stats.spent-stats.saved;
+ const pct=assigned>0?Math.max(0,Math.min(100,balance/assigned*100)):0;
+ return `<div class="person-card"><b>${esc(name)}</b><div class="stats"><div class="stat"><small>Asignado</small><b>${money(assigned)}</b></div><div class="stat"><small>Gastado</small><b>${money(stats.spent)} <button class="detail-btn" onclick="openPersonalSpending('${person}')">ver detalles</button></b></div><div class="stat"><small>Saldo disponible</small><b class="${balance<0?'negative':'positive'}">${money(balance)}</b></div></div><div class="small">Ahorro personal: <b>${money(stats.saved)}</b> · Ingresos adicionales: <b>${money(stats.extraIncome)}</b></div><div class="progress"><i style="width:${pct}%"></i></div><div class="small" style="margin-top:6px">${pct.toFixed(0)}% del asignado disponible</div></div>`;
 }
 function renderBars(id,year,type){
  const box=document.getElementById(id), vals=MONTHS.map((_,i)=>{
@@ -576,19 +603,71 @@ function renderSavingHistory(type){const y=Number(document.getElementById("histY
 function saveSaving(e,type,id){e.preventDefault();let amount=num(document.getElementById("sAmount").value);if(!amount)return toast("Ingresa un monto válido.");let rec={id:id||crypto.randomUUID(),date:document.getElementById("sDate").value,amount,type,person:document.getElementById("sPerson").value};if(id)state.savings=state.savings.map(x=>x.id===id?rec:x);else state.savings.push(rec);saveState();toast(id?"Ahorro actualizado":"Ahorro registrado");openSaving(type)}
 
 function saveSavingTarget(){state.savingTarget=num(document.getElementById("savingTarget").value);saveState();renderAll();toast("Meta mensual de ahorro guardada.")}
-function openPersonalSpending(person){
- state.personalSpending=state.personalSpending||[];
- openModal(`Gastos personales · ${state.people[person]}`,`<form onsubmit="savePersonalSpending(event,'${person}')"><div class="form-grid"><div class="field"><label>Fecha</label><input class="input" id="pDate" type="date" value="${dateNow()}"></div><div class="field"><label>Monto</label><input class="input money-input" id="pAmount" inputmode="numeric"></div><div class="field full"><label>Descripción</label><input class="input" id="pDesc" placeholder="Ej. comida, salida, compra..."></div></div><div class="form-actions"><button class="btn primary">Registrar gasto personal</button></div></form><div class="history"><b>Historial</b><div class="history-list" style="margin-top:10px">${state.personalSpending.filter(x=>x.person===person).sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="record"><span>${x.date}</span><b>${money(x.amount)}</b><span>${esc(x.desc)}</span><div class="record-actions"><button onclick="deleteRecord('personal','${x.id}')">Eliminar</button></div></div>`).join("")||'<div class="empty">Sin gastos personales.</div>'}</div></div>`);document.getElementById("pAmount").addEventListener("input",e=>e.target.value=fmtInput(e.target.value));
+function personalTypeLabel(type){
+ return ({expense:"Gasto personal",debt:"Pago de deuda", "other-expense":"Otro egreso",saving:"Ahorro personal",income:"Ingreso adicional"})[type]||"Gasto personal";
 }
-function savePersonalSpending(e,person){e.preventDefault();let a=num(document.getElementById("pAmount").value);if(!a)return toast("Ingresa un monto.");state.personalSpending=state.personalSpending||[];state.personalSpending.push({id:crypto.randomUUID(),person,date:document.getElementById("pDate").value,amount:a,desc:document.getElementById("pDesc").value});saveState();toast("Gasto personal registrado");openPersonalSpending(person)}
+function personalTypeCountsAsSpent(type){return ["expense","debt","other-expense"].includes(type||"expense")}
+let activePersonalPerson="me";
+function openPersonalSpending(person){
+ activePersonalPerson=person;
+ state.personalSpending=state.personalSpending||[];
+ const stats=personalStats(person);
+ const assigned=personalAssigned(person);
+ const personalBalance=assigned+stats.extraIncome-stats.spent-stats.saved;
+ const rows=stats.rows.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+ const history=rows.map(x=>{
+   const type=personalMovementType(x), amount=Math.abs(Number(x.amount)||0);
+   const sign=type==="income"?"+":personalTypeCountsAsSpent(type)?"−":"↗";
+   return `<div class="record"><span>${esc(x.date||"—")}</span><b class="${type==='income'?'positive':personalTypeCountsAsSpent(type)?'negative':''}">${sign}${money(amount)}</b><span><span class="personal-kind">${personalTypeLabel(type)}</span><br>${esc(x.category||"Sin categoría")} · ${esc(x.desc||"Sin descripción")}</span><div class="record-actions"><button onclick="deleteRecord('personal','${x.id}')">Eliminar</button></div></div>`;
+ }).join("");
+ openModal(`Finanzas personales · ${state.people[person]}`,`
+ <div class="small">Registra aquí los movimientos de ${esc(state.people[person])}. Los gastos, pagos de deuda y otros egresos alimentan automáticamente el valor de <b>Gastado</b>; los ahorros y los ingresos adicionales se contabilizan por separado.</div>
+ <div class="personal-summary">
+  <div class="summary-box"><small>Asignado</small><strong>${money(assigned)}</strong></div>
+  <div class="summary-box"><small>Gastado</small><strong class="negative">${money(stats.spent)}</strong></div>
+  <div class="summary-box"><small>Ahorro personal</small><strong>${money(stats.saved)}</strong></div>
+  <div class="summary-box"><small>Ingresos adicionales</small><strong class="positive">${money(stats.extraIncome)}</strong></div>
+  <div class="summary-box"><small>Disponible real</small><strong class="${personalBalance<0?'negative':'positive'}">${money(personalBalance)}</strong></div>
+ </div>
+ <form onsubmit="savePersonalSpending(event,'${person}')">
+  <div class="form-grid">
+   <div class="field"><label>Fecha</label><input class="input" id="pDate" type="date" value="${dateNow()}" required></div>
+   <div class="field"><label>Tipo de movimiento</label><select class="select" id="pType" onchange="updatePersonalCategories()" required><option value="expense">Gasto personal</option><option value="debt">Pago de deuda</option><option value="other-expense">Otro egreso</option><option value="saving">Ahorro personal</option><option value="income">Ingreso adicional</option></select></div>
+   <div class="field"><label>Categoría</label><select class="select" id="pCategory"><option>Alimentación</option><option>Transporte</option><option>Compras personales</option><option>Salud</option><option>Entretenimiento</option><option>Servicios / suscripciones</option><option>Deudas y obligaciones</option><option>Ahorro personal</option><option>Ingreso adicional</option><option>Otros</option></select></div>
+   <div class="field"><label>Monto (COP)</label><input class="input money-input" id="pAmount" inputmode="numeric" placeholder="Ej. 50000" required></div>
+   <div class="field full"><label>Descripción / nota</label><input class="input" id="pDesc" placeholder="Ej. mercado, transporte, cuota del préstamo..." maxlength="180"></div>
+  </div>
+  <div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cerrar</button><button class="btn primary">Registrar movimiento</button></div>
+ </form>
+ <div class="history"><div class="history-head"><b>Historial personal</b><span class="small">${rows.length} movimiento(s)</span></div><div class="history-list" style="margin-top:10px">${history||'<div class="empty">Aún no hay movimientos personales registrados.</div>'}</div></div>`);
+ document.getElementById("pAmount").addEventListener("input",e=>e.target.value=fmtInput(e.target.value));
+}
+function updatePersonalCategories(){
+ const type=document.getElementById("pType")?.value, cat=document.getElementById("pCategory");
+ if(!cat)return;
+ if(type==="saving")cat.value="Ahorro personal";
+ else if(type==="income")cat.value="Ingreso adicional";
+ else if(type==="debt")cat.value="Deudas y obligaciones";
+ else if(!["Alimentación","Transporte","Compras personales","Salud","Entretenimiento","Servicios / suscripciones","Otros"].includes(cat.value))cat.value="Otros";
+}
+function savePersonalSpending(e,person){
+ e.preventDefault();
+ const a=num(document.getElementById("pAmount").value);
+ if(!a||a<0)return toast("Ingresa un monto mayor que cero.");
+ const type=document.getElementById("pType").value;
+ state.personalSpending=state.personalSpending||[];
+ state.personalSpending.push({id:crypto.randomUUID(),person,date:document.getElementById("pDate").value,amount:a,type,category:document.getElementById("pCategory").value,desc:document.getElementById("pDesc").value.trim()});
+ saveState();renderAll();toast(`${personalTypeLabel(type)} registrado`);openPersonalSpending(person);
+}
 function deleteRecord(type,id){
  if(!confirm("¿Eliminar este registro?"))return;
  if(type==="income")state.incomes=state.incomes.filter(x=>x.id!==id);
  if(type==="expense")state.expenses=state.expenses.filter(x=>x.id!==id);
  if(type==="saving")state.savings=state.savings.filter(x=>x.id!==id);
  if(type==="personal")state.personalSpending=(state.personalSpending||[]).filter(x=>x.id!==id);
- saveState();toast("Registro eliminado");
- if(activeModal.type==="income")openIncome(activeModal.key); else if(activeModal.type==="expense")openExpense(activeModal.key); else if(activeModal.type==="saving")openSaving(activeModal.key); else closeModal();
+ saveState();renderAll();toast("Registro eliminado");
+ if(type==="personal")openPersonalSpending(activePersonalPerson);
+ else if(activeModal.type==="income")openIncome(activeModal.key); else if(activeModal.type==="expense")openExpense(activeModal.key); else if(activeModal.type==="saving")openSaving(activeModal.key); else closeModal();
 }
 
 function openGoal(editId=null){
