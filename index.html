@@ -34,6 +34,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
 @media(max-width:520px){.kpis{grid-template-columns:1fr}.future-grid{grid-template-columns:1fr}.filterbar .field{min-width:100px;flex:1}.actions{width:100%}.actions .btn{flex:1}.stats{grid-template-columns:1fr}.title h1{font-size:22px}}
 
 /* Autenticación y módulos ampliados Nexus */
+.auth-options{display:grid;gap:9px;margin:4px 0 14px;font-size:13px;color:var(--muted)}.remember-option{display:flex;align-items:center;gap:9px}.remember-option input{accent-color:var(--accent);width:15px;height:15px}
 #authScreen{position:fixed;inset:0;z-index:500;background:radial-gradient(circle at 20% -10%,#302052 0,#0b0a12 55%);display:flex;align-items:center;justify-content:center;padding:20px}
 .auth-card{width:min(460px,100%);padding:28px;background:rgba(18,16,27,.97);border:1px solid #392d4e;border-radius:24px;box-shadow:0 28px 90px #0009}
 .auth-brand{display:flex;align-items:center;gap:12px;margin-bottom:22px}.auth-brand .logo-mark{width:48px;height:48px;font-size:21px}.auth-card h1{margin:0;font-size:25px}.auth-card p{color:var(--muted);font-size:12px;line-height:1.6}.auth-card form{display:grid;gap:13px}.auth-card label{display:grid;gap:6px;font-size:11px;color:var(--muted)}.auth-card .input{padding:12px}.auth-message{min-height:18px;color:#fda4af;font-size:11px}.auth-switch{width:100%;margin-top:14px;background:transparent;color:#c4b5fd;padding:10px}
@@ -177,12 +178,14 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
 <div id="authScreen">
  <div class="auth-card">
   <div class="auth-brand"><div class="logo-mark">N</div><div><h1>Nexus Finance</h1><div class="small">Hogar & Personal · nube segura</div></div></div>
-  <p id="authIntro">Inicia sesión para acceder a tus finanzas. Tus registros se guardan en tu cuenta y no se mezclan con los de otros usuarios.</p>
+  <p id="authIntro">Inicia sesión para acceder a tus finanzas. Los dos perfiles del hogar comparten la misma información financiera.</p>
   <form id="authForm" onsubmit="submitAuth(event)">
-   <label id="authNameWrap" class="hidden">Nombre<input class="input" id="authName" autocomplete="name" placeholder="Tu nombre"></label>
-   <label id="authCodeWrap" class="hidden">Código inicial de seguridad <span class="small">Solo para crear la primera cuenta</span><input class="input" id="authSetupCode" autocomplete="off" placeholder="Pega el código de Apps Script"></label>
-   <label>Correo electrónico<input class="input" id="authEmail" type="email" autocomplete="username" required placeholder="tu@correo.com"></label>
+   <label id="authNameWrap" class="hidden">Nombre del perfil<input class="input" id="authName" autocomplete="name" placeholder="Ruben o Mauren"></label>
+   <label id="authUsernameWrap" class="hidden">Nombre de usuario<input class="input" id="authUsername" autocomplete="username" placeholder="Ej. ruben"></label>
+   <label id="authCodeWrap" class="hidden">Código de invitación del perfil 2 <span class="small">Lo genera el administrador desde Apps Script y se usa una sola vez</span><input class="input" id="authSetupCode" autocomplete="off" placeholder="Código de invitación"></label>
+   <label id="authIdentifierLabel">Correo o nombre de usuario<input class="input" id="authEmail" type="text" autocomplete="username" required placeholder="Correo o usuario"></label>
    <label>Contraseña<input class="input" id="authPassword" type="password" autocomplete="current-password" minlength="10" required placeholder="Mínimo 10 caracteres"></label>
+   <div class="auth-options"><label class="remember-option"><input type="checkbox" id="rememberAccount" checked> Recordar mi usuario</label><label class="remember-option"><input type="checkbox" id="keepSignedIn"> Mantener sesión iniciada</label></div>
    <div class="auth-message" id="authMessage" aria-live="polite"></div>
    <button class="btn primary" id="authSubmit">Iniciar sesión</button>
   </form>
@@ -203,44 +206,119 @@ const KEY="nexus_home_finance_v1";
 const API_URL="https://script.google.com/macros/s/AKfycbz897X-GuvfrTn-iT8egt4YkjOTvul1hlB4Rsb2ofuW4LN7IlvZXYv3LFQWY2QjPtOQtA/exec";
 const AUTH_TOKEN_KEY="nexus_auth_token_v2";
 const AUTH_USER_KEY="nexus_auth_user_v2";
-let authToken=sessionStorage.getItem(AUTH_TOKEN_KEY)||"";
+const AUTH_REMEMBER_KEY="nexus_auth_remembered_identifier_v1";
+const AUTH_KEEP_KEY="nexus_auth_keep_session_v1";
+let authToken=(localStorage.getItem(AUTH_KEEP_KEY)==="yes"?localStorage.getItem(AUTH_TOKEN_KEY):sessionStorage.getItem(AUTH_TOKEN_KEY))||"";
 let authUser=(()=>{try{return JSON.parse(localStorage.getItem(AUTH_USER_KEY)||"null")}catch(_){return null}})();
 let authMode="login";
-let cloudSyncing=false,cloudReady=false,cloudSavePending=false,localChangesDuringSync=false,activeModule="dashboard";
+let cloudSyncing=false,cloudReady=false,cloudSavePending=false,activeModule="dashboard";
 let calendarCursor=new Date();
-const defaultState={people:{me:"Yo",partner:"Mi pareja"},incomes:[],expenses:[],savings:[],savingTarget:0,goals:[],personalSpending:[],debts:[],tasks:[],accounts:[],transactions:[]};
+const defaultState={people:{me:"Ruben",partner:"Mauren"},incomes:[],expenses:[],savings:[],savingTarget:0,goals:[],personalSpending:[],debts:[],tasks:[],accounts:[],transactions:[]};
 let state=structuredClone(defaultState);
 let activeModal={type:null,key:null};
 function normalizeClientState(remote){
  const s=remote&&typeof remote==="object"?remote:{};
  const out={...structuredClone(defaultState),...s,people:{...defaultState.people,...(s.people||{})}};
+ if(out.people.me==="Yo")out.people.me="Ruben";if(out.people.partner==="Mi pareja")out.people.partner="Mauren";
  if(out.personalSpending&&!Array.isArray(out.personalSpending)&&typeof out.personalSpending==="object")out.personalSpending=Object.entries(out.personalSpending).flatMap(([person,items])=>(Array.isArray(items)?items.map(x=>({...x,person:x.person||person})):[]));
  ["incomes","expenses","savings","goals","personalSpending","debts","tasks","accounts","transactions"].forEach(k=>{if(!Array.isArray(out[k]))out[k]=[]});
  return out;
 }
-function apiRequest(action,data={}){
- return new Promise((resolve,reject)=>{
-  const nonce="nx_"+crypto.randomUUID().replace(/-/g,"");
-  const frameName="nexus_api_"+nonce;
-  const frame=document.createElement("iframe");frame.name=frameName;frame.style.display="none";document.body.appendChild(frame);
-  const form=document.createElement("form");form.method="POST";form.action=API_URL;form.target=frameName;form.style.display="none";
-  const values={...data,action,nonce};
-  Object.entries(values).forEach(([key,value])=>{const input=document.createElement("input");input.type="hidden";input.name=key;input.value=typeof value==="string"?value:JSON.stringify(value);form.appendChild(input)});
-  let finished=false;
-  const cleanup=()=>{window.removeEventListener("message",listener);form.remove();frame.remove()};
-  const timer=setTimeout(()=>{if(finished)return;finished=true;cleanup();reject(new Error("Nexus no respondió. Revisa la conexión e inténtalo de nuevo."))},25000);
-  const listener=(event)=>{
-   if(!event.data||event.data.type!=="nexus-api-response"||event.data.nonce!==nonce)return;
-   if(finished)return;finished=true;clearTimeout(timer);cleanup();
-   const result=event.data.result||{};if(result.success)resolve(result);else reject(new Error(result.error||"No se pudo completar la operación."));
-  };
-  window.addEventListener("message",listener);document.body.appendChild(form);form.submit();
- });
+
+function apiRequest(action, data = {}) {
+  return new Promise((resolve, reject) => {
+    const nonce = "nx_" + crypto.randomUUID().replace(/-/g, "");
+    const frameName = "nexus_api_" + nonce;
+
+    const frame = document.createElement("iframe");
+    frame.name = frameName;
+    frame.style.display = "none";
+    document.body.appendChild(frame);
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = API_URL;
+    form.target = frameName;
+    form.style.display = "none";
+
+    const values = { ...data, action, nonce };
+
+    Object.entries(values).forEach(([key, value]) => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = key;
+      input.value =
+        typeof value === "string" ? value : JSON.stringify(value);
+      form.appendChild(input);
+    });
+
+    let finished = false;
+
+    const cleanup = () => {
+      window.removeEventListener("message", listener);
+      clearTimeout(timer);
+      form.remove();
+      frame.remove();
+    };
+
+    const timer = setTimeout(() => {
+      if (finished) return;
+
+      finished = true;
+      cleanup();
+
+      reject(
+        new Error(
+          "Nexus tardó demasiado en responder. Intenta nuevamente."
+        )
+      );
+    }, 25000);
+
+    const listener = (event) => {
+      let message = event.data;
+
+      // Aceptar respuestas como objeto o como texto JSON.
+      if (typeof message === "string") {
+        try {
+          message = JSON.parse(message);
+        } catch (_) {
+          return;
+        }
+      }
+
+      // Ignorar mensajes que no pertenezcan a esta solicitud.
+      if (
+        !message ||
+        message.type !== "nexus-api-response" ||
+        message.nonce !== nonce
+      ) {
+        return;
+      }
+
+      if (finished) return;
+      finished = true;
+
+      cleanup();
+
+      const result = message.result || {};
+
+      if (result.success) {
+        resolve(result);
+      } else {
+        reject(
+          new Error(result.error || "No se pudo completar la operación.")
+        );
+      }
+    };
+
+    window.addEventListener("message", listener);
+    document.body.appendChild(form);
+    form.submit();
+  });
 }
 function saveState(){
  if(!authToken||!authUser)return;
- if(!cloudReady)localChangesDuringSync=true;
- const localKey=KEY+"_shared";
+ const localKey=KEY+"_"+authUser.id;
  try{localStorage.setItem(localKey,JSON.stringify(state))}catch(_){}
  saveStateCloud();
  renderExtendedModules();
@@ -255,42 +333,84 @@ async function saveStateCloud(){
 }
 async function loadStateCloud(){
  if(!authToken)return false;
- try{const result=await apiRequest("get",{token:authToken});
-  if(!localChangesDuringSync){state=normalizeClientState(result.state);try{localStorage.setItem(KEY+"_shared",JSON.stringify(state))}catch(_){}}
-  cloudReady=true;
-  if(localChangesDuringSync){localChangesDuringSync=false;await saveStateCloud()}
-  return true}
+ try{const result=await apiRequest("get",{token:authToken});state=normalizeClientState(result.state);localStorage.setItem(KEY+"_"+authUser.id,JSON.stringify(state));localStorage.setItem(KEY+"_shared",JSON.stringify(state));cloudReady=true;return true}
  catch(err){if(/sesión venció|inicia sesión/i.test(err.message)){clearAuth();return false}throw err}
 }
-function toggleAuthMode(){authMode=authMode==="login"?"register":"login";document.getElementById("authNameWrap").classList.toggle("hidden",authMode!=="register");document.getElementById("authCodeWrap").classList.toggle("hidden",authMode!=="register");document.getElementById("authPassword").autocomplete=authMode==="register"?"new-password":"current-password";document.getElementById("authPassword").minLength=10;document.getElementById("authSubmit").textContent=authMode==="register"?"Crear cuenta":"Iniciar sesión";document.getElementById("authSwitch").textContent=authMode==="register"?"Ya tengo cuenta · Iniciar sesión":"¿Primera vez? Crear cuenta";document.getElementById("authIntro").textContent=authMode==="register"?"Crea tu cuenta Nexus. Usa un correo al que tengas acceso y una contraseña única de al menos 10 caracteres.":"Inicia sesión para acceder a tus finanzas. Tus registros se guardan en tu cuenta y no se mezclan con los de otros usuarios.";document.getElementById("authMessage").textContent=""}
+function toggleAuthMode(){
+ authMode=authMode==="login"?"register":"login";
+ document.getElementById("authEmail").value=authMode==="register"?"":(localStorage.getItem(AUTH_REMEMBER_KEY)||"");
+ document.getElementById("authNameWrap").classList.toggle("hidden",authMode!=="register");
+ document.getElementById("authUsernameWrap").classList.toggle("hidden",authMode!=="register");
+ document.getElementById("authCodeWrap").classList.toggle("hidden",authMode!=="register");
+ document.getElementById("authEmail").type=authMode==="register"?"email":"text";
+ document.getElementById("authEmail").placeholder=authMode==="register"?"correo@ejemplo.com":"Correo o usuario";
+ document.getElementById("authIdentifierLabel").firstChild.textContent=authMode==="register"?"Correo electrónico":"Correo o nombre de usuario";
+ document.getElementById("authPassword").autocomplete=authMode==="register"?"new-password":"current-password";
+ document.getElementById("authPassword").minLength=10;
+ document.getElementById("authSubmit").textContent=authMode==="register"?"Crear cuenta":"Iniciar sesión";
+ document.getElementById("authSwitch").textContent=authMode==="register"?"Ya tengo cuenta · Iniciar sesión":"Crear la segunda cuenta";
+ document.getElementById("authIntro").textContent=authMode==="register"?"Registra el segundo perfil del hogar. Solo se permiten dos cuentas Nexus.":"Ingresa con tu correo o nombre de usuario. Tus dos perfiles comparten la misma información financiera del hogar.";
+ document.getElementById("authMessage").textContent="";
+}
 async function submitAuth(event){
  event.preventDefault();const btn=document.getElementById("authSubmit"),msg=document.getElementById("authMessage");btn.disabled=true;btn.textContent="Conectando…";msg.textContent="";
  try{
-  const data={email:document.getElementById("authEmail").value.trim(),password:document.getElementById("authPassword").value};
-  if(authMode==="register"){data.name=document.getElementById("authName").value.trim();data.setupCode=document.getElementById("authSetupCode").value.trim()}
+  const identifier=document.getElementById("authEmail").value.trim();
+  const data={identifier,password:document.getElementById("authPassword").value};
+  if(authMode==="register"){
+   data.email=identifier;data.name=document.getElementById("authName").value.trim();data.username=document.getElementById("authUsername").value.trim();data.setupCode=document.getElementById("authSetupCode").value.trim();
+  }
   const result=await apiRequest(authMode==="register"?"register":"login",data);
-  setAuth(result.token,result.user);
-  const localKey=KEY+"_shared";
-  try{const cached=localStorage.getItem(localKey);state=normalizeClientState(cached?JSON.parse(cached):defaultState)}catch(_){state=normalizeClientState(defaultState)}
-  document.getElementById("authScreen").style.display="none";document.querySelector(".app").classList.remove("auth-locked");document.getElementById("signedUserName").textContent=authUser.name||authUser.email;
-  setupYears();renderAll();renderExtendedModules();setSyncStatus("Sincronizando…");
-  loadStateCloud().then(ok=>{if(ok){setupYears();renderAll();renderExtendedModules();setSyncStatus("Sincronizado");toast("Sesión iniciada. Datos sincronizados con Nexus.")}else setSyncStatus("Conexión no disponible")}).catch(err=>{setSyncStatus("Sin conexión · datos locales");toast("Entraste, pero no se pudieron cargar los datos de la nube.")});
+  const remember=document.getElementById("rememberAccount").checked;
+  const keep=document.getElementById("keepSignedIn").checked;
+  if(remember)localStorage.setItem(AUTH_REMEMBER_KEY,identifier);else localStorage.removeItem(AUTH_REMEMBER_KEY);
+  if(keep)localStorage.setItem(AUTH_KEEP_KEY,"yes");else localStorage.removeItem(AUTH_KEEP_KEY);
+  setAuth(result.token,result.user,keep);
+
+  // Mostrar el dashboard con la última copia local disponible tras autenticar.
+  // La descarga desde Sheets ocurre después, sin mantener bloqueada la pantalla.
+  let cachedState=null;
+  try{cachedState=JSON.parse(localStorage.getItem(KEY+"_shared")||"null")}catch(_){}
+  if(!cachedState && authUser?.id){
+   try{cachedState=JSON.parse(localStorage.getItem(KEY+"_"+authUser.id)||"null")}catch(_){}
+  }
+  state=normalizeClientState(cachedState || result.state || defaultState);
+
+  document.getElementById("authScreen").style.display="none";document.querySelector(".app").classList.remove("auth-locked");updateSignedUserLabel();
+  setupYears();renderAll();renderExtendedModules();
+  toast(authMode==="register"?(result.migratedLegacy?"Cuenta creada. Los datos anteriores se conservaron.":"Cuenta creada."):"Acceso confirmado. Cargando datos en segundo plano…");
+
+  // Sincronización remota separada del login. No guardar la copia local sobre la nube aquí.
+  loadStateCloud().then(ok=>{
+   if(ok){
+    localStorage.setItem(KEY+"_shared",JSON.stringify(state));
+    setupYears();renderAll();renderExtendedModules();
+    toast("Datos de Nexus sincronizados.");
+   }else{
+    toast("Sesión no válida. Inicia sesión nuevamente.");
+   }
+  }).catch(err=>{
+   toast("No se pudieron actualizar los datos de la nube: "+(err.message||"error de conexión"));
+  });
  }catch(err){msg.textContent=err.message||"No se pudo iniciar sesión."}
  finally{btn.disabled=false;btn.textContent=authMode==="register"?"Crear cuenta":"Iniciar sesión"}
 }
-function setAuth(token,user){authToken=token;authUser=user;cloudReady=false;localChangesDuringSync=false;sessionStorage.setItem(AUTH_TOKEN_KEY,token);localStorage.removeItem(AUTH_TOKEN_KEY);localStorage.setItem(AUTH_USER_KEY,JSON.stringify(user))}
+function setAuth(token,user,keep=localStorage.getItem(AUTH_KEEP_KEY)==="yes"){
+ authToken=token;authUser=user;sessionStorage.removeItem(AUTH_TOKEN_KEY);localStorage.removeItem(AUTH_TOKEN_KEY);
+ (keep?localStorage:sessionStorage).setItem(AUTH_TOKEN_KEY,token);localStorage.setItem(AUTH_USER_KEY,JSON.stringify(user));
+}
 function clearAuth(){authToken="";authUser=null;sessionStorage.removeItem(AUTH_TOKEN_KEY);localStorage.removeItem(AUTH_TOKEN_KEY);localStorage.removeItem(AUTH_USER_KEY)}
+function updateSignedUserLabel(){const role=authUser?.role||"admin";const fallback=role==="partner"?state.people.partner:state.people.me;const label=document.getElementById("signedUserName");if(label)label.textContent=fallback||authUser?.username||authUser?.name||authUser?.email||"Usuario"}
+
 async function logoutNexus(){if(authToken){try{await apiRequest("logout",{token:authToken})}catch(_){}}clearAuth();document.getElementById("authScreen").style.display="flex";document.querySelector(".app").classList.add("auth-locked");document.getElementById("authPassword").value="";document.getElementById("authMessage").textContent="Sesión cerrada.";}
 async function bootstrapAuth(){
  document.querySelector(".app").classList.add("auth-locked");
+ const remembered=localStorage.getItem(AUTH_REMEMBER_KEY)||"";document.getElementById("authEmail").value=remembered;document.getElementById("rememberAccount").checked=!!remembered;document.getElementById("keepSignedIn").checked=localStorage.getItem(AUTH_KEEP_KEY)==="yes";
  if(!authToken||!authUser){document.getElementById("authScreen").style.display="flex";return}
- try{const cached=localStorage.getItem(KEY+"_shared");state=normalizeClientState(cached?JSON.parse(cached):defaultState)}catch(_){state=normalizeClientState(defaultState)}
- document.getElementById("authScreen").style.display="none";document.querySelector(".app").classList.remove("auth-locked");document.getElementById("signedUserName").textContent=authUser.name||authUser.email;setupYears();renderAll();renderExtendedModules();setSyncStatus("Sincronizando…");
- loadStateCloud().then(ok=>{if(ok){setupYears();renderAll();renderExtendedModules();setSyncStatus("Sincronizado")}else{document.getElementById("authScreen").style.display="flex";document.querySelector(".app").classList.add("auth-locked")}}).catch(()=>setSyncStatus("Sin conexión · datos locales"));
+ try{const ok=await loadStateCloud();if(!ok){document.getElementById("authScreen").style.display="flex";return}document.getElementById("authScreen").style.display="none";document.querySelector(".app").classList.remove("auth-locked");updateSignedUserLabel();setupYears();renderAll();renderExtendedModules();}
+ catch(err){document.getElementById("authScreen").style.display="flex";document.getElementById("authMessage").textContent=err.message;clearAuth()}
 }
 
-
-function setSyncStatus(message){let el=document.getElementById("nexusSyncStatus");if(!el){el=document.createElement("div");el.id="nexusSyncStatus";el.style.cssText="position:fixed;right:12px;bottom:12px;z-index:9999;padding:7px 11px;border-radius:10px;background:rgba(20,20,30,.92);color:#ddd;font:12px system-ui;border:1px solid rgba(255,255,255,.12);pointer-events:none";document.body.appendChild(el)}el.textContent=message}
 function money(n){return new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(Math.round(Number(n)||0))}
 function num(v){return Number(String(v??"").replace(/[^\d]/g,""))||0}
 function dateNow(){return new Date().toISOString().slice(0,10)}
@@ -485,8 +605,8 @@ function saveGoal(e,id){e.preventDefault();let rec={id:id||crypto.randomUUID(),n
 function renderGoals(){let box=document.getElementById("goalsGrid");box.innerHTML=state.goals.length?state.goals.map(g=>{let p=g.target?Math.min(100,g.current/g.target*100):0;return `<div class="goal"><h3>${esc(g.name)}</h3><p>${esc(g.desc)}</p><div class="money">${money(g.current)} <span class="small">/ ${money(g.target)}</span></div><div class="progress"><i style="width:${p}%"></i></div><div class="saving-meta"><span>${p.toFixed(0)}%</span><span>${p>=100?"Meta cumplida":"En progreso"}</span></div><div class="goal-actions"><button class="mini-btn" onclick="openGoal('${g.id}')">Editar</button><button class="mini-btn" onclick="deleteGoal('${g.id}')">Eliminar</button></div></div>`}).join(""):`<div class="empty" style="grid-column:1/-1">Crea hasta 4 metas para hacer seguimiento a tus objetivos.</div>`}
 function deleteGoal(id){if(confirm("¿Eliminar esta meta?")){state.goals=state.goals.filter(x=>x.id!==id);saveState();renderAll();toast("Meta eliminada")}}
 
-function openSettings(){openModal("Configuración",`<form onsubmit="saveSettings(event)"><div class="form-grid"><div class="field"><label>Tu nombre</label><input class="input" id="setMe" value="${esc(state.people.me)}"></div><div class="field"><label>Nombre de tu pareja</label><input class="input" id="setPartner" value="${esc(state.people.partner)}"></div></div><div class="form-actions"><button class="btn primary">Guardar configuración</button></div></form><div style="margin-top:20px;padding-top:15px;border-top:1px solid var(--line)"><b>Datos locales</b><p class="small">Los registros se guardan en tu cuenta de Nexus en Google Sheets. Puedes exportar una copia de seguridad.</p><div class="actions"><button class="btn" onclick="exportData()">Exportar respaldo</button><button class="btn" onclick="importData()">Importar respaldo</button><button class="btn danger" onclick="resetAll()">Borrar todos los datos</button></div></div>`)}
-function saveSettings(e){e.preventDefault();state.people.me=document.getElementById("setMe").value.trim()||"Yo";state.people.partner=document.getElementById("setPartner").value.trim()||"Mi pareja";saveState();closeModal();toast("Configuración guardada")}
+function openSettings(){openModal("Configuración",`<form onsubmit="saveSettings(event)"><div class="form-grid"><div class="field"><label>Nombre del perfil administrador</label><input class="input" id="setMe" value="${esc(state.people.me)}" maxlength="60"></div><div class="field"><label>Nombre del segundo perfil</label><input class="input" id="setPartner" value="${esc(state.people.partner)}" maxlength="60"></div><div class="field full"><label>Tu nombre de usuario para iniciar sesión</label><input class="input" id="setUsername" value="${esc(authUser?.username||authUser?.name||"")}" maxlength="40" required><small class="small">Puedes cambiarlo aquí. El correo seguirá funcionando como alternativa.</small></div></div><div class="form-actions"><button class="btn primary">Guardar configuración</button></div></form><div style="margin-top:20px;padding-top:15px;border-top:1px solid var(--line)"><b>Datos del hogar compartidos</b><p class="small">Ruben y Mauren trabajan sobre la misma información financiera. Los cambios se sincronizan en la nube.</p><div class="actions"><button class="btn" onclick="exportData()">Exportar respaldo</button><button class="btn" onclick="importData()">Importar respaldo</button><button class="btn danger" onclick="resetAll()">Borrar todos los datos</button></div></div>`)}
+async function saveSettings(e){e.preventDefault();const username=document.getElementById("setUsername").value.trim();try{const result=await apiRequest("updateUsername",{token:authToken,username});authUser=result.user;localStorage.setItem(AUTH_USER_KEY,JSON.stringify(authUser));state.people.me=document.getElementById("setMe").value.trim()||"Ruben";state.people.partner=document.getElementById("setPartner").value.trim()||"Mauren";saveState();updateSignedUserLabel();closeModal();toast("Configuración guardada")}catch(err){toast("No se pudo guardar: "+err.message)}}
 function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`nexus-finance-respaldo-${dateNow()}.json`;a.click();URL.revokeObjectURL(a.href)}
 function importData(){let input=document.createElement("input");input.type="file";input.accept=".json,application/json";input.onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{state={...defaultState,...JSON.parse(r.result)};saveState();closeModal();renderAll();toast("Respaldo importado")}catch(_){toast("El archivo no es válido.")}};r.readAsText(f)};input.click()}
 function resetAll(){if(confirm("Esto eliminará todos los registros de Nexus. ¿Continuar?")){state=structuredClone(defaultState);saveState();closeModal();renderAll();toast("Datos eliminados")}}
