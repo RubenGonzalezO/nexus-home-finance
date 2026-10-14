@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nexus Home Finance</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 :root{
   --bg:#0b0a12;--panel:#12101b;--panel2:#181523;--line:#292438;--text:#f6f3ff;--muted:#9c96ad;
@@ -25,10 +26,13 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
 .savings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.saving-card{background:#0e0c15;border:1px solid #272233;border-radius:15px;padding:13px}.saving-card h3{font-size:12px;margin:0 0 10px}.progress{height:9px;background:#272332;border-radius:20px;overflow:hidden}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--green),#7dd3fc);border-radius:20px}.saving-meta{display:flex;justify-content:space-between;margin-top:8px;font-size:10px;color:var(--muted)}.target{display:flex;gap:8px;margin-top:12px}
 .availability{display:grid;grid-template-columns:1fr 1fr;gap:12px}.availability .person-card{background:#0e0c15;border:1px solid #272233;border-radius:15px;padding:15px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.stat{background:#171321;border-radius:10px;padding:9px}.stat b{display:block;font-size:13px;margin-top:3px}.stat small{color:var(--muted);font-size:9px}.detail-btn{font-size:10px;background:none;color:var(--purple2);padding:0}.future-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.goal{background:#0e0c15;border:1px solid #272233;border-radius:15px;padding:14px}.goal h3{margin:0;font-size:14px}.goal p{font-size:10px;color:var(--muted);min-height:30px}.goal .money{font-weight:800;margin:8px 0}.goal-actions{display:flex;gap:6px;margin-top:12px}.empty{padding:25px;text-align:center;color:var(--muted);font-size:12px}.hidden{display:none!important}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(7px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}.modal.show{display:flex}.modal-box{width:min(780px,100%);max-height:92vh;overflow:auto;background:#14111e;border:1px solid #332c43;border-radius:20px;box-shadow:0 30px 80px #000;padding:20px}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.modal-head h3{margin:0}.close{background:#211c2d;color:#fff;width:34px;height:34px;border-radius:10px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.form-grid .full{grid-column:1/-1}.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.history{margin-top:18px}.history-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:9px}.history-list{display:grid;gap:6px}.record{display:grid;grid-template-columns:100px 1fr 120px 70px;gap:7px;align-items:center;background:#0d0b14;border:1px solid #25202f;padding:9px;border-radius:10px;font-size:11px}.record-actions{display:flex;gap:4px}.record-actions button{padding:5px 6px;border-radius:7px;background:#211c2d;color:#fff;font-size:10px}
+.sync-status{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#151220;padding:8px 10px;border-radius:999px;font-size:11px;color:var(--muted);white-space:nowrap}.sync-status i{font-size:9px;color:var(--green)}.sync-status.syncing i{color:var(--orange)}.sync-status.offline i{color:var(--red)}
+#loadingOverlay{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;background:rgba(5,4,10,.62);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:24px}#loadingOverlay.show{display:flex}.loading-card{text-align:center;min-width:230px;max-width:90%;padding:28px 34px;background:rgba(19,16,29,.94);border:1px solid #3a304d;border-radius:22px;box-shadow:0 24px 80px #0008}.loading-spinner{width:46px;height:46px;border:4px solid #3a304d;border-top-color:var(--purple2);border-right-color:var(--orange);border-radius:50%;animation:nexus-spin .8s linear infinite;margin:0 auto 17px}.loading-title{font-size:15px;font-weight:800}.loading-subtitle{font-size:11px;color:var(--muted);margin-top:7px}@keyframes nexus-spin{to{transform:rotate(360deg)}}
+.chart-tip{font-size:10px;color:var(--muted);margin-top:10px}.bar{cursor:pointer;position:relative}.bar:focus{outline:1px solid var(--purple2);outline-offset:3px}.category-swatch{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:middle}.dashboard-mini-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin:0 0 16px}.mini-list-item{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #211d2b;font-size:12px}.mini-list-item:last-child{border-bottom:0}.mini-list-item .muted{font-size:10px;color:var(--muted);margin-top:3px}.mini-account-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.mini-account{padding:10px;background:#0e0c15;border:1px solid var(--line);border-radius:11px}.mini-account strong{display:block;font-size:13px;margin-top:4px}
 .toast{position:fixed;right:22px;bottom:22px;background:#1d1829;border:1px solid #493b61;padding:12px 15px;border-radius:12px;z-index:300;box-shadow:var(--shadow);font-size:12px;transform:translateY(20px);opacity:0;transition:.25s}.toast.show{transform:none;opacity:1}
 .mobile-menu{display:none}.small{font-size:10px;color:var(--muted)}.positive{color:var(--green)}.negative{color:var(--red)}
 @media(max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}#personalPageContent .kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important}.future-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:800px){
+@media(max-width:800px){.dashboard-mini-grid{grid-template-columns:1fr}.sync-status{order:4;width:100%;justify-content:center}
  .sidebar{transform:translateX(-100%);transition:.25s}.sidebar.open{transform:none}.main{margin-left:0;width:100%;padding:16px}.mobile-menu{display:block}.topbar{align-items:flex-start}.section-grid{grid-template-columns:1fr}.people,.availability{grid-template-columns:1fr}.savings-grid{grid-template-columns:1fr}.donut-layout{grid-template-columns:1fr}.future-grid{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:auto}.record{grid-template-columns:1fr 1fr}.record .record-actions{grid-column:1/-1}.kpis{grid-template-columns:1fr 1fr}
 }
 @media(max-width:520px){.kpis{grid-template-columns:1fr}.future-grid{grid-template-columns:1fr}.filterbar .field{min-width:100px;flex:1}.actions{width:100%}.actions .btn{flex:1}.stats{grid-template-columns:1fr}#personalPageContent .kpis{grid-template-columns:1fr 1fr!important}.title h1{font-size:22px}}
@@ -57,19 +61,17 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
 <aside class="sidebar" id="sidebar">
   <div class="logo"><div class="logo-mark">₿</div><div>Nexus Finance<div class="small">Hogar & Personal</div></div></div>
   <nav class="nav">
-    <button class="active" onclick="scrollToId('dashboard')"><i>⌂</i>Dashboard</button>
-    <button onclick="openIncome('me')"><i>↗</i>Mis ingresos</button>
-    <button onclick="openIncome('partner')"><i>↗</i>Ingresos pareja</button>
-    <button onclick="openExpensePicker()"><i>↘</i>Gastos del hogar</button>
-    <button onclick="openSavingPicker()"><i>◈</i>Ahorros</button>
-    <button onclick="showModule('personalMe')"><i>♙</i>Mis finanzas personales</button>
-    <button onclick="showModule('personalPartner')"><i>♧</i>Finanzas de mi pareja</button>
-    <button onclick="showModule('dashboard');scrollToId('goals')"><i>◎</i>Metas a futuro</button>
-    <button onclick="showModule('calendar')"><i>▦</i>Calendario & recordatorios</button>
-    <button onclick="showModule('debts')"><i>▤</i>Deudas</button>
-    <button onclick="showModule('accounts')"><i>◉</i>Cuentas separadas</button>
-    <button onclick="showModule('reports')"><i>▥</i>Reportes avanzados</button>
-    <button onclick="openSettings()"><i>⚙</i>Configuración</button>
+    <button class="active" data-route="dashboard" onclick="showModule('dashboard')"><i class="fa-solid fa-house"></i>Dashboard</button>
+    <button onclick="openExpensePicker()"><i class="fa-solid fa-house-chimney"></i>Gastos del hogar</button>
+    <button onclick="openSavingPicker()"><i class="fa-solid fa-piggy-bank"></i>Ahorros</button>
+    <button data-route="personalMe" onclick="showModule('personalMe')"><i class="fa-regular fa-user"></i><span id="navMeName">Finanza · Mi perfil</span></button>
+    <button data-route="personalPartner" onclick="showModule('personalPartner')"><i class="fa-solid fa-user-group"></i><span id="navPartnerName">Finanza · Pareja</span></button>
+    <button onclick="showModule('dashboard');setTimeout(()=>document.getElementById('goals').scrollIntoView({behavior:'smooth'}),0)"><i class="fa-solid fa-bullseye"></i>Metas a futuro</button>
+    <button data-route="calendar" onclick="showModule('calendar')"><i class="fa-regular fa-calendar"></i>Calendario & recordatorios</button>
+    <button data-route="debts" onclick="showModule('debts')"><i class="fa-solid fa-credit-card"></i>Deudas</button>
+    <button data-route="accounts" onclick="showModule('accounts')"><i class="fa-solid fa-wallet"></i>Cuentas separadas</button>
+    <button data-route="reports" onclick="showModule('reports')"><i class="fa-solid fa-chart-column"></i>Reportes avanzados</button>
+    <button onclick="openSettings()"><i class="fa-solid fa-gear"></i>Configuración</button>
   </nav>
 </aside>
 
@@ -78,7 +80,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
   <div class="title"><h1>Dashboard General</h1><p>Control de tus finanzas personales y del hogar.</p></div>
   <div class="actions">
     <button class="btn mobile-menu" onclick="toggleSidebar()">☰</button>
-    <span class="account-strip">Sesión: <strong id="signedUserName">—</strong></span><button class="btn" onclick="refreshDashboard()">↻ Refrescar</button><button class="btn ghost" onclick="logoutNexus()">Salir</button>
+    <span class="sync-status" id="syncStatus" role="status"><i class="fa-solid fa-circle"></i><span id="syncStatusText">Sincronizando…</span></span><span class="account-strip">Sesión: <strong id="signedUserName">—</strong></span><button class="btn" onclick="refreshDashboard()"><i class="fa-solid fa-rotate"></i> Refrescar</button><button class="btn ghost" onclick="logoutNexus()"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
   </div>
 </header>
 
@@ -99,7 +101,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
 
 <section class="grid section-grid">
  <div class="card">
-  <div class="card-head"><div><h2>▣ Detalles de ingresos</h2><span>Aportes de ambos</span></div></div>
+  <div class="card-head"><div><h2><i class="fa-solid fa-arrow-trend-up"></i> Detalles de ingresos</h2><span>Aportes de ambos</span></div></div>
   <div class="donut-layout">
    <div class="donut" id="incomeDonut"><div class="donut-center">Aportes</div></div>
    <div class="people">
@@ -111,7 +113,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
  </div>
 
  <div class="card">
-  <div class="card-head"><div><h2>▣ Detalles gastos · Hogar</h2><span>Distribución por categoría</span></div><button class="mini-btn" onclick="openExpensePicker()">+ Gasto</button></div>
+  <div class="card-head"><div><h2><i class="fa-solid fa-house-chimney"></i> Detalles gastos · Hogar</h2><span>Distribución por categoría</span></div><button class="mini-btn" onclick="openExpensePicker()">+ Gasto</button></div>
   <div class="donut-layout">
    <div class="donut" id="expenseDonut"><div class="donut-center">Hogar</div></div>
    <div class="list" id="expenseList"></div>
@@ -120,14 +122,14 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
  </div>
 
  <div class="card wide">
-  <div class="card-head"><div><h2>▣ Detalles de ahorros</h2><span>Seguimiento por objetivo</span></div><button class="mini-btn" onclick="openSavingPicker()">+ Ahorro</button></div>
+  <div class="card-head"><div><h2><i class="fa-solid fa-piggy-bank"></i> Detalles de ahorros</h2><span>Seguimiento por objetivo</span></div><button class="mini-btn" onclick="openSavingPicker()">+ Ahorro</button></div>
   <div class="savings-grid" id="savingsGrid"></div>
-  <div class="target"><input class="input" id="savingTarget" type="text" inputmode="numeric" placeholder="Meta mensual de ahorro"><button class="btn primary" onclick="saveSavingTarget()">Guardar meta</button></div>
-  <div style="margin-top:10px" class="small" id="savingTargetStatus"></div>
+  <div style="margin-top:14px" class="small" id="savingTargetStatus"></div>
+  <div class="small" style="margin-top:6px">La meta mensual se configura desde Configuración.</div>
  </div>
 
  <div class="card wide">
-  <div class="card-head"><div><h2>▣ Detalles disponible</h2><span>Asignado · gastado · saldo</span></div></div>
+  <div class="card-head"><div><h2><i class="fa-solid fa-wallet"></i> Detalles disponible</h2><span>Asignado · gastado · saldo</span></div></div>
   <div class="donut-layout">
    <div class="donut" id="availableDonut"><div class="donut-center">Disponible</div></div>
    <div class="people" id="availablePeople"></div>
@@ -135,10 +137,16 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
  </div>
 
  <div class="card wide">
-  <div class="card-head"><div><h2>▣ Evolución mensual</h2><span>Resumen del año seleccionado</span></div></div>
+  <div class="card-head"><div><h2><i class="fa-solid fa-chart-line"></i> Evolución mensual</h2><span>Resumen del año seleccionado</span></div></div>
   <div class="bar-chart" id="evolutionBars"></div>
   <div class="small">Las barras muestran ingresos, gastos y ahorros de cada mes. Los valores aparecen al pasar el cursor.</div>
  </div>
+</section>
+
+<section class="dashboard-mini-grid" aria-label="Resumen general de módulos">
+ <div class="card"><div class="card-head"><div><h2><i class="fa-regular fa-calendar"></i> Próximos pendientes</h2><span>Hasta 3 próximos</span></div><button class="mini-btn" onclick="showModule('calendar')">Ver calendario</button></div><div id="dashboardUpcoming" class="list"></div></div>
+ <div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-credit-card"></i> Deudas</h2><span>Resumen general</span></div><button class="mini-btn" onclick="showModule('debts')">Ver deudas</button></div><div id="dashboardDebts" class="list"></div></div>
+ <div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-wallet"></i> Cuentas separadas</h2><span>Saldo por cuenta</span></div><button class="mini-btn" onclick="showModule('accounts')">Ver cuentas</button></div><div id="dashboardAccounts" class="mini-account-grid"></div></div>
 </section>
 
 <section class="card" id="goals">
@@ -190,23 +198,20 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
 <div id="authScreen">
  <div class="auth-card">
   <div class="auth-brand"><div class="logo-mark">N</div><div><h1>Nexus Finance</h1><div class="small">Hogar & Personal · nube segura</div></div></div>
-  <p id="authIntro">Inicia sesión para acceder a tus finanzas. Los dos perfiles del hogar comparten la misma información financiera.</p>
+  <p id="authIntro">Inicia sesión para acceder a tu información financiera.</p>
   <form id="authForm" onsubmit="submitAuth(event)">
-   <label id="authNameWrap" class="hidden">Nombre del perfil<input class="input" id="authName" autocomplete="name" placeholder="Ruben o Mauren"></label>
-   <label id="authUsernameWrap" class="hidden">Nombre de usuario<input class="input" id="authUsername" autocomplete="username" placeholder="Ej. ruben"></label>
-   <label id="authCodeWrap" class="hidden">Código de invitación del perfil 2 <span class="small">Lo genera el administrador desde Apps Script y se usa una sola vez</span><input class="input" id="authSetupCode" autocomplete="off" placeholder="Código de invitación"></label>
    <label id="authIdentifierLabel">Correo o nombre de usuario<input class="input" id="authEmail" type="text" autocomplete="username" required placeholder="Correo o usuario"></label>
    <label>Contraseña<input class="input" id="authPassword" type="password" autocomplete="current-password" minlength="10" required placeholder="Mínimo 10 caracteres"></label>
-   <div class="auth-options"><label class="remember-option"><input type="checkbox" id="rememberAccount" checked> Recordar mi usuario</label><label class="remember-option"><input type="checkbox" id="keepSignedIn"> Mantener sesión iniciada</label></div>
+   
    <div class="auth-message" id="authMessage" aria-live="polite"></div>
    <button class="btn primary" id="authSubmit">Iniciar sesión</button>
   </form>
-  <button type="button" class="auth-switch" id="authSwitch" onclick="toggleAuthMode()">¿Primera vez? Crear cuenta</button>
-  <p class="small">No uses una contraseña que ya utilices en tu banco o correo.</p>
+  <p class="small">Utiliza tus credenciales de acceso.</p>
  </div>
 </div>
 <div class="modal" id="modal"><div class="modal-box" id="modalBox"></div></div>
 <div class="toast" id="toast"></div>
+<div id="loadingOverlay" aria-live="polite" aria-busy="true"><div class="loading-card"><div class="loading-spinner"></div><div class="loading-title" id="loadingTitle">Cargando datos</div><div class="loading-subtitle" id="loadingSubtitle">Sincronizando con la nube…</div></div></div>
 
 <script>
 const CATS=["Arriendo","Mercado","Luz","Agua","Gas","Internet","Transporte","Otros"];
@@ -220,10 +225,10 @@ const AUTH_TOKEN_KEY="nexus_auth_token_v2";
 const AUTH_USER_KEY="nexus_auth_user_v2";
 const AUTH_REMEMBER_KEY="nexus_auth_remembered_identifier_v1";
 const AUTH_KEEP_KEY="nexus_auth_keep_session_v1";
-let authToken=(localStorage.getItem(AUTH_KEEP_KEY)==="yes"?localStorage.getItem(AUTH_TOKEN_KEY):sessionStorage.getItem(AUTH_TOKEN_KEY))||"";
+let authToken=localStorage.getItem(AUTH_TOKEN_KEY)||sessionStorage.getItem(AUTH_TOKEN_KEY)||"";
 let authUser=(()=>{try{return JSON.parse(localStorage.getItem(AUTH_USER_KEY)||"null")}catch(_){return null}})();
 let authMode="login";
-let cloudSyncing=false,cloudReady=false,cloudSavePending=false,activeModule="dashboard";
+let cloudSyncing=false,cloudReady=false,cloudSavePending=false,activeModule="dashboard",modalHistoryOpen=false,loadingCount=0;
 let calendarCursor=new Date();
 const defaultState={people:{me:"Ruben",partner:"Mauren"},incomes:[],expenses:[],savings:[],savingTarget:0,goals:[],personalSpending:[],debts:[],tasks:[],accounts:[],transactions:[]};
 let state=structuredClone(defaultState);
@@ -328,104 +333,65 @@ function apiRequest(action, data = {}) {
     form.submit();
   });
 }
+function setSyncStatus(status,message){const el=document.getElementById("syncStatus"),txt=document.getElementById("syncStatusText");if(!el||!txt)return;el.classList.remove("syncing","offline");if(status==="syncing")el.classList.add("syncing");if(status==="offline")el.classList.add("offline");txt.textContent=message||({synced:"Sincronizado",syncing:"Sincronizando…",offline:"Sin conexión"}[status]||status)}
+function showLoader(title="Cargando datos",subtitle=null){const options=["Sincronizando con la nube…","Actualizando tu información…","Un momento, estamos preparando tus datos…"];loadingCount++;document.getElementById("loadingTitle").textContent=title;document.getElementById("loadingSubtitle").textContent=subtitle||options[Math.floor(Math.random()*options.length)];document.getElementById("loadingOverlay").classList.add("show")}
+function hideLoader(force=false){loadingCount=force?0:Math.max(0,loadingCount-1);if(!loadingCount)document.getElementById("loadingOverlay").classList.remove("show")}
 function saveState(){
  if(!authToken||!authUser)return;
  const localKey=KEY+"_"+authUser.id;
- try{localStorage.setItem(localKey,JSON.stringify(state))}catch(_){}
- saveStateCloud();
- renderExtendedModules();
+ try{localStorage.setItem(localKey,JSON.stringify(state));localStorage.setItem(KEY+"_shared",JSON.stringify(state))}catch(_){}
+ saveStateCloud();renderExtendedModules();
 }
 async function saveStateCloud(){
  if(!authToken)return;
  if(cloudSyncing){cloudSavePending=true;return}
- cloudSyncing=true;
- try{await apiRequest("save",{token:authToken,state:JSON.stringify(state)});cloudReady=true}
- catch(err){toast("⚠ No se pudo sincronizar: "+err.message)}
+ cloudSyncing=true;setSyncStatus("syncing","Sincronizando…");
+ try{await apiRequest("save",{token:authToken,state:JSON.stringify(state)});cloudReady=true;setSyncStatus("synced","Sincronizado")}
+ catch(err){setSyncStatus("offline","Sin conexión");toast("No se pudo sincronizar. Revisa la conexión e intenta Refrescar para evitar conflictos.")}
  finally{cloudSyncing=false;if(cloudSavePending){cloudSavePending=false;saveStateCloud()}}
 }
 async function loadStateCloud(){
  if(!authToken)return false;
- try{const result=await apiRequest("get",{token:authToken});state=normalizeClientState(result.state);localStorage.setItem(KEY+"_"+authUser.id,JSON.stringify(state));localStorage.setItem(KEY+"_shared",JSON.stringify(state));cloudReady=true;return true}
- catch(err){if(/sesión venció|inicia sesión/i.test(err.message)){clearAuth();return false}throw err}
+ setSyncStatus("syncing","Sincronizando…");
+ try{const result=await apiRequest("get",{token:authToken});state=normalizeClientState(result.state);localStorage.setItem(KEY+"_"+authUser.id,JSON.stringify(state));localStorage.setItem(KEY+"_shared",JSON.stringify(state));cloudReady=true;setSyncStatus("synced","Sincronizado");return true}
+ catch(err){setSyncStatus("offline","Sin conexión");if(/sesión venció|inicia sesión|sesión no válida/i.test(err.message)){clearAuth();return false}throw err}
 }
-function toggleAuthMode(){
- authMode=authMode==="login"?"register":"login";
- document.getElementById("authEmail").value=authMode==="register"?"":(localStorage.getItem(AUTH_REMEMBER_KEY)||"");
- document.getElementById("authNameWrap").classList.toggle("hidden",authMode!=="register");
- document.getElementById("authUsernameWrap").classList.toggle("hidden",authMode!=="register");
- document.getElementById("authCodeWrap").classList.toggle("hidden",authMode!=="register");
- document.getElementById("authEmail").type=authMode==="register"?"email":"text";
- document.getElementById("authEmail").placeholder=authMode==="register"?"correo@ejemplo.com":"Correo o usuario";
- document.getElementById("authIdentifierLabel").firstChild.textContent=authMode==="register"?"Correo electrónico":"Correo o nombre de usuario";
- document.getElementById("authPassword").autocomplete=authMode==="register"?"new-password":"current-password";
- document.getElementById("authPassword").minLength=10;
- document.getElementById("authSubmit").textContent=authMode==="register"?"Crear cuenta":"Iniciar sesión";
- document.getElementById("authSwitch").textContent=authMode==="register"?"Ya tengo cuenta · Iniciar sesión":"Crear la segunda cuenta";
- document.getElementById("authIntro").textContent=authMode==="register"?"Registra el segundo perfil del hogar. Solo se permiten dos cuentas Nexus.":"Ingresa con tu correo o nombre de usuario. Tus dos perfiles comparten la misma información financiera del hogar.";
- document.getElementById("authMessage").textContent="";
-}
+function toggleAuthMode(){return false}
 async function submitAuth(event){
- event.preventDefault();const btn=document.getElementById("authSubmit"),msg=document.getElementById("authMessage");btn.disabled=true;btn.textContent="Conectando…";msg.textContent="";
+ event.preventDefault();const btn=document.getElementById("authSubmit"),msg=document.getElementById("authMessage");btn.disabled=true;msg.textContent="";showLoader("Iniciando sesión","Verificando credenciales…");setSyncStatus("syncing","Sincronizando…");
  try{
   const identifier=document.getElementById("authEmail").value.trim();
-  const data={identifier,password:document.getElementById("authPassword").value};
-  if(authMode==="register"){
-   data.email=identifier;data.name=document.getElementById("authName").value.trim();data.username=document.getElementById("authUsername").value.trim();data.setupCode=document.getElementById("authSetupCode").value.trim();
-  }
-  const result=await apiRequest(authMode==="register"?"register":"login",data);
-  const remember=document.getElementById("rememberAccount").checked;
-  const keep=document.getElementById("keepSignedIn").checked;
-  if(remember)localStorage.setItem(AUTH_REMEMBER_KEY,identifier);else localStorage.removeItem(AUTH_REMEMBER_KEY);
-  if(keep)localStorage.setItem(AUTH_KEEP_KEY,"yes");else localStorage.removeItem(AUTH_KEEP_KEY);
-  setAuth(result.token,result.user,keep);
-
-  // Mostrar el dashboard con la última copia local disponible tras autenticar.
-  // La descarga desde Sheets ocurre después, sin mantener bloqueada la pantalla.
-  let cachedState=null;
-  try{cachedState=JSON.parse(localStorage.getItem(KEY+"_shared")||"null")}catch(_){}
-  if(!cachedState && authUser?.id){
-   try{cachedState=JSON.parse(localStorage.getItem(KEY+"_"+authUser.id)||"null")}catch(_){}
-  }
-  state=normalizeClientState(cachedState || result.state || defaultState);
-
-  document.getElementById("authScreen").style.display="none";document.querySelector(".app").classList.remove("auth-locked");updateSignedUserLabel();
-  setupYears();renderAll();renderExtendedModules();
-  toast(authMode==="register"?(result.migratedLegacy?"Cuenta creada. Los datos anteriores se conservaron.":"Cuenta creada."):"Acceso confirmado. Cargando datos en segundo plano…");
-
-  // Sincronización remota separada del login. No guardar la copia local sobre la nube aquí.
-  loadStateCloud().then(ok=>{
-   if(ok){
-    localStorage.setItem(KEY+"_shared",JSON.stringify(state));
-    setupYears();renderAll();renderExtendedModules();
-    toast("Datos de Nexus sincronizados.");
-   }else{
-    toast("Sesión no válida. Inicia sesión nuevamente.");
-   }
-  }).catch(err=>{
-   toast("No se pudieron actualizar los datos de la nube: "+(err.message||"error de conexión"));
-  });
- }catch(err){msg.textContent=err.message||"No se pudo iniciar sesión."}
- finally{btn.disabled=false;btn.textContent=authMode==="register"?"Crear cuenta":"Iniciar sesión"}
+  const result=await apiRequest("login",{identifier,password:document.getElementById("authPassword").value});
+  setAuth(result.token,result.user);
+  let cachedState=null;try{cachedState=JSON.parse(localStorage.getItem(KEY+"_shared")||"null")}catch(_){}
+  if(!cachedState&&authUser?.id){try{cachedState=JSON.parse(localStorage.getItem(KEY+"_"+authUser.id)||"null")}catch(_){}}
+  state=normalizeClientState(cachedState||result.state||defaultState);
+  document.getElementById("authScreen").style.display="none";document.querySelector(".app").classList.remove("auth-locked");updateSignedUserLabel();setupYears();renderAll();renderExtendedModules();showModule(routeFromHash(),true);
+  document.getElementById("loadingTitle").textContent="Cargando datos";document.getElementById("loadingSubtitle").textContent="Sincronizando con la nube…";toast("Acceso confirmado.");
+  try{const ok=await loadStateCloud();if(ok){setupYears();renderAll();renderExtendedModules();showModule(routeFromHash(),true);toast("Datos actualizados.")}else{toast("La sesión no es válida. Inicia sesión nuevamente.");await logoutNexus(false)}}
+  catch(err){setSyncStatus("offline","Sin conexión");toast("No se pudieron actualizar los datos. Se conservan los últimos datos guardados; intenta Refrescar cuando tengas conexión.")}
+ }catch(err){msg.textContent=err.message||"No se pudo iniciar sesión.";setSyncStatus("offline","Sin conexión")}
+ finally{btn.disabled=false;hideLoader(true)}
 }
-function setAuth(token,user,keep=localStorage.getItem(AUTH_KEEP_KEY)==="yes"){
- authToken=token;authUser=user;sessionStorage.removeItem(AUTH_TOKEN_KEY);localStorage.removeItem(AUTH_TOKEN_KEY);
- (keep?localStorage:sessionStorage).setItem(AUTH_TOKEN_KEY,token);localStorage.setItem(AUTH_USER_KEY,JSON.stringify(user));
-}
-function clearAuth(){authToken="";authUser=null;sessionStorage.removeItem(AUTH_TOKEN_KEY);localStorage.removeItem(AUTH_TOKEN_KEY);localStorage.removeItem(AUTH_USER_KEY)}
-function updateSignedUserLabel(){const role=authUser?.role||"admin";const fallback=role==="partner"?state.people.partner:state.people.me;const label=document.getElementById("signedUserName");if(label)label.textContent=fallback||authUser?.username||authUser?.name||authUser?.email||"Usuario"}
+function setAuth(token,user){authToken=token;authUser=user;sessionStorage.removeItem(AUTH_TOKEN_KEY);localStorage.setItem(AUTH_TOKEN_KEY,token);localStorage.setItem(AUTH_USER_KEY,JSON.stringify(user));localStorage.setItem(AUTH_KEEP_KEY,"yes")}
+function clearAuth(){authToken="";authUser=null;sessionStorage.removeItem(AUTH_TOKEN_KEY);localStorage.removeItem(AUTH_TOKEN_KEY);localStorage.removeItem(AUTH_USER_KEY);localStorage.removeItem(AUTH_KEEP_KEY)}
+function updateSignedUserLabel(){const role=authUser?.role||"admin";const fallback=role==="partner"?state.people.partner:state.people.me;const label=document.getElementById("signedUserName");if(label)label.textContent=fallback||authUser?.username||authUser?.name||authUser?.email||"Usuario";const me=document.getElementById("navMeName"),pa=document.getElementById("navPartnerName");if(me)me.textContent="Finanza · "+(state.people.me||"Mi perfil");if(pa)pa.textContent="Finanza · "+(state.people.partner||"Pareja") }
 
-async function logoutNexus(){if(authToken){try{await apiRequest("logout",{token:authToken})}catch(_){}}clearAuth();document.getElementById("authScreen").style.display="flex";document.querySelector(".app").classList.add("auth-locked");document.getElementById("authPassword").value="";document.getElementById("authMessage").textContent="Sesión cerrada.";}
+async function logoutNexus(callServer=true){if(callServer&&authToken){try{await apiRequest("logout",{token:authToken})}catch(_){}}clearAuth();document.getElementById("loadingOverlay").classList.remove("show");loadingCount=0;document.getElementById("authScreen").style.display="flex";document.querySelector(".app").classList.add("auth-locked");document.getElementById("authPassword").value="";document.getElementById("authMessage").textContent="Sesión cerrada.";history.replaceState({nexusRoute:"login"},"",location.pathname+location.search);setSyncStatus("offline","Sin sesión");}
 async function bootstrapAuth(){
  document.querySelector(".app").classList.add("auth-locked");
- const remembered=localStorage.getItem(AUTH_REMEMBER_KEY)||"";document.getElementById("authEmail").value=remembered;document.getElementById("rememberAccount").checked=!!remembered;document.getElementById("keepSignedIn").checked=localStorage.getItem(AUTH_KEEP_KEY)==="yes";
  if(!authToken||!authUser){document.getElementById("authScreen").style.display="flex";return}
- try{const ok=await loadStateCloud();if(!ok){document.getElementById("authScreen").style.display="flex";return}document.getElementById("authScreen").style.display="none";document.querySelector(".app").classList.remove("auth-locked");updateSignedUserLabel();setupYears();renderAll();renderExtendedModules();}
- catch(err){document.getElementById("authScreen").style.display="flex";document.getElementById("authMessage").textContent=err.message;clearAuth()}
+ // La sesión se mantiene en este dispositivo hasta pulsar Salir.
+ localStorage.setItem(AUTH_TOKEN_KEY,authToken);
+ showLoader("Cargando datos","Restaurando tu última vista…");
+ try{const ok=await loadStateCloud();if(!ok){document.getElementById("authScreen").style.display="flex";return}document.getElementById("authScreen").style.display="none";document.querySelector(".app").classList.remove("auth-locked");updateSignedUserLabel();setupYears();renderAll();renderExtendedModules();showModule(routeFromHash(),true)}
+ catch(err){const cached=localStorage.getItem(KEY+"_shared")||localStorage.getItem(KEY+"_"+authUser.id);if(cached){try{state=normalizeClientState(JSON.parse(cached));document.getElementById("authScreen").style.display="none";document.querySelector(".app").classList.remove("auth-locked");updateSignedUserLabel();setupYears();renderAll();renderExtendedModules();showModule(routeFromHash(),true);setSyncStatus("offline","Sin conexión")}catch(_){clearAuth();document.getElementById("authScreen").style.display="flex"}}else{document.getElementById("authScreen").style.display="flex";document.getElementById("authMessage").textContent="No fue posible cargar los datos. Comprueba la conexión e intenta nuevamente.";clearAuth()}}
+ finally{hideLoader(true)}
 }
 
 function money(n){return new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(Math.round(Number(n)||0))}
 function num(v){return Number(String(v??"").replace(/[^\d]/g,""))||0}
-function dateNow(){return new Date().toISOString().slice(0,10)}
+function dateNow(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function fmtInput(v){let n=num(v);return n?new Intl.NumberFormat("es-CO").format(n):""}
 function setupYears(){
@@ -441,52 +407,48 @@ function sum(arr){return arr.reduce((a,x)=>a+Number(x.amount||0),0)}
 function renderAll(){
  setupYears(); const f=getFilter();
  const inc=filtered(state.incomes), exp=filtered(state.expenses), sav=filtered(state.savings);
- const income=sum(inc), expense=sum(exp), saving=sum(sav), available=income-exp-saving;
+ const income=sum(inc), expense=sum(exp), saving=sum(sav);
+ const available=["me","partner"].reduce((total,person)=>{const personal=personalStats(person,f.year,f.month);return total+personalAssigned(person,f.year,f.month)+personal.extraIncome-personal.spent-personal.saved},0);
  document.getElementById("kpiIncome").textContent=money(income);
  document.getElementById("kpiExpense").textContent=money(expense);
  document.getElementById("kpiSaving").textContent=money(saving);
  document.getElementById("kpiAvailable").textContent=money(available);
  document.getElementById("periodLabel").textContent=f.month==="all"?`Mostrando ${f.year}`:`Mostrando ${MONTHS[Number(f.month)-1]} ${f.year}`;
- document.getElementById("meNameIncome").textContent=state.people.me;
- document.getElementById("partnerNameIncome").textContent=state.people.partner;
+ document.getElementById("meNameIncome").innerHTML=`<span class="category-swatch" style="background:#8b5cf6"></span>${esc(state.people.me)}`;
+ document.getElementById("partnerNameIncome").innerHTML=`<span class="category-swatch" style="background:#fb923c"></span>${esc(state.people.partner)}`;updateSignedUserLabel();
  document.getElementById("meIncome").textContent=money(sum(inc.filter(x=>x.person==="me")));
  document.getElementById("partnerIncome").textContent=money(sum(inc.filter(x=>x.person==="partner")));
  renderDonut("incomeDonut",sum(inc.filter(x=>x.person==="me")),sum(inc.filter(x=>x.person==="partner")));
  renderExpenseList(exp);
- renderDonut("expenseDonut",expense,0,true);
+ renderDonut("expenseDonut",expense,0,true,exp);
  renderSavings(sav);
  renderAvailable(inc,exp,sav);
  renderBars("incomeBars",f.year,1);
  renderBars("expenseBars",f.year,2);
  renderEvolution(f.year);
  renderGoals();
- document.getElementById("savingTarget").value=state.savingTarget?fmtInput(state.savingTarget):"";
- let target=Number(state.savingTarget)||0; document.getElementById("savingTargetStatus").textContent=target?`Meta: ${money(target)} · Avance del periodo: ${money(saving)} · ${target?Math.min(100,saving/target*100).toFixed(0):0}%`:"Sin meta mensual configurada.";
+ let target=Number(state.savingTarget)||0; const targetPct=target?Math.min(100,saving/target*100):0; document.getElementById("savingTargetStatus").innerHTML=target?`<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:7px"><span>Meta de ahorro: <b>${money(target)}</b></span><span>Acumulado: <b>${money(saving)}</b> · ${targetPct.toFixed(0)}%</span></div><div class="progress"><i style="width:${targetPct}%"></i></div>`:"Configura una meta mensual para ver el progreso.";
  if(activeModule==="personalMe"||activeModule==="personalPartner")renderPersonalModule();
 }
-function renderDonut(id,a,b,expense=false){
- const el=document.getElementById(id); let total=a+b;
- if(expense){let cats=CATS.map(c=>sum(state.expenses.filter(x=>x.category===c&&inPeriod(x.date,getFilter().year,getFilter().month))));total=cats.reduce((x,y)=>x+y,0); a=cats[0]||0;b=total-a}
- let p=total?Math.max(0,Math.min(100,a/total*100)):50;
- el.style.background=`conic-gradient(var(--purple) 0 ${p}%,var(--orange) ${p}% 100%)`;
+const CAT_COLORS=["#8b5cf6","#fb923c","#34d399","#60a5fa","#f472b6","#facc15","#22d3ee","#a3e635"];
+function renderDonut(id,a,b,expense=false,filteredExpenses=null){
+ const el=document.getElementById(id);if(!el)return;
+ if(expense){const rows=filteredExpenses||filtered(state.expenses),vals=CATS.map(c=>sum(rows.filter(x=>x.category===c)));const total=vals.reduce((x,y)=>x+y,0);let start=0;const parts=vals.map((v,i)=>{const from=start;start+=total?v/total*100:0;return `${CAT_COLORS[i]} ${from}% ${start}%`});el.style.background=total?`conic-gradient(${parts.join(",")})`:"conic-gradient(#302a3d 0 100%)";return}
+ const total=(Number(a)||0)+(Number(b)||0),p=total?Math.max(0,Math.min(100,(Number(a)||0)/total*100)):50;
+ el.style.background=`conic-gradient(#8b5cf6 0 ${p}%,#fb923c ${p}% 100%)`;el.title=`${money(a)} · ${money(b)}`;el.setAttribute("aria-label",`Gráfico de ingresos: ${money(a)} y ${money(b)}`);
 }
 function renderExpenseList(exp){
  const total=sum(exp), box=document.getElementById("expenseList");
- box.innerHTML=CATS.map(c=>{let n=sum(exp.filter(x=>x.category===c)),p=total?n/total*100:0;return `<div class="list-row"><div><b>${c}</b><div class="pct">${p.toFixed(1)}%</div></div><b>${money(n)}</b><span class="pct">${p.toFixed(0)}%</span><button class="category-btn" onclick="openExpense('${c}')">+</button></div>`}).join("");
+ box.innerHTML=CATS.map(c=>{let n=sum(exp.filter(x=>x.category===c)),p=total?n/total*100:0;return `<div class="list-row"><div><b><span class="category-swatch" style="background:${CAT_COLORS[CATS.indexOf(c)]}"></span>${c}</b><div class="pct">${p.toFixed(1)}% del gasto del hogar</div></div><b>${money(n)}</b><span class="pct">${p.toFixed(0)}%</span><button class="category-btn" onclick="openExpense('${c}')">+</button></div>`}).join("");
 }
 function renderSavings(sav){
- const box=document.getElementById("savingsGrid"); const total=sum(sav);
- box.innerHTML=SAVINGS.map(([key,name])=>{let n=sum(sav.filter(x=>x.type===key)),p=total?n/total*100:0;return `<div class="saving-card"><h3>${name}</h3><div style="font-size:20px;font-weight:800">${money(n)}</div><div class="small">${p.toFixed(1)}% del ahorro general</div><div class="progress" style="margin-top:10px"><i style="width:${p}%"></i></div><div class="saving-meta"><span>${p.toFixed(0)}%</span><button class="mini-btn" onclick="openSaving('${key}')">Registrar</button></div></div>`}).join("");
+ const box=document.getElementById("savingsGrid"); const target=Number(state.savingTarget)||0;
+ box.innerHTML=SAVINGS.map(([key,name])=>{let n=sum(sav.filter(x=>x.type===key)),p=target?Math.min(100,n/target*100):0;return `<div class="saving-card"><h3><i class="fa-solid fa-piggy-bank"></i> ${name}</h3><div style="font-size:20px;font-weight:800">${money(n)}</div><div class="small">${target?`${money(n)} de ${money(target)} de la meta`:"Configura la meta en este panel"}</div><div class="progress" style="margin-top:10px"><i style="width:${p}%"></i></div><div class="saving-meta"><span>${p.toFixed(0)}% de la meta</span><button class="mini-btn" onclick="openSaving('${key}')">Registrar</button></div></div>`}).join("");
 }
 function renderAvailable(inc,exp,sav){
- const meI=sum(inc.filter(x=>x.person==="me")), paI=sum(inc.filter(x=>x.person==="partner"));
- const meE=sum(exp.flatMap(x=>[{person:"me",amount:x.meAmount}])).toFixed(0)*1;
- const paE=sum(exp.flatMap(x=>[{person:"partner",amount:x.partnerAmount}])).toFixed(0)*1;
- const meS=sum(sav.filter(x=>x.person==="me")),paS=sum(sav.filter(x=>x.person==="partner"));
- const meA=meI-meE-meS,paA=paI-paE-paS;
- renderDonut("availableDonut",Math.max(0,meA),Math.max(0,paA));
- const box=document.getElementById("availablePeople");
- box.innerHTML=personCard("me",state.people.me,meA)+personCard("partner",state.people.partner,paA);
+ const f=getFilter();const details=["me","partner"].map(person=>{const assigned=personalAssigned(person,f.year,f.month),stats=personalStats(person,f.year,f.month);return {person,name:state.people[person],assigned,balance:assigned+stats.extraIncome-stats.spent-stats.saved}});
+ const me=details[0],pa=details[1];renderDonut("availableDonut",Math.max(0,me.balance),Math.max(0,pa.balance));
+ const box=document.getElementById("availablePeople");box.innerHTML=details.map(d=>personCard(d.person,d.name,d.assigned)).join("");
 }
 function personalMovementType(x){
  // Los registros antiguos no tenían tipo: se conservan como gastos.
@@ -513,19 +475,14 @@ function personCard(person,name,assigned){
  return `<div class="person-card"><b>${esc(name)}</b><div class="stats"><div class="stat"><small>Asignado</small><b>${money(assigned)}</b></div><div class="stat"><small>Gastado</small><b>${money(stats.spent)} <button class="detail-btn" onclick="showModule('${person==='me'?'personalMe':'personalPartner'}')">ver detalles</button></b></div><div class="stat"><small>Saldo disponible</small><b class="${balance<0?'negative':'positive'}">${money(balance)}</b></div></div><div class="small">Ahorro personal: <b>${money(stats.saved)}</b> · Ingresos adicionales: <b>${money(stats.extraIncome)}</b></div><div class="progress"><i style="width:${pct}%"></i></div><div class="small" style="margin-top:6px">${pct.toFixed(0)}% del asignado disponible</div></div>`;
 }
 function renderBars(id,year,type){
- const box=document.getElementById(id), vals=MONTHS.map((_,i)=>{
-   let arr=type===1?state.incomes:state.expenses;return sum(arr.filter(x=>{let d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i}))
- });
- const max=Math.max(...vals,1);
- box.innerHTML=vals.map((v,i)=>`<div class="bar" title="${MONTHS[i]}: ${money(v)}"><em>${v?money(v).replace(/\s/g,""):''}</em><div class="bar-fill" style="height:${Math.max(v?4:1,v/max*145)}px"></div><small>${MONTHS[i].slice(0,3)}</small></div>`).join("");
+ const box=document.getElementById(id);if(!box)return;const arr=type===1?state.incomes:state.expenses;const vals=MONTHS.map((_,i)=>sum(arr.filter(x=>{let d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i})));const max=Math.max(...vals,1);const label=type===1?"Ingresos":"Gastos del hogar";
+ box.innerHTML=vals.map((v,i)=>`<div class="bar" tabindex="0" role="button" aria-label="${MONTHS[i]} ${label}: ${money(v)}" title="${MONTHS[i]} · ${label}: ${money(v)}" onclick="toast('${MONTHS[i]} · ${label}: ${money(v)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toast('${MONTHS[i]} · ${label}: ${money(v)}')}"><em>${v?money(v).replace(/\s/g,""):"—"}</em><div class="bar-fill" style="height:${Math.max(v?4:1,v/max*145)}px;background:${type===1?'linear-gradient(180deg,#c4b5fd,#8b5cf6)':'linear-gradient(180deg,#fdba74,#fb923c)'}"></div><small>${MONTHS[i].slice(0,3)}</small></div>`).join("");
 }
 function renderEvolution(year){
- const box=document.getElementById("evolutionBars");
- const inc=MONTHS.map((_,i)=>sum(state.incomes.filter(x=>{let d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i})));
- const exp=MONTHS.map((_,i)=>sum(state.expenses.filter(x=>{let d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i})));
- const sav=MONTHS.map((_,i)=>sum(state.savings.filter(x=>{let d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i})));
+ const box=document.getElementById("evolutionBars");if(!box)return;
+ const inc=MONTHS.map((_,i)=>sum(state.incomes.filter(x=>{let d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i}))),exp=MONTHS.map((_,i)=>sum(state.expenses.filter(x=>{let d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i}))),sav=MONTHS.map((_,i)=>sum(state.savings.filter(x=>{let d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i})));
  const max=Math.max(...inc,...exp,...sav,1);
- box.innerHTML=MONTHS.map((m,i)=>`<div class="bar" title="${m} | Ingresos ${money(inc[i])} | Gastos ${money(exp[i])} | Ahorros ${money(sav[i])}"><em>${inc[i]?'●':''}</em><div class="bar-fill" style="height:${Math.max(3,inc[i]/max*145)}px"></div><small>${m.slice(0,3)}</small></div>`).join("");
+ box.innerHTML=MONTHS.map((m,i)=>{const details=`${m} · Ingresos ${money(inc[i])} · Gastos ${money(exp[i])} · Ahorros ${money(sav[i])}`;return `<div class="bar" tabindex="0" role="button" aria-label="${details}" title="${details}" onclick="toast('${details}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toast('${details}')}"><em>${inc[i]||exp[i]||sav[i]?'●':''}</em><div class="bar-fill" style="height:${Math.max(3,inc[i]/max*145)}px"></div><small>${m.slice(0,3)}</small></div>`}).join("");
 }
 function comparison(arr){
  const f=getFilter(); if(f.month==="all")return "";
@@ -535,15 +492,17 @@ function comparison(arr){
  let p=(cur-old)/old*100;return `${p>=0?"▲":"▼"} ${Math.abs(p).toFixed(1)}% vs mes anterior`;
 }
 async function refreshDashboard(){
-  try{const ok=await loadStateCloud();if(ok){setupYears();renderAll();renderExtendedModules();toast("☁ Datos actualizados desde Google Sheets")}}
-  catch(err){toast("⚠ No se pudo actualizar: "+err.message)}
+ showLoader("Cargando datos","Actualizando información desde la nube…");
+ try{const ok=await loadStateCloud();if(ok){setupYears();renderAll();renderExtendedModules();showModule(routeFromHash(),true);toast("Datos actualizados desde la nube.")}else{setSyncStatus("offline","Sin conexión");toast("No se pudieron cargar los datos. Intenta nuevamente cuando tengas conexión.")}}
+ catch(err){setSyncStatus("offline","Sin conexión");toast("No se pudieron actualizar los datos. Intenta nuevamente para evitar conflictos.")}
+ finally{hideLoader()}
 }
 function clearGeneralFilter(){document.getElementById("filterYear").value=new Date().getFullYear();document.getElementById("filterMonth").value="all";renderAll()}
 function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:"smooth"});document.getElementById("sidebar").classList.remove("open")}
 function toggleSidebar(){document.getElementById("sidebar").classList.toggle("open")}
 
-function openModal(title,body){document.getElementById("modalBox").innerHTML=`<div class="modal-head"><h3>${title}</h3><button class="close" onclick="closeModal()">×</button></div>${body}`;document.getElementById("modal").classList.add("show")}
-function closeModal(){document.getElementById("modal").classList.remove("show");activeModal={type:null,key:null};renderAll()}
+function openModal(title,body){document.getElementById("modalBox").innerHTML=`<div class="modal-head"><h3>${title}</h3><button class="close" onclick="closeModal()" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button></div>${body}`;document.getElementById("modal").classList.add("show");modalHistoryOpen=true;history.pushState({nexusModal:true},"",location.pathname+location.search+"#"+routeFromHash()+"/modal")}
+function closeModal(fromPop=false){if(modalHistoryOpen&&!fromPop){history.back();return}document.getElementById("modal").classList.remove("show");activeModal={type:null,key:null};modalHistoryOpen=false;renderAll()}
 document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal()});
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
 
@@ -718,8 +677,8 @@ function saveGoal(e,id){e.preventDefault();let rec={id:id||crypto.randomUUID(),n
 function renderGoals(){let box=document.getElementById("goalsGrid");box.innerHTML=state.goals.length?state.goals.map(g=>{let p=g.target?Math.min(100,g.current/g.target*100):0;return `<div class="goal"><h3>${esc(g.name)}</h3><p>${esc(g.desc)}</p><div class="money">${money(g.current)} <span class="small">/ ${money(g.target)}</span></div><div class="progress"><i style="width:${p}%"></i></div><div class="saving-meta"><span>${p.toFixed(0)}%</span><span>${p>=100?"Meta cumplida":"En progreso"}</span></div><div class="goal-actions"><button class="mini-btn" onclick="openGoal('${g.id}')">Editar</button><button class="mini-btn" onclick="deleteGoal('${g.id}')">Eliminar</button></div></div>`}).join(""):`<div class="empty" style="grid-column:1/-1">Crea hasta 4 metas para hacer seguimiento a tus objetivos.</div>`}
 function deleteGoal(id){if(confirm("¿Eliminar esta meta?")){state.goals=state.goals.filter(x=>x.id!==id);saveState();renderAll();toast("Meta eliminada")}}
 
-function openSettings(){openModal("Configuración",`<form onsubmit="saveSettings(event)"><div class="form-grid"><div class="field"><label>Nombre del perfil administrador</label><input class="input" id="setMe" value="${esc(state.people.me)}" maxlength="60"></div><div class="field"><label>Nombre del segundo perfil</label><input class="input" id="setPartner" value="${esc(state.people.partner)}" maxlength="60"></div><div class="field full"><label>Tu nombre de usuario para iniciar sesión</label><input class="input" id="setUsername" value="${esc(authUser?.username||authUser?.name||"")}" maxlength="40" required><small class="small">Puedes cambiarlo aquí. El correo seguirá funcionando como alternativa.</small></div></div><div class="form-actions"><button class="btn primary">Guardar configuración</button></div></form><div style="margin-top:20px;padding-top:15px;border-top:1px solid var(--line)"><b>Datos del hogar compartidos</b><p class="small">Ruben y Mauren trabajan sobre la misma información financiera. Los cambios se sincronizan en la nube.</p><div class="actions"><button class="btn" onclick="exportData()">Exportar respaldo</button><button class="btn" onclick="importData()">Importar respaldo</button><button class="btn danger" onclick="resetAll()">Borrar todos los datos</button></div></div>`)}
-async function saveSettings(e){e.preventDefault();const username=document.getElementById("setUsername").value.trim();try{const result=await apiRequest("updateUsername",{token:authToken,username});authUser=result.user;localStorage.setItem(AUTH_USER_KEY,JSON.stringify(authUser));state.people.me=document.getElementById("setMe").value.trim()||"Ruben";state.people.partner=document.getElementById("setPartner").value.trim()||"Mauren";saveState();updateSignedUserLabel();closeModal();toast("Configuración guardada")}catch(err){toast("No se pudo guardar: "+err.message)}}
+function openSettings(){openModal("Configuración",`<form onsubmit="saveSettings(event)"><div class="form-grid"><div class="field"><label>Nombre del primer perfil</label><input class="input" id="setMe" value="${esc(state.people.me)}" maxlength="60"></div><div class="field"><label>Nombre del segundo perfil</label><input class="input" id="setPartner" value="${esc(state.people.partner)}" maxlength="60"></div><div class="field"><label>Meta mensual de ahorro (COP)</label><input class="input" id="setSavingTarget" type="text" inputmode="numeric" value="${state.savingTarget?fmtInput(state.savingTarget):""}" placeholder="Ej. 500000"></div><div class="field"><label>Nombre de usuario</label><input class="input" id="setUsername" value="${esc(authUser?.username||authUser?.name||"")}" maxlength="40" required></div></div><div class="form-actions"><button class="btn primary"><i class="fa-solid fa-floppy-disk"></i> Guardar configuración</button></div></form><div style="margin-top:20px;padding-top:15px;border-top:1px solid var(--line)"><b>Datos financieros</b><p class="small">Los cambios se sincronizan cuando hay conexión disponible.</p><div class="actions"><button class="btn" onclick="exportData()">Exportar respaldo</button><button class="btn" onclick="importData()">Importar respaldo</button><button class="btn danger" onclick="resetAll()">Borrar todos los datos</button></div></div>`);const target=document.getElementById("setSavingTarget");if(target)target.addEventListener("input",e=>e.target.value=fmtInput(e.target.value))}
+async function saveSettings(e){e.preventDefault();const username=document.getElementById("setUsername").value.trim();try{const result=await apiRequest("updateUsername",{token:authToken,username});authUser=result.user;localStorage.setItem(AUTH_USER_KEY,JSON.stringify(authUser));state.people.me=document.getElementById("setMe").value.trim()||"Mi perfil";state.people.partner=document.getElementById("setPartner").value.trim()||"Pareja";state.savingTarget=num(document.getElementById("setSavingTarget").value);saveState();updateSignedUserLabel();closeModal();renderAll();toast("Configuración guardada")}catch(err){toast("No se pudo guardar: "+err.message)}}
 function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`nexus-finance-respaldo-${dateNow()}.json`;a.click();URL.revokeObjectURL(a.href)}
 function importData(){let input=document.createElement("input");input.type="file";input.accept=".json,application/json";input.onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{state={...defaultState,...JSON.parse(r.result)};saveState();closeModal();renderAll();toast("Respaldo importado")}catch(_){toast("El archivo no es válido.")}};r.readAsText(f)};input.click()}
 function resetAll(){if(confirm("Esto eliminará todos los registros de Nexus. ¿Continuar?")){state=structuredClone(defaultState);saveState();closeModal();renderAll();toast("Datos eliminados")}}
@@ -728,21 +687,28 @@ function toast(msg){let t=document.getElementById("toast");t.textContent=msg;t.c
 document.getElementById("filterMonth").addEventListener("change",()=>{let f=getFilter();document.getElementById("incomeComparison").textContent=comparison(state.incomes);document.getElementById("expenseComparison").textContent=comparison(state.expenses)});
 setInterval(()=>{document.getElementById("incomeComparison").textContent=comparison(state.incomes);document.getElementById("expenseComparison").textContent=comparison(state.expenses)},1000);
 /* ===== MÓDULOS EXTRA: calendario, deudas, cuentas e informes ===== */
-function showModule(name){
+function routeFromHash(){const raw=(location.hash||"#dashboard").replace(/^#/,"").replace(/\/modal$/,"");const allowed=["dashboard","calendar","debts","accounts","reports","personalMe","personalPartner"];return allowed.includes(raw)?raw:"dashboard"}
+function showModule(name,fromHistory=false){
+ const allowed=["dashboard","calendar","debts","accounts","reports","personalMe","personalPartner"];if(!allowed.includes(name))name="dashboard";
  activeModule=name;
  ["dashboard","calendar","debts","accounts","reports","personal"].forEach(m=>{const el=document.getElementById(m+"Module");if(el)el.classList.toggle("hidden",m!==name&&!(m==="personal"&&(name==="personalMe"||name==="personalPartner")))});
- document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
- const title={dashboard:"Dashboard General",calendar:"Calendario y recordatorios",debts:"Gestión de deudas",accounts:"Cuentas separadas",reports:"Reportes avanzados",personalMe:"Mis finanzas personales",personalPartner:"Finanzas personales · Pareja"};
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.route===name));
+ const title={dashboard:"Dashboard General",calendar:"Calendario y recordatorios",debts:"Gestión de deudas",accounts:"Cuentas separadas",reports:"Reportes avanzados",personalMe:"Finanza · "+(state.people.me||"Mi perfil"),personalPartner:"Finanza · "+(state.people.partner||"Pareja")};
  const h=document.querySelector(".title h1");if(h)h.textContent=title[name]||"Nexus Finance";
- const p=document.querySelector(".title p");if(p)p.textContent=(name==="personalMe"||name==="personalPartner")?"Control individual de asignación, gastos, ahorros e ingresos adicionales.":"Control de tus finanzas personales y del hogar.";
- const navButtons=[...document.querySelectorAll(".nav button")];
- const navIndex={dashboard:0,personalMe:5,personalPartner:6,calendar:8,debts:9,accounts:10,reports:11};
- if(navButtons[navIndex[name]])navButtons[navIndex[name]].classList.add("active");
+ const p=document.querySelector(".title p");if(p)p.textContent=name.startsWith("personal")?"Control de tus finanzas personales.":name==="dashboard"?"Resumen general de tus finanzas.":"Consulta y administra tu información financiera.";
+ if(!fromHistory){const url=location.pathname+location.search+"#"+name;history.pushState({nexusRoute:name},"",url)}
  if(name==="personalMe"||name==="personalPartner")renderPersonalModule();
  if(name!=="dashboard")renderExtendedModules();
- document.getElementById("sidebar").classList.remove("open");
+ document.getElementById("sidebar").classList.remove("open");window.scrollTo({top:0,behavior:"auto"});
 }
-function renderExtendedModules(){renderCalendar();renderTasks();renderDebts();renderAccounts();renderReports()}
+window.addEventListener("popstate",()=>{if(document.getElementById("modal").classList.contains("show")){closeModal(true);const route=routeFromHash();showModule(route,true);return}showModule(routeFromHash(),true)});
+window.addEventListener("hashchange",()=>{if(!document.getElementById("modal").classList.contains("show"))showModule(routeFromHash(),true)});
+function renderExtendedModules(){renderCalendar();renderTasks();renderDebts();renderAccounts();renderReports();renderDashboardMinis()}
+function renderDashboardMinis(){
+ const upcoming=document.getElementById("dashboardUpcoming");if(upcoming){const items=state.tasks.filter(t=>t.status!=="done"&&t.date&&t.date>=dateNow()).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);upcoming.innerHTML=items.length?items.map(t=>`<div class="mini-list-item"><div><b>${esc(t.title)}</b><div class="muted">${esc(t.date)} ${esc(t.time||"")}</div></div><span class="pill">Pendiente</span></div>`).join(""):'<div class="empty">No hay pendientes próximos.</div>'}
+ const debts=document.getElementById("dashboardDebts");if(debts){const items=state.debts.filter(d=>d.status!=="paid"&&Number(d.balance)>0).sort((a,b)=>(a.due||"9999").localeCompare(b.due||"9999")).slice(0,3);debts.innerHTML=items.length?items.map(d=>`<div class="mini-list-item"><div><b>${esc(d.name)}</b><div class="muted">${esc(d.owner==="me"?state.people.me:d.owner==="partner"?state.people.partner:"Hogar")} · vence ${esc(d.due||"sin fecha")}</div></div><strong>${money(d.balance)}</strong></div>`).join(""):'<div class="empty">No hay deudas pendientes.</div>'}
+ const accounts=document.getElementById("dashboardAccounts");if(accounts){accounts.innerHTML=ACCOUNT_TYPES.map(a=>`<div class="mini-account"><span class="small">${esc(a.name)}</span><strong>${money(accountBalance(a.id))}</strong></div>`).join("")}
+}
 function openTaskForm(){openModal("Nuevo recordatorio",`<form onsubmit="saveTask(event)"><div class="form-grid"><div class="field"><label>Fecha</label><input class="input" id="taskDate" type="date" value="${dateNow()}" required></div><div class="field"><label>Hora (opcional)</label><input class="input" id="taskTime" type="time"></div><div class="field full"><label>Compromiso</label><input class="input" id="taskTitle" required placeholder="Ej. Pagar internet"></div><div class="field"><label>Responsable</label><select class="select" id="taskOwner"><option value="home">Hogar</option><option value="me">${esc(state.people.me)}</option><option value="partner">${esc(state.people.partner)}</option></select></div><div class="field"><label>Recordatorio</label><select class="select" id="taskReminder"><option value="none">Solo en calendario</option><option value="on-day">Recordar el día</option><option value="one-day">Un día antes</option></select></div><div class="field full"><label>Notas</label><textarea class="textarea" id="taskNotes" rows="2"></textarea></div></div><div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary">Guardar recordatorio</button></div></form>`)}
 function saveTask(e){e.preventDefault();state.tasks.push({id:crypto.randomUUID(),date:document.getElementById("taskDate").value,time:document.getElementById("taskTime").value,title:document.getElementById("taskTitle").value.trim(),owner:document.getElementById("taskOwner").value,reminder:document.getElementById("taskReminder").value,notes:document.getElementById("taskNotes").value,status:"pending",createdAt:new Date().toISOString()});saveState();closeModal();renderExtendedModules();toast("Recordatorio guardado en la nube")}
 function shiftCalendar(delta){calendarCursor=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()+delta,1);renderCalendar()}
