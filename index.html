@@ -27,11 +27,11 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(7px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}.modal.show{display:flex}.modal-box{width:min(780px,100%);max-height:92vh;overflow:auto;background:#14111e;border:1px solid #332c43;border-radius:20px;box-shadow:0 30px 80px #000;padding:20px}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.modal-head h3{margin:0}.close{background:#211c2d;color:#fff;width:34px;height:34px;border-radius:10px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.form-grid .full{grid-column:1/-1}.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.history{margin-top:18px}.history-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:9px}.history-list{display:grid;gap:6px}.record{display:grid;grid-template-columns:100px 1fr 120px 70px;gap:7px;align-items:center;background:#0d0b14;border:1px solid #25202f;padding:9px;border-radius:10px;font-size:11px}.record-actions{display:flex;gap:4px}.record-actions button{padding:5px 6px;border-radius:7px;background:#211c2d;color:#fff;font-size:10px}
 .toast{position:fixed;right:22px;bottom:22px;background:#1d1829;border:1px solid #493b61;padding:12px 15px;border-radius:12px;z-index:300;box-shadow:var(--shadow);font-size:12px;transform:translateY(20px);opacity:0;transition:.25s}.toast.show{transform:none;opacity:1}
 .mobile-menu{display:none}.small{font-size:10px;color:var(--muted)}.positive{color:var(--green)}.negative{color:var(--red)}
-@media(max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}.future-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}#personalPageContent .kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important}.future-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:800px){
  .sidebar{transform:translateX(-100%);transition:.25s}.sidebar.open{transform:none}.main{margin-left:0;width:100%;padding:16px}.mobile-menu{display:block}.topbar{align-items:flex-start}.section-grid{grid-template-columns:1fr}.people,.availability{grid-template-columns:1fr}.savings-grid{grid-template-columns:1fr}.donut-layout{grid-template-columns:1fr}.future-grid{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:auto}.record{grid-template-columns:1fr 1fr}.record .record-actions{grid-column:1/-1}.kpis{grid-template-columns:1fr 1fr}
 }
-@media(max-width:520px){.kpis{grid-template-columns:1fr}.future-grid{grid-template-columns:1fr}.filterbar .field{min-width:100px;flex:1}.actions{width:100%}.actions .btn{flex:1}.stats{grid-template-columns:1fr}.title h1{font-size:22px}}
+@media(max-width:520px){.kpis{grid-template-columns:1fr}.future-grid{grid-template-columns:1fr}.filterbar .field{min-width:100px;flex:1}.actions{width:100%}.actions .btn{flex:1}.stats{grid-template-columns:1fr}#personalPageContent .kpis{grid-template-columns:1fr 1fr!important}.title h1{font-size:22px}}
 
 /* Autenticación y módulos ampliados Nexus */
 .auth-options{display:grid;gap:9px;margin:4px 0 14px;font-size:13px;color:var(--muted)}.remember-option{display:flex;align-items:center;gap:9px}.remember-option input{accent-color:var(--accent);width:15px;height:15px}
@@ -62,6 +62,8 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
     <button onclick="openIncome('partner')"><i>↗</i>Ingresos pareja</button>
     <button onclick="openExpensePicker()"><i>↘</i>Gastos del hogar</button>
     <button onclick="openSavingPicker()"><i>◈</i>Ahorros</button>
+    <button onclick="showModule('personalMe')"><i>♙</i>Mis finanzas personales</button>
+    <button onclick="showModule('personalPartner')"><i>♧</i>Finanzas de mi pareja</button>
     <button onclick="showModule('dashboard');scrollToId('goals')"><i>◎</i>Metas a futuro</button>
     <button onclick="showModule('calendar')"><i>▦</i>Calendario & recordatorios</button>
     <button onclick="showModule('debts')"><i>▤</i>Deudas</button>
@@ -144,6 +146,8 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
  <div class="future-grid" id="goalsGrid"></div>
 </section>
 </div>
+
+<section id="personalModule" class="module-section hidden"></section>
 
 <section id="calendarModule" class="module-section hidden">
  <div class="card"><div class="card-head"><div><h2>▦ Calendario y recordatorios</h2><span>Compromisos del hogar y personales</span></div><button class="btn primary" onclick="openTaskForm()">+ Recordatorio</button></div>
@@ -458,6 +462,7 @@ function renderAll(){
  renderGoals();
  document.getElementById("savingTarget").value=state.savingTarget?fmtInput(state.savingTarget):"";
  let target=Number(state.savingTarget)||0; document.getElementById("savingTargetStatus").textContent=target?`Meta: ${money(target)} · Avance del periodo: ${money(saving)} · ${target?Math.min(100,saving/target*100).toFixed(0):0}%`:"Sin meta mensual configurada.";
+ if(activeModule==="personalMe"||activeModule==="personalPartner")renderPersonalModule();
 }
 function renderDonut(id,a,b,expense=false){
  const el=document.getElementById(id); let total=a+b;
@@ -505,7 +510,7 @@ function personalStats(person,year=getFilter().year,month=getFilter().month){
 function personCard(person,name,assigned){
  const stats=personalStats(person), balance=assigned+stats.extraIncome-stats.spent-stats.saved;
  const pct=assigned>0?Math.max(0,Math.min(100,balance/assigned*100)):0;
- return `<div class="person-card"><b>${esc(name)}</b><div class="stats"><div class="stat"><small>Asignado</small><b>${money(assigned)}</b></div><div class="stat"><small>Gastado</small><b>${money(stats.spent)} <button class="detail-btn" onclick="openPersonalSpending('${person}')">ver detalles</button></b></div><div class="stat"><small>Saldo disponible</small><b class="${balance<0?'negative':'positive'}">${money(balance)}</b></div></div><div class="small">Ahorro personal: <b>${money(stats.saved)}</b> · Ingresos adicionales: <b>${money(stats.extraIncome)}</b></div><div class="progress"><i style="width:${pct}%"></i></div><div class="small" style="margin-top:6px">${pct.toFixed(0)}% del asignado disponible</div></div>`;
+ return `<div class="person-card"><b>${esc(name)}</b><div class="stats"><div class="stat"><small>Asignado</small><b>${money(assigned)}</b></div><div class="stat"><small>Gastado</small><b>${money(stats.spent)} <button class="detail-btn" onclick="showModule('${person==='me'?'personalMe':'personalPartner'}')">ver detalles</button></b></div><div class="stat"><small>Saldo disponible</small><b class="${balance<0?'negative':'positive'}">${money(balance)}</b></div></div><div class="small">Ahorro personal: <b>${money(stats.saved)}</b> · Ingresos adicionales: <b>${money(stats.extraIncome)}</b></div><div class="progress"><i style="width:${pct}%"></i></div><div class="small" style="margin-top:6px">${pct.toFixed(0)}% del asignado disponible</div></div>`;
 }
 function renderBars(id,year,type){
  const box=document.getElementById(id), vals=MONTHS.map((_,i)=>{
@@ -608,40 +613,69 @@ function personalTypeLabel(type){
 }
 function personalTypeCountsAsSpent(type){return ["expense","debt","other-expense"].includes(type||"expense")}
 let activePersonalPerson="me";
-function openPersonalSpending(person){
+function getPersonalPageFilter(){
+ const y=Number(document.getElementById("pFilterYear")?.value)||new Date().getFullYear();
+ const m=document.getElementById("pFilterMonth")?.value||"all";
+ return {year:y,month:m};
+}
+function renderPersonalModule(){
+ const box=document.getElementById("personalModule");
+ if(!box||!(activeModule==="personalMe"||activeModule==="personalPartner"))return;
+ const person=activeModule==="personalPartner"?"partner":"me";
  activePersonalPerson=person;
- state.personalSpending=state.personalSpending||[];
- const stats=personalStats(person);
- const assigned=personalAssigned(person);
+ const oldYear=Number(document.getElementById("pFilterYear")?.value)||Number(document.getElementById("filterYear")?.value)||new Date().getFullYear();
+ const oldMonth=document.getElementById("pFilterMonth")?.value||document.getElementById("filterMonth")?.value||"all";
+ const years=new Set([new Date().getFullYear(),oldYear,...(state.personalSpending||[]).map(x=>Number(String(x.date||"").slice(0,4))).filter(Boolean),...(state.incomes||[]).map(x=>Number(String(x.date||"").slice(0,4))).filter(Boolean)]);
+ const yearOptions=[...years].sort((a,b)=>b-a).map(y=>`<option value="${y}" ${y===oldYear?'selected':''}>${y}</option>`).join("");
+ box.innerHTML=`
+ <div class="card" style="margin-bottom:15px">
+  <div class="card-head"><div><h2>Finanzas personales · ${esc(state.people[person])}</h2><span>Control individual del dinero asignado y de tus movimientos</span></div><button class="btn" onclick="showModule('dashboard')">← Volver al dashboard</button></div>
+  <p class="small">Esta página es independiente del dashboard del hogar. Los gastos, pagos de deudas y otros egresos registrados aquí se reflejan automáticamente en “Gastado”. Los ahorros e ingresos adicionales se mantienen separados.</p>
+  <div class="filterbar" style="margin-top:14px;margin-bottom:0"><div class="field"><label>Año</label><select class="select" id="pFilterYear" onchange="renderPersonalModule()">${yearOptions}</select></div><div class="field"><label>Periodo</label><select class="select" id="pFilterMonth" onchange="renderPersonalModule()">${['Año completo','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'].map((n,i)=>`<option value="${i===0?'all':i}" ${(String(i===0?'all':i)===String(oldMonth))?'selected':''}>${n}</option>`).join('')}</select></div><button class="btn ghost" onclick="document.getElementById('pFilterYear').value='${new Date().getFullYear()}';document.getElementById('pFilterMonth').value='all';renderPersonalModule()">Periodo actual</button></div>
+ </div>
+ <div id="personalPageContent"></div>`;
+ const f=getPersonalPageFilter();
+ const stats=personalStats(person,f.year,f.month);
+ const assigned=personalAssigned(person,f.year,f.month);
  const personalBalance=assigned+stats.extraIncome-stats.spent-stats.saved;
  const rows=stats.rows.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+ const spentRows=rows.filter(x=>personalTypeCountsAsSpent(personalMovementType(x)));
+ const savedRows=rows.filter(x=>personalMovementType(x)==="saving");
+ const incomeRows=rows.filter(x=>personalMovementType(x)==="income");
  const history=rows.map(x=>{
-   const type=personalMovementType(x), amount=Math.abs(Number(x.amount)||0);
+   const type=personalMovementType(x),amount=Math.abs(Number(x.amount)||0);
    const sign=type==="income"?"+":personalTypeCountsAsSpent(type)?"−":"↗";
-   return `<div class="record"><span>${esc(x.date||"—")}</span><b class="${type==='income'?'positive':personalTypeCountsAsSpent(type)?'negative':''}">${sign}${money(amount)}</b><span><span class="personal-kind">${personalTypeLabel(type)}</span><br>${esc(x.category||"Sin categoría")} · ${esc(x.desc||"Sin descripción")}</span><div class="record-actions"><button onclick="deleteRecord('personal','${x.id}')">Eliminar</button></div></div>`;
+   return `<div class="record"><span>${esc(x.date||"—")}</span><span><b class="${type==='income'?'positive':personalTypeCountsAsSpent(type)?'negative':''}">${sign}${money(amount)}</b><br><span class="personal-kind">${personalTypeLabel(type)}</span></span><span>${esc(x.category||"Sin categoría")}<br><span class="small">${esc(x.desc||"Sin descripción")}</span></span><div class="record-actions"><button onclick="deleteRecord('personal','${x.id}')">Eliminar</button></div></div>`;
  }).join("");
- openModal(`Finanzas personales · ${state.people[person]}`,`
- <div class="small">Registra aquí los movimientos de ${esc(state.people[person])}. Los gastos, pagos de deuda y otros egresos alimentan automáticamente el valor de <b>Gastado</b>; los ahorros y los ingresos adicionales se contabilizan por separado.</div>
- <div class="personal-summary">
-  <div class="summary-box"><small>Asignado</small><strong>${money(assigned)}</strong></div>
-  <div class="summary-box"><small>Gastado</small><strong class="negative">${money(stats.spent)}</strong></div>
-  <div class="summary-box"><small>Ahorro personal</small><strong>${money(stats.saved)}</strong></div>
-  <div class="summary-box"><small>Ingresos adicionales</small><strong class="positive">${money(stats.extraIncome)}</strong></div>
-  <div class="summary-box"><small>Disponible real</small><strong class="${personalBalance<0?'negative':'positive'}">${money(personalBalance)}</strong></div>
- </div>
- <form onsubmit="savePersonalSpending(event,'${person}')">
-  <div class="form-grid">
-   <div class="field"><label>Fecha</label><input class="input" id="pDate" type="date" value="${dateNow()}" required></div>
-   <div class="field"><label>Tipo de movimiento</label><select class="select" id="pType" onchange="updatePersonalCategories()" required><option value="expense">Gasto personal</option><option value="debt">Pago de deuda</option><option value="other-expense">Otro egreso</option><option value="saving">Ahorro personal</option><option value="income">Ingreso adicional</option></select></div>
-   <div class="field"><label>Categoría</label><select class="select" id="pCategory"><option>Alimentación</option><option>Transporte</option><option>Compras personales</option><option>Salud</option><option>Entretenimiento</option><option>Servicios / suscripciones</option><option>Deudas y obligaciones</option><option>Ahorro personal</option><option>Ingreso adicional</option><option>Otros</option></select></div>
-   <div class="field"><label>Monto (COP)</label><input class="input money-input" id="pAmount" inputmode="numeric" placeholder="Ej. 50000" required></div>
-   <div class="field full"><label>Descripción / nota</label><input class="input" id="pDesc" placeholder="Ej. mercado, transporte, cuota del préstamo..." maxlength="180"></div>
+ document.getElementById("personalPageContent").innerHTML=`
+ <section class="grid kpis" style="grid-template-columns:repeat(5,minmax(0,1fr))">
+  <div class="card kpi available"><div class="label">ASIGNADO</div><div class="value" style="font-size:clamp(16px,2vw,24px)">${money(assigned)}</div><div class="sub">Después de gastos y ahorros del hogar</div></div>
+  <div class="card kpi expense"><div class="label">GASTADO</div><div class="value" style="font-size:clamp(16px,2vw,24px)">${money(stats.spent)}</div><div class="sub">Gastos, deudas y otros egresos</div></div>
+  <div class="card kpi saving"><div class="label">AHORRO PERSONAL</div><div class="value" style="font-size:clamp(16px,2vw,24px)">${money(stats.saved)}</div><div class="sub">Separado de los gastos</div></div>
+  <div class="card kpi income"><div class="label">INGRESOS EXTRA</div><div class="value" style="font-size:clamp(16px,2vw,24px)">${money(stats.extraIncome)}</div><div class="sub">Entradas adicionales</div></div>
+  <div class="card kpi available"><div class="label">DISPONIBLE REAL</div><div class="value ${personalBalance<0?'negative':'positive'}" style="font-size:clamp(16px,2vw,24px)">${money(personalBalance)}</div><div class="sub">Asignado + extras − gastos − ahorro</div></div>
+ </section>
+ <section class="grid section-grid">
+  <div class="card"><div class="card-head"><div><h2>Registrar movimiento</h2><span>Un solo registro actualiza los totales</span></div></div>
+   <form onsubmit="savePersonalSpending(event,'${person}')"><div class="form-grid">
+    <div class="field"><label>Fecha</label><input class="input" id="pDate" type="date" value="${dateNow()}" required></div>
+    <div class="field"><label>Tipo de movimiento</label><select class="select" id="pType" onchange="updatePersonalCategories()" required><option value="expense">Gasto personal</option><option value="debt">Pago de deuda</option><option value="other-expense">Otro egreso</option><option value="saving">Ahorro personal</option><option value="income">Ingreso adicional</option></select></div>
+    <div class="field"><label>Categoría</label><select class="select" id="pCategory"><option>Alimentación</option><option>Transporte</option><option>Compras personales</option><option>Salud</option><option>Entretenimiento</option><option>Servicios / suscripciones</option><option>Deudas y obligaciones</option><option>Ahorro personal</option><option>Ingreso adicional</option><option>Otros</option></select></div>
+    <div class="field"><label>Monto (COP)</label><input class="input money-input" id="pAmount" inputmode="numeric" placeholder="Ej. 50000" required></div>
+    <div class="field full"><label>Descripción / nota</label><input class="input" id="pDesc" placeholder="Ej. transporte, compra, cuota del préstamo..." maxlength="180"></div>
+   </div><div class="form-actions"><button class="btn primary">+ Registrar movimiento</button></div></form>
   </div>
-  <div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cerrar</button><button class="btn primary">Registrar movimiento</button></div>
- </form>
- <div class="history"><div class="history-head"><b>Historial personal</b><span class="small">${rows.length} movimiento(s)</span></div><div class="history-list" style="margin-top:10px">${history||'<div class="empty">Aún no hay movimientos personales registrados.</div>'}</div></div>`);
- document.getElementById("pAmount").addEventListener("input",e=>e.target.value=fmtInput(e.target.value));
+  <div class="card"><div class="card-head"><div><h2>Distribución del dinero</h2><span>Resumen del periodo seleccionado</span></div></div>
+   <div class="list"><div class="list-row" style="grid-template-columns:1fr auto"><span>Asignado</span><strong>${money(assigned)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Ingresos adicionales</span><strong class="positive">+${money(stats.extraIncome)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Gastos y pagos</span><strong class="negative">−${money(stats.spent)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Ahorros personales</span><strong>−${money(stats.saved)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><b>Saldo disponible</b><strong class="${personalBalance<0?'negative':'positive'}">${money(personalBalance)}</strong></div></div>
+   <div style="margin-top:18px"><div class="card-head"><h2>Actividad del periodo</h2></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Movimientos registrados</span><strong>${rows.length}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Gastos y pagos</span><strong>${spentRows.length}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Ahorros personales</span><strong>${savedRows.length}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Ingresos adicionales</span><strong>${incomeRows.length}</strong></div></div>
+  </div>
+ </section>
+ <section class="card"><div class="card-head"><div><h2>Historial de movimientos</h2><span>Registros personales del periodo seleccionado</span></div><span>${rows.length} movimiento(s)</span></div><div class="history-list">${history||'<div class="empty">No hay movimientos en este periodo. Registra el primero usando el formulario.</div>'}</div></section>`;
+ const amountInput=document.getElementById("pAmount");
+ if(amountInput)amountInput.addEventListener("input",e=>e.target.value=fmtInput(e.target.value));
 }
+function openPersonalSpending(person){showModule(person==="partner"?"personalPartner":"personalMe")}
+
 function updatePersonalCategories(){
  const type=document.getElementById("pType")?.value, cat=document.getElementById("pCategory");
  if(!cat)return;
@@ -657,7 +691,7 @@ function savePersonalSpending(e,person){
  const type=document.getElementById("pType").value;
  state.personalSpending=state.personalSpending||[];
  state.personalSpending.push({id:crypto.randomUUID(),person,date:document.getElementById("pDate").value,amount:a,type,category:document.getElementById("pCategory").value,desc:document.getElementById("pDesc").value.trim()});
- saveState();renderAll();toast(`${personalTypeLabel(type)} registrado`);openPersonalSpending(person);
+ saveState();renderAll();if(activeModule==="personalMe"||activeModule==="personalPartner")renderPersonalModule();toast(`${personalTypeLabel(type)} registrado`);
 }
 function deleteRecord(type,id){
  if(!confirm("¿Eliminar este registro?"))return;
@@ -666,7 +700,7 @@ function deleteRecord(type,id){
  if(type==="saving")state.savings=state.savings.filter(x=>x.id!==id);
  if(type==="personal")state.personalSpending=(state.personalSpending||[]).filter(x=>x.id!==id);
  saveState();renderAll();toast("Registro eliminado");
- if(type==="personal")openPersonalSpending(activePersonalPerson);
+ if(type==="personal"&&(activeModule==="personalMe"||activeModule==="personalPartner"))renderPersonalModule();
  else if(activeModal.type==="income")openIncome(activeModal.key); else if(activeModal.type==="expense")openExpense(activeModal.key); else if(activeModal.type==="saving")openSaving(activeModal.key); else closeModal();
 }
 
@@ -696,11 +730,17 @@ setInterval(()=>{document.getElementById("incomeComparison").textContent=compari
 /* ===== MÓDULOS EXTRA: calendario, deudas, cuentas e informes ===== */
 function showModule(name){
  activeModule=name;
- ["dashboard","calendar","debts","accounts","reports"].forEach(m=>{const el=document.getElementById(m+"Module");if(el)el.classList.toggle("hidden",m!==name)});
+ ["dashboard","calendar","debts","accounts","reports","personal"].forEach(m=>{const el=document.getElementById(m+"Module");if(el)el.classList.toggle("hidden",m!==name&&!(m==="personal"&&(name==="personalMe"||name==="personalPartner")))});
  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
- const title={dashboard:"Dashboard General",calendar:"Calendario y recordatorios",debts:"Gestión de deudas",accounts:"Cuentas separadas",reports:"Reportes avanzados"};
+ const title={dashboard:"Dashboard General",calendar:"Calendario y recordatorios",debts:"Gestión de deudas",accounts:"Cuentas separadas",reports:"Reportes avanzados",personalMe:"Mis finanzas personales",personalPartner:"Finanzas personales · Pareja"};
  const h=document.querySelector(".title h1");if(h)h.textContent=title[name]||"Nexus Finance";
+ const p=document.querySelector(".title p");if(p)p.textContent=(name==="personalMe"||name==="personalPartner")?"Control individual de asignación, gastos, ahorros e ingresos adicionales.":"Control de tus finanzas personales y del hogar.";
+ const navButtons=[...document.querySelectorAll(".nav button")];
+ const navIndex={dashboard:0,personalMe:5,personalPartner:6,calendar:8,debts:9,accounts:10,reports:11};
+ if(navButtons[navIndex[name]])navButtons[navIndex[name]].classList.add("active");
+ if(name==="personalMe"||name==="personalPartner")renderPersonalModule();
  if(name!=="dashboard")renderExtendedModules();
+ document.getElementById("sidebar").classList.remove("open");
 }
 function renderExtendedModules(){renderCalendar();renderTasks();renderDebts();renderAccounts();renderReports()}
 function openTaskForm(){openModal("Nuevo recordatorio",`<form onsubmit="saveTask(event)"><div class="form-grid"><div class="field"><label>Fecha</label><input class="input" id="taskDate" type="date" value="${dateNow()}" required></div><div class="field"><label>Hora (opcional)</label><input class="input" id="taskTime" type="time"></div><div class="field full"><label>Compromiso</label><input class="input" id="taskTitle" required placeholder="Ej. Pagar internet"></div><div class="field"><label>Responsable</label><select class="select" id="taskOwner"><option value="home">Hogar</option><option value="me">${esc(state.people.me)}</option><option value="partner">${esc(state.people.partner)}</option></select></div><div class="field"><label>Recordatorio</label><select class="select" id="taskReminder"><option value="none">Solo en calendario</option><option value="on-day">Recordar el día</option><option value="one-day">Un día antes</option></select></div><div class="field full"><label>Notas</label><textarea class="textarea" id="taskNotes" rows="2"></textarea></div></div><div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary">Guardar recordatorio</button></div></form>`)}
