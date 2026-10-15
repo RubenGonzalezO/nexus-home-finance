@@ -62,7 +62,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
 ::-webkit-scrollbar-track{background:#100d18;border-radius:12px}
 ::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#8b5cf6,#57406f);border:2px solid #100d18;border-radius:12px}
 ::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#b09aff,#8058a8)}
-body.modal-open{overflow:hidden;position:fixed;left:0;right:0;width:100%}
+body.modal-open{overflow:hidden}
 .modal-box{scrollbar-color:#655080 #14111e}
 .saving-goal-feature{margin:0 0 16px;padding:18px 20px;border:1px solid rgba(52,211,153,.36);border-radius:17px;background:radial-gradient(circle at 95% 0,rgba(52,211,153,.12),transparent 45%),linear-gradient(135deg,rgba(31,47,42,.9),rgba(18,16,27,.95));box-shadow:inset 0 1px rgba(255,255,255,.04)}
 .saving-goal-feature .goal-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}.saving-goal-feature .goal-label{font-size:12px;color:#b9e9d3;font-weight:800;letter-spacing:.04em;text-transform:uppercase}.saving-goal-feature .goal-number{font-size:clamp(23px,3vw,32px);font-weight:900;letter-spacing:-.03em;margin-top:5px}.saving-goal-feature .goal-progress-label{font-size:12px;color:#d7e8df;text-align:right}.saving-goal-feature .progress{height:13px;background:#252d2a;margin-top:14px}.saving-goal-feature .progress i{background:linear-gradient(90deg,#34d399,#a3e635)}
@@ -72,35 +72,6 @@ body.modal-open{overflow:hidden;position:fixed;left:0;right:0;width:100%}
 @media(max-width:1050px){.evolution-grid{grid-template-columns:1fr}.evolution-panel .modern-chart{height:180px}.availability .stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:800px){.bar-callout{position:fixed;left:50%;bottom:22px;top:auto;transform:translate(-50%,8px);width:min(320px,calc(100vw - 32px));max-width:calc(100vw - 32px);z-index:120;background:rgba(27,22,39,.99)}.bar-callout:after{display:none}.bar.tip-open .bar-callout{transform:translate(-50%,0)}.evolution-grid{grid-template-columns:1fr}.evolution-panel .modern-chart{height:185px}.availability .stats{grid-template-columns:repeat(3,minmax(0,1fr))}.upcoming-item{grid-template-columns:50px minmax(0,1fr) auto}}
 @media(max-width:520px){.availability .stats{grid-template-columns:1fr}.availability .stat{display:flex;justify-content:space-between;align-items:center;gap:10px}.availability .stat b{font-size:13px;text-align:right}.saving-goal-feature{padding:15px}.upcoming-item{grid-template-columns:48px minmax(0,1fr);}.upcoming-badge{grid-column:2;justify-self:start}.modern-chart .bar em{font-size:8px}}
-
-
-/* Nexus UI patch v2: working scrollbar, stable modal scroll, denser overview and rich chart callouts */
-html{scrollbar-gutter:stable}
-body{scrollbar-color:#655080 #100d18}
-.comparison-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:0 0 16px;align-items:stretch}
-.comparison-card{min-width:0;overflow:visible}
-.overview-grid{align-items:stretch}
-.income-breakdown{margin-top:18px;padding-top:15px;border-top:1px solid var(--line)}
-.income-breakdown-title{font-size:11px;color:var(--muted);font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:7px}
-.contribution-row{display:grid;grid-template-columns:minmax(70px,100px) minmax(50px,1fr) auto;gap:9px;align-items:center;margin:10px 0;font-size:11px}
-.contribution-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#e9e3f5}
-.contribution-track{height:8px;background:#292436;border-radius:99px;overflow:hidden}
-.contribution-track i{display:block;height:100%;border-radius:99px;min-width:0}
-.contribution-value{font-weight:800;white-space:nowrap}
-.bar-chart{gap:7px;overflow:visible}
-.bar-chart .bar{min-width:0;border-radius:10px 10px 0 0;transition:background .18s ease}
-.bar-chart .bar:hover,.bar-chart .bar:focus,.bar-chart .bar.tip-open{background:rgba(139,92,246,.07)}
-.bar-chart .bar-fill{transition:height .35s cubic-bezier(.2,.7,.2,1),filter .18s ease,transform .18s ease;position:relative}
-.bar-chart .bar-fill:after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.28),transparent 55%);pointer-events:none}
-.bar-callout{min-width:195px;max-width:270px;padding:12px 13px;border-color:#766095;background:linear-gradient(145deg,rgba(35,28,50,.99),rgba(18,15,27,.99));font-size:11px;box-shadow:0 16px 36px rgba(0,0,0,.55),0 0 0 1px rgba(167,139,250,.08);overflow-wrap:anywhere}
-.bar-callout strong{font-size:12px;color:#e3d8ff;padding-bottom:6px;margin-bottom:6px;border-bottom:1px solid #3b304d}
-.callout-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-top:5px}
-.callout-row span:first-child{color:#bdb4ce}
-.callout-row b{font-variant-numeric:tabular-nums;text-align:right}
-.callout-note{font-size:10px;color:#aaa0bd;margin-top:8px;padding-top:7px;border-top:1px solid #3b304d}
-.modal-open{overscroll-behavior:none}
-@media(max-width:800px){.comparison-grid{grid-template-columns:1fr}.bar-callout{bottom:18px;max-height:42vh;overflow:auto;overscroll-behavior:contain}.comparison-card .bar-chart{height:175px}}
-@media(max-width:520px){.contribution-row{grid-template-columns:80px minmax(35px,1fr) auto;gap:6px}.contribution-value{font-size:10px}.bar-callout{width:min(340px,calc(100vw - 24px));max-width:calc(100vw - 24px)}}
 
 </style>
 </head>
@@ -157,7 +128,7 @@ body{scrollbar-color:#655080 #100d18}
     <div class="person"><div class="name" id="partnerNameIncome">Mi pareja</div><div class="amount" id="partnerIncome">$0</div><button class="mini-btn" onclick="openIncome('partner')">+ Registrar</button></div>
    </div>
   </div>
-  <div class="income-breakdown" id="incomeContributionBreakdown"></div>
+  <div style="margin-top:18px"><div class="card-head"><h2>Comparativo mensual</h2><span id="incomeComparison"></span></div><div class="bar-chart" id="incomeBars"></div></div>
  </div>
 
  <div class="card">
@@ -166,15 +137,9 @@ body{scrollbar-color:#655080 #100d18}
    <div class="donut" id="expenseDonut"><div class="donut-center">Hogar</div></div>
    <div class="list" id="expenseList"></div>
   </div>
+  <div style="margin-top:18px"><div class="card-head"><h2>Comparativo mensual</h2><span id="expenseComparison"></span></div><div class="bar-chart" id="expenseBars"></div></div>
  </div>
-</section>
 
-<section class="comparison-grid" aria-label="Comparativos mensuales">
- <div class="card comparison-card"><div class="card-head"><div><h2><i class="fa-solid fa-chart-column"></i> Comparativo mensual · Ingresos</h2><span>Detalle por perfil al interactuar con cada mes</span></div><span id="incomeComparison"></span></div><div class="bar-chart" id="incomeBars"></div></div>
- <div class="card comparison-card"><div class="card-head"><div><h2><i class="fa-solid fa-chart-column"></i> Comparativo mensual · Gastos del hogar</h2><span>Desglose por categoría</span></div><span id="expenseComparison"></span></div><div class="bar-chart" id="expenseBars"></div></div>
-</section>
-
-<section class="grid section-grid secondary-grid">
  <div class="card wide">
   <div class="card-head"><div><h2><i class="fa-solid fa-piggy-bank"></i> Detalles de ahorros</h2><span>Seguimiento por objetivo</span></div><button class="mini-btn" onclick="openSavingPicker()">+ Ahorro</button></div>
   <div class="saving-goal-feature" id="savingTargetStatus"></div>
@@ -480,10 +445,7 @@ function renderAll(){
  document.getElementById("partnerNameIncome").innerHTML=`<span class="category-swatch" style="background:#fb923c"></span>${esc(state.people.partner)}`;updateSignedUserLabel();
  document.getElementById("meIncome").textContent=money(sum(inc.filter(x=>x.person==="me")));
  document.getElementById("partnerIncome").textContent=money(sum(inc.filter(x=>x.person==="partner")));
- const meIncomeValue=sum(inc.filter(x=>x.person==="me")), partnerIncomeValue=sum(inc.filter(x=>x.person==="partner")), incomeTotal=meIncomeValue+partnerIncomeValue;
- renderDonut("incomeDonut",meIncomeValue,partnerIncomeValue);
- const contribution=document.getElementById("incomeContributionBreakdown");
- if(contribution){const mePct=incomeTotal?meIncomeValue/incomeTotal*100:0,partnerPct=incomeTotal?partnerIncomeValue/incomeTotal*100:0;contribution.innerHTML=`<div class="income-breakdown-title"><i class="fa-solid fa-scale-balanced"></i> Distribución de aportes</div><div class="contribution-row"><span class="contribution-name"><i class="fa-solid fa-person" style="color:#a78bfa"></i> ${esc(state.people.me)}</span><div class="contribution-track"><i style="width:${mePct}%;background:linear-gradient(90deg,#8b5cf6,#c4b5fd)"></i></div><b class="contribution-value">${mePct.toFixed(0)}%</b></div><div class="contribution-row"><span class="contribution-name"><i class="fa-solid fa-person-dress" style="color:#fb923c"></i> ${esc(state.people.partner)}</span><div class="contribution-track"><i style="width:${partnerPct}%;background:linear-gradient(90deg,#fb923c,#fdba74)"></i></div><b class="contribution-value">${partnerPct.toFixed(0)}%</b></div>`}
+ renderDonut("incomeDonut",sum(inc.filter(x=>x.person==="me")),sum(inc.filter(x=>x.person==="partner")));
  renderExpenseList(exp);
  renderDonut("expenseDonut",expense,0,true,exp);
  renderSavings(sav);
@@ -540,23 +502,15 @@ function personCard(person,name,assigned){
  return `<div class="person-card"><b>${esc(name)}</b><div class="stats"><div class="stat"><small>Asignado</small><b>${money(assigned)}</b></div><div class="stat"><small>Gastado</small><b>${money(stats.spent)} <button class="detail-btn" onclick="showModule('${person==='me'?'personalMe':'personalPartner'}')">ver detalles</button></b></div><div class="stat"><small>Saldo disponible</small><b class="${balance<0?'negative':'positive'}">${money(balance)}</b></div></div><div class="small">Ahorro personal: <b>${money(stats.saved)}</b> · Ingresos adicionales: <b>${money(stats.extraIncome)}</b></div><div class="progress"><i style="width:${pct}%"></i></div><div class="small" style="margin-top:6px">${pct.toFixed(0)}% del asignado disponible</div></div>`;
 }
 function renderBars(id,year,type){
- const box=document.getElementById(id);if(!box)return;
- const arr=type===1?state.incomes:state.expenses;const vals=MONTHS.map((_,i)=>sum(arr.filter(x=>{let d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i})));const max=Math.max(...vals,1);const label=type===1?"Ingresos":"Gastos del hogar";
- box.innerHTML=vals.map((v,i)=>{
-  const details=type===1?state.incomes.filter(x=>{const d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i}):state.expenses.filter(x=>{const d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i});
-  let rows="",note="";
-  if(type===1){const mine=sum(details.filter(x=>x.person==="me")),partner=sum(details.filter(x=>x.person==="partner"));rows=`<div class="callout-row"><span><i class="fa-solid fa-person" style="color:#c4b5fd"></i> ${esc(state.people.me)}</span><b>${money(mine)}</b></div><div class="callout-row"><span><i class="fa-solid fa-person-dress" style="color:#fdba74"></i> ${esc(state.people.partner)}</span><b>${money(partner)}</b></div>`;note=`${details.length} registro${details.length===1?"":"s"} de ingreso`}
-  else {const categoryRows=CATS.map((c,ci)=>({name:c,value:sum(details.filter(x=>x.category===c)),color:CAT_COLORS[ci]})).filter(x=>x.value>0);rows=categoryRows.length?categoryRows.map(r=>`<div class="callout-row"><span><i class="category-swatch" style="background:${r.color}"></i>${esc(r.name)}</span><b>${money(r.value)}</b></div>`).join(""):'<div class="callout-row"><span>Sin gastos registrados</span><b>$0</b></div>';note=`${details.length} gasto${details.length===1?"":"s"} del hogar`}
-  const tooltip=`<strong>${MONTHS[i]} ${year}</strong><div class="callout-row"><span>Total ${label.toLowerCase()}</span><b>${money(v)}</b></div>${rows}<div class="callout-note">${note}</div>`;
-  return `<div class="bar" data-value="${v}" tabindex="0" role="button" aria-label="${esc(MONTHS[i]+" "+label+": "+money(v))}" onclick="toggleChartTip(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleChartTip(this)}"><em>${v?shortMoney(v):"—"}</em><div class="bar-fill" style="height:${Math.max(v?4:1,v/max*145)}px;background:${type===1?'linear-gradient(180deg,#c4b5fd,#8b5cf6)':'linear-gradient(180deg,#fdba74,#fb923c)'}"></div><small>${MONTHS[i].slice(0,3)}</small><div class="bar-callout">${tooltip}</div></div>`
- }).join("");
+ const box=document.getElementById(id);if(!box)return;const arr=type===1?state.incomes:state.expenses;const vals=MONTHS.map((_,i)=>sum(arr.filter(x=>{let d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i})));const max=Math.max(...vals,1);const label=type===1?"Ingresos":"Gastos del hogar";
+ box.innerHTML=vals.map((v,i)=>{const details=type===1?state.incomes.filter(x=>{const d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i}):state.expenses.filter(x=>{const d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i});const lines=type===1?details.map(x=>`${x.person==="partner"?state.people.partner:state.people.me}: ${money(x.amount)}`).join(" · "):CATS.map(c=>{const n=sum(details.filter(x=>x.category===c));return n?`${c}: ${money(n)}`:""}).filter(Boolean).join(" · ");const tooltip=`<strong>${MONTHS[i]} ${year}</strong><div><b>Total:</b> ${money(v)}</div>${lines?`<div>${esc(lines)}</div>`:'<div>Sin movimientos registrados</div>'}`;return `<div class="bar" data-value="${v}" tabindex="0" role="button" aria-label="${esc(MONTHS[i]+" "+label+": "+money(v))}" onclick="toggleChartTip(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleChartTip(this)}"><em>${v?shortMoney(v):"—"}</em><div class="bar-fill" style="height:${Math.max(v?4:1,v/max*145)}px;background:${type===1?'linear-gradient(180deg,#c4b5fd,#8b5cf6)':'linear-gradient(180deg,#fdba74,#fb923c)'}"></div><small>${MONTHS[i].slice(0,3)}</small><div class="bar-callout">${tooltip}</div></div>`}).join("");
 }
 function shortMoney(v){const n=Number(v)||0;if(n>=1000000)return "$"+(n/1000000).toLocaleString("es-CO",{maximumFractionDigits:1})+"M";if(n>=1000)return "$"+Math.round(n/1000).toLocaleString("es-CO")+"k";return n?"$"+n:"—"}
 function toggleChartTip(el){const wasOpen=el.classList.contains("tip-open");document.querySelectorAll(".bar.tip-open").forEach(x=>x.classList.remove("tip-open"));if(!wasOpen)el.classList.add("tip-open")}
 document.addEventListener("click",e=>{if(!e.target.closest(".bar"))document.querySelectorAll(".bar.tip-open").forEach(x=>x.classList.remove("tip-open"))});
 function renderEvolution(year){
- const sets=[{id:"evolutionIncomeBars",total:"evolutionIncomeTotal",arr:state.incomes,color:"linear-gradient(180deg,#c4b5fd,#8b5cf6)",label:"Ingresos",icon:"fa-arrow-trend-up"},{id:"evolutionExpenseBars",total:"evolutionExpenseTotal",arr:state.expenses,color:"linear-gradient(180deg,#fdba74,#fb923c)",label:"Gastos del hogar",icon:"fa-house-chimney"},{id:"evolutionSavingBars",total:"evolutionSavingTotal",arr:state.savings,color:"linear-gradient(180deg,#6ee7b7,#059669)",label:"Ahorros",icon:"fa-piggy-bank"}];
- sets.forEach(set=>{const box=document.getElementById(set.id);if(!box)return;const rowsByMonth=MONTHS.map((_,i)=>set.arr.filter(x=>{const d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i}));const vals=rowsByMonth.map(rows=>sum(rows));const max=Math.max(...vals,1);const total=vals.reduce((a,b)=>a+b,0);const totalEl=document.getElementById(set.total);if(totalEl)totalEl.textContent=shortMoney(total);box.innerHTML=vals.map((v,i)=>{const rows=rowsByMonth[i];const participation=total?v/total*100:0;let detailRows="";if(set.id==="evolutionIncomeBars"){detailRows=`<div class="callout-row"><span>${esc(state.people.me)}</span><b>${money(sum(rows.filter(x=>x.person==="me")))}</b></div><div class="callout-row"><span>${esc(state.people.partner)}</span><b>${money(sum(rows.filter(x=>x.person==="partner")))}</b></div>`}else if(set.id==="evolutionExpenseBars"){detailRows=CATS.map((c,ci)=>({c,ci,n:sum(rows.filter(x=>x.category===c))})).filter(x=>x.n).map(x=>`<div class="callout-row"><span><i class="category-swatch" style="background:${CAT_COLORS[x.ci]}"></i>${esc(x.c)}</span><b>${money(x.n)}</b></div>`).join("")}else{detailRows=SAVINGS.map(([key,name])=>({name,n:sum(rows.filter(x=>x.type===key))})).filter(x=>x.n).map(x=>`<div class="callout-row"><span>${esc(x.name)}</span><b>${money(x.n)}</b></div>`).join("")};return `<div class="bar" data-value="${v}" tabindex="0" role="button" aria-label="${esc(MONTHS[i]+" "+set.label+": "+money(v))}" onclick="toggleChartTip(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleChartTip(this)}"><em>${v?shortMoney(v):"—"}</em><div class="bar-fill" style="height:${Math.max(v?4:1,v/max*140)}px;background:${set.color}"></div><small>${MONTHS[i].slice(0,3)}</small><div class="bar-callout"><strong>${MONTHS[i]} ${year}</strong><div class="callout-row"><span>${set.label}</span><b>${money(v)}</b></div>${detailRows||'<div class="callout-row"><span>Sin movimientos</span><b>$0</b></div>'}<div class="callout-note">Participación del año: ${participation.toFixed(1)}% · ${rows.length} registro${rows.length===1?"":"s"}</div></div></div>`}).join("")})
+ const sets=[{id:"evolutionIncomeBars",total:"evolutionIncomeTotal",arr:state.incomes,color:"linear-gradient(180deg,#c4b5fd,#8b5cf6)",label:"Ingresos"},{id:"evolutionExpenseBars",total:"evolutionExpenseTotal",arr:state.expenses,color:"linear-gradient(180deg,#fdba74,#fb923c)",label:"Gastos del hogar"},{id:"evolutionSavingBars",total:"evolutionSavingTotal",arr:state.savings,color:"linear-gradient(180deg,#6ee7b7,#059669)",label:"Ahorros"}];
+ sets.forEach(set=>{const box=document.getElementById(set.id);if(!box)return;const vals=MONTHS.map((_,i)=>sum(set.arr.filter(x=>{const d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i})));const max=Math.max(...vals,1);const total=vals.reduce((a,b)=>a+b,0);const totalEl=document.getElementById(set.total);if(totalEl)totalEl.textContent=shortMoney(total);box.innerHTML=vals.map((v,i)=>`<div class="bar" data-value="${v}" tabindex="0" role="button" aria-label="${esc(MONTHS[i]+" "+set.label+": "+money(v))}" onclick="toggleChartTip(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleChartTip(this)}"><em>${v?shortMoney(v):"—"}</em><div class="bar-fill" style="height:${Math.max(v?4:1,v/max*140)}px;background:${set.color}"></div><small>${MONTHS[i].slice(0,3)}</small><div class="bar-callout"><strong>${MONTHS[i]} ${year}</strong><div><b>${set.label}:</b> ${money(v)}</div>${v?'<div>Participación del año: '+(total?v/total*100:0).toFixed(1)+'%</div>':'<div>Sin movimientos registrados</div>'}</div></div>`).join("")})
 }
 function comparison(arr){
  const f=getFilter(); if(f.month==="all")return "";
@@ -575,8 +529,8 @@ function clearGeneralFilter(){document.getElementById("filterYear").value=new Da
 function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:"smooth"});document.getElementById("sidebar").classList.remove("open")}
 function toggleSidebar(){document.getElementById("sidebar").classList.toggle("open")}
 
-function openModal(title,body){modalScrollY=window.scrollY||document.documentElement.scrollTop||0;document.body.style.top=`-${modalScrollY}px`;document.body.classList.add("modal-open");document.getElementById("modalBox").innerHTML=`<div class="modal-head"><h3>${title}</h3><button class="close" onclick="closeModal()" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button></div>${body}`;document.getElementById("modal").classList.add("show");modalHistoryOpen=true;history.pushState({nexusModal:true,scrollY:modalScrollY},"",location.pathname+location.search+"#"+routeFromHash()+"/modal")}
-function closeModal(fromPop=false){if(modalHistoryOpen&&!fromPop){history.back();return}const restoreY=Number(history.state?.scrollY??modalScrollY)||0;document.getElementById("modal").classList.remove("show");document.body.classList.remove("modal-open");document.body.style.top="";activeModal={type:null,key:null};modalHistoryOpen=false;renderAll();requestAnimationFrame(()=>{window.scrollTo({top:restoreY,behavior:"auto"});requestAnimationFrame(()=>window.scrollTo({top:restoreY,behavior:"auto"}))})}
+function openModal(title,body){modalScrollY=window.scrollY;document.body.classList.add("modal-open");document.getElementById("modalBox").innerHTML=`<div class="modal-head"><h3>${title}</h3><button class="close" onclick="closeModal()" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button></div>${body}`;document.getElementById("modal").classList.add("show");modalHistoryOpen=true;history.pushState({nexusModal:true,scrollY:modalScrollY},"",location.pathname+location.search+"#"+routeFromHash()+"/modal")}
+function closeModal(fromPop=false){if(modalHistoryOpen&&!fromPop){history.back();return}document.getElementById("modal").classList.remove("show");document.body.classList.remove("modal-open");activeModal={type:null,key:null};modalHistoryOpen=false;renderAll();requestAnimationFrame(()=>window.scrollTo({top:modalScrollY,behavior:"auto"}))}
 document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal()});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(document.querySelector(".bar.tip-open")){document.querySelectorAll(".bar.tip-open").forEach(x=>x.classList.remove("tip-open"));return}closeModal()}});
 
@@ -752,7 +706,7 @@ function renderGoals(){let box=document.getElementById("goalsGrid");box.innerHTM
 function deleteGoal(id){if(confirm("¿Eliminar esta meta?")){state.goals=state.goals.filter(x=>x.id!==id);saveState();renderAll();toast("Meta eliminada")}}
 
 function openSettings(){openModal("Configuración",`<form onsubmit="saveSettings(event)"><div class="form-grid"><div class="field"><label>Nombre del primer perfil</label><input class="input" id="setMe" value="${esc(state.people.me)}" maxlength="60"></div><div class="field"><label>Nombre del segundo perfil</label><input class="input" id="setPartner" value="${esc(state.people.partner)}" maxlength="60"></div><div class="field"><label>Meta mensual de ahorro (COP)</label><input class="input" id="setSavingTarget" type="text" inputmode="numeric" value="${state.savingTarget?fmtInput(state.savingTarget):""}" placeholder="Ej. 500000"></div><div class="field"><label>Nombre de usuario</label><input class="input" id="setUsername" value="${esc(authUser?.username||authUser?.name||"")}" maxlength="40" required></div></div><div class="form-actions"><button class="btn primary"><i class="fa-solid fa-floppy-disk"></i> Guardar configuración</button></div></form><div style="margin-top:20px;padding-top:15px;border-top:1px solid var(--line)"><b>Datos financieros</b><p class="small">Los cambios se sincronizan cuando hay conexión disponible.</p><div class="actions"><button class="btn" onclick="exportData()">Exportar respaldo</button><button class="btn" onclick="importData()">Importar respaldo</button><button class="btn danger" onclick="resetAll()">Borrar todos los datos</button></div></div>`);const target=document.getElementById("setSavingTarget");if(target)target.addEventListener("input",e=>e.target.value=fmtInput(e.target.value))}
-async function saveSettings(e){e.preventDefault();const username=document.getElementById("setUsername").value.trim();showLoader("Guardando configuración","Aplicando cambios y sincronizando con la nube…");try{const result=await apiRequest("updateUsername",{token:authToken,username});authUser=result.user;localStorage.setItem(AUTH_USER_KEY,JSON.stringify(authUser));state.people.me=document.getElementById("setMe").value.trim()||"Mi perfil";state.people.partner=document.getElementById("setPartner").value.trim()||"Pareja";state.savingTarget=num(document.getElementById("setSavingTarget").value);await saveState();while(cloudSyncing)await new Promise(resolve=>setTimeout(resolve,80));updateSignedUserLabel();closeModal();renderAll();toast("Configuración guardada")}catch(err){toast("No se pudo guardar: "+err.message)}finally{hideLoader()}}
+async function saveSettings(e){e.preventDefault();const username=document.getElementById("setUsername").value.trim();showLoader("Guardando configuración","Aplicando cambios y sincronizando con la nube…");try{const result=await apiRequest("updateUsername",{token:authToken,username});authUser=result.user;localStorage.setItem(AUTH_USER_KEY,JSON.stringify(authUser));state.people.me=document.getElementById("setMe").value.trim()||"Mi perfil";state.people.partner=document.getElementById("setPartner").value.trim()||"Pareja";state.savingTarget=num(document.getElementById("setSavingTarget").value);await saveState();updateSignedUserLabel();closeModal();renderAll();toast("Configuración guardada")}catch(err){toast("No se pudo guardar: "+err.message)}finally{hideLoader()}}
 function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`nexus-finance-respaldo-${dateNow()}.json`;a.click();URL.revokeObjectURL(a.href)}
 function importData(){let input=document.createElement("input");input.type="file";input.accept=".json,application/json";input.onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{state={...defaultState,...JSON.parse(r.result)};saveState();closeModal();renderAll();toast("Respaldo importado")}catch(_){toast("El archivo no es válido.")}};r.readAsText(f)};input.click()}
 function resetAll(){if(confirm("Esto eliminará todos los registros de Nexus. ¿Continuar?")){state=structuredClone(defaultState);saveState();closeModal();renderAll();toast("Datos eliminados")}}
@@ -775,7 +729,7 @@ function showModule(name,fromHistory=false){
  if(name!=="dashboard")renderExtendedModules();
  document.getElementById("sidebar").classList.remove("open");if(!fromHistory)window.scrollTo({top:0,behavior:"auto"});
 }
-window.addEventListener("popstate",(event)=>{if(document.getElementById("modal").classList.contains("show")){if(typeof event.state?.scrollY==="number")modalScrollY=event.state.scrollY;closeModal(true);return}showModule(routeFromHash(),true)});
+window.addEventListener("popstate",()=>{if(document.getElementById("modal").classList.contains("show")){closeModal(true);return}showModule(routeFromHash(),true)});
 window.addEventListener("hashchange",()=>{if(!document.getElementById("modal").classList.contains("show"))showModule(routeFromHash(),true)});
 function renderExtendedModules(){renderCalendar();renderTasks();renderDebts();renderAccounts();renderReports();renderDashboardMinis()}
 function renderDashboardMinis(){
