@@ -88,6 +88,26 @@ body{scrollbar-color:#655080 #100d18}
 .contribution-track i{display:block;height:100%;border-radius:99px;min-width:0}
 .contribution-value{font-weight:800;white-space:nowrap}
 .bar-chart{gap:7px;overflow:visible}
+
+/* Gráficas de barras interactivas: confinadas a su contenedor y con detalle seleccionable */
+.interactive-bars{display:flex;align-items:stretch;justify-content:space-between;gap:clamp(2px,.7vw,8px);height:190px;min-height:190px;min-width:0;width:100%;max-width:100%;padding:14px 2px 8px;overflow:visible;box-sizing:border-box;}
+.interactive-bars .bar{appearance:none;-webkit-appearance:none;position:relative;display:flex;flex:1 1 0;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;min-width:0;max-width:100%;height:100%;padding:0 1px;background:transparent;border:0;border-radius:8px 8px 0 0;color:var(--text);cursor:pointer;overflow:visible;}
+.interactive-bars .bar:focus-visible{outline:2px solid var(--purple2);outline-offset:2px;z-index:50}
+.interactive-bars .bar-track{display:flex;align-items:flex-end;justify-content:center;width:100%;height:calc(100% - 30px);min-height:12px;border-bottom:1px solid #393145;background:linear-gradient(180deg,transparent,rgba(255,255,255,.012));}
+.interactive-bars .bar-fill{display:block;width:min(72%,28px);height:0;min-height:0;max-height:100%;border-radius:7px 7px 2px 2px;box-shadow:0 0 13px color-mix(in srgb,var(--bar-color) 18%,transparent);transition:height .32s cubic-bezier(.2,.7,.2,1),filter .18s,transform .18s;}
+.interactive-bars .bar:hover .bar-fill,.interactive-bars .bar:focus-visible .bar-fill,.interactive-bars .bar.tip-open .bar-fill{filter:brightness(1.22);transform:scaleX(1.12)}
+.interactive-bars .bar-value-label{display:block;max-width:100%;height:12px;line-height:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#c9c1d9;font-size:clamp(7px,.65vw,9px);}
+.interactive-bars .bar em{display:block;flex:0 0 12px;max-width:100%;font-size:9px;line-height:12px;font-style:normal;color:var(--muted);white-space:nowrap;}
+.interactive-bars .bar-callout{position:absolute;left:50%;bottom:calc(100% + 8px);top:auto;transform:translate(-50%,5px);display:block;width:max-content;min-width:180px;max-width:min(270px,calc(100vw - 28px));max-height:min(48vh,340px);overflow:auto;white-space:normal;z-index:80;padding:12px 13px;border:1px solid #766095;border-radius:13px;background:linear-gradient(145deg,rgba(35,28,50,.99),rgba(18,15,27,.99));box-shadow:0 16px 36px rgba(0,0,0,.55);color:#f8f5ff;font-size:11px;line-height:1.5;text-align:left;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .14s,transform .14s;overflow-wrap:anywhere;}
+.interactive-bars .bar:hover .bar-callout,.interactive-bars .bar:focus-visible .bar-callout{opacity:1;visibility:visible;transform:translate(-50%,0)}
+.interactive-bars .bar.tip-open .bar-callout{position:fixed;left:50%;right:auto;top:auto;bottom:18px;transform:translate(-50%,0);width:min(340px,calc(100vw - 28px));max-width:calc(100vw - 28px);max-height:min(55vh,420px);opacity:1;visibility:visible;pointer-events:auto;z-index:1500;}
+.interactive-bars .bar-callout strong{display:block;font-size:12px;color:#e3d8ff;padding-bottom:6px;margin-bottom:6px;border-bottom:1px solid #3b304d}
+.interactive-bars .callout-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-top:5px}
+.interactive-bars .callout-row span:first-child{color:#bdb4ce}
+.interactive-bars .chart-callout-divider{height:1px;background:#3b304d;margin:8px 0 6px}
+.interactive-bars .chart-empty-detail{color:var(--muted);font-size:10px;margin-top:7px}
+@media(max-width:520px){.interactive-bars{gap:2px;padding-left:0;padding-right:0}.interactive-bars .bar-value-label{font-size:7px}.interactive-bars .bar em{font-size:8px}.interactive-bars .bar-fill{width:68%}}
+
 .bar-chart .bar{min-width:0;border-radius:10px 10px 0 0;transition:background .18s ease}
 .bar-chart .bar:hover,.bar-chart .bar:focus,.bar-chart .bar.tip-open{background:rgba(139,92,246,.07)}
 .bar-chart .bar-fill{transition:height .35s cubic-bezier(.2,.7,.2,1),filter .18s ease,transform .18s ease;position:relative}
@@ -564,44 +584,52 @@ function personCard(person,name,assigned){
  const pct=assigned>0?Math.max(0,Math.min(100,balance/assigned*100)):0;
  return `<div class="person-card"><b>${esc(name)}</b><div class="stats"><div class="stat"><small>Asignado</small><b>${money(assigned)}</b></div><div class="stat"><small>Gastado</small><b>${money(stats.spent)} <button class="detail-btn" onclick="showModule('${person==='me'?'personalMe':'personalPartner'}')">ver detalles</button></b></div><div class="stat"><small>Saldo disponible</small><b class="${balance<0?'negative':'positive'}">${money(balance)}</b></div></div><div class="small">Ahorro personal: <b>${money(stats.saved)}</b> · Ingresos adicionales: <b>${money(stats.extraIncome)}</b></div><div class="progress"><i style="width:${pct}%"></i></div><div class="small" style="margin-top:6px">${pct.toFixed(0)}% del asignado disponible</div></div>`;
 }
+function chartCalloutRows(items){
+ return items.filter(x=>Number(x.value)>0).map(x=>`<div class="callout-row"><span>${esc(x.label)}</span><b>${money(x.value)}</b></div>`).join("");
+}
 function renderBars(id,year,type){
  const box=document.getElementById(id);if(!box)return;
  const arr=type===1?state.incomes:state.expenses,label=type===1?"Ingresos":"Gastos del hogar",color=type===1?"#a78bfa":"#fb923c";
- const rowsByMonth=MONTHS.map((_,i)=>arr.filter(x=>{const d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i}));
- const vals=rowsByMonth.map(sum),max=Math.max(...vals,1),total=vals.reduce((a,b)=>a+b,0),W=720,H=220,L=38,R=14,T=18,B=32,plotW=W-L-R,plotH=H-T-B;
- const pts=vals.map((v,i)=>({x:L+i*plotW/11,y:T+plotH-(v/max)*plotH,v,i}));
- const grid=[0,.25,.5,.75,1].map(q=>{const y=T+plotH-q*plotH;return `<line class="gridline" x1="${L}" y1="${y}" x2="${W-R}" y2="${y}"/><text class="axis-label" x="${L-7}" y="${y+3}" text-anchor="end">${q===0?"0":shortMoney(max*q)}</text>`}).join("");
- const activePts=pts.filter(p=>p.v>0);let path="",previous=-2;pts.forEach((p,i)=>{if(p.v<=0){previous=-2;return}path+=(previous===i-1?" L":" M")+p.x+","+p.y;previous=i});
- const dots=pts.map(p=>{const rows=rowsByMonth[p.i];if(!p.v)return `<circle class="point zero" cx="${p.x}" cy="${p.y}" r="3" fill="${color}"/>`;const share=total?p.v/total*100:0;let details=type===1?`<small>${esc(state.people.me)}: ${money(sum(rows.filter(x=>x.person==="me")))}</small><small>${esc(state.people.partner)}: ${money(sum(rows.filter(x=>x.person==="partner")))}</small>`:CATS.map((c,ci)=>({c,ci,v:sum(rows.filter(x=>x.category===c))})).filter(x=>x.v).map(x=>`<small>${esc(x.c)}: ${money(x.v)}</small>`).join("");return `<circle class="point" tabindex="0" role="button" aria-label="${esc(MONTHS[p.i]+": "+money(p.v))}" cx="${p.x}" cy="${p.y}" r="4.5" fill="${color}" onclick="showLinePoint(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showLinePoint(this)}" data-title="${MONTHS[p.i]} ${year}" data-value="${money(p.v)}" data-share="${share.toFixed(1)}% del año" data-details="${esc(details.replace(/<\/?small>/g," · "))}"/>`}).join("");
- const labels=pts.map(p=>`<text class="axis-label" x="${p.x}" y="${H-9}" text-anchor="middle">${MONTHS[p.i].slice(0,3)}</text>`).join("");
- box.classList.add("line-chart-wrap");box.innerHTML=`<div class="chart-legend"><span><i style="background:${color}"></i>${label}</span><span>Total anual: <b>${money(total)}</b></span></div><svg class="line-chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${label} por mes en ${year}">${grid}<path class="line-path" stroke="${color}" d="${path}"/>${dots}${labels}</svg><div class="line-chart-callout" aria-live="polite"></div><div class="chart-tip">Toca un punto con datos para consultar su detalle y porcentaje anual.</div>`;
+ const rowsByMonth=MONTHS.map((_,i)=>arr.filter(x=>{const d=new Date((x.date||"")+"T00:00:00");return !Number.isNaN(d.getTime())&&d.getFullYear()===Number(year)&&d.getMonth()===i}));
+ const vals=rowsByMonth.map(sum),max=Math.max(...vals,1),total=vals.reduce((a,b)=>a+b,0);
+ box.classList.remove("line-chart-wrap");box.classList.add("interactive-bars");
+ box.innerHTML=MONTHS.map((month,i)=>{
+  const rows=rowsByMonth[i],value=vals[i],height=value?Math.max(3,value/max*100):0,share=total?value/total*100:0;
+  const breakdown=type===1?[
+   {label:state.people.me||"Yo",value:sum(rows.filter(x=>x.person==="me"))},
+   {label:state.people.partner||"Mi pareja",value:sum(rows.filter(x=>x.person==="partner"))}
+  ]:CATS.map(c=>({label:c,value:sum(rows.filter(x=>x.category===c))}));
+  const details=chartCalloutRows(breakdown);
+  const content=`<strong>${month} ${year}</strong><div class="callout-row"><span>Total del mes</span><b>${money(value)}</b></div><div class="callout-row"><span>Del total anual</span><b>${share.toFixed(1)}%</b></div><div class="callout-row"><span>Movimientos</span><b>${rows.length}</b></div>${details?`<div class="chart-callout-divider"></div>${details}`:'<div class="chart-empty-detail">Sin movimientos registrados en este mes.</div>'}`;
+  return `<button type="button" class="bar" style="--bar-color:${color}" aria-label="Consultar ${label.toLowerCase()} de ${month}: ${money(value)}" aria-expanded="false" data-value="${value}" onclick="toggleChartTip(this)"><span class="bar-callout">${content}</span><span class="bar-value-label">${value?shortMoney(value):'—'}</span><span class="bar-track"><span class="bar-fill" style="height:${height}%;background:linear-gradient(180deg,${color},${color}bb)"></span></span><em>${month.slice(0,3)}</em></button>`;
+ }).join("");
 }
-function showLinePoint(point){
- const wrap=point.closest(".line-chart-wrap"),tip=wrap?.querySelector(".line-chart-callout");if(!tip)return;
- const alreadyOpen=tip.classList.contains("show")&&point.classList.contains("selected");
- document.querySelectorAll(".line-chart-callout.show").forEach(t=>{t.classList.remove("show");t.innerHTML=""});
- document.querySelectorAll(".line-chart .point.selected").forEach(p=>p.classList.remove("selected"));
- if(alreadyOpen)return;
- const svg=point.ownerSVGElement,rect=svg.getBoundingClientRect(),wr=wrap.getBoundingClientRect(),vb=svg.viewBox.baseVal;
- const x=(Number(point.getAttribute("cx"))/vb.width)*rect.width+(rect.left-wr.left);
- const y=(Number(point.getAttribute("cy"))/vb.height)*rect.height+(rect.top-wr.top);
- tip.innerHTML=`<b>${esc(point.dataset.title||"")}</b><div>${esc(point.dataset.value||"")}</div><small>${esc(point.dataset.share||"")}</small><small>${esc(point.dataset.details||"")}</small>`;
- tip.style.left=`${Math.max(110,Math.min(Math.max(110,wrap.clientWidth-110),x))}px`;
- tip.style.top=`${Math.max(0,Math.min(Math.max(0,wrap.clientHeight-tip.offsetHeight),y-18))}px`;
- tip.classList.add("show");point.classList.add("selected");
+function toggleChartTip(el){
+ const wasOpen=el.classList.contains("tip-open");
+ document.querySelectorAll(".bar.tip-open").forEach(x=>{x.classList.remove("tip-open");x.setAttribute("aria-expanded","false")});
+ if(!wasOpen){el.classList.add("tip-open");el.setAttribute("aria-expanded","true");}
 }
-document.addEventListener("click",function(e){
- if(e.target.closest(".line-chart .point"))return;
- if(e.target.closest(".line-chart-wrap .line-chart-callout"))return;
- document.querySelectorAll(".line-chart-callout.show").forEach(t=>{t.classList.remove("show");t.innerHTML=""});
- document.querySelectorAll(".line-chart .point.selected").forEach(p=>p.classList.remove("selected"));
-});
+document.addEventListener("click",e=>{if(!e.target.closest(".interactive-bars .bar")){document.querySelectorAll(".interactive-bars .bar.tip-open").forEach(x=>{x.classList.remove("tip-open");x.setAttribute("aria-expanded","false")})}});
 function shortMoney(v){const n=Number(v)||0;if(n>=1000000)return "$"+(n/1000000).toLocaleString("es-CO",{maximumFractionDigits:1})+"M";if(n>=1000)return "$"+Math.round(n/1000).toLocaleString("es-CO")+"k";return n?"$"+n:"—"}
-function toggleChartTip(el){const wasOpen=el.classList.contains("tip-open");document.querySelectorAll(".bar.tip-open").forEach(x=>x.classList.remove("tip-open"));if(!wasOpen)el.classList.add("tip-open")}
-document.addEventListener("click",e=>{if(!e.target.closest(".bar"))document.querySelectorAll(".bar.tip-open").forEach(x=>x.classList.remove("tip-open"))});
 function renderEvolution(year){
- const sets=[{id:"evolutionIncomeBars",total:"evolutionIncomeTotal",arr:state.incomes,color:"#a78bfa",label:"Ingresos"},{id:"evolutionExpenseBars",total:"evolutionExpenseTotal",arr:state.expenses,color:"#fb923c",label:"Gastos del hogar"},{id:"evolutionSavingBars",total:"evolutionSavingTotal",arr:state.savings,color:"#34d399",label:"Ahorros"}];
- sets.forEach(set=>{const box=document.getElementById(set.id);if(!box)return;const rows=MONTHS.map((_,i)=>set.arr.filter(x=>{const d=new Date(x.date+"T00:00:00");return d.getFullYear()===year&&d.getMonth()===i})),vals=rows.map(sum),total=vals.reduce((a,b)=>a+b,0),max=Math.max(...vals,1),W=720,H=205,L=35,R=12,T=15,B=29,pw=W-L-R,ph=H-T-B,pts=vals.map((v,i)=>({x:L+i*pw/11,y:T+ph-v/max*ph,v,i}));const lines=[0,.5,1].map(q=>`<line class="gridline" x1="${L}" y1="${T+ph-q*ph}" x2="${W-R}" y2="${T+ph-q*ph}"/>`).join("");const activePts=pts.filter(p=>p.v>0);let path="",previous=-2;pts.forEach((p,i)=>{if(p.v<=0){previous=-2;return}path+=(previous===i-1?" L":" M")+p.x+","+p.y;previous=i});const dots=pts.filter(p=>p.v>0).map(p=>`<circle class="point" tabindex="0" role="button" cx="${p.x}" cy="${p.y}" r="4" fill="${set.color}" data-title="${MONTHS[p.i]} ${year}" data-value="${money(p.v)}" data-share="${total?(p.v/total*100).toFixed(1):0}% del año" data-details="${rows[p.i].length} movimiento(s)" onclick="showLinePoint(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showLinePoint(this)}"/>`).join("");const labels=pts.map(p=>`<text class="axis-label" x="${p.x}" y="${H-7}" text-anchor="middle">${MONTHS[p.i].slice(0,3)}</text>`).join("");document.getElementById(set.total).textContent=shortMoney(total);box.classList.add("line-chart-wrap");box.innerHTML=`<div class="chart-legend"><span><i style="background:${set.color}"></i>${set.label}</span><span>Total: <b>${money(total)}</b></span></div><svg class="line-chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${set.label} por mes">${lines}<path class="line-path" stroke="${set.color}" d="${path}"/>${dots}${labels}</svg><div class="line-chart-callout"></div>`;});
+ const sets=[{id:"evolutionIncomeBars",total:"evolutionIncomeTotal",arr:state.incomes,color:"#a78bfa",label:"Ingresos",kind:"income"},{id:"evolutionExpenseBars",total:"evolutionExpenseTotal",arr:state.expenses,color:"#fb923c",label:"Gastos del hogar",kind:"expense"},{id:"evolutionSavingBars",total:"evolutionSavingTotal",arr:state.savings,color:"#34d399",label:"Ahorros",kind:"saving"}];
+ sets.forEach(set=>{
+  const box=document.getElementById(set.id);if(!box)return;
+  const rows=MONTHS.map((_,i)=>set.arr.filter(x=>{const d=new Date((x.date||"")+"T00:00:00");return !Number.isNaN(d.getTime())&&d.getFullYear()===Number(year)&&d.getMonth()===i}));
+  const vals=rows.map(sum),total=vals.reduce((a,b)=>a+b,0),max=Math.max(...vals,1);
+  const totalEl=document.getElementById(set.total);if(totalEl)totalEl.textContent=shortMoney(total);
+  box.classList.remove("line-chart-wrap");box.classList.add("interactive-bars","modern-chart");
+  box.innerHTML=MONTHS.map((month,i)=>{
+   const value=vals[i],height=value?Math.max(3,value/max*100):0,share=total?value/total*100:0,items=rows[i];
+   let breakdown=[];
+   if(set.kind==="income")breakdown=[{label:state.people.me||"Yo",value:sum(items.filter(x=>x.person==="me"))},{label:state.people.partner||"Mi pareja",value:sum(items.filter(x=>x.person==="partner"))}];
+   else if(set.kind==="expense")breakdown=CATS.map(c=>({label:c,value:sum(items.filter(x=>x.category===c))}));
+   else breakdown=SAVINGS.map(c=>({label:c[1],value:sum(items.filter(x=>x.type===c[0]))}));
+   const details=chartCalloutRows(breakdown);
+   const content=`<strong>${month} ${year}</strong><div class="callout-row"><span>${set.label} del mes</span><b>${money(value)}</b></div><div class="callout-row"><span>Participación anual</span><b>${share.toFixed(1)}%</b></div><div class="callout-row"><span>Movimientos</span><b>${items.length}</b></div>${details?`<div class="chart-callout-divider"></div>${details}`:'<div class="chart-empty-detail">Sin movimientos registrados en este mes.</div>'}`;
+   return `<button type="button" class="bar" style="--bar-color:${set.color}" aria-label="Consultar ${set.label.toLowerCase()} de ${month}: ${money(value)}" aria-expanded="false" data-value="${value}" onclick="toggleChartTip(this)"><span class="bar-callout">${content}</span><span class="bar-value-label">${value?shortMoney(value):'—'}</span><span class="bar-track"><span class="bar-fill" style="height:${height}%;background:linear-gradient(180deg,${set.color},${set.color}bb)"></span></span><em>${month.slice(0,3)}</em></button>`;
+  }).join("");
+ });
 }
 function comparison(arr){
  const f=getFilter(); if(f.month==="all")return "";
@@ -816,7 +844,7 @@ function showModule(name,fromHistory=false){
 }
 window.addEventListener("popstate",(event)=>{if(document.getElementById("modal").classList.contains("show")){if(typeof event.state?.scrollY==="number")modalScrollY=event.state.scrollY;closeModal(true);return}showModule(routeFromHash(),true)});
 // Escape closes only an active overlay/callout; it never changes the page scroll or route by itself.
-document.addEventListener("keydown",function(event){if(event.key!=="Escape")return;const modal=document.getElementById("modal");if(modal?.classList.contains("show")){event.preventDefault();closeModal();return}const overlay=document.getElementById("loadingOverlay");if(overlay?.classList.contains("show"))return;const tips=document.querySelectorAll(".line-chart-callout.show");if(tips.length){event.preventDefault();tips.forEach(t=>t.classList.remove("show"));document.querySelectorAll(".point.selected").forEach(p=>p.classList.remove("selected"));return}document.querySelectorAll(".bar.tip-open").forEach(x=>x.classList.remove("tip-open"));});
+document.addEventListener("keydown",function(event){if(event.key!=="Escape")return;const modal=document.getElementById("modal");if(modal?.classList.contains("show")){event.preventDefault();closeModal();return}const overlay=document.getElementById("loadingOverlay");if(overlay?.classList.contains("show"))return;const tips=document.querySelectorAll(".line-chart-callout.show");if(tips.length){event.preventDefault();tips.forEach(t=>t.classList.remove("show"));document.querySelectorAll(".point.selected").forEach(p=>p.classList.remove("selected"));return}const openBars=document.querySelectorAll(".interactive-bars .bar.tip-open");if(openBars.length){event.preventDefault();openBars.forEach(x=>{x.classList.remove("tip-open");x.setAttribute("aria-expanded","false")});return}document.querySelectorAll(".bar.tip-open").forEach(x=>x.classList.remove("tip-open"));});
 window.addEventListener("hashchange",()=>{if(!document.getElementById("modal").classList.contains("show"))showModule(routeFromHash(),true)});
 function renderExtendedModules(){renderCalendar();renderTasks();renderDebts();renderAccounts();renderReports();renderDashboardMinis()}
 function renderDashboardMinis(){
