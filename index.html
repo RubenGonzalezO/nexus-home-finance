@@ -143,6 +143,22 @@ html{scrollbar-width:thin;scrollbar-color:#66517f transparent;scrollbar-gutter:s
 /* Nexus: scrollbar minimalista, sin alterar el contenido bajo overlays */
 html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}body{max-width:100%;overflow-x:clip}::-webkit-scrollbar{width:7px;height:0}::-webkit-scrollbar:horizontal{height:0}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#514568;border-radius:20px;border:2px solid transparent;background-clip:padding-box}::-webkit-scrollbar-thumb:hover{background:#8870ad;background-clip:padding-box}
 </style>
+
+<style id="nexus-chart-contextual-detail-fix">
+/* Nexus chart-only refinement: contextual detail anchored to the selected bar */
+.bar-callout{display:none!important}
+.chart-detail-popover{position:fixed;z-index:9999;display:block;width:max-content;min-width:210px;max-width:min(340px,calc(100vw - 24px));height:auto;max-height:none;overflow:visible;box-sizing:border-box;padding:13px 15px;border:1px solid #5b4a76;border-radius:14px;background:rgba(27,22,39,.99);box-shadow:0 16px 38px rgba(0,0,0,.48);color:#f8f5ff;font-size:12px;line-height:1.55;text-align:left;overflow-wrap:anywhere;animation:chartPopIn .14s ease-out}
+.chart-detail-popover strong{display:block;font-size:13px;margin-bottom:5px;color:#d8ccff}
+.chart-detail-popover .callout-row{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.chart-detail-popover .callout-row:last-child{border-bottom:0}
+.chart-detail-popover .callout-row span{color:#b8b0c9;min-width:0}
+.chart-detail-popover .callout-row b{white-space:nowrap;text-align:right;color:#fff}
+.chart-detail-popover .chart-callout-divider{height:1px;background:#41364f;margin:8px 0}
+.chart-detail-popover .chart-empty-detail{color:#aaa1ba;padding-top:5px}
+.bar.tip-open .bar-fill{filter:brightness(1.35);box-shadow:0 0 0 2px rgba(167,139,250,.2),0 0 18px rgba(139,92,246,.3)}
+@keyframes chartPopIn{from{opacity:0;transform:translateY(4px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:520px){.chart-detail-popover{min-width:0;width:min(320px,calc(100vw - 24px));font-size:11px;padding:12px}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -913,17 +929,3 @@ bootstrapAuth();
 </script>
 </body>
 </html>
-
-/* Nexus chart-only refinement: contextual detail anchored to the selected bar */
-.bar-callout{display:none!important}
-.chart-detail-popover{position:fixed;z-index:9999;display:block;width:max-content;min-width:210px;max-width:min(340px,calc(100vw - 24px));height:auto;max-height:none;overflow:visible;box-sizing:border-box;padding:13px 15px;border:1px solid #5b4a76;border-radius:14px;background:rgba(27,22,39,.99);box-shadow:0 16px 38px rgba(0,0,0,.48);color:#f8f5ff;font-size:12px;line-height:1.55;text-align:left;overflow-wrap:anywhere;animation:chartPopIn .14s ease-out}
-.chart-detail-popover strong{display:block;font-size:13px;margin-bottom:5px;color:#d8ccff}
-.chart-detail-popover .callout-row{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.06)}
-.chart-detail-popover .callout-row:last-child{border-bottom:0}
-.chart-detail-popover .callout-row span{color:#b8b0c9;min-width:0}
-.chart-detail-popover .callout-row b{white-space:nowrap;text-align:right;color:#fff}
-.chart-detail-popover .chart-callout-divider{height:1px;background:#41364f;margin:8px 0}
-.chart-detail-popover .chart-empty-detail{color:#aaa1ba;padding-top:5px}
-.bar.tip-open .bar-fill{filter:brightness(1.35);box-shadow:0 0 0 2px rgba(167,139,250,.2),0 0 18px rgba(139,92,246,.3)}
-@keyframes chartPopIn{from{opacity:0;transform:translateY(4px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
-@media(max-width:520px){.chart-detail-popover{min-width:0;width:min(320px,calc(100vw - 24px));font-size:11px;padding:12px}}
