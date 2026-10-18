@@ -621,7 +621,11 @@ function renderBars(id,year,type){
  }).join("");
 }
 let activeChartTip=null;
+let chartTipCloseTimer=null;
+function cancelChartTipClose(){if(chartTipCloseTimer){clearTimeout(chartTipCloseTimer);chartTipCloseTimer=null;}}
+function scheduleChartTipClose(){cancelChartTipClose();chartTipCloseTimer=setTimeout(()=>{closeChartTip();},220);}
 function closeChartTip(){
+ cancelChartTipClose();
  if(activeChartTip?.bar){activeChartTip.bar.classList.remove("tip-open");activeChartTip.bar.setAttribute("aria-expanded","false");}
  document.getElementById("chart-detail-popover")?.remove();
  activeChartTip=null;
@@ -640,15 +644,36 @@ function positionChartTip(bar,pop){
  }
  pop.style.left=`${left}px`;pop.style.top=`${top}px`;pop.style.visibility="visible";
 }
-function toggleChartTip(el){
- const wasOpen=activeChartTip?.bar===el;
+function openChartTip(el,fromHover=false){
+ if(!el)return;
+ if(activeChartTip?.bar===el&&activeChartTip.pop?.isConnected){cancelChartTipClose();if(!fromHover)activeChartTip.hoverOnly=false;return;}
  closeChartTip();
- if(wasOpen)return;
  const source=el.querySelector(".bar-callout");if(!source)return;
  const pop=document.createElement("div");pop.id="chart-detail-popover";pop.className="chart-detail-popover";pop.setAttribute("role","dialog");pop.setAttribute("aria-label","Detalle del mes seleccionado");pop.innerHTML=source.innerHTML;
- document.body.appendChild(pop);el.classList.add("tip-open");el.setAttribute("aria-expanded","true");activeChartTip={bar:el,pop};
+ pop.addEventListener("mouseenter",cancelChartTipClose);
+ pop.addEventListener("mouseleave",scheduleChartTipClose);
+ document.body.appendChild(pop);el.classList.add("tip-open");el.setAttribute("aria-expanded","true");activeChartTip={bar:el,pop,hoverOnly:fromHover};
  positionChartTip(el,pop);
 }
+function toggleChartTip(el){
+ const wasOpen=activeChartTip?.bar===el;
+ if(wasOpen){
+  if(activeChartTip.hoverOnly){activeChartTip.hoverOnly=false;cancelChartTipClose();return;}
+  closeChartTip();return;
+ }
+ openChartTip(el,false);
+}
+// Escritorio: mostrar detalles al pasar el cursor. En pantallas táctiles se conserva el toque/clic.
+document.addEventListener("mouseover",e=>{
+ const bar=e.target.closest?.(".interactive-bars .bar");
+ if(!bar||e.relatedTarget?.closest?.(".interactive-bars .bar")===bar)return;
+ openChartTip(bar,true);
+});
+document.addEventListener("mouseout",e=>{
+ const bar=e.target.closest?.(".interactive-bars .bar");
+ if(!bar||e.relatedTarget?.closest?.(".interactive-bars .bar")===bar)return;
+ if(activeChartTip?.bar===bar)scheduleChartTipClose();
+});
 document.addEventListener("click",e=>{
  if(e.target.closest("#chart-detail-popover"))return;
  if(e.target.closest(".interactive-bars .bar"))return;
