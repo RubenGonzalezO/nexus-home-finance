@@ -2,12 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0b0a12">
-<meta name="color-scheme" content="dark">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nexus Home Finance</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
@@ -248,110 +243,13 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 @media(max-width:420px){.personal-summary-grid{grid-template-columns:1fr}}
 </style>
 
-<style id="nexus-app-experience">
-:root{--app-surface:#11101a;--app-surface-raised:#191625;--app-border:rgba(190,171,224,.13);--app-glow:rgba(139,92,246,.18);--safe-bottom:env(safe-area-inset-bottom,0px)}
-html{scroll-padding-top:92px;-webkit-tap-highlight-color:transparent}body{background:radial-gradient(ellipse at 72% -12%,rgba(104,69,173,.2),transparent 38%),#0b0a12}button,.btn,.mini-btn,.category-btn,.nav button,.mobile-nav-item,.mobile-nav-add{touch-action:manipulation;-webkit-tap-highlight-color:transparent}button:focus-visible,[role=button]:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #b7a0ff;outline-offset:3px}
-.app{min-height:100dvh}.sidebar{display:flex;flex-direction:column;overflow-y:auto;overscroll-behavior:contain;background:linear-gradient(180deg,rgba(15,12,24,.98),rgba(10,9,16,.98));border-right-color:rgba(183,160,255,.12);box-shadow:18px 0 50px rgba(0,0,0,.12)}.logo{flex-shrink:0;padding-bottom:22px}.logo-mark{box-shadow:0 8px 25px rgba(139,92,246,.26)}.nav{display:grid;gap:5px}.nav button{display:flex;align-items:center;gap:8px;min-height:45px;border:1px solid transparent;border-radius:13px;padding:11px 13px;transition:background .18s,border-color .18s,color .18s,transform .18s}.nav button i{width:23px;flex:0 0 23px;text-align:center;font-size:15px}.nav button.active{background:linear-gradient(100deg,rgba(139,92,246,.2),rgba(139,92,246,.055));border-color:rgba(167,139,250,.19);box-shadow:inset 3px 0 #9a7bfa}.nav button:hover{transform:translateX(2px)}.main{padding:28px clamp(18px,2.4vw,38px) 44px;max-width:none}.topbar{position:relative;align-items:center;margin-bottom:24px;padding:2px 0 18px;border-bottom:1px solid rgba(190,171,224,.1)}.title h1{letter-spacing:-.035em;font-size:clamp(24px,2.1vw,32px)}.title p{font-size:12px;line-height:1.5}.actions{align-items:center}.btn{min-height:40px;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .16s,border-color .16s,filter .16s}.btn:active,.mini-btn:active{transform:scale(.98)}.btn.primary{box-shadow:0 8px 22px rgba(124,58,237,.18)}.filterbar{background:rgba(18,16,27,.7);backdrop-filter:blur(14px);border-color:var(--app-border);padding:13px 15px}.card{background:linear-gradient(145deg,rgba(26,22,38,.96),rgba(16,14,24,.98));border-color:var(--app-border);box-shadow:0 12px 34px rgba(0,0,0,.13);transition:border-color .2s,transform .2s}.card-head h2{letter-spacing:-.015em;line-height:1.4}.kpi{min-height:132px}.kpi .label{letter-spacing:.07em;font-weight:750;font-size:10px}.kpi .value{letter-spacing:-.035em;font-size:clamp(23px,2vw,31px);font-variant-numeric:tabular-nums}.section-grid{gap:18px}.section-grid>.card,.dashboard-mini-grid>.card{min-width:0}.person,.saving-card,.account-card,.goal,.person-card{border-color:var(--app-border)}.person .amount{font-variant-numeric:tabular-nums;letter-spacing:-.025em}.input,.select,.textarea{min-height:43px;border-color:#393047;background:#0c0a13}.input::placeholder,.textarea::placeholder{color:#756d84}.modal{padding:clamp(12px,3vw,24px)}.modal-box{border-radius:23px;border-color:rgba(183,160,255,.2);box-shadow:0 32px 100px rgba(0,0,0,.62);background:linear-gradient(155deg,#191525,#100e18)}.modal-head{position:sticky;top:-1px;z-index:2;padding:0 0 12px;background:linear-gradient(#191525 80%,rgba(25,21,37,0));gap:12px}.modal-head h3{font-size:18px;line-height:1.35}.close{flex:0 0 36px}.form-actions{position:sticky;bottom:-1px;padding:12px 0 0;background:linear-gradient(rgba(16,14,24,0),#100e18 30%)}.table-wrap{border-radius:12px}.data-table th{white-space:nowrap}.empty{padding:22px 14px;text-align:center;border:1px dashed rgba(190,171,224,.17);border-radius:13px;color:var(--muted);line-height:1.6}.mobile-drawer-head{display:none}.drawer-scrim{display:none}.mobile-bottom-nav{display:none}.desktop-quick-add{position:fixed;right:25px;bottom:24px;z-index:45;display:flex;align-items:center;gap:10px;padding:13px 18px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:linear-gradient(135deg,#8b5cf6,#7043c4);color:white;font-weight:800;font-size:12px;box-shadow:0 12px 32px rgba(93,50,170,.38);transition:transform .18s,box-shadow .18s}.desktop-quick-add i{font-size:15px}.desktop-quick-add:hover{transform:translateY(-2px);box-shadow:0 16px 38px rgba(93,50,170,.45)}
-/* Touch-first drawer and persistent bottom navigation */
-@media(max-width:800px){
- html{scroll-padding-top:72px}.sidebar{width:min(320px,88vw);z-index:210;padding:13px 14px calc(24px + var(--safe-bottom));transform:translateX(-110%);box-shadow:30px 0 90px rgba(0,0,0,.55);border-right:1px solid rgba(183,160,255,.2)}.sidebar.open{transform:translateX(0)}.mobile-drawer-head{display:flex;justify-content:space-between;align-items:center;padding:4px 4px 9px;color:#c7b9e3;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.drawer-close{width:37px;height:37px;border:1px solid var(--app-border);border-radius:12px;background:#211b2f;color:#fff}.drawer-scrim.show{display:block;position:fixed;inset:0;z-index:205;background:rgba(4,3,8,.62);backdrop-filter:blur(3px)}.main{padding:15px 14px calc(108px + var(--safe-bottom));width:100%;margin:0}.topbar{align-items:flex-start;gap:10px;margin-bottom:17px;padding:4px 0 14px}.title{min-width:0;flex:1}.title h1{font-size:clamp(21px,5.7vw,27px);line-height:1.15;margin:0 0 7px}.title p{font-size:11px;max-width:260px}.topbar .actions{width:auto;max-width:48%;justify-content:flex-end;gap:6px}.topbar .actions .btn{min-width:38px;width:40px;height:39px;min-height:39px;padding:0;font-size:0;border-radius:12px;flex:0 0 40px}.topbar .actions .btn i{font-size:14px}.topbar .actions .mobile-menu{font-size:0;order:-1}.topbar .sync-status{order:5;width:auto;flex:0 0 100%;justify-content:flex-start;min-height:32px;padding:6px 9px;font-size:10px}.topbar .account-strip{display:none}.filterbar{display:grid;grid-template-columns:1fr 1.3fr;gap:9px;padding:11px;margin-bottom:14px;border-radius:15px}.filterbar .field{min-width:0!important}.filterbar .select{min-width:0;font-size:12px;padding:10px}.filterbar>.btn{grid-column:1/-1;width:100%;min-height:39px}.filterbar #periodLabel{grid-column:1/-1;padding:0 2px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-bottom:12px}.kpi{min-height:112px;padding:13px;border-radius:16px}.kpi .value{font-size:clamp(19px,5vw,25px);margin-top:12px;line-height:1.15;overflow-wrap:anywhere}.kpi .sub{font-size:10px;line-height:1.35}.kpi .label{font-size:9px}.section-grid,.dashboard-mini-grid,.module-grid{grid-template-columns:minmax(0,1fr);gap:12px}.card{padding:15px;border-radius:18px;margin-bottom:12px}.card-head{align-items:flex-start;gap:8px}.card-head h2{font-size:14px}.card-head span{line-height:1.45}.card-head .btn,.card-head .mini-btn{flex-shrink:0}.donut-layout{grid-template-columns:minmax(110px,.75fr) minmax(0,1.25fr);gap:12px}.donut{width:min(130px,100%);aspect-ratio:1;height:auto}.people{grid-template-columns:1fr;gap:8px}.person{padding:11px}.person .amount{font-size:18px}.person button{min-height:35px}.savings-grid{grid-template-columns:1fr}.availability{grid-template-columns:1fr}.availability .stats{grid-template-columns:repeat(3,minmax(0,1fr))}.availability .stat{display:block;padding:8px}.availability .stat b{font-size:12px;text-align:left}.future-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.module-form,.form-grid{grid-template-columns:1fr}.form-grid .full,.module-form .full{grid-column:1}.table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.data-table{min-width:610px}.record{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:7px}.record .record-actions{grid-column:1/-1;display:flex;flex-wrap:wrap}.record-actions button{min-height:32px}.month-list{grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}.calendar-day{min-width:0;min-height:58px;padding:4px;font-size:9px;overflow:hidden}.calendar-task{font-size:8px;white-space:nowrap;text-overflow:ellipsis}.report-row{grid-template-columns:1fr}.report-metric{grid-template-columns:56px minmax(35px,1fr);gap:6px}.report-metric small,.report-metric em{grid-column:2;white-space:normal}.personal-summary,.personal-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.personal-summary strong{font-size:14px}.desktop-quick-add{display:none}.mobile-bottom-nav{position:fixed;left:10px;right:10px;bottom:calc(8px + var(--safe-bottom));z-index:190;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:center;gap:3px;padding:7px 7px 6px;border:1px solid rgba(196,181,253,.18);border-radius:22px;background:rgba(20,17,30,.94);backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);box-shadow:0 14px 42px rgba(0,0,0,.45),inset 0 1px rgba(255,255,255,.04)}.mobile-nav-item{display:flex;min-width:0;min-height:49px;flex-direction:column;justify-content:center;align-items:center;gap:4px;padding:4px 0;border-radius:14px;background:transparent;color:#898199;font-size:9px;font-weight:750}.mobile-nav-item i{font-size:16px}.mobile-nav-item.active{background:rgba(139,92,246,.16);color:#d7c7ff}.mobile-nav-add{display:grid;place-items:center;justify-self:center;width:44px;height:44px;border-radius:15px;background:linear-gradient(145deg,#a78bfa,#713de0);color:#fff;font-size:20px;box-shadow:0 6px 20px rgba(124,58,237,.4);transform:translateY(-8px);border:4px solid #14111e}.toast{right:12px;left:12px;bottom:calc(84px + var(--safe-bottom));max-width:none;z-index:320}.modal{align-items:flex-end;padding:0;z-index:300}.modal-box{width:100%;max-height:min(90dvh,900px);border-radius:23px 23px 0 0;padding:17px 16px calc(18px + var(--safe-bottom));border-bottom:0;overscroll-behavior:contain}.modal-head{top:-17px;margin:0 -1px;padding:16px 0 13px}.form-actions{bottom:calc(-18px - var(--safe-bottom));margin:15px -16px calc(-18px - var(--safe-bottom));padding:12px 16px calc(18px + var(--safe-bottom));border-top:1px solid var(--app-border)}.form-actions .btn{min-height:44px}.auth-card{padding:25px 21px;border-radius:23px}.auth-card h1{font-size:24px}.auth-card .btn{min-height:46px}
-}
-@media(max-width:420px){.main{padding-left:11px;padding-right:11px}.topbar .actions{max-width:45%;gap:4px}.topbar .actions .btn{width:35px;min-width:35px;flex-basis:35px;height:37px;min-height:37px}.title h1{font-size:21px}.title p{font-size:10px}.kpi{padding:11px;min-height:106px}.kpi .value{font-size:19px}.donut-layout{grid-template-columns:1fr}.donut-layout .donut{margin:0 auto 4px}.people{grid-template-columns:repeat(2,minmax(0,1fr))}.person .amount{font-size:16px}.person button{font-size:10px;padding:6px}.availability .stats{grid-template-columns:1fr}.availability .stat{display:flex;justify-content:space-between;align-items:center;gap:8px}.availability .stat b{text-align:right}.future-grid{grid-template-columns:1fr}.personal-summary,.personal-summary-grid{grid-template-columns:1fr 1fr}.mobile-bottom-nav{left:6px;right:6px;grid-template-columns:repeat(5,minmax(0,1fr));padding-left:5px;padding-right:5px}.mobile-nav-item{font-size:8px}.mobile-nav-item i{font-size:15px}.mobile-nav-add{width:41px;height:41px}}
-@media(min-width:801px){.mobile-drawer-head,.drawer-scrim,.mobile-bottom-nav{display:none!important}.sidebar{transform:none!important}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
-
-.quick-action-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.quick-action-tile{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0;min-height:128px;padding:14px;border:1px solid var(--app-border);border-radius:16px;background:linear-gradient(145deg,rgba(35,29,50,.95),rgba(17,14,25,.98));color:var(--text);text-align:left;transition:transform .16s,border-color .16s}.quick-action-tile:hover{transform:translateY(-2px);border-color:rgba(183,160,255,.38)}.quick-action-tile b{font-size:12px}.quick-action-tile small{font-size:10px;color:var(--muted);line-height:1.4}.quick-action-icon{width:36px;height:36px;display:grid;place-items:center;border-radius:12px;background:rgba(139,92,246,.15);color:#c4b5fd;font-size:15px}.quick-action-icon.expense-icon{background:rgba(251,146,60,.13);color:#fdba74}.quick-action-icon.saving-icon{background:rgba(52,211,153,.13);color:#6ee7b7}.quick-action-icon.debt-icon{background:rgba(251,113,133,.13);color:#fda4af}.quick-action-icon.plan-icon{background:rgba(96,165,250,.13);color:#93c5fd}.quick-action-icon.partner-icon{background:rgba(251,146,60,.13);color:#fdba74}
-@media(max-width:800px){.quick-action-grid{gap:9px}.quick-action-tile{min-height:116px;padding:12px}.quick-action-tile b{font-size:11px}.quick-action-tile small{font-size:9px}}
-
-/* NEXUS MOBILE APP SHELL — screen-based navigation, not a squeezed desktop layout */
-@media(max-width:800px){
-  body{background:#0a0910}
-  .main{padding:0 0 calc(100px + var(--safe-bottom));}
-  .topbar{position:sticky;top:0;z-index:80;display:flex;align-items:center;gap:12px;margin:0;padding:calc(12px + env(safe-area-inset-top,0px)) 16px 12px;background:rgba(11,10,18,.94);border-bottom:1px solid rgba(190,171,224,.11);backdrop-filter:blur(22px) saturate(150%);-webkit-backdrop-filter:blur(22px) saturate(150%)}
-  .title h1{font-size:21px;letter-spacing:-.045em;margin:0 0 3px}
-  .title p{font-size:10px;max-width:none;margin:0;opacity:.8}
-  .topbar .actions{max-width:none;gap:5px}
-  .topbar .actions .btn{width:36px;min-width:36px;flex-basis:36px;height:36px;min-height:36px;border-radius:12px;background:#191525;border:1px solid rgba(190,171,224,.12)}
-  .topbar .actions .btn.ghost{display:none}
-  .topbar .actions .sync-status{display:none}
-  #dashboardModule{padding:15px 14px 0}
-  #dashboardModule .filterbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px;margin:0 0 13px;border-radius:15px;background:#13111d;border:1px solid rgba(190,171,224,.1)}
-  #dashboardModule .filterbar .field{flex:1 1 0;min-width:0}
-  #dashboardModule .filterbar .field label{font-size:9px;text-transform:uppercase;letter-spacing:.06em;margin:0 0 5px}
-  #dashboardModule .filterbar .select{min-height:37px;padding:8px 9px;font-size:11px;border-radius:10px}
-  #dashboardModule .filterbar>.btn{width:auto;min-height:35px;flex:1 0 100%;font-size:10px;border-radius:10px}
-  #dashboardModule .filterbar #periodLabel{font-size:10px;padding:0 2px}
-  #dashboardModule .kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 13px}
-  #dashboardModule .kpi{position:relative;display:flex;min-height:128px;flex-direction:column;justify-content:space-between;padding:14px 13px 13px;border-radius:19px;background:linear-gradient(145deg,#1c1729,#12101a 85%);border:1px solid rgba(190,171,224,.12);box-shadow:inset 0 1px rgba(255,255,255,.025),0 10px 24px rgba(0,0,0,.14);overflow:hidden}
-  #dashboardModule .kpi:before{content:"";position:absolute;right:-22px;top:-30px;width:92px;height:92px;border-radius:50%;background:var(--kpi-glow,rgba(139,92,246,.12));filter:blur(1px)}
-  #dashboardModule .kpi.income{--kpi-glow:rgba(139,92,246,.16)} #dashboardModule .kpi.expense{--kpi-glow:rgba(251,146,60,.14)} #dashboardModule .kpi.saving{--kpi-glow:rgba(52,211,153,.13)} #dashboardModule .kpi.available{--kpi-glow:rgba(96,165,250,.14)}
-  #dashboardModule .kpi .label{position:relative;font-size:9px;letter-spacing:.08em;line-height:1.4;color:#bdb4ce}
-  #dashboardModule .kpi .value{position:relative;font-size:clamp(19px,5.1vw,25px);line-height:1.1;margin:12px 0 6px;letter-spacing:-.05em}
-  #dashboardModule .kpi .sub{position:relative;font-size:9px;line-height:1.35;color:#938aa6}
-  #dashboardModule [data-mobile-container]{display:contents}
-  body.mobile-view-household #dashboardModule [data-mobile-screen]:not([data-mobile-screen~="household"]){display:none!important}
-  body.mobile-view-savings #dashboardModule [data-mobile-screen]:not([data-mobile-screen~="savings"]){display:none!important}
-  body.mobile-view-more #dashboardModule [data-mobile-screen]:not([data-mobile-screen~="more"]){display:none!important}
-  body.mobile-view-home #dashboardModule [data-mobile-screen]:not([data-mobile-screen~="home"]){display:none!important}
-  #dashboardModule .card{margin:0 0 12px;padding:16px;border-radius:20px;background:linear-gradient(150deg,#171421,#100e17);border:1px solid rgba(190,171,224,.12);box-shadow:0 12px 30px rgba(0,0,0,.13)}
-  #dashboardModule .card-head{margin-bottom:14px}
-  #dashboardModule .card-head h2{font-size:14px;letter-spacing:-.02em}
-  #dashboardModule .card-head span{font-size:10px;line-height:1.45}
-  #dashboardModule .card-head .btn,#dashboardModule .card-head .mini-btn{min-height:34px;border-radius:11px;font-size:10px;padding:8px 10px}
-  #dashboardModule .donut-layout{grid-template-columns:112px minmax(0,1fr);gap:14px;align-items:center}
-  #dashboardModule .donut{width:108px;max-width:108px}
-  #dashboardModule .donut-center{font-size:11px}
-  #dashboardModule .donut-center small{font-size:8px}
-  #dashboardModule .people{grid-template-columns:1fr;gap:8px}
-  #dashboardModule .person{padding:10px;border-radius:13px;background:#100e17}
-  #dashboardModule .person .name{font-size:10px}
-  #dashboardModule .person .amount{font-size:16px;margin:5px 0}
-  #dashboardModule .person button{min-height:29px;font-size:9px;padding:6px 8px}
-  #dashboardModule .list-row{padding:11px 0}
-  #dashboardModule .comparison-card .bar-chart{height:170px}
-  #dashboardModule .evolution-grid{grid-template-columns:1fr;gap:10px}
-  #dashboardModule .evolution-panel{padding:12px;border-radius:14px;background:#100e17;border:1px solid rgba(190,171,224,.08)}
-  #dashboardModule .dashboard-mini-grid{display:grid;grid-template-columns:1fr;gap:12px}
-  #dashboardModule #goals{margin-top:0}
-  #dashboardModule .future-grid{grid-template-columns:1fr}
-  .mobile-bottom-nav{left:10px;right:10px;bottom:calc(8px + var(--safe-bottom));grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;padding:7px 7px calc(7px + var(--safe-bottom));border-radius:23px;background:rgba(20,17,30,.96);border:1px solid rgba(196,181,253,.17);box-shadow:0 16px 44px rgba(0,0,0,.48),inset 0 1px rgba(255,255,255,.04)}
-  .mobile-nav-item{min-height:48px;gap:4px;font-size:9px;border-radius:14px;color:#827991}
-  .mobile-nav-item i{font-size:16px}
-  .mobile-nav-item.active{background:rgba(139,92,246,.17);color:#e1d6ff;box-shadow:inset 0 0 0 1px rgba(167,139,250,.08)}
-  .mobile-nav-add{width:46px;height:46px;border-radius:16px;transform:translateY(-8px);border:4px solid #14111e;box-shadow:0 7px 22px rgba(124,58,237,.4)}
-  .module-section:not(#dashboardModule){padding:15px 14px 0}
-  .module-section:not(#dashboardModule)>.card,.module-section:not(#dashboardModule) .card{border-radius:20px;padding:16px;margin-bottom:12px}
-  .module-section:not(#dashboardModule) .card-head h2{font-size:14px}
-  .module-section:not(#dashboardModule) .card-head span{font-size:10px}
-  .module-section:not(#dashboardModule) .btn{min-height:42px;border-radius:12px}
-  .module-section:not(#dashboardModule) .module-form,.module-section:not(#dashboardModule) .form-grid{gap:13px}
-  .module-section:not(#dashboardModule) .field label{font-size:11px}
-  .module-section:not(#dashboardModule) .input,.module-section:not(#dashboardModule) .select,.module-section:not(#dashboardModule) .textarea{min-height:46px;border-radius:12px}
-  .modal{align-items:flex-end;padding:0;}
-  .modal-box{width:100%;max-width:none;max-height:calc(92dvh - env(safe-area-inset-top,0px));padding:18px 16px calc(18px + var(--safe-bottom));border-radius:25px 25px 0 0;border-bottom:0;overscroll-behavior:contain}
-  .modal-head h3{font-size:17px}
-  .form-actions .btn{min-height:46px}
-  .toast{bottom:calc(91px + var(--safe-bottom));left:12px;right:12px}
-  body.drawer-open{overflow:hidden}
-}
-@media(max-width:390px){
-  #dashboardModule .donut-layout{grid-template-columns:1fr}
-  #dashboardModule .donut{margin:0 auto 4px}
-  #dashboardModule .people{grid-template-columns:repeat(2,minmax(0,1fr))}
-  #dashboardModule .person .amount{font-size:14px}
-  #dashboardModule .kpi{min-height:119px;padding:12px}
-  #dashboardModule .kpi .value{font-size:18px}
-}
-@media(min-width:801px){body.mobile-view-household #dashboardModule [data-mobile-screen],body.mobile-view-savings #dashboardModule [data-mobile-screen],body.mobile-view-more #dashboardModule [data-mobile-screen]{display:initial!important}}
-</style>
 </head>
 <body>
 <div class="app">
-<aside class="sidebar" id="sidebar" aria-label="Navegación principal">
-  <div class="mobile-drawer-head"><span>Menú</span><button class="drawer-close" type="button" onclick="closeSidebar()" aria-label="Cerrar menú"><i class="fa-solid fa-xmark"></i></button></div>
+<aside class="sidebar" id="sidebar">
   <div class="logo"><div class="logo-mark"><i class="fa-solid fa-wallet" aria-hidden="true"></i></div><div>Nexus Finance<div class="small">Hogar & Personal</div></div></div>
   <nav class="nav">
-    <button class="active" data-route="dashboard" onclick="mobileTab('home')"><i class="fa-solid fa-house"></i>Dashboard</button>
+    <button class="active" data-route="dashboard" onclick="showModule('dashboard')"><i class="fa-solid fa-house"></i>Dashboard</button>
     <button onclick="openExpensePicker()"><i class="fa-solid fa-house-chimney"></i>Gastos del hogar</button>
     <button onclick="openSavingPicker()"><i class="fa-solid fa-piggy-bank"></i>Ahorros</button>
     <button data-route="personalMe" onclick="showModule('personalMe')"><i class="fa-solid fa-person"></i><span id="navMeName">Finanza · Mi perfil</span></button>
@@ -368,7 +266,7 @@ html{scroll-padding-top:92px;-webkit-tap-highlight-color:transparent}body{backgr
 <header class="topbar">
   <div class="title"><h1>Dashboard General</h1><p>Control de tus finanzas personales y del hogar.</p></div>
   <div class="actions">
-    <button class="btn mobile-menu" type="button" onclick="toggleSidebar()" aria-label="Abrir menú"><i class="fa-solid fa-bars"></i></button>
+    <button class="btn mobile-menu" onclick="toggleSidebar()">☰</button>
     <span class="sync-status" id="syncStatus" role="status"><i class="fa-solid fa-circle"></i><span id="syncStatusText">Sincronizando…</span></span><span class="account-strip">Sesión: <strong id="signedUserName">—</strong></span><button class="btn" onclick="refreshDashboard()"><i class="fa-solid fa-rotate"></i> Refrescar</button><button class="btn ghost" onclick="logoutNexus()"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
   </div>
 </header>
@@ -381,15 +279,15 @@ html{scroll-padding-top:92px;-webkit-tap-highlight-color:transparent}body{backgr
   <span class="small" id="periodLabel"></span>
 </div>
 
-<section class="grid kpis" data-mobile-screen="home">
+<section class="grid kpis">
  <div class="card kpi income"><div class="label">INGRESOS</div><div class="value" id="kpiIncome">$0</div><div class="sub">Total del periodo</div></div>
  <div class="card kpi expense"><div class="label">GASTOS · HOGAR</div><div class="value" id="kpiExpense">$0</div><div class="sub">Total del periodo</div></div>
  <div class="card kpi saving"><div class="label">AHORROS</div><div class="value" id="kpiSaving">$0</div><div class="sub">Financiero + imprevistos + emergencias</div></div>
  <div class="card kpi available"><div class="label">DISPONIBLE</div><div class="value" id="kpiAvailable">$0</div><div class="sub">Después de hogar y ahorros</div></div>
 </section>
 
-<section class="grid section-grid" data-mobile-container="true">
- <div class="card" data-mobile-screen="home">
+<section class="grid section-grid">
+ <div class="card">
   <div class="card-head"><div><h2><i class="fa-solid fa-arrow-trend-up"></i> Detalles de ingresos</h2><span>Aportes de ambos</span></div></div>
   <div class="donut-layout">
    <div class="donut" id="incomeDonut" tabindex="0" role="button" aria-label="Ver detalle de ingresos" onclick="openDonutDetails('income')" onkeydown="if(event.key==='Enter'){openDonutDetails('income')}"><div class="donut-center">Aportes<small>Ver detalle</small></div></div>
@@ -401,7 +299,7 @@ html{scroll-padding-top:92px;-webkit-tap-highlight-color:transparent}body{backgr
   <div class="income-breakdown" id="incomeContributionBreakdown"></div>
  </div>
 
- <div class="card" data-mobile-screen="household">
+ <div class="card">
   <div class="card-head"><div><h2><i class="fa-solid fa-house-chimney"></i> Detalles gastos · Hogar</h2><span>Distribución por categoría</span></div><button class="mini-btn" onclick="openExpensePicker()"><i class="fa-solid fa-plus"></i> Gasto</button></div>
   <div class="donut-layout">
    <div class="donut" id="expenseDonut" tabindex="0" role="button" aria-label="Ver detalle de gastos" onclick="openDonutDetails('expense')" onkeydown="if(event.key==='Enter'){openDonutDetails('expense')}"><div class="donut-center">Hogar<small>Ver detalle</small></div></div>
@@ -410,20 +308,20 @@ html{scroll-padding-top:92px;-webkit-tap-highlight-color:transparent}body{backgr
  </div>
 </section>
 
-<section class="comparison-grid" data-mobile-container="true" aria-label="Comparativos mensuales">
- <div class="card comparison-card" data-mobile-screen="home"><div class="card-head"><div><h2><i class="fa-solid fa-chart-column"></i> Comparativo mensual · Ingresos</h2><span>Detalle por perfil al interactuar con cada mes</span></div><span id="incomeComparison"></span></div><div class="bar-chart" id="incomeBars"></div></div>
- <div class="card comparison-card" data-mobile-screen="household"><div class="card-head"><div><h2><i class="fa-solid fa-chart-column"></i> Comparativo mensual · Gastos del hogar</h2><span>Desglose por categoría</span></div><span id="expenseComparison"></span></div><div class="bar-chart" id="expenseBars"></div></div>
+<section class="comparison-grid" aria-label="Comparativos mensuales">
+ <div class="card comparison-card"><div class="card-head"><div><h2><i class="fa-solid fa-chart-column"></i> Comparativo mensual · Ingresos</h2><span>Detalle por perfil al interactuar con cada mes</span></div><span id="incomeComparison"></span></div><div class="bar-chart" id="incomeBars"></div></div>
+ <div class="card comparison-card"><div class="card-head"><div><h2><i class="fa-solid fa-chart-column"></i> Comparativo mensual · Gastos del hogar</h2><span>Desglose por categoría</span></div><span id="expenseComparison"></span></div><div class="bar-chart" id="expenseBars"></div></div>
 </section>
 
-<section class="grid section-grid secondary-grid" data-mobile-container="true">
- <div class="card wide" data-mobile-screen="savings">
+<section class="grid section-grid secondary-grid">
+ <div class="card wide">
   <div class="card-head"><div><h2><i class="fa-solid fa-piggy-bank"></i> Detalles de ahorros</h2><span>Seguimiento por objetivo</span></div><button class="mini-btn" onclick="openSavingPicker()"><i class="fa-solid fa-plus"></i> Ahorro</button></div>
   <div class="saving-goal-feature" id="savingTargetStatus"></div>
   <div class="savings-grid" id="savingsGrid"></div>
   <div class="small" style="margin-top:10px"><i class="fa-solid fa-sliders"></i> La meta mensual se ajusta desde Configuración.</div>
  </div>
 
- <div class="card wide" data-mobile-screen="home">
+ <div class="card wide">
   <div class="card-head"><div><h2><i class="fa-solid fa-wallet"></i> Detalles disponible</h2><span>Asignado · gastado · saldo</span></div></div>
   <div class="donut-layout">
    <div class="donut" id="availableDonut" tabindex="0" role="button" aria-label="Ver detalle de saldos disponibles" onclick="openDonutDetails('available')" onkeydown="if(event.key==='Enter'){openDonutDetails('available')}"><div class="donut-center">Disponible<small>Ver detalle</small></div></div>
@@ -431,7 +329,7 @@ html{scroll-padding-top:92px;-webkit-tap-highlight-color:transparent}body{backgr
   </div>
  </div>
 
- <div class="card wide evolution-card" data-mobile-screen="home">
+ <div class="card wide evolution-card">
   <div class="card-head"><div><h2><i class="fa-solid fa-chart-line"></i> Evolución mensual</h2><span>Comparativo independiente del año seleccionado</span></div></div>
   <div class="evolution-grid">
    <section class="evolution-panel"><div class="evolution-title"><span><i class="fa-solid fa-arrow-trend-up"></i> Ingresos</span><b id="evolutionIncomeTotal">$0</b></div><div class="bar-chart modern-chart" id="evolutionIncomeBars"></div></section>
@@ -442,13 +340,13 @@ html{scroll-padding-top:92px;-webkit-tap-highlight-color:transparent}body{backgr
  </div>
 </section>
 
-<section class="dashboard-mini-grid" data-mobile-container="true" aria-label="Resumen general de módulos">
- <div class="card" data-mobile-screen="home"><div class="card-head"><div><h2><i class="fa-solid fa-calendar-days"></i> Próximos pendientes</h2><span>Hasta 3 próximos</span></div><button class="mini-btn" onclick="showModule('calendar')">Ver calendario</button></div><div id="dashboardUpcoming" class="list"></div></div>
- <div class="card" data-mobile-screen="more"><div class="card-head"><div><h2><i class="fa-solid fa-credit-card"></i> Deudas</h2><span>Resumen general</span></div><button class="mini-btn" onclick="showModule('debts')">Ver deudas</button></div><div id="dashboardDebts" class="list"></div></div>
- <div class="card" data-mobile-screen="more"><div class="card-head"><div><h2><i class="fa-solid fa-wallet"></i> Cuentas separadas</h2><span>Saldo por cuenta</span></div><button class="mini-btn" onclick="showModule('reports')">Ver cuentas</button></div><div id="dashboardAccounts" class="mini-account-grid"></div></div>
+<section class="dashboard-mini-grid" aria-label="Resumen general de módulos">
+ <div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-calendar-days"></i> Próximos pendientes</h2><span>Hasta 3 próximos</span></div><button class="mini-btn" onclick="showModule('calendar')">Ver calendario</button></div><div id="dashboardUpcoming" class="list"></div></div>
+ <div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-credit-card"></i> Deudas</h2><span>Resumen general</span></div><button class="mini-btn" onclick="showModule('debts')">Ver deudas</button></div><div id="dashboardDebts" class="list"></div></div>
+ <div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-wallet"></i> Cuentas separadas</h2><span>Saldo por cuenta</span></div><button class="mini-btn" onclick="showModule('reports')">Ver cuentas</button></div><div id="dashboardAccounts" class="mini-account-grid"></div></div>
 </section>
 
-<section class="card" id="goals" data-mobile-screen="savings">
+<section class="card" id="goals">
  <div class="card-head"><div><h2><i class="fa-solid fa-bullseye"></i> Metas a futuro</h2><span>Máximo 4 metas</span></div><button class="btn primary" onclick="openGoal()"><i class="fa-solid fa-bullseye"></i> Crear meta</button></div>
  <div class="future-grid" id="goalsGrid"></div>
 </section>
@@ -480,7 +378,12 @@ html{scroll-padding-top:92px;-webkit-tap-highlight-color:transparent}body{backgr
  <div class="card"><div class="card-head"><h2>Historial de obligaciones</h2><span>Actualiza saldo o marca pagada</span></div><div class="table-wrap" id="debtTable"></div></div>
 </section>
 
-
+<section id="accountsModule" class="module-section hidden">
+ <div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-wallet"></i> Cuentas separadas</h2><span>Hogar · Ahorros · Mío · Ella</span></div><button class="btn primary" onclick="openAccountMovement()"><i class="fa-solid fa-plus"></i> Movimiento</button></div>
+  <div class="grid savings-grid" id="accountsGrid"></div>
+ </div>
+ <div class="card"><div class="card-head"><h2>Movimientos de cuentas</h2><span>Registro de ingresos y egresos manuales</span></div><div class="table-wrap" id="accountMovementTable"></div></div>
+</section>
 
 <section id="reportsModule" class="module-section hidden">
  <div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-chart-column"></i> Reportes</h2><span>Resumen financiero filtrable por año y periodo</span></div><button class="btn" onclick="exportReportCsv()">Exportar CSV</button></div><div class="filterbar report-filter"><div class="field"><label>Año del reporte</label><select class="select" id="reportYear" onchange="renderReports()"></select></div><div class="field"><label>Mes</label><select class="select" id="reportMonth" onchange="renderReports()"><option value="all">Año completo</option><option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option><option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option><option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option></select></div></div><div id="reportKpis" class="grid kpis"></div><div class="report-legend"><span>● Ingresos</span><span>● Gastos</span><span>● Ahorros</span></div><div id="reportChart" class="report-bars"></div></div><div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-wallet"></i> Saldos por cuenta</h2><span>Resumen automático de los movimientos registrados</span></div><button class="btn primary" onclick="openAccountMovement()"><i class="fa-solid fa-plus"></i> Movimiento</button></div><div class="grid savings-grid" id="accountsGrid"></div><div class="table-wrap" id="accountMovementTable"></div></div>
@@ -492,15 +395,6 @@ html{scroll-padding-top:92px;-webkit-tap-highlight-color:transparent}body{backgr
  <div class="card"><div class="card-head"><div><h2>Respaldo y mantenimiento</h2><span>Protege o restaura tus datos financieros</span></div></div><div class="actions"><button class="btn" onclick="exportData()">Exportar respaldo</button><button class="btn" onclick="importData()">Importar respaldo</button><button class="btn danger" onclick="resetAll()">Borrar todos los datos</button></div></div>
 </section>
 </main>
-<div class="drawer-scrim" id="drawerScrim" onclick="closeSidebar()" aria-hidden="true"></div>
-<nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Navegación principal">
-  <button type="button" data-mobile-route="dashboard" class="mobile-nav-item active" onclick="mobileTab('home')"><i class="fa-solid fa-house"></i><span>Inicio</span></button>
-  <button type="button" data-mobile-route="household" class="mobile-nav-item" onclick="mobileTab('household')"><i class="fa-solid fa-receipt"></i><span>Hogar</span></button>
-  <button type="button" class="mobile-nav-add" onclick="openQuickActions()" aria-label="Crear registro"><i class="fa-solid fa-plus"></i></button>
-  <button type="button" data-mobile-route="savings" class="mobile-nav-item" onclick="mobileTab('savings')"><i class="fa-solid fa-piggy-bank"></i><span>Ahorro</span></button>
-  <button type="button" data-mobile-route="more" class="mobile-nav-item" onclick="toggleSidebar()"><i class="fa-solid fa-grip"></i><span>Más</span></button>
-</nav>
-<button type="button" class="desktop-quick-add" onclick="openQuickActions()" aria-label="Crear nuevo registro"><i class="fa-solid fa-plus"></i><span>Nuevo registro</span></button>
 </div>
 
 <div id="authScreen">
@@ -520,9 +414,6 @@ html{scroll-padding-top:92px;-webkit-tap-highlight-color:transparent}body{backgr
 <div class="modal" id="modal"><div class="modal-box" id="modalBox"></div></div>
 <div class="toast" id="toast"></div>
 <div id="loadingOverlay" aria-live="polite" aria-busy="true"><div class="loading-card"><div class="loading-spinner"></div><div class="loading-title" id="loadingTitle">Cargando datos</div><div class="loading-subtitle" id="loadingSubtitle">Sincronizando con la nube…</div></div></div>
-
-
-
 
 <script>
 const CATS=["Arriendo","Mercado","Luz","Agua","Gas","Internet","Transporte","Otros"];
@@ -785,7 +676,7 @@ function renderSavings(sav){
  box.innerHTML=SAVINGS.map(([key,name])=>{let n=sum(sav.filter(x=>x.type===key)),p=target?Math.min(100,n/target*100):0;return `<div class="saving-card" style="--identity-color:${SAVING_COLORS[key]||MODULE_COLORS.saving}"><h3>${savingTag(key,name)}</h3><div style="font-size:20px;font-weight:800">${money(n)}</div><div class="small">${target?`${money(n)} de ${money(target)} de la meta`:"Configura la meta en este panel"}</div><div class="progress" style="margin-top:10px"><i style="width:${p}%"></i></div><div class="saving-meta"><span>${p.toFixed(0)}% de la meta</span><button class="mini-btn" onclick="openSaving('${key}')">Registrar</button></div></div>`}).join("");
 }
 function renderAvailable(inc,exp,sav){
- const f=getFilter();const details=["me","partner"].map(person=>{const assigned=personalAssigned(person,f.year,f.month),stats=personalStats(person,f.year,f.month);return {person,name:state.people[person],assigned,balance:assigned+stats.extraIncome-stats.spent-stats.saved-stats.commitments,commitments:stats.commitments,totalDebt:stats.totalDebt}});
+ const f=getFilter();const details=["me","partner"].map(person=>{const assigned=personalAssigned(person,f.year,f.month),stats=personalStats(person,f.year,f.month);return {person,name:state.people[person],assigned,balance:assigned+stats.extraIncome-stats.spent-stats.saved}});
  const me=details[0],pa=details[1];renderDonut("availableDonut",Math.max(0,me.balance),Math.max(0,pa.balance));
  const box=document.getElementById("availablePeople");box.innerHTML=details.map(d=>personCard(d.person,d.name,d.assigned)).join("");
 }
@@ -800,47 +691,18 @@ function personalAssigned(person,year=getFilter().year,month=getFilter().month){
  const generalSavings=matches(state.savings);
  return income-householdShare-generalSavings;
 }
-function debtPaymentsForPeriod(debt,year,month){
- const key=String(year)+"-"+String(month).padStart(2,"0");
- if(Array.isArray(debt.payments))return debt.payments.filter(p=>String(p.date||"").slice(0,7)===key).reduce((n,p)=>n+(Number(p.amount)||0),0);
- return (state.personalSpending||[]).filter(x=>x.debtId===debt.id&&String(x.date||"").slice(0,7)===key).reduce((n,x)=>n+(Number(x.amount)||0),0);
-}
-function personalCommitments(person,year=getFilter().year,month=getFilter().month){
- // Solo se reservan cuotas personales. Las deudas del hogar siguen siendo compartidas y no se cargan completas a ambos perfiles.
- const now=new Date(),currentKey=now.getFullYear()*100+(now.getMonth()+1),selectedYear=Number(year)||now.getFullYear();
- const months=month==="all"||month===undefined||month===null
-  ?Array.from({length:12},(_,i)=>i+1)
-  :[Number(month)];
- let total=0;const details=[];
- for(const d of (state.debts||[])){
-  if(d.status==="paid"||d.owner!==person||!(Number(d.balance)>0)||!(Number(d.installment)>0)||!d.due)continue;
-  const dueDate=String(d.due).slice(0,10);if(!/^\d{4}-\d{2}-\d{2}$/.test(dueDate))continue;
-  const dueKey=Number(dueDate.slice(0,4))*100+Number(dueDate.slice(5,7));
-  const created=String(d.createdAt||d.due).slice(0,7),createdKey=Number(created.slice(0,4))*100+Number(created.slice(5,7));
-  for(const m of months){
-   if(m<1||m>12)continue;const key=selectedYear*100+m;
-   // No proyectar cuotas anteriores al mes actual: los pagos pasados ya pertenecen al historial.
-   if(key<currentKey||key<dueKey||key<createdKey)continue;
-   const paid=debtPaymentsForPeriod(d,selectedYear,m),remaining=Math.max(0,Math.min(Number(d.installment)||0,(Number(d.balance)||0)+paid)-paid);
-   if(remaining>0){total+=remaining;details.push({debtId:d.id,name:d.name,month:m,amount:remaining,paid});}
-  }
- }
- return {total,details};
-}
 function personalStats(person,year=getFilter().year,month=getFilter().month){
  const rows=(state.personalSpending||[]).filter(x=>x.person===person&&inPeriod(x.date,year,month));
  const amountOf=x=>Math.abs(Number(x.amount)||0);
  const spent=sum(rows.filter(x=>["expense","debt","other-expense"].includes(personalMovementType(x))).map(x=>({amount:amountOf(x)})));
  const saved=sum(rows.filter(x=>personalMovementType(x)==="saving").map(x=>({amount:amountOf(x)})));
  const extraIncome=sum(rows.filter(x=>personalMovementType(x)==="income").map(x=>({amount:amountOf(x)})));
- const commitments=personalCommitments(person,year,month).total;
- const totalDebt=(state.debts||[]).filter(d=>d.status!=="paid"&&d.owner===person).reduce((n,d)=>n+(Number(d.balance)||0),0);
- return {rows,spent,saved,extraIncome,commitments,totalDebt};
+ return {rows,spent,saved,extraIncome};
 }
 function personCard(person,name,assigned){
- const stats=personalStats(person), balance=assigned+stats.extraIncome-stats.spent-stats.saved-stats.commitments;
+ const stats=personalStats(person), balance=assigned+stats.extraIncome-stats.spent-stats.saved;
  const pct=assigned>0?Math.max(0,Math.min(100,balance/assigned*100)):0;
- return `<div class="person-card" style="--identity-color:${PERSON_COLORS[person]}"><b>${personTag(person,name)}</b><div class="stats"><div class="stat"><small>Asignado</small><b>${money(assigned)}</b></div><div class="stat"><small>Gastado</small><b>${money(stats.spent)} <button class="detail-btn" onclick="showModule('${person==='me'?'personalMe':'personalPartner'}')">ver detalles</button></b></div><div class="stat"><small>Saldo disponible</small><b class="${balance<0?'negative':'positive'}">${money(balance)}</b></div></div><div class="small">Ahorro personal: <b>${money(stats.saved)}</b> · Ingresos adicionales: <b>${money(stats.extraIncome)}</b></div><div class="small">Cuotas por cubrir en el período: <b class="${stats.commitments>0?'negative':'positive'}">${money(stats.commitments)}</b> · Deuda personal pendiente: <b>${money(stats.totalDebt)}</b></div><div class="progress"><i style="width:${pct}%"></i></div><div class="small" style="margin-top:6px">${pct.toFixed(0)}% del asignado disponible</div></div>`;
+ return `<div class="person-card" style="--identity-color:${PERSON_COLORS[person]}"><b>${personTag(person,name)}</b><div class="stats"><div class="stat"><small>Asignado</small><b>${money(assigned)}</b></div><div class="stat"><small>Gastado</small><b>${money(stats.spent)} <button class="detail-btn" onclick="showModule('${person==='me'?'personalMe':'personalPartner'}')">ver detalles</button></b></div><div class="stat"><small>Saldo disponible</small><b class="${balance<0?'negative':'positive'}">${money(balance)}</b></div></div><div class="small">Ahorro personal: <b>${money(stats.saved)}</b> · Ingresos adicionales: <b>${money(stats.extraIncome)}</b></div><div class="progress"><i style="width:${pct}%"></i></div><div class="small" style="margin-top:6px">${pct.toFixed(0)}% del asignado disponible</div></div>`;
 }
 function chartCalloutRows(items){
  return items.filter(x=>Number(x.value)>0).map(x=>{const color=x.color||"#a78bfa";return `<div class="callout-row"><span class="identity-inline" style="--identity-color:${color}"><i class="identity-dot"></i>${esc(x.label)}</span><b>${money(x.value)}</b></div>`}).join("");
@@ -960,24 +822,7 @@ async function refreshDashboard(){
 function setCurrentPeriod(){const now=new Date();document.getElementById("filterYear").value=String(now.getFullYear());document.getElementById("filterMonth").value=String(now.getMonth()+1);renderAll();renderExtendedModules()}
 function clearGeneralFilter(){setCurrentPeriod()}
 function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:"smooth"});document.getElementById("sidebar").classList.remove("open")}
-function toggleSidebar(){const side=document.getElementById("sidebar");side.classList.toggle("open");document.getElementById("drawerScrim")?.classList.toggle("show",side.classList.contains("open"));document.body.classList.toggle("drawer-open",side.classList.contains("open"))}
-function closeSidebar(){document.getElementById("sidebar")?.classList.remove("open");document.getElementById("drawerScrim")?.classList.remove("show");document.body.classList.remove("drawer-open")}
-function openQuickActions(){openModal("¿Qué quieres registrar?",`<p class="small" style="margin:0 0 14px">Elige el movimiento. Nexus abrirá el formulario correspondiente.</p><div class="quick-action-grid"><button class="quick-action-tile" onclick="closeModal();openIncome('me')"><span class="quick-action-icon income-icon"><i class="fa-solid fa-wallet"></i></span><b>Ingreso personal</b><small>Registrar un ingreso tuyo</small></button><button class="quick-action-tile" onclick="closeModal();openIncome('partner')"><span class="quick-action-icon partner-icon"><i class="fa-solid fa-user-group"></i></span><b>Ingreso de pareja</b><small>Registrar su ingreso</small></button><button class="quick-action-tile" onclick="openExpensePicker()"><span class="quick-action-icon expense-icon"><i class="fa-solid fa-house"></i></span><b>Gasto del hogar</b><small>Arriendo, mercado y servicios</small></button><button class="quick-action-tile" onclick="openSavingPicker()"><span class="quick-action-icon saving-icon"><i class="fa-solid fa-piggy-bank"></i></span><b>Ahorro</b><small>Financiero, imprevistos o emergencias</small></button><button class="quick-action-tile" onclick="closeModal();showModule('debts');setTimeout(()=>{document.getElementById('debtForm')?.scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('debtName')?.focus({preventScroll:true})},80)"><span class="quick-action-icon debt-icon"><i class="fa-solid fa-credit-card"></i></span><b>Deuda</b><small>Crear una obligación</small></button><button class="quick-action-tile" onclick="closeModal();showModule('calendar');setTimeout(()=>openTaskForm(),80)"><span class="quick-action-icon plan-icon"><i class="fa-solid fa-calendar-plus"></i></span><b>Recordatorio</b><small>Agendar un compromiso</small></button></div>`)}
-let mobileDashboardView="home";
-function mobileTab(view){
- if(view==="more"){toggleSidebar();return;}
- if(view==="planning"){showModule("calendar");return;}
- if(!["home","household","savings"].includes(view))view="home";
- if(activeModule!=="dashboard")showModule("dashboard");
- mobileDashboardView=view;
- document.body.classList.remove("mobile-view-home","mobile-view-household","mobile-view-savings","mobile-view-more");
- document.body.classList.add("mobile-view-"+view);
- const h=document.querySelector(".title h1"),p=document.querySelector(".title p");
- const copy={home:["Inicio","Resumen de tus finanzas del hogar."],household:["Hogar","Gastos compartidos y distribución del hogar."],savings:["Ahorros","Tus objetivos y reservas financieras."]}[view];
- if(h)h.textContent=copy[0];if(p)p.textContent=copy[1];
- syncMobileNav();window.scrollTo({top:0,behavior:"auto"});
-}
-function syncMobileNav(){const route=activeModule||"dashboard";document.querySelectorAll("[data-mobile-route]").forEach(b=>{const r=b.dataset.mobileRoute;const active=(r==="dashboard"&&route==="dashboard"&&mobileDashboardView==="home")||(r==="household"&&route==="dashboard"&&mobileDashboardView==="household")||(r==="savings"&&route==="dashboard"&&mobileDashboardView==="savings")||(r==="more"&&["personalMe","personalPartner","debts","reports","settings","calendar"].includes(route));b.classList.toggle("active",active);if(active)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")})}
+function toggleSidebar(){document.getElementById("sidebar").classList.toggle("open")}
 
 function openModal(title,body){
  const modal=document.getElementById("modal"),wasOpen=modal.classList.contains("show");
@@ -1019,7 +864,7 @@ function renderIncomeHistory(person){
 }
 function saveIncome(e,person,id){e.preventDefault();const undoBefore=id?snapshotNexusState():null;let amount=num(document.getElementById("rAmount").value);if(!amount)return toast("Ingresa un monto válido.");let rec={id:id||crypto.randomUUID(),date:document.getElementById("rDate").value,amount,person};if(id)state.incomes=state.incomes.map(x=>x.id===id?rec:x);else state.incomes.push(rec);saveState();if(id)showUndoToast("Ingreso actualizado",undoBefore,"fa-pen-to-square");else toast("Ingreso registrado");openIncome(person)}
 
-function openExpensePicker(){closeSidebar();openModal("Registrar gasto del hogar",`<div class="small" style="margin-bottom:12px">Selecciona la categoría que deseas administrar.</div><div class="future-grid">${CATS.map(c=>`<button class="btn category-pick-btn" style="--identity-color:${categoryColor(c)}" onclick="openExpense('${c}')"><span class="identity-inline" style="--identity-color:${categoryColor(c)}"><i class="identity-dot"></i>${esc(c)}</span></button>`).join("")}</div>`)}
+function openExpensePicker(){openModal("Registrar gasto del hogar",`<div class="small" style="margin-bottom:12px">Selecciona la categoría que deseas administrar.</div><div class="future-grid">${CATS.map(c=>`<button class="btn category-pick-btn" style="--identity-color:${categoryColor(c)}" onclick="openExpense('${c}')"><span class="identity-inline" style="--identity-color:${categoryColor(c)}"><i class="identity-dot"></i>${esc(c)}</span></button>`).join("")}</div>`)}
 function openExpense(category,editId=null){
  activeModal={type:"expense",key:category};let rec=state.expenses.find(x=>x.id===editId);
  openModal(editId?`Editar gasto · ${category}`:`Registrar gasto · ${category}`,`<form onsubmit="saveExpense(event,'${category}','${editId||""}')">${categoryTag(category,"expense-category-tag")}<div style="height:10px"></div>${editModeBanner(!!editId,"gasto del hogar")}<div class="form-grid">
@@ -1043,7 +888,7 @@ function renderExpenseHistory(category){
 function saveExpense(e,category,id){e.preventDefault();const undoBefore=id?snapshotNexusState():null;let amount=num(document.getElementById("eAmount").value),dist=document.getElementById("eDist").value;if(!amount)return toast("Ingresa un monto válido.");let me,pa;if(dist==="auto"){me=amount/2;pa=amount/2}else{me=num(document.getElementById("eMe").value);pa=num(document.getElementById("ePartner").value);if(Math.abs(me+pa-amount)>0.01)return toast("La distribución manual debe sumar exactamente el monto total.");}
 let rec={id:id||crypto.randomUUID(),date:document.getElementById("eDate").value,amount,category,distribution:dist,meAmount:me,partnerAmount:pa};if(id)state.expenses=state.expenses.map(x=>x.id===id?rec:x);else state.expenses.push(rec);saveState();if(id)showUndoToast("Gasto actualizado",undoBefore,"fa-pen-to-square");else toast("Gasto registrado");openExpense(category)}
 
-function openSavingPicker(){closeSidebar();openModal("Registrar ahorro",`<div class="future-grid">${SAVINGS.map(([k,n])=>`<button class="btn category-pick-btn" style="--identity-color:${SAVING_COLORS[k]}" onclick="openSaving('${k}')">${savingTag(k,n)}</button>`).join("")}</div>`)}
+function openSavingPicker(){openModal("Registrar ahorro",`<div class="future-grid">${SAVINGS.map(([k,n])=>`<button class="btn category-pick-btn" style="--identity-color:${SAVING_COLORS[k]}" onclick="openSaving('${k}')">${savingTag(k,n)}</button>`).join("")}</div>`)}
 function openSaving(type,editId=null,defaultPerson="me"){
  let name=SAVINGS.find(x=>x[0]===type)?.[1]||type;let rec=state.savings.find(x=>x.id===editId);
  openModal(editId?`Editar ahorro · ${name}`:`Registrar ahorro · ${name}`,`<form onsubmit="saveSaving(event,'${type}','${editId||""}')">${savingTag(type,name)}<div style="height:10px"></div>${editModeBanner(!!editId,"ahorro")}<div class="form-grid">
@@ -1080,10 +925,10 @@ function renderPersonalModule(){
  box.innerHTML=`
  <div class="card" style="margin-bottom:15px">
   <div class="card-head"><div><h2>${personTag(person,state.people[person])} Finanzas personales</h2><span>Tu asignación, tus movimientos y tus obligaciones, separados por tipo</span></div><button class="btn" onclick="showModule('dashboard')"><i class="fa-solid fa-arrow-left"></i> Volver al dashboard</button></div>
-  <p class="small">El ingreso asignado se calcula automáticamente con tus ingresos menos tu parte de los gastos y ahorros generales del hogar. Los bloques siguientes muestran por separado tus gastos, ahorros personales, ingresos adicionales y pagos de deudas. El disponible resta también las cuotas personales exigibles del período que aún no se hayan cubierto; la deuda total se informa aparte.</p>
+  <p class="small">El ingreso asignado se calcula automáticamente con tus ingresos menos tu parte de los gastos y ahorros generales del hogar. Los bloques siguientes muestran por separado tus gastos, ahorros personales, ingresos adicionales y pagos de deudas.</p>
   <div class="filterbar" style="margin-top:14px;margin-bottom:0"><div class="field"><label>Año</label><select class="select" id="pFilterYear" onchange="renderPersonalModule()">${yearOptions}</select></div><div class="field"><label>Periodo</label><select class="select" id="pFilterMonth" onchange="renderPersonalModule()">${['Año completo','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'].map((n,i)=>`<option value="${i===0?'all':i}" ${(String(i===0?'all':i)===String(oldMonth))?'selected':''}>${n}</option>`).join('')}</select></div><button class="btn ghost" onclick="document.getElementById('pFilterYear').value='${new Date().getFullYear()}';document.getElementById('pFilterMonth').value='${new Date().getMonth()+1}';renderPersonalModule()">Periodo actual</button></div>
  </div><div id="personalPageContent"></div>`;
- const f=getPersonalPageFilter(),stats=personalStats(person,f.year,f.month),assigned=personalAssigned(person,f.year,f.month),personalBalance=assigned+stats.extraIncome-stats.spent-stats.saved-stats.commitments;
+ const f=getPersonalPageFilter(),stats=personalStats(person,f.year,f.month),assigned=personalAssigned(person,f.year,f.month),personalBalance=assigned+stats.extraIncome-stats.spent-stats.saved;
  const rows=stats.rows.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));
  const expenses=rows.filter(x=>["expense","other-expense"].includes(personalMovementType(x)));
  const debts=rows.filter(x=>personalMovementType(x)==="debt");
@@ -1110,8 +955,7 @@ function renderPersonalModule(){
   <div class="card kpi income personal-summary-card" style="--identity-color:${MODULE_COLORS.income}"><div class="label">INGRESOS EXTRA</div><div class="value" style="font-size:clamp(16px,2vw,24px)">${money(stats.extraIncome)}</div><div class="sub">Entradas adicionales</div></div>
   <div class="card kpi expense personal-summary-card" style="--identity-color:${MODULE_COLORS.expense}"><div class="label">GASTOS Y PAGOS</div><div class="value" style="font-size:clamp(16px,2vw,24px)">${money(stats.spent)}</div><div class="sub">Incluye pagos de deudas</div></div>
   <div class="card kpi saving personal-summary-card" style="--identity-color:${MODULE_COLORS.saving}"><div class="label">AHORRO PERSONAL</div><div class="value" style="font-size:clamp(16px,2vw,24px)">${money(stats.saved)}</div><div class="sub">Separado del ahorro del hogar</div></div>
-  <div class="card kpi available personal-summary-card" style="--identity-color:${PERSON_COLORS[person]}"><div class="label">DISPONIBLE TRAS COMPROMISOS</div><div class="value ${personalBalance<0?'negative':'positive'}" style="font-size:clamp(16px,2vw,24px)">${money(personalBalance)}</div><div class="sub">Incluye cuotas exigibles aún no cubiertas</div></div>
-  <div class="card kpi expense personal-summary-card" style="--identity-color:${MODULE_COLORS.debt}"><div class="label">DEUDA PERSONAL PENDIENTE</div><div class="value" style="font-size:clamp(16px,2vw,24px)">${money(stats.totalDebt)}</div><div class="sub">Saldo total de tus deudas personales, aparte del disponible</div></div>
+  <div class="card kpi available personal-summary-card" style="--identity-color:${PERSON_COLORS[person]}"><div class="label">DISPONIBLE REAL</div><div class="value ${personalBalance<0?'negative':'positive'}" style="font-size:clamp(16px,2vw,24px)">${money(personalBalance)}</div><div class="sub">Asignado + extras − gastos − ahorros</div></div>
  </section>
  <section class="personal-finance-blocks">
   <article class="card personal-finance-block" style="--identity-color:${MODULE_COLORS.income}"><div class="card-head"><div><h2><i class="fa-solid fa-arrow-trend-up"></i> Ingresos adicionales</h2><span>Dinero que no forma parte del ingreso base</span></div><span class="pill">${incomes.length}</span></div><div class="personal-block-total">${money(sum(incomes))}</div><div class="personal-block-sub">Total de entradas adicionales en el periodo</div>${miniChart("income",MODULE_COLORS.income)}<div class="personal-block-actions"><button class="btn primary" onclick="openPersonalMovement('${person}','income')"><i class="fa-solid fa-plus"></i> Registrar ingreso</button></div><h3>Historial de ingresos</h3>${blockHistory(incomes)}</article>
@@ -1119,7 +963,7 @@ function renderPersonalModule(){
   <article class="card personal-finance-block" style="--identity-color:${MODULE_COLORS.saving}"><div class="card-head"><div><h2><i class="fa-solid fa-piggy-bank"></i> Ahorros personales</h2><span>Tus cajas personales · máximo 4, independientes del hogar</span></div><span class="pill">${savings.length} movimientos</span></div><div class="personal-block-total">${money(sum(savings))}</div><div class="personal-block-sub">Total ahorrado en el periodo, distribuido por caja</div>${miniChart("saving",MODULE_COLORS.saving)}<div class="personal-block-actions"><button class="btn" onclick="managePersonalSavingBoxes('${person}')"><i class="fa-solid fa-sliders"></i> Administrar cajas</button>${(state.personalSavingBoxes?.[person]||[]).length<4?`<button class="btn primary" onclick="addPersonalSavingBox('${person}')"><i class="fa-solid fa-plus"></i> Crear caja</button>`:""}</div><div class="personal-saving-boxes">${renderPersonalSavingBoxes(person,savings,blockHistory)}</div></article>
   <article class="card personal-finance-block" style="--identity-color:${MODULE_COLORS.debt}"><div class="card-head"><div><h2><i class="fa-solid fa-file-invoice-dollar"></i> Pagos de deudas</h2><span>Solo tus deudas personales y las del hogar</span></div><span class="pill">${debts.length}</span></div><div class="personal-block-total">${money(sum(debts))}</div><div class="personal-block-sub">Abonos realizados por este perfil durante el periodo</div>${miniChart("debt",MODULE_COLORS.debt)}<div class="personal-block-actions"><button class="btn" onclick="openPersonalDebtPicker('${person}')"><i class="fa-solid fa-list"></i> Ver deudas para abonar</button></div><h3>Deudas que puedes pagar</h3>${debtRows}<h3 style="margin-top:16px">Historial de abonos</h3>${blockHistory(debts)}</article>
  </section>
- <section class="grid section-grid"><div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-scale-balanced"></i> Distribución del dinero</h2><span>Resumen del periodo seleccionado</span></div></div><div class="list"><div class="list-row" style="grid-template-columns:1fr auto"><span>Asignado</span><strong>${money(assigned)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Ingresos adicionales</span><strong class="positive">+${money(stats.extraIncome)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Gastos y pagos</span><strong class="negative">−${money(stats.spent)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Ahorros personales</span><strong>−${money(stats.saved)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Cuotas exigibles pendientes del período</span><strong class="negative">−${money(stats.commitments)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><b>Disponible tras compromisos</b><strong class="${personalBalance<0?'negative':'positive'}">${money(personalBalance)}</strong></div></div></div>
+ <section class="grid section-grid"><div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-scale-balanced"></i> Distribución del dinero</h2><span>Resumen del periodo seleccionado</span></div></div><div class="list"><div class="list-row" style="grid-template-columns:1fr auto"><span>Asignado</span><strong>${money(assigned)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Ingresos adicionales</span><strong class="positive">+${money(stats.extraIncome)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Gastos y pagos</span><strong class="negative">−${money(stats.spent)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Ahorros personales</span><strong>−${money(stats.saved)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><b>Saldo disponible</b><strong class="${personalBalance<0?'negative':'positive'}">${money(personalBalance)}</strong></div></div></div>
  <div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-chart-pie"></i> Actividad del periodo</h2><span>Resumen independiente de cada tipo</span></div></div><div class="list"><div class="list-row" style="grid-template-columns:1fr auto"><span>Gastos personales</span><strong>${expenses.length}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Ahorros personales</span><strong>${savings.length}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Ingresos adicionales</span><strong>${incomes.length}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Pagos de deudas</span><strong>${debts.length}</strong></div></div></div></section>`;
 }
 function openPersonalSpending(person){showModule(person==="partner"?"personalPartner":"personalMe")}
@@ -1246,11 +1090,11 @@ function navigateToGoals(){
  const alreadyDashboard=activeModule==="dashboard"&&!document.getElementById("dashboard").classList.contains("hidden");
  if(!alreadyDashboard){showModule("dashboard");setTimeout(()=>goals.scrollIntoView({behavior:"smooth",block:"start"}),40);}
  else{goals.scrollIntoView({behavior:"smooth",block:"start"});}
- document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.textContent.includes("Metas a futuro")));syncMobileNav();
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.textContent.includes("Metas a futuro")));
 }
 function showModule(name,fromHistory=false){
  const allowed=["dashboard","calendar","debts","accounts","reports","settings","personalMe","personalPartner"];if(name==="accounts")name="reports";if(!allowed.includes(name))name="dashboard";
- activeModule=name;if(name==="dashboard"){mobileDashboardView="home";document.body.classList.remove("mobile-view-household","mobile-view-savings","mobile-view-more");document.body.classList.add("mobile-view-home");}else{mobileDashboardView="home";document.body.classList.remove("mobile-view-household","mobile-view-savings","mobile-view-more");document.body.classList.add("mobile-view-home");}
+ activeModule=name;
  ["dashboard","calendar","debts","accounts","reports","settings","personal"].forEach(m=>{const el=document.getElementById(m+"Module");if(el)el.classList.toggle("hidden",m!==name&&!(m==="personal"&&(name==="personalMe"||name==="personalPartner")))});
  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.route===name));
  const title={dashboard:"Dashboard General",calendar:"Calendario y recordatorios",debts:"Gestión de deudas",accounts:"Cuentas separadas",reports:"Reportes",settings:"Configuración",personalMe:"Finanza · "+(state.people.me||"Mi perfil"),personalPartner:"Finanza · "+(state.people.partner||"Pareja")};
@@ -1259,13 +1103,13 @@ function showModule(name,fromHistory=false){
  if(!fromHistory){const url=location.pathname+location.search+"#"+name;history.pushState({nexusRoute:name},"",url)}
  if(name==="personalMe"||name==="personalPartner")renderPersonalModule();if(name==="settings")populateSettings();
  if(name!=="dashboard")renderExtendedModules();
- closeSidebar();syncMobileNav();if(!fromHistory)window.scrollTo({top:0,behavior:"auto"});
+ document.getElementById("sidebar").classList.remove("open");if(!fromHistory)window.scrollTo({top:0,behavior:"auto"});
 }
 window.addEventListener("popstate",(event)=>{if(document.getElementById("modal").classList.contains("show")){if(typeof event.state?.scrollY==="number")modalScrollY=event.state.scrollY;closeModal(true);return}showModule(routeFromHash(),true)});
 // Escape closes only an active overlay/callout; it never changes the page scroll or route by itself.
 document.addEventListener("keydown",function(event){if(event.key!=="Escape")return;const modal=document.getElementById("modal");if(modal?.classList.contains("show")){event.preventDefault();closeModal();return}const overlay=document.getElementById("loadingOverlay");if(overlay?.classList.contains("show"))return;const tips=document.querySelectorAll(".line-chart-callout.show");if(tips.length){event.preventDefault();tips.forEach(t=>t.classList.remove("show"));document.querySelectorAll(".point.selected").forEach(p=>p.classList.remove("selected"));return}const openBars=document.querySelectorAll(".interactive-bars .bar.tip-open");if(openBars.length||document.getElementById("chart-detail-popover")){event.preventDefault();closeChartTip();return}document.querySelectorAll(".bar.tip-open").forEach(x=>x.classList.remove("tip-open"));});
 window.addEventListener("hashchange",()=>{if(!document.getElementById("modal").classList.contains("show"))showModule(routeFromHash(),true)});
-function renderExtendedModules(){renderCalendar();renderTasks();renderDebts();renderAccounts();renderReports();renderDashboardMinis();syncMobileNav()}
+function renderExtendedModules(){renderCalendar();renderTasks();renderDebts();renderAccounts();renderReports();renderDashboardMinis()}
 function renderDashboardMinis(){
  const upcoming=document.getElementById("dashboardUpcoming");if(upcoming){const today=new Date(dateNow()+"T00:00:00");const items=state.tasks.filter(t=>t.status!=="done"&&t.date).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);upcoming.innerHTML=items.length?items.map(t=>{const due=new Date(t.date+"T00:00:00"),days=Math.round((due-today)/86400000),urgent=days<=1,soon=days<=3,dayLabel=days<0?"Vencido":days===0?"Hoy":days===1?"Mañana":`En ${days} días`;return `<div class="upcoming-item ${urgent?'urgent':soon?'soon':''}" role="button" tabindex="0" onclick="openTaskDashboardStatus('${t.id}')" onkeydown="if(event.key==='Enter'){openTaskDashboardStatus('${t.id}')}"><div class="upcoming-date"><strong>${due.getDate()}</strong><small>${due.toLocaleDateString("es-CO",{month:"short"}).replace(".","")}</small></div><div><div class="upcoming-name">${esc(t.title)}</div><div class="upcoming-meta"><i class="fa-solid fa-clock"></i> ${esc(t.time||"Sin hora")} · ${ownerTag(t.owner)}</div></div><span class="upcoming-badge">${dayLabel}</span></div>`}).join(""):'<div class="empty"><i class="fa-solid fa-calendar-check"></i><br>No hay pendientes próximos.</div>'}
  const debts=document.getElementById("dashboardDebts");if(debts){const items=state.debts.filter(d=>d.status!=="paid"&&Number(d.balance)>0).sort((a,b)=>(a.due||"9999").localeCompare(b.due||"9999")).slice(0,3);debts.innerHTML=items.length?items.map(d=>{const pct=d.original>0?Math.max(0,Math.min(100,(1-(Number(d.balance)||0)/(Number(d.original)||1))*100)):0;return `<div class="debt-preview" role="button" tabindex="0" onclick="payDebt('${d.id}')" onkeydown="if(event.key==='Enter'){payDebt('${d.id}')}"><div class="debt-preview-top"><span class="debt-icon"><i class="fa-solid fa-file-invoice-dollar"></i></span><div class="debt-preview-name"><b>${esc(d.name)}</b><small>${ownerTag(d.owner)} · vence ${esc(d.due||"sin fecha")}</small></div><strong>${money(d.balance)}</strong></div><div class="debt-progress"><i style="width:${pct}%"></i></div><div class="debt-preview-foot"><span>${pct.toFixed(0)}% pagado</span><span>Inicial ${money(d.original)}</span></div></div>`}).join(""):'<div class="empty">No hay deudas pendientes.</div>'}
@@ -1312,8 +1156,8 @@ function accountPeriodSummary(id){
  const f=getFilter(),period=arr=>arr.filter(x=>inPeriod(x.date,f.year,f.month)),inc=period(state.incomes),exp=period(state.expenses),sav=period(state.savings);
  if(id==="home")return {value:sum(exp),detail:`${exp.length} gasto(s) del hogar · periodo seleccionado`};
  if(id==="savings")return {value:sum(sav),detail:`${sav.length} aporte(s) de ahorro · periodo seleccionado`};
- const person=id==="me"?"me":"partner",assigned=personalAssigned(person,f.year,f.month),stats=personalStats(person,f.year,f.month),balance=assigned+stats.extraIncome-stats.spent-stats.saved-stats.commitments;
- return {value:balance,detail:`Asignado ${money(assigned)} · Gastado ${money(stats.spent)} · Ahorrado ${money(stats.saved)} · Compromisos ${money(stats.commitments)}`};
+ const person=id==="me"?"me":"partner",assigned=personalAssigned(person,f.year,f.month),stats=personalStats(person,f.year,f.month),balance=assigned+stats.extraIncome-stats.spent-stats.saved;
+ return {value:balance,detail:`Asignado ${money(assigned)} · Gastado ${money(stats.spent)} · Ahorrado ${money(stats.saved)}`};
 }
 function renderAccounts(){const grid=document.getElementById("accountsGrid");if(grid)grid.innerHTML=ACCOUNT_TYPES.map(a=>{const d=accountPeriodSummary(a.id),ledger=state.transactions.filter(t=>t.account===a.id);return `<div class="account-card"><h3>${esc(a.name)}</h3><div class="balance">${money(d.value)}</div><small>${esc(d.detail)}</small><div class="small" style="margin-top:8px">Libro manual: ${money(accountBalance(a.id))} · ${ledger.length} movimiento(s) total</div></div>`}).join("");const box=document.getElementById("accountMovementTable");if(!box)return;if(!state.transactions.length){box.innerHTML='<div class="empty">Aún no hay movimientos manuales de cuentas. Los valores superiores se calculan automáticamente con tus ingresos, gastos y ahorros del periodo.</div>';return}box.innerHTML=`<table class="data-table"><thead><tr><th>Fecha</th><th>Cuenta</th><th>Tipo</th><th>Descripción</th><th>Valor</th><th></th></tr></thead><tbody>${[...state.transactions].sort((a,b)=>(b.date||"").localeCompare(a.date||"")).map(t=>`<tr><td>${esc(t.date)}</td><td>${esc((ACCOUNT_TYPES.find(a=>a.id===t.account)||{}).name||t.account)}</td><td><span class="pill">${t.type==="income"?"Ingreso":"Egreso"}</span></td><td>${esc(t.description)}</td><td>${t.type==="income"?"+":"−"}${money(t.amount)}</td><td><button class="mini-btn" onclick="deleteAccountMovement('${t.id}')">Eliminar</button></td></tr>`).join("")}</tbody></table>`}
 function openAccountMovement(){openModal("Nuevo movimiento de cuenta",`<form onsubmit="saveAccountMovement(event)">${editModeBanner(false,"movimiento de cuenta")}<div class="form-grid"><div class="field"><label>Fecha</label><input class="input" id="amDate" type="date" value="${dateNow()}" required></div><div class="field"><label>Cuenta</label><select class="select" id="amAccount">${ACCOUNT_TYPES.map(a=>`<option value="${a.id}">${a.name}</option>`).join("")}</select></div><div class="field"><label>Tipo</label><select class="select" id="amType"><option value="income">Ingreso / abono</option><option value="expense">Egreso / retiro</option></select></div><div class="field"><label>Valor</label><input class="input money-input" id="amAmount" type="text" inputmode="numeric" oninput="formatMoneyField(this)" required placeholder="Ej. 100.000"></div><div class="field full"><label>Descripción</label><input class="input" id="amDescription" required placeholder="Ej. transferencia, pago de servicio"></div></div><div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary">Guardar movimiento</button></div></form>`)}
@@ -1328,7 +1172,6 @@ setupYears();
 document.querySelector(".app").classList.add("auth-locked");
 document.getElementById("authScreen").style.display="flex";
 bootstrapAuth();
-document.body.classList.add("mobile-view-home");
 </script>
 </body>
 </html>
