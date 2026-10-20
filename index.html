@@ -194,131 +194,6 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 .card:has(#availablePeople) .card-head h2 i{color:#60a5fa}
 .identity-inline .identity-dot{box-shadow:0 0 0 2px color-mix(in srgb,var(--identity-color,#8b5cf6) 18%,transparent)}
 
-
-
-/* Nexus Mobile App · mobile-first layer; preserves the existing financial engine */
-:root{--mobile-nav-height:68px;--mobile-safe-bottom:env(safe-area-inset-bottom,0px)}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
-body{overscroll-behavior-y:contain}
-button,input,select,textarea{font:inherit}
-button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-.mobile-bottom-nav,.mobile-drawer-scrim,.offline-access-wrap{display:none}
-.card,.kpi,.module-section{min-width:0}
-@media(max-width:760px){
- body{font-size:14px;line-height:1.45;padding:0}
- .app{display:block;min-height:100dvh;width:100%;overflow-x:clip}
- .sidebar{position:fixed;z-index:1005;inset:0 auto 0 0;width:min(84vw,320px);height:100dvh;max-height:100dvh;overflow-y:auto;transform:translateX(-105%);transition:transform .24s ease;box-shadow:20px 0 55px #0008;border-radius:0 18px 18px 0;padding:18px 14px calc(24px + var(--mobile-safe-bottom));display:block}
- .sidebar.open{transform:translateX(0)}
- .mobile-drawer-scrim{position:fixed;z-index:1004;inset:0;background:rgba(2,4,10,.62);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
- .sidebar.open~.mobile-drawer-scrim{display:block}
- .main{width:100%;min-width:0;margin:0;padding:0 13px calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 24px);}
- .topbar{position:sticky;z-index:20;top:0;margin:0 -13px 14px;padding:calc(10px + env(safe-area-inset-top,0px)) 13px 12px;display:flex;align-items:center;gap:10px;border-radius:0 0 18px 18px;background:color-mix(in srgb,var(--bg,#0b0a10) 90%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:0;border-bottom:1px solid var(--line,rgba(255,255,255,.1));box-shadow:0 8px 25px #0002}
- .topbar .title{min-width:0;flex:1}
- .topbar .title h1{font-size:clamp(18px,5vw,22px);line-height:1.15;margin:0;letter-spacing:-.035em}
- .topbar .title p{font-size:11px;line-height:1.35;margin:4px 0 0;max-width:250px}
- .topbar .actions{display:flex;align-items:center;justify-content:flex-end;gap:6px;flex:0 0 auto}
- .topbar .actions .mobile-menu{display:inline-flex;align-items:center;justify-content:center;width:39px;height:39px;min-width:39px;padding:0;border-radius:12px;font-size:0;order:-1}
- .topbar .actions .mobile-menu:before{content:'☰';font-size:19px;line-height:1}
- .topbar .actions .mobile-menu i{display:none}
- .topbar .actions .sync-status{font-size:0;padding:0;background:transparent;border:0;min-width:12px;display:inline-flex;align-items:center}
- .topbar .actions .sync-status i{font-size:9px;margin:0}
- .topbar .actions .account-strip,.topbar .actions button:not(.mobile-menu){display:none}
- .filterbar{display:grid;grid-template-columns:1fr 1.25fr;gap:8px;padding:11px;margin:0 0 13px;border-radius:15px;align-items:end}
- .filterbar .field{min-width:0;gap:4px}
- .filterbar .field label{font-size:10px}
- .filterbar .select{min-height:42px;padding:8px 10px;font-size:13px;width:100%}
- .filterbar>.btn{grid-column:1/-1;width:100%;min-height:39px}
- .filterbar #periodLabel{grid-column:1/-1;font-size:11px}
- .grid.kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-bottom:13px}
- .kpi{padding:13px 12px!important;border-radius:16px!important;min-height:104px}
- .kpi .label{font-size:10px;letter-spacing:.07em}
- .kpi .value{font-size:clamp(19px,5.5vw,26px);line-height:1.15;overflow-wrap:anywhere;margin:7px 0 5px}
- .kpi .sub{font-size:10px;line-height:1.35}
- .section-grid,.comparison-grid,.secondary-grid,.dashboard-mini-grid,.module-grid{display:grid;grid-template-columns:minmax(0,1fr)!important;gap:11px!important}
- .card{padding:14px!important;border-radius:17px!important;margin:0;min-width:0}
- .card-head{gap:10px;align-items:flex-start;margin-bottom:12px}
- .card-head h2,.card h2{font-size:15px;line-height:1.3;margin:0}
- .card-head h2 i,.card h2>i{font-size:14px}
- .card-head span,.card-head .small{font-size:11px;line-height:1.4}
- .card-head>.btn,.card-head>.mini-btn{flex-shrink:0;min-height:34px;padding:7px 9px;font-size:11px}
- .donut-layout{grid-template-columns:minmax(100px,.8fr) minmax(0,1fr);gap:12px;align-items:center}
- .donut{width:min(100%,140px);aspect-ratio:1;height:auto;justify-self:center}
- .donut-center{font-size:12px}
- .donut-center small{font-size:9px}
- .people{min-width:0;gap:9px}
- .person{min-width:0;padding:9px;border-radius:12px}
- .person .name{font-size:11px;overflow-wrap:anywhere}
- .person .amount{font-size:15px;overflow-wrap:anywhere}
- .person .mini-btn{font-size:10px;min-height:30px;padding:5px 7px}
- .list,.income-breakdown{min-width:0}
- .list-row,.record{grid-template-columns:minmax(0,1fr) auto!important;gap:8px;padding:10px 0}
- .record>span:nth-child(3){grid-column:1/-1}
- .record-actions{grid-column:1/-1;display:flex;gap:7px;flex-wrap:wrap}
- .comparison-grid .card,.evolution-card{overflow:hidden}
- .bar-chart{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
- .modern-chart{min-height:110px}
- .evolution-grid{grid-template-columns:minmax(0,1fr);gap:12px}
- .evolution-panel{min-width:0;padding:10px}
- .evolution-title{font-size:12px;gap:8px}
- .savings-grid,.goals-grid,.mini-account-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
- .savings-grid>.card,.savings-grid .saving-card,.goals-grid .goal{min-width:0;padding:11px!important}
- .saving-goal-feature{padding:14px;border-radius:15px}
- .saving-goal-feature .goal-number{font-size:24px}
- .form-grid,.module-form{grid-template-columns:minmax(0,1fr)!important;gap:12px}
- .form-grid .field,.module-form .field,.field{min-width:0}
- .form-grid .full,.module-form .full{grid-column:1/-1}
- .input,.select,textarea.input{width:100%;min-height:45px;font-size:16px!important;border-radius:12px;padding:10px 12px}
- .field label{font-size:12px;margin-bottom:5px}
- .btn,.mini-btn,.detail-btn{min-height:42px;border-radius:12px;touch-action:manipulation}
- .mini-btn{min-height:35px}
- .form-actions{display:grid;grid-template-columns:1fr 1.3fr;gap:9px;position:sticky;bottom:0;padding:10px 0 calc(4px + var(--mobile-safe-bottom));background:var(--panel, #15121d);z-index:2}
- .module-section{padding-bottom:8px}
- .module-section .card+.card{margin-top:11px}
- .report-filter{grid-template-columns:repeat(2,minmax(0,1fr))!important}
- .report-row{grid-template-columns:64px minmax(0,1fr) 78px!important;gap:7px}
- .report-metrics{min-width:0}
- .calendar-grid{gap:3px}
- .calendar-day{min-height:58px!important;padding:4px!important;border-radius:8px!important;font-size:10px!important}
- .calendar-task{font-size:8px!important;line-height:1.2;overflow:hidden}
- .personal-summary,.personal-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
- .personal-summary-card,.summary-box{padding:10px!important}
- .personal-summary strong,.personal-summary-card .value{font-size:14px!important;overflow-wrap:anywhere}
- .modal{align-items:flex-end!important;padding:0!important}
- .modal-box{width:100%!important;max-width:none!important;max-height:min(90dvh,900px)!important;border-radius:22px 22px 0 0!important;padding:17px 15px calc(17px + var(--mobile-safe-bottom))!important;margin:0!important;overflow-y:auto;overscroll-behavior:contain;box-shadow:0 -15px 60px #0007}
- .modal-head{position:sticky;top:-17px;z-index:5;margin:-17px -15px 14px;padding:16px 15px 12px;background:var(--panel,#17131f);border-radius:22px 22px 0 0;border-bottom:1px solid var(--line,rgba(255,255,255,.1))}
- .modal-head h3{font-size:17px;line-height:1.3;padding-right:10px}
- .modal .future-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
- .toast{bottom:calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 12px);left:12px;right:12px;width:auto;max-width:none}
- .loading-card{width:calc(100% - 36px);max-width:340px}
- .mobile-bottom-nav{position:fixed;z-index:1000;inset:auto 0 0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;padding:7px 7px calc(7px + var(--mobile-safe-bottom));min-height:calc(var(--mobile-nav-height) + var(--mobile-safe-bottom));background:color-mix(in srgb,var(--panel,#17131f) 93%,transparent);border-top:1px solid var(--line,rgba(255,255,255,.12));backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 -8px 28px #0003}
- .mobile-nav-item{appearance:none;border:0;background:transparent;color:var(--muted,#aaa);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;min-height:48px;padding:5px 2px;border-radius:12px;font-size:10px;font-weight:650;line-height:1.1}
- .mobile-nav-item i{font-size:18px;line-height:1}
- .mobile-nav-item.active{color:var(--purple,#a78bfa);background:color-mix(in srgb,var(--purple,#a78bfa) 13%,transparent)}
- .mobile-nav-item:active{transform:scale(.97)}
- .offline-access-wrap{display:block;margin-top:20px}
- .offline-access-divider{display:flex;align-items:center;gap:10px;color:var(--muted,#aaa);font-size:11px;margin:14px 0}
- .offline-access-divider:before,.offline-access-divider:after{content:'';height:1px;flex:1;background:var(--line,rgba(255,255,255,.15))}
- .offline-access-btn{width:100%;min-height:46px;justify-content:center}
- .offline-access-note{font-size:10px;line-height:1.45;text-align:center;color:var(--muted,#aaa);margin:9px 5px 0}
- body.nexus-readonly .mobile-nav-item[onclick*="openExpensePicker"],body.nexus-readonly .mobile-nav-item[onclick*="openSavingPicker"]{opacity:.55}
-}
-@media(max-width:380px){
- .main{padding-left:10px;padding-right:10px}
- .topbar{margin-left:-10px;margin-right:-10px;padding-left:10px;padding-right:10px}
- .topbar .title p{max-width:180px}
- .topbar .actions .sync-status{display:none}
- .grid.kpis{gap:7px}
- .kpi{padding:11px 9px!important;min-height:98px}
- .donut-layout{grid-template-columns:94px minmax(0,1fr);gap:8px}
- .donut{width:92px}
- .savings-grid,.goals-grid,.mini-account-grid{grid-template-columns:minmax(0,1fr)!important}
- .report-row{grid-template-columns:1fr!important}
- .mobile-nav-item{font-size:9px}
- .mobile-nav-item i{font-size:17px}
-}
-@media(min-width:761px){.topbar .mobile-menu{display:none!important}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
-
 </style>
 
 <style id="nexus-chart-contextual-detail-fix">
@@ -368,6 +243,28 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 @media(max-width:420px){.personal-summary-grid{grid-template-columns:1fr}}
 </style>
 
+
+<style id="nexus-mobile-first-rebuild">
+:root{--bg:#0b1017;--panel:#111a24;--panel2:#172330;--line:#273645;--text:#edf4fa;--muted:#93a5b5;--purple:#8856ed;--purple2:#a98bff;--orange:#fe6402;--green:#44cf72;--red:#ff6b72;--blue:#18c7fe;--gold:#f7b336;--radius:19px;--shadow:0 16px 40px #0003}
+html{background:var(--bg);scroll-padding-top:90px}body{background:radial-gradient(ellipse at 50% -20%,#172d3a 0,transparent 50%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.005em}button,input,select,textarea{font-family:inherit}button{transition:transform .16s ease,border-color .16s ease,background .16s ease}button:active{transform:scale(.985)}
+.sidebar{background:#0d141d;border-right:1px solid #22303d;padding:20px 13px}.logo{padding:7px 9px 25px;font-size:19px;letter-spacing:-.035em}.logo-mark,.auth-brand .logo-mark{background:var(--blue);color:#07131b;border-radius:13px;box-shadow:0 7px 22px #18c7fe26}.nav button{display:flex;align-items:center;gap:11px;border:1px solid transparent;border-radius:12px;padding:12px 13px;margin:4px 0;color:#9aabba;font-size:13px;font-weight:650}.nav button i{width:19px;text-align:center;font-size:15px}.nav button:hover,.nav button.active{background:#172532;border-color:#2b4150;color:#f2f8fd}.nav button.active i{color:var(--blue)}
+.main{padding:28px clamp(16px,2.3vw,38px);max-width:1800px}.topbar{align-items:center;margin-bottom:24px}.title h1{font-size:clamp(24px,2vw,32px);letter-spacing:-.045em;font-weight:800}.title p{font-size:12px;color:var(--muted)}.actions{gap:8px}.btn,.mini-btn{border:1px solid #2b3c4b;background:#17232e;color:#dce8f0;border-radius:12px;padding:10px 13px;font-size:12px;font-weight:700}.btn:hover,.mini-btn:hover{border-color:#4c697c;background:#1d303e}.btn.primary{background:var(--blue);border-color:var(--blue);color:#06141c}.btn.ghost{background:transparent}.sync-status{background:#13211f;border-color:#24483a;color:#9dddb4}.sync-status i{color:var(--green)}
+.filterbar{background:#111b25;border:1px solid #253543;border-radius:15px;padding:10px 12px;gap:10px}.field label{font-size:11px;color:#a5b6c4}.input,.select,.textarea,input,select,textarea{border-radius:11px!important;border:1px solid #304351!important;background:#0e1720!important;color:#edf4fa!important;box-shadow:none!important;outline:none}.input:focus,.select:focus,.textarea:focus,input:focus,select:focus,textarea:focus{border-color:#18c7fe!important;box-shadow:0 0 0 2px #18c7fe20!important}.field{gap:6px}.card{position:relative;overflow:hidden;background:#111a24;border:1px solid #263643;border-radius:19px;padding:20px;box-shadow:0 10px 28px #00000012}.card:before{content:"";position:absolute;inset:16px auto 16px 0;width:3px;border-radius:0 4px 4px 0;background:#344858;opacity:.85}.card.kpi{padding:19px 20px 18px 23px;min-height:133px;background:#111b25}.card.kpi:before{background:var(--identity-color,var(--blue))}.card.kpi.income{--identity-color:var(--green)}.card.kpi.expense{--identity-color:var(--orange)}.card.kpi.saving{--identity-color:var(--purple)}.card.kpi.available{--identity-color:var(--blue)}.kpi .label{font-size:10px;letter-spacing:.11em;color:#a2b2c0;font-weight:800}.kpi .value{font-size:clamp(22px,2vw,30px);letter-spacing:-.045em;font-weight:850;margin:12px 0 4px;color:var(--identity-color,var(--text));overflow-wrap:anywhere}.kpi .sub{font-size:11px;color:#8295a5}.card-head{margin-bottom:17px;align-items:center}.card-head h2{font-size:15px;letter-spacing:-.025em;font-weight:800}.card-head h2 i{color:var(--blue)}.card-head span{font-size:11px;color:#91a4b3}.person,.saving-card,.availability .person-card,.evolution-panel,.mini-account,.goal,.upcoming-item,.debt-preview{background:#0e1720;border:1px solid #263744;border-radius:14px}.person{padding:14px}.person .name{font-size:11px;color:#9aabba}.person .amount{font-size:20px;font-weight:800;letter-spacing:-.035em}.saving-card{padding:15px}.saving-card h3{font-size:13px}.comparison-grid{gap:15px}.section-grid{gap:15px}.list-row{font-size:12px;border-color:#263744;padding:12px 0}.donut{box-shadow:0 0 0 7px #ffffff05}.stats{gap:9px}.pill,.personal-kind{border-radius:8px}.modal{background:#050a10bd;backdrop-filter:blur(12px)}.modal-box{background:#111b25;border:1px solid #314452;border-radius:22px;box-shadow:0 24px 80px #0008}.modal-head h3{font-size:19px;letter-spacing:-.03em}.toast{background:#172532;border-color:#355264;border-radius:14px}.positive{color:var(--green)!important}.negative{color:var(--orange)!important}
+/* Semantic colors: green=incomes, orange=expenses, purple=savings, cyan=availability. */
+.card:has(#incomeDonut) .card-head h2 i,.card:has(#incomeBars) .card-head h2 i{color:var(--green)}.card:has(#expenseDonut) .card-head h2 i,.card:has(#expenseBars) .card-head h2 i{color:var(--orange)}.card:has(#savingsGrid) .card-head h2 i,.card:has(#evolutionSavingBars) .card-head h2 i{color:var(--purple)}.card:has(#availablePeople) .card-head h2 i{color:var(--blue)}.saving-card{border-top:2px solid var(--purple)!important}.person-card{border-top:2px solid var(--identity-color,var(--blue))!important}.saving-goal-feature{border-color:#8856ed55!important;background:linear-gradient(135deg,#251a3d,#141b25)!important}.saving-goal-feature .goal-label{color:#cbb7ff!important}.module-section>.card,.module-section .card{margin-bottom:14px}.hidden{display:none!important}
+.mobile-bottom-nav{display:none}
+@media(max-width:800px){
+ .sidebar{z-index:150;box-shadow:20px 0 70px #0007}.main{padding:15px 14px calc(100px + env(safe-area-inset-bottom));margin:0;width:100%}.topbar{gap:10px;align-items:center;margin-bottom:16px}.title h1{font-size:23px}.title p{font-size:11px;margin-top:5px}.actions{justify-content:flex-end;flex-wrap:wrap}.actions .account-strip{display:none}.actions .sync-status{order:0;width:auto;justify-content:center;font-size:10px;padding:7px 9px}.actions .btn:not(.mobile-menu){font-size:11px;padding:8px 10px}.mobile-menu{display:inline-flex!important;align-items:center;justify-content:center;min-width:38px;min-height:38px}.filterbar{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px;padding:10px}.filterbar .field{min-width:0}.filterbar .field .select{width:100%;min-width:0}.filterbar .btn{grid-column:1/2}.filterbar #periodLabel{grid-column:2/3;text-align:right;align-self:center}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px;margin-bottom:12px}.card.kpi{min-height:115px;padding:15px 12px 14px 16px;border-radius:16px}.card.kpi:before{inset:12px auto 12px 0}.kpi .label{font-size:9px;letter-spacing:.07em}.kpi .value{font-size:clamp(18px,5vw,24px);margin:10px 0 4px}.kpi .sub{font-size:10px;line-height:1.35}.section-grid,.comparison-grid,.secondary-grid,.dashboard-mini-grid{grid-template-columns:1fr!important;gap:12px}.card{padding:16px;border-radius:17px}.card:before{inset:13px auto 13px 0}.card-head{align-items:flex-start;gap:8px}.card-head h2{font-size:14px}.card-head span{font-size:10px}.donut-layout{gap:12px}.donut{width:125px;height:125px;flex:0 0 125px}.people{gap:8px}.person{padding:11px}.person .amount{font-size:17px}.mini-btn{padding:8px 9px;font-size:11px}.savings-grid{grid-template-columns:1fr!important}.evolution-grid{grid-template-columns:1fr!important}.personal-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.module-form{grid-template-columns:1fr 1fr}.modal{z-index:500;padding:10px}.modal-box{max-height:calc(100dvh - 20px);border-radius:19px;padding:16px}.mobile-bottom-nav{position:fixed;z-index:140;left:10px;right:10px;bottom:calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;padding:7px;background:#101a24f5;border:1px solid #2b3d4b;border-radius:20px;box-shadow:0 12px 40px #0008;backdrop-filter:blur(18px)}.mobile-bottom-nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:48px;padding:5px 2px;border:1px solid transparent;background:transparent;color:#879baa;border-radius:13px;font-size:9px;font-weight:750}.mobile-bottom-nav button i{font-size:17px}.mobile-bottom-nav button.active{background:#1c3040;color:#eaf8ff;border-color:#2c5062}.mobile-bottom-nav button.active i{color:var(--blue)}
+}
+@media(max-width:420px){.main{padding-left:11px;padding-right:11px}.title h1{font-size:20px}.actions .sync-status{max-width:125px;overflow:hidden}.actions .sync-status span{overflow:hidden;text-overflow:ellipsis}.card{padding:14px}.card.kpi{padding:13px 10px 12px 14px}.kpi .value{font-size:18px}.donut-layout{flex-direction:column;align-items:stretch}.donut{margin:4px auto 10px}.people{grid-template-columns:1fr 1fr}.module-form{grid-template-columns:1fr}.filterbar .btn{font-size:10px;padding:8px}.mobile-bottom-nav{left:7px;right:7px}.mobile-bottom-nav button{font-size:8px}}
+@media(min-width:801px){.main{padding-top:28px}.kpis{gap:14px}.section-grid{gap:15px}.card{transition:border-color .18s ease,transform .18s ease}.card:hover{border-color:#354b5a}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+
+<style id="nexus-mobile-home-composition">
+.mobile-overview{display:none}
+@media(max-width:800px){.mobile-overview{display:block;margin:0 0 15px}.mobile-balance-card{position:relative;overflow:hidden;padding:20px 18px 17px;border-radius:22px;background:linear-gradient(145deg,#153242,#11212c 64%,#111a24);border:1px solid #2b5365;box-shadow:0 15px 36px #0003}.mobile-balance-card:after{content:"";position:absolute;width:190px;height:190px;border:1px solid #18c7fe24;border-radius:50%;right:-75px;top:-95px;box-shadow:0 0 0 20px #18c7fe08,0 0 0 42px #18c7fe05;pointer-events:none}.mobile-balance-top{display:flex;justify-content:space-between;align-items:center;gap:10px;color:#b5cbd6;font-size:11px;font-weight:700}.mobile-balance-top i{color:var(--blue);margin-right:6px}.mobile-balance-amount{position:relative;z-index:1;margin:12px 0 4px;font-size:clamp(28px,8vw,36px);font-weight:850;letter-spacing:-.055em;line-height:1.12;color:#f2fbff;overflow-wrap:anywhere}.mobile-balance-note{color:#9cb5c2;font-size:10px}.mobile-overview-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:9px}.mobile-overview-metric{min-width:0;padding:12px 9px;background:#111b25;border:1px solid #273945;border-radius:14px}.mobile-overview-metric span{display:block;font-size:9px;font-weight:800;letter-spacing:.05em;color:#93a7b6;margin-bottom:7px}.mobile-overview-metric strong{display:block;font-size:clamp(12px,3.7vw,16px);letter-spacing:-.035em;overflow-wrap:anywhere}.mobile-overview-metric.income strong{color:var(--green)}.mobile-overview-metric.expense strong{color:var(--orange)}.mobile-overview-metric.saving strong{color:#a98bff}.mobile-quick-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:11px}.mobile-quick-actions button{display:flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:8px 5px;border:1px solid #2a3d4b;border-radius:12px;background:#16232e;color:#e4eef5;font-size:10px;font-weight:750}.mobile-quick-actions button i{font-size:12px}.mobile-quick-actions button:first-child i{color:var(--green)}.mobile-quick-actions button:nth-child(2) i{color:var(--orange)}.mobile-quick-actions button:nth-child(3) i{color:#a98bff}.kpis{display:none!important}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -520,14 +417,6 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
  <div class="card"><div class="card-head"><div><h2>Respaldo y mantenimiento</h2><span>Protege o restaura tus datos financieros</span></div></div><div class="actions"><button class="btn" onclick="exportData()">Exportar respaldo</button><button class="btn" onclick="importData()">Importar respaldo</button><button class="btn danger" onclick="resetAll()">Borrar todos los datos</button></div></div>
 </section>
 </main>
-<nav class="mobile-bottom-nav" aria-label="Navegación principal móvil">
- <button type="button" class="mobile-nav-item active" data-mobile-route="dashboard" onclick="showModule('dashboard')"><i class="fa-solid fa-house"></i><span>Inicio</span></button>
- <button type="button" class="mobile-nav-item" onclick="openExpensePicker()"><i class="fa-solid fa-house-chimney"></i><span>Hogar</span></button>
- <button type="button" class="mobile-nav-item" onclick="openSavingPicker()"><i class="fa-solid fa-piggy-bank"></i><span>Ahorros</span></button>
- <button type="button" class="mobile-nav-item" data-mobile-route="debts" onclick="showModule('debts')"><i class="fa-solid fa-credit-card"></i><span>Deudas</span></button>
- <button type="button" class="mobile-nav-item" onclick="toggleSidebar()"><i class="fa-solid fa-grid-2"></i><span>Más</span></button>
-</nav>
-<div class="mobile-drawer-scrim" onclick="toggleSidebar()" aria-hidden="true"></div>
 </div>
 
 <div id="authScreen">
@@ -542,11 +431,6 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
    <button class="btn primary" id="authSubmit">Iniciar sesión</button>
   </form>
   <p class="small">Utiliza tus credenciales de acceso.</p>
-  <div class="offline-access-wrap">
-   <div class="offline-access-divider"><span>o consulta sin conexión</span></div>
-   <button type="button" class="btn offline-access-btn" onclick="openCachedReadOnly()"><i class="fa-solid fa-cloud-arrow-down"></i> Consultar datos guardados</button>
-   <p class="offline-access-note">Solo lectura · requiere una copia guardada previamente en este dispositivo.</p>
-  </div>
  </div>
 </div>
 <div class="modal" id="modal"><div class="modal-box" id="modalBox"></div></div>
@@ -1312,103 +1196,33 @@ document.getElementById("authScreen").style.display="flex";
 bootstrapAuth();
 </script>
 
-<script>
-/* Mobile navigation and cached, read-only access. Existing finance functions remain the source of truth. */
+<nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Navegación principal móvil">
+ <button data-mobile-route="dashboard" class="active" onclick="showModule('dashboard')"><i class="fa-solid fa-house"></i><span>Inicio</span></button>
+ <button data-mobile-route="personalMe" onclick="showModule('personalMe')"><i class="fa-solid fa-arrow-right-arrow-left"></i><span>Actividad</span></button>
+ <button data-mobile-route="savings" onclick="openSavingPicker()"><i class="fa-solid fa-piggy-bank"></i><span>Ahorros</span></button>
+ <button data-mobile-route="debts" onclick="showModule('debts')"><i class="fa-solid fa-handshake"></i><span>Deudas</span></button>
+ <button data-mobile-route="more" onclick="toggleSidebar()"><i class="fa-solid fa-grid-2"></i><span>Más</span></button>
+</nav>
+<script id="nexus-mobile-navigation-enhancement">
 (function(){
-  const mobileRoutes=['dashboard','debts'];
-  function updateMobileActive(){
-    const route=(typeof activeModule!=='undefined'?activeModule:'dashboard');
-    document.querySelectorAll('.mobile-nav-item[data-mobile-route]').forEach(b=>b.classList.toggle('active',b.dataset.mobileRoute===route));
-  }
-  const originalShowModule=window.showModule;
-  if(typeof originalShowModule==='function'){
-    window.showModule=function(name,fromHistory){
-      const result=originalShowModule.apply(this,arguments);
-      updateMobileActive();
-      return result;
-    };
-  }
-  window.addEventListener('resize',()=>{if(window.innerWidth>760){document.getElementById('sidebar')?.classList.remove('open')}});
-  window.addEventListener('keydown',e=>{if(e.key==='Escape'){document.getElementById('sidebar')?.classList.remove('open')}});
-
-  window.openCachedReadOnly=function(){
-    let cached=null;
-    try{
-      if(typeof authUser!=='undefined'&&authUser?.id) cached=JSON.parse(localStorage.getItem(KEY+'_'+authUser.id)||'null');
-      if(!cached) cached=JSON.parse(localStorage.getItem(KEY+'_shared')||'null');
-    }catch(_){cached=null}
-    if(!cached||typeof cached!=='object'){
-      const msg=document.getElementById('authMessage');
-      if(msg)msg.textContent='No hay datos guardados en este dispositivo. Conéctate a internet e inicia sesión para descargarlos.';
-      return;
-    }
-    try{state=normalizeClientState(cached)}catch(_){
-      const msg=document.getElementById('authMessage');if(msg)msg.textContent='La copia local no se puede leer. Conéctate e intenta sincronizar nuevamente.';return;
-    }
-    window.nexusOfflineReadOnly=true;
-    document.body.classList.add('nexus-readonly');
-    const auth=document.getElementById('authScreen');if(auth)auth.style.display='none';
-    document.querySelector('.app')?.classList.remove('auth-locked');
-    try{setSyncStatus('offline','Datos guardados · solo lectura')}catch(_){}
-    try{updateSignedUserLabel();setupYears();applyCurrentPeriodDefault();renderAll();renderExtendedModules();showModule('dashboard',true)}catch(err){
-      console.error('No se pudo mostrar la copia local',err);
-      if(auth)auth.style.display='flex';
-      document.body.classList.remove('nexus-readonly');window.nexusOfflineReadOnly=false;
-      const msg=document.getElementById('authMessage');if(msg)msg.textContent='No fue posible abrir la copia guardada. Inicia sesión con conexión para actualizar los datos.';
-      return;
-    }
-    const bar=document.createElement('div');bar.className='nexus-offline-banner';bar.id='nexusOfflineBanner';
-    bar.innerHTML='<i class="fa-solid fa-cloud-arrow-down"></i><span><strong>Modo sin conexión</strong><small>Consulta de datos guardados · no se pueden editar</small></span><button type="button" aria-label="Volver al inicio de sesión" title="Salir de la consulta" onclick="exitCachedReadOnly()"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>';
-    document.querySelector('.main')?.prepend(bar);
-    toast('Se abrió la última copia guardada en este dispositivo.');
-    updateMobileActive();
-  };
-  window.exitCachedReadOnly=function(){
-    window.nexusOfflineReadOnly=false;document.body.classList.remove('nexus-readonly');
-    document.getElementById('nexusOfflineBanner')?.remove();
-    document.getElementById('authScreen').style.display='flex';
-    document.querySelector('.app')?.classList.add('auth-locked');
-    setSyncStatus('offline','Sin sesión');
-  };
-  document.addEventListener('submit',function(e){
-    if(!window.nexusOfflineReadOnly)return;
-    e.preventDefault();e.stopImmediatePropagation();toast('Modo de consulta: conecta a internet e inicia sesión para modificar datos.');
-  },true);
-  document.addEventListener('click',function(e){
-    if(!window.nexusOfflineReadOnly)return;
-    const el=e.target.closest('button,[role="button"],a');if(!el)return;
-    if(el.id==='nexusOfflineBanner'||el.closest('#nexusOfflineBanner'))return;
-    if(el.closest('.nav')||el.closest('.mobile-bottom-nav')){
-      const action=el.getAttribute('onclick')||'';
-      if(/showModule\(|toggleSidebar\(|navigateToGoals\(|openExpensePicker\(|openSavingPicker\(/.test(action)){
-        if(/openExpensePicker\(|openSavingPicker\(/.test(action)){
-          e.preventDefault();e.stopImmediatePropagation();toast('Modo de consulta: esta acción requiere conexión.');
-        }
-        return;
-      }
-    }
-    const action=el.getAttribute('onclick')||'';
-    if(/showModule\(|toggleSidebar\(|navigateToGoals\(|closeModal\(|setCurrentPeriod\(|clearGeneralFilter\(|scrollToId\(|openDonutDetails\(|shiftCalendar\(|renderAll\(/.test(action))return;
-    e.preventDefault();e.stopImmediatePropagation();toast('Modo de consulta: conecta a internet e inicia sesión para modificar datos.');
-  },true);
-  document.addEventListener('change',function(e){
-    if(!window.nexusOfflineReadOnly)return;
-    if(e.target.matches('#filterYear,#filterMonth,#pFilterYear,#pFilterMonth,#reportYear,#reportMonth'))return;
-    e.preventDefault();e.stopImmediatePropagation();
-  },true);
-  document.addEventListener('DOMContentLoaded',updateMobileActive);
+ const syncNav=()=>{const route=(location.hash||'#dashboard').slice(1);document.querySelectorAll('[data-mobile-route]').forEach(b=>b.classList.toggle('active',b.dataset.mobileRoute===route||(b.dataset.mobileRoute==='more'&&['calendar','reports','settings'].includes(route))));};
+ document.addEventListener('click',e=>{const b=e.target.closest('[data-mobile-route]');if(!b)return;if(b.dataset.mobileRoute==='savings')document.querySelectorAll('[data-mobile-route]').forEach(x=>x.classList.toggle('active',x===b));});
+ window.addEventListener('hashchange',syncNav);window.addEventListener('popstate',syncNav);document.addEventListener('DOMContentLoaded',syncNav);setTimeout(syncNav,0);
+ const createMobileOverview=()=>{
+  const filter=document.querySelector('#dashboardModule .filterbar');
+  if(!filter||document.getElementById('mobileOverview'))return;
+  const panel=document.createElement('section');panel.id='mobileOverview';panel.className='mobile-overview';panel.setAttribute('aria-label','Resumen financiero móvil');
+  panel.innerHTML=`<div class="mobile-balance-card"><div class="mobile-balance-top"><span><i class="fa-solid fa-wallet"></i>DISPONIBLE DEL PERIODO</span><span id="mobilePeriodPill">Periodo actual</span></div><div class="mobile-balance-amount" id="mobileBalanceValue">$0</div><div class="mobile-balance-note">Saldo después de gastos del hogar y ahorros</div></div><div class="mobile-overview-metrics"><div class="mobile-overview-metric income"><span>INGRESOS</span><strong id="mobileIncomeValue">$0</strong></div><div class="mobile-overview-metric expense"><span>GASTOS</span><strong id="mobileExpenseValue">$0</strong></div><div class="mobile-overview-metric saving"><span>AHORROS</span><strong id="mobileSavingValue">$0</strong></div></div><div class="mobile-quick-actions"><button type="button" onclick="openIncome('me')"><i class="fa-solid fa-plus"></i>Ingreso</button><button type="button" onclick="openExpensePicker()"><i class="fa-solid fa-minus"></i>Gasto hogar</button><button type="button" onclick="openSavingPicker()"><i class="fa-solid fa-piggy-bank"></i>Ahorro</button></div>`;
+  filter.insertAdjacentElement('afterend',panel);
+  const mirror=()=>{const pairs=[['kpiAvailable','mobileBalanceValue'],['kpiIncome','mobileIncomeValue'],['kpiExpense','mobileExpenseValue'],['kpiSaving','mobileSavingValue']];for(const [from,to] of pairs){const a=document.getElementById(from),b=document.getElementById(to);if(a&&b)b.textContent=a.textContent}const label=document.getElementById('periodLabel'),pill=document.getElementById('mobilePeriodPill');if(label&&pill)pill.textContent=label.textContent.trim()||'Periodo actual';};
+  mirror();const observer=new MutationObserver(mirror);['kpiAvailable','kpiIncome','kpiExpense','kpiSaving','periodLabel'].forEach(id=>{const el=document.getElementById(id);if(el)observer.observe(el,{childList:true,subtree:true,characterData:true})});
+  document.getElementById('filterYear')?.addEventListener('change',mirror);document.getElementById('filterMonth')?.addEventListener('change',mirror);
+ };
+ createMobileOverview();
+ const oldShow=window.showModule;window.showModule=function(name,...args){const out=oldShow.call(this,name,...args);setTimeout(syncNav,0);return out;};
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'){const side=document.getElementById('sidebar');if(side)side.classList.remove('open');}});
 })();
 </script>
-<style>
-.nexus-offline-banner{display:flex;align-items:center;gap:10px;padding:10px 12px;margin:0 0 12px;border:1px solid rgba(24,199,254,.28);border-radius:13px;background:rgba(24,199,254,.08);color:var(--text,#f5f5f7)}
-.nexus-offline-banner>i{font-size:17px;color:#18c7fe}
-.nexus-offline-banner span{display:flex;flex:1;min-width:0;flex-direction:column;gap:2px}
-.nexus-offline-banner strong{font-size:12px}
-.nexus-offline-banner small{font-size:10px;color:var(--muted,#aaa)}
-.nexus-offline-banner button{border:0;background:transparent;color:inherit;padding:8px;border-radius:9px}
-body.nexus-readonly .nexus-offline-banner{position:relative}
-@media(max-width:760px){.nexus-offline-banner{margin-top:0}.nexus-offline-banner small{line-height:1.35}}
-</style>
 
 </body>
 </html>
