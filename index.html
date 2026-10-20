@@ -194,6 +194,117 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 .card:has(#availablePeople) .card-head h2 i{color:#60a5fa}
 .identity-inline .identity-dot{box-shadow:0 0 0 2px color-mix(in srgb,var(--identity-color,#8b5cf6) 18%,transparent)}
 
+
+
+/* Nexus Mobile App layer — progressive enhancement; original finance logic remains unchanged */
+:root{--mobile-nav-height:68px;--mobile-safe-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:18px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}
+button,.btn,.mini-btn,.nav button{touch-action:manipulation}
+.sidebar-backdrop,.mobile-bottom-nav{display:none}
+@media(max-width:800px){
+  body{background:radial-gradient(circle at 50% -12%,#241943 0,#0b0a12 38%);overscroll-behavior-x:none}
+  .app{display:block;min-height:100dvh}
+  .sidebar{position:fixed;inset:0 auto 0 0;width:min(84vw,320px);max-width:320px;padding:calc(16px + env(safe-area-inset-top,0px)) 14px calc(24px + var(--mobile-safe-bottom));overflow-y:auto;overscroll-behavior:contain;z-index:620;transform:translateX(-105%);visibility:hidden;transition:transform .24s ease,visibility .24s;box-shadow:var(--shadow)}
+  .sidebar.open{transform:translateX(0);visibility:visible}
+  .sidebar-backdrop{display:block;position:fixed;inset:0;z-index:610;background:rgba(3,2,8,.68);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s}
+  .sidebar-backdrop.show{opacity:1;visibility:visible}
+  .sidebar .logo{padding:6px 8px 20px}
+  .nav button{min-height:46px;padding:12px 13px;font-size:14px}
+  .main{margin:0;width:100%;max-width:none;padding:calc(14px + env(safe-area-inset-top,0px)) 14px calc(var(--mobile-nav-height) + 34px + var(--mobile-safe-bottom));}
+  .topbar{display:flex;flex-direction:column;align-items:stretch;gap:12px;margin-bottom:16px}
+  .title h1{font-size:clamp(21px,5.6vw,27px);line-height:1.18;letter-spacing:-.35px}
+  .title p{font-size:12px;line-height:1.45;margin-top:5px}
+  .actions{display:flex;align-items:center;gap:7px;width:100%;flex-wrap:wrap}
+  .actions .btn{flex:1 1 auto;min-height:42px;padding:10px 11px;font-size:12px}
+  .actions .mobile-menu{display:none}
+  .sync-status{order:0!important;width:auto!important;flex:1 1 100%;justify-content:flex-start!important;padding:7px 10px;border-radius:10px;background:rgba(18,16,27,.72)}
+  .account-strip{display:none!important}
+  .filterbar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:11px;margin-bottom:13px;border-radius:15px}
+  .filterbar .field{min-width:0;width:100%}
+  .filterbar .field select{min-height:43px}
+  .filterbar>.btn{min-height:42px;grid-column:1/-1}
+  .filterbar .small{grid-column:1/-1}
+  .grid{gap:12px}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px;margin-bottom:12px}
+  .card{border-radius:17px;padding:14px;min-width:0}
+  .kpi{padding:14px 13px;min-height:112px}
+  .kpi .label{font-size:9px;letter-spacing:.45px;line-height:1.35}
+  .kpi .value{font-size:clamp(19px,5.8vw,27px);line-height:1.2;margin:7px 0 4px;overflow-wrap:anywhere}
+  .kpi .sub{font-size:10px;line-height:1.35}
+  .section-grid,.comparison-grid,.dashboard-mini-grid,.module-grid,.evolution-grid{grid-template-columns:minmax(0,1fr)!important;gap:12px}
+  .card-head{gap:9px;align-items:flex-start;flex-wrap:wrap;margin-bottom:12px}
+  .card-head>div{min-width:0;flex:1 1 170px}
+  .card-head h2{font-size:14px;line-height:1.35}
+  .card-head span{font-size:10px;line-height:1.4}
+  .card-head>.btn,.card-head>.mini-btn{flex:0 0 auto}
+  .donut-layout{grid-template-columns:minmax(0,1fr)!important;justify-items:stretch;gap:14px}
+  .donut{margin-inline:auto;max-width:190px}
+  .people{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px}
+  .person{padding:11px;border-radius:13px;min-width:0}
+  .person .name{font-size:11px}
+  .person .amount{font-size:16px;overflow-wrap:anywhere}
+  .person .mini-btn{width:100%;min-height:36px;margin-top:8px}
+  .list{min-width:0}
+  .comparison-card{padding:13px}
+  .bar-chart{max-width:100%;overflow-x:auto}
+  .evolution-grid{gap:10px}
+  .evolution-panel{padding:12px;border-radius:13px;min-width:0}
+  .chart-tip{font-size:10px;line-height:1.45}
+  .savings-grid{grid-template-columns:minmax(0,1fr)!important}
+  .future-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px}
+  .future-grid .btn,.category-pick-btn{min-height:48px;padding:11px;font-size:12px}
+  .form-grid,.module-form{grid-template-columns:minmax(0,1fr)!important;gap:12px}
+  .form-grid .full,.module-form .full{grid-column:1/-1}
+  .field{min-width:0;width:100%}
+  .field label{font-size:12px}
+  .input,.select,.textarea{font-size:16px;min-height:44px;padding:11px 12px;border-radius:11px}
+  input[type=date],input[type=time],input[type=month]{min-height:44px}
+  .btn,.mini-btn{min-height:40px}
+  .form-actions{display:flex;gap:8px;position:sticky;bottom:0;padding:10px 0 max(4px,var(--mobile-safe-bottom));background:linear-gradient(180deg,rgba(18,16,27,0),rgba(18,16,27,.98) 25%);z-index:2}
+  .form-actions .btn{flex:1 1 120px;min-height:44px}
+  .record{grid-template-columns:minmax(0,1fr) auto!important;gap:8px;padding:12px 0}
+  .record .record-actions{grid-column:1/-1;display:flex;gap:7px}
+  .record-actions button{min-height:38px;flex:1 1 auto}
+  .history-head{gap:8px}
+  .history-head>div{width:100%}
+  .report-row{grid-template-columns:minmax(60px,78px) minmax(30px,1fr) minmax(70px,90px);gap:7px}
+  .module-form .full{grid-column:1/-1}
+  .calendar-day{min-height:62px;padding:5px;border-radius:8px}
+  .calendar-task{font-size:9px;line-height:1.2;overflow-wrap:anywhere}
+  .month-list{overflow-x:auto}
+  .modal{padding:0!important;align-items:flex-end!important;justify-content:center!important}
+  .modal-box{width:100%!important;max-width:none!important;max-height:min(92dvh,900px)!important;margin:0!important;border-radius:22px 22px 0 0!important;padding:18px 16px calc(18px + var(--mobile-safe-bottom))!important;overflow-y:auto!important;overscroll-behavior:contain;box-shadow:0 -18px 55px rgba(0,0,0,.4)}
+  .modal-head{position:sticky;top:-18px;z-index:3;padding:10px 0 12px;margin:-8px 0 12px;background:rgba(18,16,27,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .modal-head h3{font-size:17px;line-height:1.3}
+  .modal .close{width:40px;height:40px;flex:0 0 40px}
+  .toast{left:12px!important;right:12px!important;bottom:calc(var(--mobile-nav-height) + 16px + var(--mobile-safe-bottom))!important;width:auto!important;max-width:none!important}
+  #loadingOverlay{padding:18px}
+  .loading-card{width:min(100%,360px)}
+  .mobile-bottom-nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:fixed;z-index:590;inset:auto 0 0 0;padding:7px 6px calc(7px + var(--mobile-safe-bottom));min-height:calc(var(--mobile-nav-height) + var(--mobile-safe-bottom));background:rgba(15,12,23,.94);border-top:1px solid rgba(167,139,250,.18);backdrop-filter:blur(20px);box-shadow:0 -10px 28px rgba(0,0,0,.22)}
+  .mobile-nav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;min-height:50px;padding:5px 2px;background:transparent;color:#8f88a2;border-radius:12px;font-size:10px;font-weight:700;line-height:1.1}
+  .mobile-nav-item i{font-size:18px;line-height:1.2}
+  .mobile-nav-item.active{color:#fff;background:linear-gradient(180deg,rgba(139,92,246,.2),rgba(139,92,246,.06))}
+  .mobile-nav-item.active i{color:var(--purple2)}
+  body.modal-open .mobile-bottom-nav{opacity:.25;pointer-events:none}
+  body.auth-locked .mobile-bottom-nav{display:none}
+  .auth-card{width:min(100% - 28px,430px);padding:22px 18px;border-radius:22px}
+  #authScreen{padding:16px;align-items:center;overflow-y:auto}
+  #authScreen .input{min-height:48px}
+}
+@media(max-width:380px){
+  .main{padding-left:10px;padding-right:10px}
+  .kpis{gap:8px}
+  .kpi{padding:12px 10px;min-height:105px}
+  .kpi .value{font-size:clamp(17px,5.4vw,22px)}
+  .card{padding:12px}
+  .future-grid{grid-template-columns:minmax(0,1fr)!important}
+  .actions .btn{font-size:11px;padding:9px 8px}
+  .mobile-nav-item{font-size:9px}
+}
+@media(hover:none){.btn:hover,.mini-btn:hover,.nav button:hover{filter:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
+
 </style>
 
 <style id="nexus-chart-contextual-detail-fix">
@@ -261,6 +372,14 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
     <button data-route="settings" onclick="showModule('settings')"><i class="fa-solid fa-gear"></i>Configuración</button>
   </nav>
 </aside>
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeMobileNav()" aria-hidden="true"></div>
+<nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Navegación principal">
+  <button type="button" class="mobile-nav-item active" data-mobile-route="dashboard" onclick="showModule('dashboard')"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Inicio</span></button>
+  <button type="button" class="mobile-nav-item" onclick="closeMobileNav();openExpensePicker()"><i class="fa-solid fa-house-chimney" aria-hidden="true"></i><span>Gastos</span></button>
+  <button type="button" class="mobile-nav-item" onclick="closeMobileNav();openSavingPicker()"><i class="fa-solid fa-piggy-bank" aria-hidden="true"></i><span>Ahorros</span></button>
+  <button type="button" class="mobile-nav-item" data-mobile-route="personalMe" onclick="showModule('personalMe')"><i class="fa-solid fa-user" aria-hidden="true"></i><span>Mi perfil</span></button>
+  <button type="button" class="mobile-nav-item" onclick="toggleSidebar()"><i class="fa-solid fa-grip" aria-hidden="true"></i><span>Más</span></button>
+</nav>
 
 <main class="main" id="dashboard">
 <header class="topbar">
@@ -822,7 +941,8 @@ async function refreshDashboard(){
 function setCurrentPeriod(){const now=new Date();document.getElementById("filterYear").value=String(now.getFullYear());document.getElementById("filterMonth").value=String(now.getMonth()+1);renderAll();renderExtendedModules()}
 function clearGeneralFilter(){setCurrentPeriod()}
 function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:"smooth"});document.getElementById("sidebar").classList.remove("open")}
-function toggleSidebar(){document.getElementById("sidebar").classList.toggle("open")}
+function toggleSidebar(){const sidebar=document.getElementById("sidebar"),backdrop=document.getElementById("sidebarBackdrop");const opening=!sidebar.classList.contains("open");sidebar.classList.toggle("open",opening);if(backdrop)backdrop.classList.toggle("show",opening);document.body.classList.toggle("mobile-nav-open",opening)}
+function closeMobileNav(){document.getElementById("sidebar")?.classList.remove("open");document.getElementById("sidebarBackdrop")?.classList.remove("show");document.body.classList.remove("mobile-nav-open")}
 
 function openModal(title,body){
  const modal=document.getElementById("modal"),wasOpen=modal.classList.contains("show");
@@ -1103,7 +1223,7 @@ function showModule(name,fromHistory=false){
  if(!fromHistory){const url=location.pathname+location.search+"#"+name;history.pushState({nexusRoute:name},"",url)}
  if(name==="personalMe"||name==="personalPartner")renderPersonalModule();if(name==="settings")populateSettings();
  if(name!=="dashboard")renderExtendedModules();
- document.getElementById("sidebar").classList.remove("open");if(!fromHistory)window.scrollTo({top:0,behavior:"auto"});
+ closeMobileNav();document.querySelectorAll(".mobile-nav-item[data-mobile-route]").forEach(b=>b.classList.toggle("active",b.dataset.mobileRoute===name||(b.dataset.mobileRoute==="personalMe"&&name==="personalPartner")));if(!fromHistory)window.scrollTo({top:0,behavior:"auto"});
 }
 window.addEventListener("popstate",(event)=>{if(document.getElementById("modal").classList.contains("show")){if(typeof event.state?.scrollY==="number")modalScrollY=event.state.scrollY;closeModal(true);return}showModule(routeFromHash(),true)});
 // Escape closes only an active overlay/callout; it never changes the page scroll or route by itself.
