@@ -211,6 +211,31 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 @keyframes chartPopIn{from{opacity:0;transform:translateY(4px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(max-width:520px){.chart-detail-popover{min-width:0;width:min(320px,calc(100vw - 24px));font-size:11px;padding:12px}}
 </style>
+
+<style id="nexus-personal-finance-blocks">
+.personal-finance-blocks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin:15px 0}
+.personal-finance-block{min-width:0;border-top:3px solid var(--identity-color,#60a5fa)}
+.personal-finance-block .card-head h2{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.personal-finance-block .personal-block-total{font-size:clamp(20px,2.1vw,29px);font-weight:850;letter-spacing:-.03em;color:var(--identity-color,#60a5fa);margin:9px 0 2px;overflow-wrap:anywhere}
+.personal-finance-block .personal-block-sub{font-size:12px;color:var(--muted);line-height:1.5}
+.personal-block-actions{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0}
+.personal-mini-chart{display:flex;align-items:flex-end;gap:5px;height:100px;padding:8px 2px 0;overflow:hidden;border-bottom:1px solid var(--border);margin:10px 0 14px}
+.personal-mini-month{display:flex;flex:1;min-width:0;height:100%;align-items:center;justify-content:flex-end;flex-direction:column;gap:5px}
+.personal-mini-month .track{height:70px;width:100%;display:flex;align-items:flex-end;justify-content:center}
+.personal-mini-month .bar{display:block;width:min(18px,80%);min-height:2px;border-radius:5px 5px 1px 1px;background:var(--identity-color,#60a5fa);opacity:.9;transition:height .2s ease}
+.personal-mini-month small{font-size:9px;color:var(--muted);white-space:nowrap}
+.personal-block-history{display:grid;gap:7px;margin-top:9px}
+.personal-block-history .record{grid-template-columns:minmax(64px,.6fr) minmax(90px,.8fr) minmax(0,1.5fr) auto;gap:9px}
+.personal-debt-list{display:grid;gap:8px;margin:10px 0}
+.personal-debt-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;border:1px solid var(--border);border-radius:12px;min-width:0}
+.personal-debt-row .debt-info{min-width:0;display:grid;gap:4px}
+.personal-debt-row .debt-info strong,.personal-debt-row .debt-info small{overflow-wrap:anywhere}
+.personal-debt-row .debt-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.personal-summary-card{border-left:3px solid var(--identity-color,#60a5fa)}
+@media(max-width:900px){.personal-finance-blocks{grid-template-columns:1fr}}
+@media(max-width:560px){.personal-block-history .record{grid-template-columns:1fr auto;gap:7px}.personal-block-history .record>span:nth-child(3){grid-column:1/-1}.personal-debt-row{align-items:flex-start;flex-direction:column}.personal-debt-row .debt-actions{width:100%;justify-content:flex-start}.personal-mini-chart{gap:3px}.personal-mini-month small{font-size:8px}}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -222,7 +247,7 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
     <button onclick="openSavingPicker()"><i class="fa-solid fa-piggy-bank"></i>Ahorros</button>
     <button data-route="personalMe" onclick="showModule('personalMe')"><i class="fa-solid fa-person"></i><span id="navMeName">Finanza · Mi perfil</span></button>
     <button data-route="personalPartner" onclick="showModule('personalPartner')"><i class="fa-solid fa-person-dress"></i><span id="navPartnerName">Finanza · Pareja</span></button>
-    <button onclick="showModule('dashboard');setTimeout(()=>document.getElementById('goals').scrollIntoView({behavior:'smooth'}),0)"><i class="fa-solid fa-bullseye"></i>Metas a futuro</button>
+    <button onclick="navigateToGoals()"><i class="fa-solid fa-bullseye"></i>Metas a futuro</button>
     <button data-route="calendar" onclick="showModule('calendar')"><i class="fa-solid fa-calendar-days"></i>Calendario & recordatorios</button>
     <button data-route="debts" onclick="showModule('debts')"><i class="fa-solid fa-credit-card"></i>Deudas</button>
     <button data-route="reports" onclick="showModule('reports')"><i class="fa-solid fa-chart-column"></i>Reportes</button>
@@ -885,55 +910,69 @@ function renderPersonalModule(){
  activePersonalPerson=person;
  const oldYear=Number(document.getElementById("pFilterYear")?.value)||Number(document.getElementById("filterYear")?.value)||new Date().getFullYear();
  const oldMonth=document.getElementById("pFilterMonth")?.value||document.getElementById("filterMonth")?.value||"all";
- const years=new Set([new Date().getFullYear(),oldYear,...(state.personalSpending||[]).map(x=>Number(String(x.date||"").slice(0,4))).filter(Boolean),...(state.incomes||[]).map(x=>Number(String(x.date||"").slice(0,4))).filter(Boolean)]);
+ const years=new Set([new Date().getFullYear(),oldYear,...(state.personalSpending||[]).map(x=>Number(String(x.date||"").slice(0,4))).filter(Boolean),...(state.incomes||[]).map(x=>Number(String(x.date||"").slice(0,4))).filter(Boolean),...(state.debts||[]).map(x=>Number(String(x.createdAt||x.due||"").slice(0,4))).filter(Boolean)]);
  const yearOptions=[...years].sort((a,b)=>b-a).map(y=>`<option value="${y}" ${y===oldYear?'selected':''}>${y}</option>`).join("");
  box.innerHTML=`
  <div class="card" style="margin-bottom:15px">
-  <div class="card-head"><div><h2>Finanzas personales · ${esc(state.people[person])}</h2><span>Control individual del dinero asignado y de tus movimientos</span></div><button class="btn" onclick="showModule('dashboard')">← Volver al dashboard</button></div>
-  <p class="small">Esta página es independiente del dashboard del hogar. Los gastos, pagos de deudas y otros egresos registrados aquí se reflejan automáticamente en “Gastado”. Los ahorros e ingresos adicionales se mantienen separados.</p>
-  <div class="filterbar" style="margin-top:14px;margin-bottom:0"><div class="field"><label>Año</label><select class="select" id="pFilterYear" onchange="renderPersonalModule()">${yearOptions}</select></div><div class="field"><label>Periodo</label><select class="select" id="pFilterMonth" onchange="renderPersonalModule()">${['Año completo','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'].map((n,i)=>`<option value="${i===0?'all':i}" ${(String(i===0?'all':i)===String(oldMonth))?'selected':''}>${n}</option>`).join('')}</select></div><button class="btn ghost" onclick="document.getElementById('pFilterYear').value='${new Date().getFullYear()}';document.getElementById('pFilterMonth').value='all';renderPersonalModule()">Periodo actual</button></div>
- </div>
- <div id="personalPageContent"></div>`;
- const f=getPersonalPageFilter();
- const stats=personalStats(person,f.year,f.month);
- const assigned=personalAssigned(person,f.year,f.month);
- const personalBalance=assigned+stats.extraIncome-stats.spent-stats.saved;
+  <div class="card-head"><div><h2>${personTag(person,state.people[person])} Finanzas personales</h2><span>Tu asignación, tus movimientos y tus obligaciones, separados por tipo</span></div><button class="btn" onclick="showModule('dashboard')"><i class="fa-solid fa-arrow-left"></i> Volver al dashboard</button></div>
+  <p class="small">El ingreso asignado se calcula automáticamente con tus ingresos menos tu parte de los gastos y ahorros generales del hogar. Los bloques siguientes muestran por separado tus gastos, ahorros personales, ingresos adicionales y pagos de deudas.</p>
+  <div class="filterbar" style="margin-top:14px;margin-bottom:0"><div class="field"><label>Año</label><select class="select" id="pFilterYear" onchange="renderPersonalModule()">${yearOptions}</select></div><div class="field"><label>Periodo</label><select class="select" id="pFilterMonth" onchange="renderPersonalModule()">${['Año completo','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'].map((n,i)=>`<option value="${i===0?'all':i}" ${(String(i===0?'all':i)===String(oldMonth))?'selected':''}>${n}</option>`).join('')}</select></div><button class="btn ghost" onclick="document.getElementById('pFilterYear').value='${new Date().getFullYear()}';document.getElementById('pFilterMonth').value='${new Date().getMonth()+1}';renderPersonalModule()">Periodo actual</button></div>
+ </div><div id="personalPageContent"></div>`;
+ const f=getPersonalPageFilter(),stats=personalStats(person,f.year,f.month),assigned=personalAssigned(person,f.year,f.month),personalBalance=assigned+stats.extraIncome-stats.spent-stats.saved;
  const rows=stats.rows.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));
- const spentRows=rows.filter(x=>personalTypeCountsAsSpent(personalMovementType(x)));
- const savedRows=rows.filter(x=>personalMovementType(x)==="saving");
- const incomeRows=rows.filter(x=>personalMovementType(x)==="income");
- const history=rows.map(x=>{
-   const type=personalMovementType(x),amount=Math.abs(Number(x.amount)||0);
-   const sign=type==="income"?"+":personalTypeCountsAsSpent(type)?"−":"↗";
-   return `<div class="record"><span>${esc(x.date||"—")}</span><span><b class="${type==='income'?'positive':personalTypeCountsAsSpent(type)?'negative':''}">${sign}${money(amount)}</b><br><span class="personal-kind">${personalTypeLabel(type)}</span></span><span>${(CATS.includes(x.category)?categoryTag(x.category):`<span class="identity-tag" style="--identity-color:${type==='income'?MODULE_COLORS.income:type==='saving'?MODULE_COLORS.saving:MODULE_COLORS.personal}"><i class="fa-solid ${type==='income'?'fa-arrow-trend-up':type==='saving'?'fa-piggy-bank':'fa-wallet'}"></i>${esc(x.category||"Sin categoría")}</span>`)}<br><span class="small">${esc(x.desc||"Sin descripción")}</span></span><div class="record-actions"><button onclick="deleteRecord('personal','${x.id}')">Eliminar</button></div></div>`;
- }).join("");
+ const expenses=rows.filter(x=>["expense","other-expense"].includes(personalMovementType(x)));
+ const debts=rows.filter(x=>personalMovementType(x)==="debt");
+ const savings=rows.filter(x=>personalMovementType(x)==="saving");
+ const incomes=rows.filter(x=>personalMovementType(x)==="income");
+ const blockHistory=(items)=>items.length?`<div class="personal-block-history">${items.map(x=>{
+  const type=personalMovementType(x),amount=Math.abs(Number(x.amount)||0),sign=type==="income"?"+":personalTypeCountsAsSpent(type)?"−":"↗";
+  const tag=CATS.includes(x.category)?categoryTag(x.category):`<span class="identity-tag" style="--identity-color:${type==='income'?MODULE_COLORS.income:type==='saving'?MODULE_COLORS.saving:type==='debt'?MODULE_COLORS.debt:MODULE_COLORS.personal}"><i class="fa-solid ${type==='income'?'fa-arrow-trend-up':type==='saving'?'fa-piggy-bank':type==='debt'?'fa-file-invoice-dollar':'fa-wallet'}"></i>${esc(x.category||personalTypeLabel(type))}</span>`;
+  const linked=!!x.debtId;
+  return `<div class="record"><span>${esc(x.date||"—")}</span><span><b class="${type==='income'?'positive':personalTypeCountsAsSpent(type)?'negative':''}">${sign}${money(amount)}</b><br><span class="personal-kind">${personalTypeLabel(type)}</span></span><span>${tag}<br><span class="small">${esc(x.desc||"Sin descripción")}${linked?' · Abono vinculado a la deuda':''}</span></span><div class="record-actions">${linked?`<span class="pill">Vinculado</span>`:`<button onclick="deleteRecord('personal','${x.id}')">Eliminar</button>`}</div></div>`;
+ }).join("")}</div>`:`<div class="empty">No hay movimientos de este tipo en el periodo seleccionado.</div>`;
+ const miniChart=(type,color)=>{
+  const chartRows=(state.personalSpending||[]).filter(x=>x.person===person);
+  const values=MONTHS.map((_,i)=>sum(chartRows.filter(x=>{const d=new Date((x.date||"")+"T00:00:00");const t=personalMovementType(x);const match=type==="expense"?["expense","other-expense"].includes(t):t===type;return match&&!Number.isNaN(d.getTime())&&d.getFullYear()===f.year&&d.getMonth()===i})));
+  const max=Math.max(...values,1);
+  return `<div class="personal-mini-chart" style="--identity-color:${color}" role="img" aria-label="Evolución mensual de ${esc(type==='expense'?'gastos personales':type==='saving'?'ahorros personales':type==='income'?'ingresos adicionales':'pagos de deudas')} durante ${f.year}">${values.map((v,i)=>`<div class="personal-mini-month" title="${MONTHS[i]}: ${money(v)}"><div class="track"><i class="bar" style="height:${v?Math.max(3,v/max*70):2}px"></i></div><small>${MONTHS[i].slice(0,3)}</small></div>`).join("")}</div>`;
+ };
+ const eligibleDebts=(state.debts||[]).filter(d=>d.status!=="paid"&&Number(d.balance)>0&&(d.owner===person||d.owner==="home")).sort((a,b)=>(a.due||"9999").localeCompare(b.due||"9999"));
+ const debtRows=eligibleDebts.length?`<div class="personal-debt-list">${eligibleDebts.map(d=>`<div class="personal-debt-row"><div class="debt-info"><strong><i class="fa-solid fa-file-invoice-dollar" style="color:${d.owner==='home'?MODULE_COLORS.home:MODULE_COLORS.debt}"></i> ${esc(d.name)}</strong><small>${ownerTag(d.owner)} · Saldo: <b>${money(d.balance)}</b>${Number(d.installment)>0?` · Cuota: ${money(d.installment)}`:""}</small></div><div class="debt-actions"><button class="btn primary" onclick="payDebt('${d.id}','${person}')"><i class="fa-solid fa-hand-holding-dollar"></i> Abonar</button></div></div>`).join("")}</div>`:`<div class="empty">No tienes deudas personales ni del hogar pendientes que puedas abonar desde este perfil.</div>`;
  document.getElementById("personalPageContent").innerHTML=`
  <section class="grid kpis" style="grid-template-columns:repeat(5,minmax(0,1fr))">
-  <div class="card kpi available"><div class="label">ASIGNADO</div><div class="value" style="font-size:clamp(16px,2vw,24px)">${money(assigned)}</div><div class="sub">Después de gastos y ahorros del hogar</div></div>
-  <div class="card kpi expense"><div class="label">GASTADO</div><div class="value" style="font-size:clamp(16px,2vw,24px)">${money(stats.spent)}</div><div class="sub">Gastos, deudas y otros egresos</div></div>
-  <div class="card kpi saving"><div class="label">AHORRO PERSONAL</div><div class="value" style="font-size:clamp(16px,2vw,24px)">${money(stats.saved)}</div><div class="sub">Separado de los gastos</div></div>
-  <div class="card kpi income"><div class="label">INGRESOS EXTRA</div><div class="value" style="font-size:clamp(16px,2vw,24px)">${money(stats.extraIncome)}</div><div class="sub">Entradas adicionales</div></div>
-  <div class="card kpi available"><div class="label">DISPONIBLE REAL</div><div class="value ${personalBalance<0?'negative':'positive'}" style="font-size:clamp(16px,2vw,24px)">${money(personalBalance)}</div><div class="sub">Asignado + extras − gastos − ahorro</div></div>
+  <div class="card kpi available personal-summary-card" style="--identity-color:${PERSON_COLORS[person]}"><div class="label">ASIGNADO</div><div class="value" style="font-size:clamp(16px,2vw,24px)">${money(assigned)}</div><div class="sub">Tu parte tras gastos y ahorros del hogar</div></div>
+  <div class="card kpi expense personal-summary-card" style="--identity-color:${MODULE_COLORS.expense}"><div class="label">GASTOS Y PAGOS</div><div class="value" style="font-size:clamp(16px,2vw,24px)">${money(stats.spent)}</div><div class="sub">Incluye pagos de deudas</div></div>
+  <div class="card kpi saving personal-summary-card" style="--identity-color:${MODULE_COLORS.saving}"><div class="label">AHORRO PERSONAL</div><div class="value" style="font-size:clamp(16px,2vw,24px)">${money(stats.saved)}</div><div class="sub">Separado del ahorro del hogar</div></div>
+  <div class="card kpi income personal-summary-card" style="--identity-color:${MODULE_COLORS.income}"><div class="label">INGRESOS EXTRA</div><div class="value" style="font-size:clamp(16px,2vw,24px)">${money(stats.extraIncome)}</div><div class="sub">Entradas adicionales</div></div>
+  <div class="card kpi available personal-summary-card" style="--identity-color:${PERSON_COLORS[person]}"><div class="label">DISPONIBLE REAL</div><div class="value ${personalBalance<0?'negative':'positive'}" style="font-size:clamp(16px,2vw,24px)">${money(personalBalance)}</div><div class="sub">Asignado + extras − gastos − ahorros</div></div>
  </section>
- <section class="grid section-grid">
-  <div class="card"><div class="card-head"><div><h2>Registrar movimiento</h2><span>Un solo registro actualiza los totales</span></div></div>
-   <form onsubmit="savePersonalSpending(event,'${person}')"><div class="form-grid">
-    <div class="field"><label>Fecha</label><input class="input" id="pDate" type="date" value="${dateNow()}" required></div>
-    <div class="field"><label>Tipo de movimiento</label><select class="select" id="pType" onchange="updatePersonalCategories()" required><option value="expense">Gasto personal</option><option value="debt">Pago de deuda</option><option value="other-expense">Otro egreso</option><option value="saving">Ahorro personal</option><option value="income">Ingreso adicional</option></select></div>
-    <div class="field"><label>Categoría</label><select class="select" id="pCategory"><option>Alimentación</option><option>Transporte</option><option>Compras personales</option><option>Salud</option><option>Entretenimiento</option><option>Servicios / suscripciones</option><option>Deudas y obligaciones</option><option>Ahorro personal</option><option>Ingreso adicional</option><option>Otros</option></select></div>
-    <div class="field"><label>Monto (COP)</label><input class="input money-input" id="pAmount" inputmode="numeric" placeholder="Ej. 50000" required></div>
-    <div class="field full"><label>Descripción / nota</label><input class="input" id="pDesc" placeholder="Ej. transporte, compra, cuota del préstamo..." maxlength="180"></div>
-   </div><div class="form-actions"><button class="btn primary">+ Registrar movimiento</button></div></form>
-  </div>
-  <div class="card"><div class="card-head"><div><h2>Distribución del dinero</h2><span>Resumen del periodo seleccionado</span></div></div>
-   <div class="list"><div class="list-row" style="grid-template-columns:1fr auto"><span>Asignado</span><strong>${money(assigned)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Ingresos adicionales</span><strong class="positive">+${money(stats.extraIncome)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Gastos y pagos</span><strong class="negative">−${money(stats.spent)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Ahorros personales</span><strong>−${money(stats.saved)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><b>Saldo disponible</b><strong class="${personalBalance<0?'negative':'positive'}">${money(personalBalance)}</strong></div></div>
-   <div style="margin-top:18px"><div class="card-head"><h2>Actividad del periodo</h2></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Movimientos registrados</span><strong>${rows.length}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Gastos y pagos</span><strong>${spentRows.length}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Ahorros personales</span><strong>${savedRows.length}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Ingresos adicionales</span><strong>${incomeRows.length}</strong></div></div>
-  </div>
+ <section class="personal-finance-blocks">
+  <article class="card personal-finance-block" style="--identity-color:${MODULE_COLORS.expense}"><div class="card-head"><div><h2><i class="fa-solid fa-wallet"></i> Gastos personales</h2><span>Gastos cotidianos y otros egresos</span></div><span class="pill">${expenses.length}</span></div><div class="personal-block-total">${money(sum(expenses))}</div><div class="personal-block-sub">Total de gastos registrados en el periodo</div>${miniChart("expense",MODULE_COLORS.expense)}<div class="personal-block-actions"><button class="btn primary" onclick="openPersonalMovement('${person}','expense')"><i class="fa-solid fa-plus"></i> Registrar gasto</button></div><h3>Historial de gastos</h3>${blockHistory(expenses)}</article>
+  <article class="card personal-finance-block" style="--identity-color:${MODULE_COLORS.saving}"><div class="card-head"><div><h2><i class="fa-solid fa-piggy-bank"></i> Ahorros personales</h2><span>Aportes separados del hogar</span></div><span class="pill">${savings.length}</span></div><div class="personal-block-total">${money(sum(savings))}</div><div class="personal-block-sub">Total ahorrado en el periodo</div>${miniChart("saving",MODULE_COLORS.saving)}<div class="personal-block-actions"><button class="btn primary" onclick="openPersonalMovement('${person}','saving')"><i class="fa-solid fa-plus"></i> Registrar ahorro</button></div><h3>Historial de ahorros</h3>${blockHistory(savings)}</article>
+  <article class="card personal-finance-block" style="--identity-color:${MODULE_COLORS.income}"><div class="card-head"><div><h2><i class="fa-solid fa-arrow-trend-up"></i> Ingresos adicionales</h2><span>Dinero que no forma parte del ingreso base</span></div><span class="pill">${incomes.length}</span></div><div class="personal-block-total">${money(sum(incomes))}</div><div class="personal-block-sub">Total de entradas adicionales en el periodo</div>${miniChart("income",MODULE_COLORS.income)}<div class="personal-block-actions"><button class="btn primary" onclick="openPersonalMovement('${person}','income')"><i class="fa-solid fa-plus"></i> Registrar ingreso</button></div><h3>Historial de ingresos</h3>${blockHistory(incomes)}</article>
+  <article class="card personal-finance-block" style="--identity-color:${MODULE_COLORS.debt}"><div class="card-head"><div><h2><i class="fa-solid fa-file-invoice-dollar"></i> Pagos de deudas</h2><span>Solo tus deudas personales y las del hogar</span></div><span class="pill">${debts.length}</span></div><div class="personal-block-total">${money(sum(debts))}</div><div class="personal-block-sub">Abonos realizados por este perfil durante el periodo</div>${miniChart("debt",MODULE_COLORS.debt)}<div class="personal-block-actions"><button class="btn" onclick="openPersonalDebtPicker('${person}')"><i class="fa-solid fa-list"></i> Ver deudas para abonar</button></div><h3>Deudas que puedes pagar</h3>${debtRows}<h3 style="margin-top:16px">Historial de abonos</h3>${blockHistory(debts)}</article>
  </section>
- <section class="card"><div class="card-head"><div><h2>Historial de movimientos</h2><span>Registros personales del periodo seleccionado</span></div><span>${rows.length} movimiento(s)</span></div><div class="history-list">${history||'<div class="empty">No hay movimientos en este periodo. Registra el primero usando el formulario.</div>'}</div></section>`;
- const amountInput=document.getElementById("pAmount");
- if(amountInput)amountInput.addEventListener("input",e=>e.target.value=fmtInput(e.target.value));
+ <section class="grid section-grid"><div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-scale-balanced"></i> Distribución del dinero</h2><span>Resumen del periodo seleccionado</span></div></div><div class="list"><div class="list-row" style="grid-template-columns:1fr auto"><span>Asignado</span><strong>${money(assigned)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Ingresos adicionales</span><strong class="positive">+${money(stats.extraIncome)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Gastos y pagos</span><strong class="negative">−${money(stats.spent)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Ahorros personales</span><strong>−${money(stats.saved)}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><b>Saldo disponible</b><strong class="${personalBalance<0?'negative':'positive'}">${money(personalBalance)}</strong></div></div></div>
+ <div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-chart-pie"></i> Actividad del periodo</h2><span>Resumen independiente de cada tipo</span></div></div><div class="list"><div class="list-row" style="grid-template-columns:1fr auto"><span>Gastos personales</span><strong>${expenses.length}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Ahorros personales</span><strong>${savings.length}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Ingresos adicionales</span><strong>${incomes.length}</strong></div><div class="list-row" style="grid-template-columns:1fr auto"><span>Pagos de deudas</span><strong>${debts.length}</strong></div></div></div></section>`;
 }
+function openPersonalSpending(person){showModule(person==="partner"?"personalPartner":"personalMe")}
+function openPersonalMovement(person,type){
+ const config={expense:{title:"Registrar gasto personal",icon:"fa-wallet",color:MODULE_COLORS.expense,category:"Alimentación"},saving:{title:"Registrar ahorro personal",icon:"fa-piggy-bank",color:MODULE_COLORS.saving,category:"Ahorro personal"},income:{title:"Registrar ingreso adicional",icon:"fa-arrow-trend-up",color:MODULE_COLORS.income,category:"Ingreso adicional"}}[type];
+ if(!config)return;
+ const categories=type==="expense"?['Alimentación','Transporte','Compras personales','Salud','Entretenimiento','Servicios / suscripciones','Otros']:type==="saving"?['Ahorro personal']:['Ingreso adicional'];
+ openModal(`<i class="fa-solid ${config.icon}"></i> ${config.title}`,`<form onsubmit="savePersonalMovement(event,'${person}','${type}')"><div style="margin-bottom:12px">${personTag(person,state.people[person])}</div><div class="form-mode-new"><i class="fa-solid fa-circle-plus"></i><span>Nuevo movimiento · ${esc(config.title.toLowerCase())}</span></div><div class="form-grid"><div class="field"><label>Fecha</label><input class="input" id="pmDate" type="date" value="${dateNow()}" required></div>${type==="expense"?`<div class="field"><label>Tipo de egreso</label><select class="select" id="pmSubtype"><option value="expense">Gasto personal</option><option value="other-expense">Otro egreso</option></select></div>`:""}<div class="field"><label>Categoría</label><select class="select" id="pmCategory">${categories.map(c=>`<option>${esc(c)}</option>`).join("")}</select></div><div class="field"><label>Monto (COP)</label><input class="input money-input" id="pmAmount" type="text" inputmode="numeric" oninput="formatMoneyField(this)" placeholder="Ej. 150.000" required></div><div class="field full"><label>Descripción / nota</label><input class="input" id="pmDesc" maxlength="180" placeholder="Añade un detalle para identificar el movimiento"></div></div><div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary"><i class="fa-solid fa-check"></i> Guardar movimiento</button></div></form>`);
+}
+function savePersonalMovement(e,person,type){
+ e.preventDefault();const amount=num(document.getElementById("pmAmount")?.value);if(!amount||amount<=0)return toast("Ingresa un monto mayor que cero.");
+ const actualType=type==="expense"?(document.getElementById("pmSubtype")?.value||"expense"):type;
+ const record={id:crypto.randomUUID(),person,date:document.getElementById("pmDate").value,amount,type:actualType,category:document.getElementById("pmCategory").value,desc:document.getElementById("pmDesc").value.trim()};
+ state.personalSpending=state.personalSpending||[];state.personalSpending.push(record);saveState();closeModal();renderAll();if(activeModule==="personalMe"||activeModule==="personalPartner")renderPersonalModule();toast(`${personalTypeLabel(actualType)} registrado`);
+}
+function openPersonalDebtPicker(person){
+ const eligible=(state.debts||[]).filter(d=>d.status!=="paid"&&Number(d.balance)>0&&(d.owner===person||d.owner==="home"));
+ openModal(`<i class="fa-solid fa-file-invoice-dollar"></i> Deudas disponibles para ${esc(state.people[person])}`,eligible.length?`<p class="small">Este perfil solo puede abonar a sus propias deudas y a las del hogar. Las obligaciones personales de la otra persona no aparecen aquí.</p><div class="personal-debt-list">${eligible.map(d=>`<div class="personal-debt-row"><div class="debt-info"><strong>${esc(d.name)}</strong><small>${ownerTag(d.owner)} · Pendiente: <b>${money(d.balance)}</b></small></div><button class="btn primary" onclick="payDebt('${d.id}','${person}')">Abonar</button></div>`).join("")}</div>`:`<div class="empty">No hay deudas personales o del hogar pendientes para este perfil.</div>`);
+}
+
 function openPersonalSpending(person){showModule(person==="partner"?"personalPartner":"personalMe")}
 
 function updatePersonalCategories(){
@@ -963,6 +1002,7 @@ function confirmInApp(message,onConfirm,options={}){
 function runNexusConfirmation(accepted){const action=pendingNexusConfirmation,hadModal=pendingNexusHadModal,previous=pendingNexusPreviousHtml;pendingNexusConfirmation=null;pendingNexusPreviousHtml="";pendingNexusHadModal=false;if(!accepted){if(hadModal){document.getElementById("modalBox").innerHTML=previous;document.getElementById("modal").classList.add("show");document.body.classList.add("modal-open")}else closeModal(true);return}closeModal(true);history.replaceState({nexusRoute:activeModule},"",location.pathname+location.search+"#"+routeFromHash());if(action)action()}
 
 function deleteRecord(type,id){
+ if(type==="personal"){const linked=(state.personalSpending||[]).find(x=>x.id===id&&x.debtId);if(linked){toast("Este abono está vinculado al saldo de la deuda. Adminístralo desde Deudas para evitar inconsistencias.");return;}}
  confirmInApp("¿Quieres eliminar este registro? Esta acción no se puede deshacer.",()=>{
   if(type==="income")state.incomes=state.incomes.filter(x=>x.id!==id);
   if(type==="expense")state.expenses=state.expenses.filter(x=>x.id!==id);
@@ -1003,6 +1043,14 @@ document.getElementById("filterMonth").addEventListener("change",()=>{let f=getF
 setInterval(()=>{document.getElementById("incomeComparison").textContent=comparison(state.incomes);document.getElementById("expenseComparison").textContent=comparison(state.expenses)},1000);
 /* ===== MÓDULOS EXTRA: calendario, deudas, cuentas e informes ===== */
 function routeFromHash(){const raw=(location.hash||"#dashboard").replace(/^#/ ,"").replace(/\/modal$/ ,"");const allowed=["dashboard","calendar","debts","accounts","reports","settings","personalMe","personalPartner"];return raw==="accounts"?"reports":(allowed.includes(raw)?raw:"dashboard")}
+function navigateToGoals(){
+ const goals=document.getElementById("goals");
+ if(!goals)return;
+ const alreadyDashboard=activeModule==="dashboard"&&!document.getElementById("dashboard").classList.contains("hidden");
+ if(!alreadyDashboard){showModule("dashboard");setTimeout(()=>goals.scrollIntoView({behavior:"smooth",block:"start"}),40);}
+ else{goals.scrollIntoView({behavior:"smooth",block:"start"});}
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.textContent.includes("Metas a futuro")));
+}
 function showModule(name,fromHistory=false){
  const allowed=["dashboard","calendar","debts","accounts","reports","settings","personalMe","personalPartner"];if(name==="accounts")name="reports";if(!allowed.includes(name))name="dashboard";
  activeModule=name;
@@ -1039,9 +1087,28 @@ function toggleTask(id){const t=state.tasks.find(x=>x.id===id);if(t){t.status=t.
 function deleteTask(id){confirmInApp("¿Eliminar este recordatorio?",()=>{state.tasks=state.tasks.filter(t=>t.id!==id);saveState();renderExtendedModules();toast("Recordatorio eliminado")})}
 function addDebt(e){e.preventDefault();const original=num(document.getElementById("debtOriginal").value),balance=num(document.getElementById("debtBalance").value);if(balance>original){toast("El saldo pendiente no puede superar el monto inicial.");return}state.debts.push({id:crypto.randomUUID(),name:document.getElementById("debtName").value.trim(),original,balance,installment:num(document.getElementById("debtInstallment").value)||0,due:document.getElementById("debtDue").value,owner:document.getElementById("debtOwner").value,notes:document.getElementById("debtNotes").value,status:balance===0?"paid":"pending",createdAt:dateNow()});saveState();document.getElementById("debtForm").reset();renderDebts();renderReports();toast("Deuda registrada")}
 function renderDebts(){const total=state.debts.filter(d=>d.status!=="paid").reduce((a,d)=>a+(Number(d.balance)||0),0),el=document.getElementById("debtTotal");if(!el)return;el.textContent=money(total);const box=document.getElementById("debtTable");if(!state.debts.length){box.innerHTML='<div class="empty">No hay deudas registradas. Puedes añadir préstamos, tarjetas o compromisos.</div>';return}box.innerHTML=`<table class="data-table"><thead><tr><th>Acreedor</th><th>Responsable</th><th>Saldo</th><th>Cuota</th><th>Vence</th><th>Estado / acciones</th></tr></thead><tbody>${state.debts.map(d=>`<tr><td><strong>${esc(d.name)}</strong><div class="small">Inicial: ${money(d.original)} ${d.notes?"· "+esc(d.notes):""}</div></td><td>${ownerTag(d.owner)}</td><td>${money(d.balance)}</td><td>${money(d.installment)}</td><td>${esc(d.due||"—")}</td><td><span class="pill">${d.status==="paid"?"Pagada":"Pendiente"}</span><div class="actions" style="margin-top:5px"><button class="mini-btn" onclick="payDebt('${d.id}')">Abonar</button><button class="mini-btn" onclick="deleteDebt('${d.id}')">Eliminar</button></div></td></tr>`).join("")}</tbody></table>`}
-function payDebt(id){const d=state.debts.find(x=>x.id===id);if(!d)return;const initial=Number(d.installment)>0?Math.min(Number(d.balance)||0,Number(d.installment)):0;openModal(`<i class="fa-solid fa-file-invoice-dollar"></i> Abonar a deuda`,`<div class="dialog-icon"><i class="fa-solid fa-credit-card"></i></div><p class="dialog-copy">${esc(d.name)}</p><p class="dialog-balance">Saldo pendiente<strong>${money(d.balance)}</strong></p><form onsubmit="saveDebtPayment(event,'${d.id}')"><div class="field"><label>¿Cuánto vas a abonar? (COP)</label><input class="input money-input" id="debtPaymentAmount" type="text" inputmode="numeric" oninput="formatMoneyField(this)" value="${initial?fmtInput(initial):'0'}" required autofocus></div><div class="small" style="margin-top:8px">${Number(d.installment)>0?`Cuota mensual registrada: ${money(d.installment)}.`:"Esta deuda no tiene cuota mensual registrada; ingresa manualmente el valor del abono."} El abono se registrará con la fecha de hoy.</div><div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary"><i class="fa-solid fa-check"></i> Registrar abono</button></div></form>`)}
-function saveDebtPayment(e,id){e.preventDefault();const d=state.debts.find(x=>x.id===id);if(!d)return;const amount=num(document.getElementById("debtPaymentAmount").value);if(!amount||amount<=0){toast("Ingresa un monto válido.");return}if(amount>Number(d.balance)){toast("El abono no puede superar el saldo pendiente.");return}d.balance=Math.max(0,d.balance-amount);d.status=d.balance===0?"paid":"pending";d.payments=Array.isArray(d.payments)?d.payments:[];d.payments.push({date:dateNow(),amount});saveState();closeModal();renderDebts();renderReports();renderDashboardMinis();toast(d.status==="paid"?"Deuda saldada":"Abono registrado")}
-function deleteDebt(id){confirmInApp("¿Eliminar esta deuda y todo su historial de abonos?",()=>{state.debts=state.debts.filter(d=>d.id!==id);saveState();renderDebts();renderReports();renderDashboardMinis();toast("Deuda eliminada")})}
+function payDebt(id,payerPerson=null){
+ const d=state.debts.find(x=>x.id===id);if(!d)return;
+ if(d.owner==="home"&&!payerPerson){
+  openModal(`<i class="fa-solid fa-house-chimney"></i> Abonar a deuda del hogar`,`<p class="dialog-copy">${esc(d.name)}</p><p class="dialog-balance">Saldo pendiente<strong>${money(d.balance)}</strong></p><p class="small">Selecciona quién realiza el abono. Se reflejará en sus finanzas personales y en el saldo de esta deuda.</p><div class="form-grid"><button class="btn primary" onclick="payDebt('${d.id}','me')">${personTag('me',state.people.me)}</button><button class="btn primary" onclick="payDebt('${d.id}','partner')">${personTag('partner',state.people.partner)}</button></div>`);return;
+ }
+ const payer=payerPerson||(d.owner==="partner"?"partner":"me");
+ if(d.owner!=="home"&&d.owner!==payer){toast("No puedes abonar a una deuda personal que pertenece a la otra persona.");return;}
+ if(payer!=="me"&&payer!=="partner"){toast("Selecciona una persona válida para registrar el abono.");return;}
+ const initial=Number(d.installment)>0?Math.min(Number(d.balance)||0,Number(d.installment)):0;
+ openModal(`<i class="fa-solid fa-file-invoice-dollar"></i> Abonar a deuda`,`<div class="dialog-icon"><i class="fa-solid fa-credit-card"></i></div><p class="dialog-copy">${esc(d.name)}</p><div style="margin:8px 0">${ownerTag(d.owner)} · Abona: ${personTag(payer,state.people[payer])}</div><p class="dialog-balance">Saldo pendiente<strong>${money(d.balance)}</strong></p><form onsubmit="saveDebtPayment(event,'${d.id}','${payer}')"><div class="field"><label>¿Cuánto vas a abonar? (COP)</label><input class="input money-input" id="debtPaymentAmount" type="text" inputmode="numeric" oninput="formatMoneyField(this)" value="${initial?fmtInput(initial):'0'}" required autofocus></div><div class="small" style="margin-top:8px">${Number(d.installment)>0?`Cuota mensual registrada: ${money(d.installment)}.`:"Esta deuda no tiene cuota mensual registrada; ingresa manualmente el valor del abono."} El abono se registrará con la fecha de hoy.</div><div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary"><i class="fa-solid fa-check"></i> Registrar abono</button></div></form>`);
+}
+function saveDebtPayment(e,id,payerPerson){
+ e.preventDefault();const d=state.debts.find(x=>x.id===id);if(!d)return;
+ const payer=payerPerson||(d.owner==="partner"?"partner":"me");
+ if(d.owner!=="home"&&d.owner!==payer){toast("No puedes registrar pagos en la deuda personal de la otra persona.");return;}
+ const amount=num(document.getElementById("debtPaymentAmount").value);if(!amount||amount<=0){toast("Ingresa un monto válido.");return}if(amount>Number(d.balance)){toast("El abono no puede superar el saldo pendiente.");return}
+ const paymentId=crypto.randomUUID(),paymentDate=dateNow();d.balance=Math.max(0,Number(d.balance)-amount);d.status=d.balance===0?"paid":"pending";d.payments=Array.isArray(d.payments)?d.payments:[];d.payments.push({id:paymentId,date:paymentDate,amount,person:payer});
+ state.personalSpending=Array.isArray(state.personalSpending)?state.personalSpending:[];
+ state.personalSpending.push({id:paymentId,person:payer,date:paymentDate,amount,type:"debt",category:"Deudas y obligaciones",desc:`Abono a deuda: ${d.name}`,debtId:d.id,paymentId});
+ saveState();closeModal();renderAll();renderExtendedModules();if(activeModule==="personalMe"||activeModule==="personalPartner")renderPersonalModule();toast(d.status==="paid"?"Deuda saldada y abono registrado":"Abono registrado en la deuda y en las finanzas personales");
+}
+function deleteDebt(id){confirmInApp("¿Eliminar esta deuda y todo su historial de abonos?",()=>{state.debts=state.debts.filter(d=>d.id!==id);state.personalSpending=(state.personalSpending||[]).filter(x=>x.debtId!==id);saveState();renderDebts();renderReports();renderDashboardMinis();if(activeModule==="personalMe"||activeModule==="personalPartner")renderPersonalModule();toast("Deuda eliminada")})}
 const ACCOUNT_TYPES=[{id:"home",name:"Cuenta del hogar"},{id:"savings",name:"Cuenta de ahorros"},{id:"me",name:"Cuenta personal · Mía"},{id:"partner",name:"Cuenta personal · Pareja"}];
 function accountBalance(id){return state.transactions.filter(t=>t.account===id).reduce((s,t)=>s+(t.type==="income"?1:-1)*(Number(t.amount)||0),0)}
 function accountPeriodSummary(id){
