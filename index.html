@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Home Finance</title>
+<title>Nexus Finance · Mobile</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 :root{
@@ -243,6 +243,76 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 @media(max-width:420px){.personal-summary-grid{grid-template-columns:1fr}}
 </style>
 
+
+<style id="nexus-mobile-product-redesign">
+/* Mobile is a separate product experience, not a shrunken desktop layout. */
+.mobile-app-header,.mobile-tabbar{display:none}
+@media(max-width:800px){
+ :root{--mobile-nav-h:76px;--mobile-ink:#172b35;--mobile-muted:#71808a;--mobile-paper:#f3f6f7;--mobile-green:#167d69;--mobile-line:#e4eaec;--mobile-card:#fff}
+ html{scroll-behavior:smooth;background:var(--mobile-paper)}
+ body{background:var(--mobile-paper)!important;color:var(--mobile-ink)!important;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:0 0 calc(var(--mobile-nav-h) + env(safe-area-inset-bottom));}
+ .app{display:block;min-height:100dvh}
+ .sidebar{width:min(84vw,320px);padding:22px 16px calc(24px + env(safe-area-inset-bottom));background:#102d35;border:0;box-shadow:20px 0 55px #071a2040;transform:translateX(-110%);transition:transform .28s cubic-bezier(.2,.8,.2,1);z-index:120;overflow-y:auto}
+ .sidebar.open{transform:translateX(0)}
+ .sidebar .logo{padding:8px 8px 22px;color:#fff}.sidebar .logo-mark{background:linear-gradient(145deg,#42bca0,#167d69);border-radius:13px}.sidebar .small{color:#a7c4c7}
+ .nav button{color:#b6c9cc;padding:14px 15px;margin:4px 0;border-radius:14px;font-size:14px;transition:background .18s,color .18s}
+ .nav button:hover,.nav button.active{background:#214650;color:#fff}.nav button.active{box-shadow:inset 3px 0 #62d9ba}
+ .main{margin:0!important;width:100%!important;max-width:none!important;padding:0 16px 28px!important}
+ .mobile-app-header{display:block;margin:0 -16px 20px;padding:calc(13px + env(safe-area-inset-top)) 18px 15px;background:#fff;border-bottom:1px solid #e8edef;position:relative;z-index:5}
+ .mobile-brand-row{display:flex;align-items:center;gap:11px;min-width:0}
+ .mobile-brand-mark{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border-radius:14px;background:#e0f4ee;color:#147864;font-size:19px}
+ .mobile-greeting{display:grid;gap:3px;min-width:0;flex:1}.mobile-greeting span{font-size:9px;font-weight:800;letter-spacing:.13em;color:#829198}.mobile-greeting strong{font-size:20px;letter-spacing:-.045em;line-height:1.15;color:#18333a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .mobile-avatar{height:40px;width:40px;flex:0 0 40px;border-radius:50%;border:1px solid #e2e9e9;background:#f5f8f8;color:#2d5960;font-size:15px}
+ .mobile-date-row{display:flex;align-items:center;gap:7px;margin:12px 0 0 53px;font-size:11px;color:#829198}.mobile-live-dot{height:6px;width:6px;border-radius:50%;background:#22a785;box-shadow:0 0 0 3px #e0f4ee}
+ .topbar{display:none!important}
+ .filterbar{display:grid;grid-template-columns:1fr 1.35fr;gap:9px;margin:0 0 15px;padding:12px;background:#fff;border:1px solid var(--mobile-line);border-radius:17px;box-shadow:0 4px 16px #1c3a4308}
+ .filterbar .field{min-width:0;gap:5px}.filterbar label{font-size:10px;font-weight:700;color:#78878d}.filterbar .select{min-height:42px;background:#f6f9f9;color:#223a41;border:1px solid #e5ebec;border-radius:11px;font-size:13px;padding:9px 10px}
+ .filterbar .btn{grid-column:1/-1;justify-self:start;padding:7px 0;border:0;background:transparent;color:#167d69;font-size:12px}.filterbar #periodLabel{display:none}
+ .kpis{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:9px!important;margin-bottom:15px}
+ .kpi{min-height:0!important;padding:13px 11px!important;border:1px solid #e8eeee!important;border-radius:17px!important;background:#fff!important;box-shadow:0 5px 18px #16373e08!important;overflow:hidden}
+ .kpi:after{display:none}.kpi .label{font-size:9px!important;font-weight:800;letter-spacing:.03em;color:#829198!important}.kpi .value{font-size:clamp(15px,4vw,19px)!important;line-height:1.15;margin-top:10px!important;font-weight:850!important;letter-spacing:-.045em;overflow-wrap:anywhere}.kpi .sub{font-size:9px!important;line-height:1.35;margin-top:5px!important;color:#87959a!important}
+ #dashboardModule > .kpis > .kpi.available{grid-column:1/-1;order:-1;min-height:184px!important;padding:22px 21px!important;border:0!important;border-radius:24px!important;background:linear-gradient(135deg,#143d45 0%,#126e60 60%,#168a70 100%)!important;color:#fff;box-shadow:0 13px 30px #14584b25!important;position:relative}
+ #dashboardModule > .kpis > .kpi.available:before{content:"SALDO DISPONIBLE";display:block;color:#b5e9da;font-size:10px;font-weight:800;letter-spacing:.16em;margin-bottom:18px}
+ #dashboardModule > .kpis > .kpi.available .label{display:none}#dashboardModule > .kpis > .kpi.available .value{color:#fff!important;font-size:clamp(31px,8.7vw,43px)!important;line-height:1.08;margin:0!important;letter-spacing:-.055em}#dashboardModule > .kpis > .kpi.available .sub{color:#d2eee7!important;font-size:11px!important;margin-top:10px!important}
+ #dashboardModule > .kpis > .kpi.available:after{display:block;right:-30px;top:-37px;width:180px;height:180px;background:transparent;border:1px solid #ffffff22;box-shadow:0 0 0 22px #ffffff08,0 0 0 46px #ffffff06}
+ .kpi.income .value{color:#157d69!important}.kpi.expense .value{color:#cf7134!important}.kpi.saving .value{color:#367bc4!important}
+ .section-grid,.comparison-grid,.section-grid.secondary-grid,.dashboard-mini-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:13px!important;margin-bottom:14px}
+ .card{min-width:0;padding:17px!important;border:1px solid #e7eded!important;border-radius:20px!important;background:#fff!important;box-shadow:0 5px 20px #1a3b4208!important;color:#1c353c!important}
+ .card h2,.card h3,.card h4{color:#203940}.card-head{align-items:flex-start!important;gap:10px;margin-bottom:14px!important}.card-head h2{font-size:15px!important;line-height:1.35;letter-spacing:-.025em}.card-head h2 i{color:#16816c!important}.card-head span{font-size:10px!important;line-height:1.4;color:#87969b!important}.card-head .btn,.card-head .mini-btn{flex-shrink:0}
+ .mini-btn,.category-btn{background:#eff7f4!important;border:1px solid #dceee7!important;color:#147764!important;border-radius:10px!important}
+ .btn{border-radius:12px!important;background:#f1f5f5;color:#244149;border:1px solid #e1e9e9;padding:11px 13px;font-size:12px}.btn.primary{background:linear-gradient(135deg,#16836d,#0e6e5d)!important;border:0!important;color:white!important;box-shadow:0 5px 12px #167d6920}.btn.danger{color:#c54858!important}
+ .people{gap:8px}.person{min-width:0;padding:12px!important;border-radius:14px!important;background:#f4f8f7!important;border:1px solid #e6efed!important}.person .name{font-size:10px!important;color:#7c8b90}.person .amount{font-size:16px!important;letter-spacing:-.04em;color:#233d43}.person button{font-size:10px;padding:8px 4px;white-space:nowrap}
+ .donut-layout{grid-template-columns:minmax(105px,125px) minmax(0,1fr)!important;gap:14px!important}.donut{width:118px!important;height:118px!important}.donut:after{inset:24px!important;background:#fff!important}.donut-center{font-size:11px!important;color:#233c42}.donut-center small{font-size:9px;color:#7e8e93}.legend-row{font-size:11px;color:#3b5358}.list{gap:6px}.list-row{grid-template-columns:minmax(0,1fr) auto!important;gap:7px;padding:10px 0!important;font-size:11px!important;color:#355057;border-bottom-color:#edf1f1!important}.list-row>*:nth-child(n+3){display:none}
+ .comparison-card .bar-chart{height:145px!important;gap:5px!important}.bar small{font-size:8px!important;color:#829198!important}.bar em{font-size:8px!important;color:#476067!important}.bar-fill{background:linear-gradient(180deg,#54c7aa,#16816c)!important;border-radius:7px 7px 2px 2px!important}
+ .savings-grid{grid-template-columns:1fr!important;gap:9px!important}.saving-card{padding:14px!important;background:#f6faf9!important;border:1px solid #e2efeb!important;border-radius:15px!important}.saving-card h3{font-size:13px!important;color:#27464b}.saving-meta{font-size:10px!important}.progress{background:#e4eeea!important}.progress i{background:linear-gradient(90deg,#28aa8d,#83d8ba)!important}
+ .availability,.form-grid{grid-template-columns:1fr!important}.form-grid .full{grid-column:auto}.future-grid{grid-template-columns:1fr!important}.goal{background:#f7faf9!important;border:1px solid #e4eeeb!important}.goal h3{color:#203b42}.goal p{color:#788b90}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.stat{background:#eef5f3!important}.stat b{font-size:12px;color:#203b42}.stat small{color:#72878a}
+ .dashboard-mini-grid .card{padding:15px!important}.mini-account{background:#f4f8f7!important;border-color:#e4eeeb!important}.upcoming-item,.debt-preview{background:#f7faf9!important;border-color:#e6efed!important}
+ .module-section{min-width:0}.module-section:not(.hidden){animation:mobileScreenIn .22s ease-out}@keyframes mobileScreenIn{from{opacity:.55;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+ #personalModule .card,#calendarModule .card,#debtsModule .card,#reportsModule .card,#settingsModule .card{margin-bottom:13px}
+ .personal-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.personal-summary-grid .kpi{min-height:100px!important}.personal-summary-grid .value{font-size:17px!important}
+ .personal-finance-blocks{grid-template-columns:1fr!important}.personal-finance-block{border-top:0!important;border-left:4px solid var(--identity-color,#16816c)!important}.personal-finance-block .personal-block-total{font-size:27px!important}
+ .record{grid-template-columns:minmax(0,1fr) auto!important;gap:6px!important;background:#f6f9f8!important;border:1px solid #e8efed!important;color:#2a454b!important;padding:11px!important}.record>span:nth-child(3){grid-column:1/-1}.record-actions{grid-column:1/-1;justify-content:flex-end}.record-actions button{background:#e9f4f0!important;color:#176f60!important;font-size:11px!important;padding:8px!important}
+ .table-wrap{overflow-x:auto;border-radius:12px}.table-wrap table{min-width:540px}.table-wrap th{background:#eff6f4!important;color:#4c666a}.table-wrap td{color:#304c51;border-color:#e8eeee!important}
+ .mobile-tabbar{position:fixed;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:end;left:0;right:0;bottom:0;z-index:90;padding:8px 8px calc(8px + env(safe-area-inset-bottom));min-height:var(--mobile-nav-h);background:rgba(255,255,255,.94);border-top:1px solid #e5ecec;box-shadow:0 -8px 28px #193b420c;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
+ .mobile-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:0;min-height:48px;background:transparent;color:#91a0a4;font-size:18px;padding:2px 0;border-radius:13px}.mobile-tab span{font-size:9px;font-weight:700;letter-spacing:.01em}.mobile-tab.active{color:#167d69}.mobile-tab.active i{transform:translateY(-1px)}.mobile-add-tab{gap:3px;color:#167d69}.mobile-add-tab>span{display:grid;place-items:center;width:43px;height:37px;border-radius:14px;background:linear-gradient(145deg,#1a9279,#126c5d);color:#fff;font-size:17px;box-shadow:0 5px 13px #167d6935}.mobile-add-tab small{font-size:9px;font-weight:800;color:#167d69}
+ .mobile-scrim{position:fixed;inset:0;background:#071d22a8;z-index:110;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(2px)}.mobile-scrim.show{opacity:1;pointer-events:auto}
+ .modal{align-items:flex-end!important;padding:0!important;background:#0b242b85!important;backdrop-filter:blur(5px)!important;z-index:200!important}.modal-box{width:100%!important;max-width:none!important;max-height:min(88dvh,850px)!important;overflow-y:auto!important;padding:23px 19px calc(22px + env(safe-area-inset-bottom))!important;border:0!important;border-radius:26px 26px 0 0!important;background:#fff!important;color:#213a40!important;box-shadow:0 -15px 50px #071b2030!important;animation:sheetUp .24s ease-out}.modal-box:before{content:"";display:block;width:38px;height:4px;border-radius:8px;background:#dbe5e4;margin:-10px auto 20px}@keyframes sheetUp{from{transform:translateY(25px);opacity:.7}to{transform:translateY(0);opacity:1}}
+ .modal-head h3{font-size:19px;color:#203940}.close{background:#edf3f2;color:#34565b;width:38px;height:38px;border-radius:12px}.input,.select,.textarea{background:#f7faf9!important;color:#1e383e!important;border:1px solid #dfe9e7!important;border-radius:12px!important;min-height:44px;padding:11px 12px!important;font-size:14px!important}.field label{font-size:11px;font-weight:700;color:#60767a}.form-grid{gap:13px!important}.form-actions{position:sticky;bottom:-22px;background:linear-gradient(0deg,#fff 75%,#ffffffd9);padding:14px 0 3px;margin-top:17px!important}.form-actions .btn{min-height:44px}
+ .toast{left:14px!important;right:14px!important;bottom:calc(var(--mobile-nav-h) + 12px + env(safe-area-inset-bottom))!important;max-width:none!important;border-radius:14px!important;background:#173d42!important;box-shadow:0 10px 28px #102e3230!important}
+ #authScreen{padding:24px!important;align-items:center!important;background:linear-gradient(155deg,#e7f5f0 0%,#f4f7f7 45%,#e4eeee 100%)!important;z-index:500!important}
+ .auth-card{width:100%!important;max-width:390px!important;padding:26px 22px!important;border:1px solid #e1ece9!important;border-radius:26px!important;background:#fff!important;color:#243e43!important;box-shadow:0 18px 55px #174a3c14!important}
+ .auth-brand h1{color:#1c3b40!important;font-size:25px!important;letter-spacing:-.05em}.auth-brand .logo-mark{width:46px;height:46px;border-radius:15px;background:linear-gradient(145deg,#27a88a,#126e5d)!important}.auth-card p,.auth-card .small{color:#74888b!important}.auth-card .input{background:#f7faf9!important}.auth-card .btn.primary{width:100%;min-height:48px;margin-top:8px}
+ .sync-status{background:#f0f8f5!important;border-color:#dceee6!important;color:#3f7267!important}.sync-status i{color:#159879!important}
+ .filterbar,.card,.kpi,.mobile-tabbar,.mobile-app-header{ -webkit-tap-highlight-color:transparent }
+ button{touch-action:manipulation}
+}
+@media(max-width:420px){
+ .main{padding-left:12px!important;padding-right:12px!important}.mobile-app-header{margin-left:-12px;margin-right:-12px;padding-left:14px;padding-right:14px}.kpis{gap:7px!important}.kpi:not(.available){padding:11px 8px!important}.kpi .value{font-size:15px!important}.kpi .label{font-size:8px!important}.kpi .sub{font-size:8px!important}#dashboardModule > .kpis > .kpi.available{padding:21px 18px!important}.card{padding:15px!important;border-radius:18px!important}.donut-layout{grid-template-columns:100px minmax(0,1fr)!important;gap:10px!important}.donut{width:98px!important;height:98px!important}.donut:after{inset:20px!important}.person{padding:10px!important}.person .amount{font-size:14px!important}.mobile-tab span{font-size:8px}.mobile-tab{font-size:17px}
+}
+@media(min-width:801px){.mobile-scrim{display:none}}
+.mobile-more-list{display:grid;gap:7px}.mobile-more-item{display:flex;align-items:center;gap:12px;width:100%;padding:11px 10px;border-radius:13px;background:#f7faf9;color:#29454a;text-align:left;border:1px solid #e8efed;font-size:13px;font-weight:700}.mobile-more-item>span:nth-child(2){flex:1}.mobile-more-item>i{font-size:10px;color:#9aabaa}.mobile-more-icon{width:36px;height:36px;display:grid;place-items:center;border-radius:11px;background:#e5f4ee;color:#187c68}.mobile-logout-item{margin-top:7px;color:#bd4c59;background:#fff7f7;border-color:#f2e1e2}.mobile-logout-item .mobile-more-icon{background:#fdebed;color:#bf4c5a}.mobile-action-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.mobile-action-grid button{display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:15px 14px;background:#f7faf9;border:1px solid #e4edeb;border-radius:17px;text-align:left;color:#29454a}.mobile-action-grid b{font-size:13px}.mobile-action-grid small{font-size:10px;color:#7e9092}.quick-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;font-size:16px}.quick-income{background:#e0f5ed;color:#168368}.quick-expense{background:#fff0e4;color:#ca743a}.quick-saving{background:#e8f0ff;color:#457bc0}.quick-task{background:#f1eaff;color:#805ac2}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -263,6 +333,14 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 </aside>
 
 <main class="main" id="dashboard">
+<div class="mobile-app-header" id="mobileAppHeader">
+  <div class="mobile-brand-row">
+    <div class="mobile-brand-mark"><i class="fa-solid fa-n"></i></div>
+    <div class="mobile-greeting"><span id="mobileGreeting">TU ESPACIO FINANCIERO</span><strong id="mobilePageTitle">Mi resumen</strong></div>
+    <button class="mobile-avatar" onclick="openMobileMore()" aria-label="Abrir menú de cuenta"><i class="fa-regular fa-user"></i></button>
+  </div>
+  <div class="mobile-date-row"><span id="mobileToday">Hoy</span><span class="mobile-live-dot"></span><span id="mobileSyncLabel">Sincronizando</span></div>
+</div>
 <header class="topbar">
   <div class="title"><h1>Dashboard General</h1><p>Control de tus finanzas personales y del hogar.</p></div>
   <div class="actions">
@@ -396,7 +474,13 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 </section>
 </main>
 </div>
-
+<nav class="mobile-tabbar" id="mobileTabbar" aria-label="Navegación principal">
+  <button class="mobile-tab active" data-mobile-tab="home" onclick="mobileGo('dashboard')"><i class="fa-solid fa-house"></i><span>Inicio</span></button>
+  <button class="mobile-tab" data-mobile-tab="house" onclick="openExpensePicker();mobileSetActive('house')"><i class="fa-solid fa-receipt"></i><span>Hogar</span></button>
+  <button class="mobile-tab mobile-add-tab" data-mobile-tab="add" onclick="openQuickAddMobile()" aria-label="Registrar movimiento"><span><i class="fa-solid fa-plus"></i></span><small>Registrar</small></button>
+  <button class="mobile-tab" data-mobile-tab="plan" onclick="mobileGo('calendar')"><i class="fa-regular fa-calendar-check"></i><span>Planes</span></button>
+  <button class="mobile-tab" data-mobile-tab="more" onclick="openMobileMore()"><i class="fa-solid fa-grip"></i><span>Más</span></button>
+</nav>
 <div id="authScreen">
  <div class="auth-card">
   <div class="auth-brand"><div class="logo-mark">N</div><div><h1>Nexus Finance</h1><div class="small">Hogar & Personal · nube segura</div></div></div>
@@ -1172,6 +1256,49 @@ setupYears();
 document.querySelector(".app").classList.add("auth-locked");
 document.getElementById("authScreen").style.display="flex";
 bootstrapAuth();
+
+
+/* Nexus Mobile Experience: dedicated mobile navigation and quick actions */
+(function(){
+ const isMobile=()=>window.matchMedia('(max-width: 800px)').matches;
+ window.mobileSetActive=function(key){document.querySelectorAll('.mobile-tab').forEach(b=>b.classList.toggle('active',b.dataset.mobileTab===key));};
+ window.mobileGo=function(route){
+   if(route==='dashboard')mobileSetActive('home');else if(route==='calendar')mobileSetActive('plan');else mobileSetActive('more');
+   showModule(route);window.scrollTo({top:0,behavior:'smooth'});
+ };
+ window.openMobileMore=function(){
+   mobileSetActive('more');
+   const items=[['fa-user-group','Finanzas personales','personalMe'],['fa-person-dress','Perfil de pareja','personalPartner'],['fa-bullseye','Metas a futuro','goals'],['fa-calendar-days','Calendario y recordatorios','calendar'],['fa-credit-card','Deudas','debts'],['fa-chart-pie','Reportes y cuentas','reports'],['fa-sliders','Configuración','settings']];
+   openModal('Explorar Nexus',`<p style="color:#7a8c90;font-size:12px;margin:-4px 0 15px">Todas tus herramientas financieras, en un solo lugar.</p><div class="mobile-more-list">${items.map(([icon,label,route])=>`<button class="mobile-more-item" onclick="closeModal();${route==='goals'?'navigateToGoals()':`mobileGo('${route}')`}"><span class="mobile-more-icon"><i class="fa-solid ${icon}"></i></span><span>${label}</span><i class="fa-solid fa-chevron-right"></i></button>`).join('')}<button class="mobile-more-item mobile-logout-item" onclick="closeModal();logoutNexus()"><span class="mobile-more-icon"><i class="fa-solid fa-right-from-bracket"></i></span><span>Cerrar sesión</span><i class="fa-solid fa-chevron-right"></i></button></div>`);
+ };
+ window.openQuickAddMobile=function(){
+   mobileSetActive('add');
+   openModal('¿Qué deseas registrar?',`<p style="font-size:12px;color:#7b8b90;margin:-3px 0 17px">Elige un movimiento para actualizar tus finanzas.</p><div class="mobile-action-grid"><button onclick="closeModal();openIncome('me')"><span class="quick-icon quick-income"><i class="fa-solid fa-arrow-down"></i></span><b>Ingreso</b><small>Dinero recibido</small></button><button onclick="closeModal();openExpensePicker()"><span class="quick-icon quick-expense"><i class="fa-solid fa-arrow-up"></i></span><b>Gasto</b><small>Pago del hogar</small></button><button onclick="closeModal();openSavingPicker()"><span class="quick-icon quick-saving"><i class="fa-solid fa-piggy-bank"></i></span><b>Ahorro</b><small>Separar dinero</small></button><button onclick="closeModal();mobileGo('calendar');setTimeout(()=>openTaskForm(),180)"><span class="quick-icon quick-task"><i class="fa-regular fa-calendar-plus"></i></span><b>Recordatorio</b><small>Una fecha importante</small></button></div>`);
+ };
+ function updateMobileHeader(){
+   const title=document.querySelector('.title h1');const target=document.getElementById('mobilePageTitle');
+   if(target&&title){const raw=title.textContent.trim();target.textContent=raw==='Dashboard General'?'Mi resumen':raw.replace('Finanza · ','');}
+   const date=document.getElementById('mobileToday');if(date){const now=new Date();date.textContent=now.toLocaleDateString('es-CO',{weekday:'long',day:'numeric',month:'long'});}
+   const sync=document.getElementById('syncStatusText');const mobileSync=document.getElementById('mobileSyncLabel');if(sync&&mobileSync)mobileSync.textContent=sync.textContent.trim();
+ }
+ const originalShowModule=window.showModule;
+ window.showModule=function(name,fromHistory=false){originalShowModule(name,fromHistory);updateMobileHeader();if(name==='dashboard')mobileSetActive('home');else if(name==='calendar')mobileSetActive('plan');else if(name==='personalMe'||name==='personalPartner')mobileSetActive('more');else mobileSetActive('more');};
+ const originalToggleSidebar=window.toggleSidebar;
+ window.toggleSidebar=function(){
+   if(!isMobile()){if(originalToggleSidebar)originalToggleSidebar();return;}
+   const sidebar=document.getElementById('sidebar');let scrim=document.querySelector('.mobile-scrim');
+   if(!scrim){scrim=document.createElement('div');scrim.className='mobile-scrim';scrim.onclick=()=>window.toggleSidebar();document.body.appendChild(scrim);}
+   const open=!sidebar.classList.contains('open');sidebar.classList.toggle('open',open);scrim.classList.toggle('show',open);document.body.style.overflow=open?'hidden':'';
+ };
+ const originalShow=window.showModule;
+ // Keep drawer and scrim in sync when any route is selected from the original side navigation.
+ document.addEventListener('click',e=>{if(e.target.closest('.sidebar .nav button')&&isMobile()){const sidebar=document.getElementById('sidebar');sidebar.classList.remove('open');document.querySelector('.mobile-scrim')?.classList.remove('show');document.body.style.overflow='';}});
+ document.addEventListener('click',e=>{if(e.target.closest('.mobile-tab')&&!e.target.closest('.mobile-add-tab')){const b=e.target.closest('.mobile-tab');if(b.dataset.mobileTab==='house'||b.dataset.mobileTab==='more')return;}});
+ const observer=new MutationObserver(updateMobileHeader);const title=document.querySelector('.title h1');if(title)observer.observe(title,{childList:true,subtree:true,characterData:true});
+ document.addEventListener('DOMContentLoaded',updateMobileHeader);window.addEventListener('resize',()=>{if(!isMobile()){document.getElementById('sidebar')?.classList.remove('open');document.querySelector('.mobile-scrim')?.classList.remove('show');document.body.style.overflow='';}});
+ setTimeout(updateMobileHeader,100);setTimeout(updateMobileHeader,800);
+})();
+
 </script>
 </body>
 </html>
