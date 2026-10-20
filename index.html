@@ -2,7 +2,11 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b0a12">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
 <title>Nexus Home Finance</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
@@ -243,11 +247,78 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 @media(max-width:420px){.personal-summary-grid{grid-template-columns:1fr}}
 </style>
 
+
+<style id="nexus-mobile-app-experience">
+.mobile-appbar,.mobile-quick-actions,.mobile-drawer-intro{display:none}.mobile-drawer-backdrop{display:none}
+@media(max-width:800px){
+ :root{--mobile-gutter:17px}
+ html{scroll-behavior:smooth;scroll-padding-top:100px}
+ body{background:radial-gradient(ellipse at 15% -12%,rgba(91,53,150,.34),transparent 42%),#0b0a12;padding-bottom:env(safe-area-inset-bottom);overscroll-behavior-y:contain}
+ .app{min-height:100dvh}
+ .main{padding:0 var(--mobile-gutter) 32px!important;width:100%;max-width:100%;min-height:100dvh}
+ .mobile-appbar{display:flex;position:sticky;top:0;z-index:35;align-items:center;justify-content:space-between;gap:12px;margin:0 calc(-1 * var(--mobile-gutter)) 0;padding:calc(10px + env(safe-area-inset-top)) var(--mobile-gutter) 12px;background:rgba(11,10,18,.88);border-bottom:1px solid rgba(167,139,250,.12);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
+ .mobile-brand-button{display:flex;align-items:center;gap:10px;background:none;color:var(--text);padding:0;text-align:left}
+ .mobile-brand-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:14px;background:linear-gradient(145deg,#9b70ff,#6940bc 62%,#e38c50);box-shadow:0 7px 22px rgba(139,92,246,.23);font-size:17px}
+ .mobile-brand-copy{display:grid;gap:3px}.mobile-brand-copy strong{font-size:16px;letter-spacing:-.035em}.mobile-brand-copy small{font-size:8px;letter-spacing:.12em;color:#a79bb9;font-weight:800}
+ .mobile-appbar-actions{display:flex;align-items:center;gap:9px}.mobile-live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(52,211,153,.1)}
+ .mobile-icon-button,.mobile-avatar{width:37px;height:37px;display:grid;place-items:center;border-radius:13px;background:#191522;border:1px solid #30263f;color:#ded5f2}.mobile-avatar{background:#2b2040;border-color:#46315f;color:#c4b5fd}
+ .topbar{display:flex;align-items:flex-start;flex-direction:column;gap:12px;margin:0 -2px 15px;padding:18px 2px 4px}
+ .title h1{font-size:clamp(25px,7vw,31px);letter-spacing:-.045em;line-height:1.12;margin:0 0 7px}.title p{font-size:12px;line-height:1.5;max-width:300px}.topbar>.actions{display:none}.mobile-menu{display:none!important}
+ .sidebar{display:block;width:min(340px,88vw);padding:calc(20px + env(safe-area-inset-top)) 17px calc(24px + env(safe-area-inset-bottom));background:linear-gradient(180deg,#171222,#0d0b14 70%);border-right:1px solid #393047;box-shadow:25px 0 70px #0007;z-index:61;overflow-y:auto;overscroll-behavior:contain;transform:translateX(-110%);transition:transform .32s cubic-bezier(.2,.8,.2,1);visibility:hidden}
+ .sidebar.open{transform:translateX(0);visibility:visible}
+ .mobile-drawer-backdrop{display:block;position:fixed;inset:0;z-index:60;background:rgba(3,2,7,.68);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
+ body.drawer-open .mobile-drawer-backdrop{opacity:1;visibility:visible}body.drawer-open{overflow:hidden}
+ .sidebar .logo{padding:4px 4px 18px;font-size:18px}
+ .mobile-drawer-intro{display:grid;gap:6px;margin:5px 0 22px;padding:17px;border-radius:18px;border:1px solid rgba(167,139,250,.2);background:radial-gradient(circle at 100% 0,rgba(139,92,246,.24),transparent 55%),linear-gradient(135deg,#21172f,#15111e)}
+ .mobile-drawer-intro span{font-size:9px;font-weight:800;letter-spacing:.12em;color:#b8a3e5}.mobile-drawer-intro strong{font-size:22px;letter-spacing:-.04em}.mobile-drawer-intro small{font-size:11px;color:var(--muted);line-height:1.5}
+ .nav{display:grid;gap:5px}.nav button{display:flex;align-items:center;min-height:49px;padding:12px 13px;border:1px solid transparent;border-radius:14px;font-size:13px;margin:0;transition:background .18s,border-color .18s,transform .18s}
+ .nav button:active{transform:scale(.985)}.nav button.active{background:linear-gradient(100deg,rgba(139,92,246,.2),rgba(139,92,246,.06));border-color:rgba(167,139,250,.22);color:#fff}
+ .nav button i{width:30px;font-size:15px;color:#b7a1e5}.nav button.active i{color:#c4b5fd}
+ .filterbar{display:grid;grid-template-columns:1fr 1.25fr;gap:9px;padding:12px;margin:0 0 14px;border-radius:17px;background:rgba(24,21,35,.8);box-shadow:0 8px 25px #0002}
+ .filterbar .field{min-width:0;width:100%}.filterbar .field label{font-size:9px;letter-spacing:.06em;text-transform:uppercase}.filterbar .select{min-height:43px;font-size:12px;border-radius:12px}
+ .filterbar .btn{grid-column:1/-1;min-height:39px}.filterbar #periodLabel{grid-column:1/-1;display:block;padding:0 2px}
+ .mobile-quick-actions{display:block;margin:0 0 17px;padding:15px;border:1px solid rgba(167,139,250,.17);border-radius:20px;background:linear-gradient(135deg,rgba(29,23,43,.96),rgba(18,15,26,.94));box-shadow:0 12px 30px rgba(0,0,0,.15)}
+ .mobile-quick-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.mobile-quick-heading>div{display:grid;gap:4px}
+ .mobile-quick-heading span{font-size:9px;letter-spacing:.1em;color:#b6a0e5;font-weight:800}.mobile-quick-heading strong{font-size:15px;letter-spacing:-.025em}.mobile-quick-heading>i{color:#c4b5fd;background:#302342;border-radius:11px;padding:10px}
+ .mobile-quick-grid{display:grid;grid-template-columns:1fr;gap:7px}.mobile-quick-grid button{display:flex;align-items:center;gap:11px;text-align:left;padding:10px;border:1px solid #30283e;border-radius:14px;background:rgba(10,9,15,.45);color:var(--text);min-height:61px}
+ .mobile-quick-grid button:active{background:#29203a;transform:scale(.99)}.mobile-quick-grid button>span:nth-child(2){display:grid;gap:4px;flex:1}.mobile-quick-grid button b{font-size:12px}.mobile-quick-grid button small{font-size:10px;color:var(--muted)}.mobile-quick-grid button>i{font-size:10px;color:#817594}
+ .quick-icon{width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:12px;font-size:14px}.quick-income{color:#c4b5fd;background:rgba(139,92,246,.16)}.quick-expense{color:#fdba74;background:rgba(251,146,60,.13)}.quick-saving{color:#6ee7b7;background:rgba(52,211,153,.12)}
+ .kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px;margin-bottom:13px}.kpi{min-height:122px;padding:14px;border-radius:17px;box-shadow:0 8px 22px rgba(0,0,0,.14)}
+ .kpi .label{font-size:9px;letter-spacing:.07em;font-weight:800;line-height:1.4}.kpi .value{font-size:clamp(17px,5vw,24px);letter-spacing:-.045em;margin-top:15px;line-height:1.12}.kpi .sub{font-size:9px;line-height:1.4;margin-top:7px}
+ .section-grid,.comparison-grid,.dashboard-mini-grid,.module-grid{grid-template-columns:minmax(0,1fr)!important;gap:12px;margin-bottom:12px}.card{padding:15px;border-radius:19px;box-shadow:0 10px 25px rgba(0,0,0,.14)}
+ .card-head{align-items:flex-start;gap:9px;margin-bottom:13px}.card-head h2{font-size:14px;line-height:1.35}.card-head span{font-size:10px;line-height:1.45}.head-actions{flex-wrap:wrap}
+ .donut-layout{grid-template-columns:minmax(110px,.8fr) minmax(0,1fr);gap:12px}.donut{width:min(130px,100%);height:auto;aspect-ratio:1}.donut:after{inset:24%}.donut-center{font-size:11px}.people{grid-template-columns:1fr;gap:8px}
+ .person{padding:11px;border-radius:13px}.person .amount{font-size:17px;margin:5px 0 8px}.person button{font-size:10px;padding:7px}
+ .list-row{grid-template-columns:minmax(0,1fr) auto!important;gap:8px;font-size:11px}.list-row>*:nth-child(3){justify-self:end}
+ .savings-grid,.future-grid{grid-template-columns:minmax(0,1fr)!important}.saving-card,.goal{padding:14px;border-radius:15px}.evolution-grid{grid-template-columns:minmax(0,1fr)!important;gap:10px}.evolution-panel{padding:12px;border-radius:15px}.evolution-panel .modern-chart{height:160px}.chart-tip{line-height:1.5}
+ .upcoming-item{grid-template-columns:48px minmax(0,1fr) auto;gap:9px;padding:10px}.upcoming-item .upcoming-name{font-size:11px}.upcoming-item .upcoming-meta{font-size:9px}.upcoming-badge{font-size:8px}
+ .module-section{margin-top:4px}.module-section>.card,.module-section .card{margin-bottom:12px}.module-form{grid-template-columns:minmax(0,1fr)!important;gap:12px}.module-form .full{grid-column:auto}
+ .form-grid{grid-template-columns:minmax(0,1fr)!important;gap:12px}.form-grid .full{grid-column:auto}.form-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.form-actions .btn{min-height:43px}
+ .btn,.mini-btn{min-height:38px}.actions{gap:7px}.actions .btn{min-height:40px}.table-wrap{border-radius:12px}.data-table{font-size:11px}.data-table th,.data-table td{padding:10px 8px}
+ .month-list{grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}.calendar-day{min-height:52px;padding:4px 2px;border-radius:8px;font-size:8px}.calendar-task{font-size:7px;line-height:1.25}
+ .account-card{padding:14px;border-radius:15px}.account-card .balance{font-size:20px}.personal-summary,.personal-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px}.personal-summary .summary-box{padding:10px}.personal-summary strong{font-size:13px}
+ .personal-finance-blocks{grid-template-columns:1fr!important;gap:11px}.personal-saving-boxes{grid-template-columns:1fr!important}.personal-block-history .record,.personal-saving-box .box-history .record{grid-template-columns:minmax(0,1fr) auto!important}
+ .personal-block-history .record>span:nth-child(3),.personal-saving-box .box-history .record>span:nth-child(3){grid-column:1/-1}.record{padding:10px;font-size:10px}.record-actions{grid-column:1/-1;display:flex;flex-wrap:wrap}.record-actions button{flex:1;min-height:34px}
+ .report-filter{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.report-filter .field{min-width:0}.report-row{grid-template-columns:1fr;gap:8px}.report-balance{align-items:flex-start}.comparison-card .bar-chart{height:170px}
+ .modal{z-index:200;padding:10px;align-items:flex-end}.modal-box{width:100%;max-height:min(88dvh,850px);padding:17px;border-radius:23px 23px 15px 15px;border-bottom:0;animation:nexus-sheet-in .25s cubic-bezier(.2,.8,.2,1)}
+ .modal-head{position:sticky;top:-17px;z-index:2;margin:-17px -17px 15px;padding:17px;background:rgba(20,17,30,.96);backdrop-filter:blur(18px);border-radius:23px 23px 0 0;border-bottom:1px solid rgba(255,255,255,.05)}
+ .modal-head h3{font-size:16px}.input,.select,.textarea{font-size:16px;min-height:45px;border-radius:12px}.textarea{min-height:90px}
+ .toast{z-index:300;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));max-width:none}.saving-goal-feature{border-radius:16px}.chart-detail-popover{z-index:250}
+ .module-section .card-head .btn{font-size:11px;padding:9px}.module-section .card-head{flex-wrap:wrap}
+ #authScreen{padding:20px 16px;align-items:center;min-height:100dvh}.auth-card{border-radius:26px;padding:24px 20px;box-shadow:0 30px 100px #0009}.auth-card h1{font-size:24px}
+}
+@media(max-width:390px){:root{--mobile-gutter:13px}.kpi{padding:12px;min-height:116px}.kpi .value{font-size:17px}.donut-layout{grid-template-columns:1fr}.donut-layout .donut{width:122px}.people{grid-template-columns:repeat(2,minmax(0,1fr))}.person .amount{font-size:15px}.upcoming-item{grid-template-columns:43px minmax(0,1fr)}.upcoming-badge{grid-column:2;justify-self:start}.personal-summary,.personal-summary-grid{grid-template-columns:1fr 1fr!important}}
+@keyframes nexus-sheet-in{from{opacity:.7;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+
 </head>
 <body>
 <div class="app">
+<div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" onclick="closeMobileDrawer()" aria-hidden="true"></div>
 <aside class="sidebar" id="sidebar">
   <div class="logo"><div class="logo-mark"><i class="fa-solid fa-wallet" aria-hidden="true"></i></div><div>Nexus Finance<div class="small">Hogar & Personal</div></div></div>
+  <div class="mobile-drawer-intro"><span>ESPACIO FINANCIERO</span><strong>Todo en orden.</strong><small>Tu hogar, tus metas y tu tranquilidad.</small></div>
   <nav class="nav">
     <button class="active" data-route="dashboard" onclick="showModule('dashboard')"><i class="fa-solid fa-house"></i>Dashboard</button>
     <button onclick="openExpensePicker()"><i class="fa-solid fa-house-chimney"></i>Gastos del hogar</button>
@@ -263,6 +334,17 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 </aside>
 
 <main class="main" id="dashboard">
+<div class="mobile-appbar" id="mobileAppbar">
+  <button class="mobile-brand-button" onclick="toggleSidebar()" aria-label="Abrir navegación">
+    <span class="mobile-brand-mark"><i class="fa-solid fa-wallet"></i></span>
+    <span class="mobile-brand-copy"><strong>Nexus</strong><small>FINANZAS DEL HOGAR</small></span>
+  </button>
+  <div class="mobile-appbar-actions">
+    <span class="mobile-live-dot" title="Aplicación activa"></span>
+    <button class="mobile-icon-button" onclick="refreshDashboard()" aria-label="Actualizar"><i class="fa-solid fa-rotate"></i></button>
+    <button class="mobile-avatar" onclick="showModule('settings')" aria-label="Abrir configuración"><i class="fa-solid fa-user"></i></button>
+  </div>
+</div>
 <header class="topbar">
   <div class="title"><h1>Dashboard General</h1><p>Control de tus finanzas personales y del hogar.</p></div>
   <div class="actions">
@@ -279,11 +361,20 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
   <span class="small" id="periodLabel"></span>
 </div>
 
+
 <section class="grid kpis">
  <div class="card kpi income"><div class="label">INGRESOS</div><div class="value" id="kpiIncome">$0</div><div class="sub">Total del periodo</div></div>
  <div class="card kpi expense"><div class="label">GASTOS · HOGAR</div><div class="value" id="kpiExpense">$0</div><div class="sub">Total del periodo</div></div>
  <div class="card kpi saving"><div class="label">AHORROS</div><div class="value" id="kpiSaving">$0</div><div class="sub">Financiero + imprevistos + emergencias</div></div>
  <div class="card kpi available"><div class="label">DISPONIBLE</div><div class="value" id="kpiAvailable">$0</div><div class="sub">Después de hogar y ahorros</div></div>
+</section>
+<section class="mobile-quick-actions" aria-label="Acciones rápidas">
+  <div class="mobile-quick-heading"><div><span>ACCIONES RÁPIDAS</span><strong>¿Qué quieres registrar?</strong></div><i class="fa-solid fa-bolt"></i></div>
+  <div class="mobile-quick-grid">
+    <button onclick="openIncome('me')"><span class="quick-icon quick-income"><i class="fa-solid fa-arrow-down"></i></span><span><b>Ingreso</b><small>Registrar entrada</small></span><i class="fa-solid fa-chevron-right"></i></button>
+    <button onclick="openExpensePicker()"><span class="quick-icon quick-expense"><i class="fa-solid fa-arrow-up"></i></span><span><b>Gasto del hogar</b><small>Registrar salida</small></span><i class="fa-solid fa-chevron-right"></i></button>
+    <button onclick="openSavingPicker()"><span class="quick-icon quick-saving"><i class="fa-solid fa-piggy-bank"></i></span><span><b>Ahorro</b><small>Sumar a una meta</small></span><i class="fa-solid fa-chevron-right"></i></button>
+  </div>
 </section>
 
 <section class="grid section-grid">
@@ -1166,6 +1257,29 @@ function deleteAccountMovement(id){confirmInApp("¿Eliminar este movimiento de c
 function monthlyReportData(){const year=Number(document.getElementById("reportYear")?.value||document.getElementById("filterYear").value)||new Date().getFullYear();const chosen=document.getElementById("reportMonth")?.value||"all";return MONTHS.map((name,i)=>{const month=String(i+1).padStart(2,"0"),key=`${year}-${month}`,matches=arr=>arr.filter(x=>String(x.date||"").slice(0,7)===key).reduce((s,x)=>s+(Number(x.amount)||0),0);const income=matches(state.incomes),expenses=matches(state.expenses),savings=matches(state.savings);return {name:name.slice(0,3),fullName:name,month:i+1,income,expenses,savings,balance:income-expenses-savings}}).filter(d=>chosen==="all"||String(d.month)===chosen)}
 function renderReports(){const yearSel=document.getElementById("reportYear"),globalYear=document.getElementById("filterYear");if(!yearSel||!globalYear)return;const years=[...new Set([new Date().getFullYear(),Number(globalYear.value),...state.incomes,...state.expenses,...state.savings].map(x=>typeof x==="number"?x:Number(String(x.date||"").slice(0,4))).filter(y=>y>=2000&&y<=2100))].sort((a,b)=>b-a);const old=yearSel.value;yearSel.innerHTML=years.map(y=>`<option value="${y}">${y}</option>`).join("");yearSel.value=years.includes(Number(old))?old:String(globalYear.value||years[0]);const data=monthlyReportData(),box=document.getElementById("reportChart"),max=Math.max(1,...data.flatMap(x=>[x.income,x.expenses,x.savings]));const fmtPct=(v,base)=>base>0?(v/base*100).toFixed(1)+"%":"—";if(box)box.innerHTML=data.map((d,i)=>{if(!(d.income||d.expenses||d.savings))return "";const prev=data[i-1],delta=(key)=>prev&&prev[key]>0?((d[key]-prev[key])/prev[key]*100):null;return `<div class="report-row"><strong>${d.fullName}</strong><div class="report-metrics"><div class="report-metric"><span>Ingresos</span><div class="report-track"><i class="report-income" style="width:${d.income/max*100}%"></i></div><small>${money(d.income)} · ${fmtPct(d.income,max)}</small>${delta("income")!==null?`<em class="${delta("income")>=0?'positive':'negative'}">${delta("income")>=0?'↑':'↓'} ${Math.abs(delta("income")).toFixed(1)}% vs mes anterior</em>`:""}</div><div class="report-metric"><span>Gastos</span><div class="report-track"><i class="report-expense" style="width:${d.expenses/max*100}%"></i></div><small>${money(d.expenses)} · ${fmtPct(d.expenses,max)}</small>${delta("expenses")!==null?`<em class="${delta("expenses")<=0?'positive':'negative'}">${delta("expenses")>=0?'↑':'↓'} ${Math.abs(delta("expenses")).toFixed(1)}% vs mes anterior</em>`:""}</div><div class="report-metric"><span>Ahorros</span><div class="report-track"><i class="report-savings" style="width:${d.savings/max*100}%"></i></div><small>${money(d.savings)} · ${fmtPct(d.savings,max)}</small>${delta("savings")!==null?`<em class="${delta("savings")>=0?'positive':'negative'}">${delta("savings")>=0?'↑':'↓'} ${Math.abs(delta("savings")).toFixed(1)}% vs mes anterior</em>`:""}</div></div><div class="report-balance"><b>${money(d.balance)}</b><small>Saldo neto</small><span class="report-callout">${d.income?`Gasto/ingreso: ${(d.expenses/d.income*100).toFixed(1)}%`:"Sin ingresos"}</span></div></div>`}).join("")||'<div class="empty">No hay movimientos en el periodo seleccionado.</div>';const sumKey=k=>data.reduce((s,d)=>s+d[k],0);const kpi=document.getElementById("reportKpis");if(kpi)kpi.innerHTML=[["Ingresos",sumKey("income"),"#a78bfa"],["Gastos",sumKey("expenses"),"#fb923c"],["Ahorros",sumKey("savings"),"#34d399"],["Saldo neto",sumKey("balance"),"#60a5fa"]].map(([n,v,c])=>`<div class="card kpi"><div class="label">${n.toUpperCase()}</div><div class="value" style="color:${c}">${money(v)}</div><div class="sub">${sumKey("income")?((v/sumKey("income"))*100).toFixed(1)+"% de los ingresos":"Sin ingresos en el periodo"}</div></div>`).join("");const summary=document.getElementById("reportSummary");if(summary)summary.innerHTML=[["Ingresos",sumKey("income")],["Gastos del hogar",sumKey("expenses")],["Ahorros",sumKey("savings")],["Saldo neto",sumKey("balance")],["Deudas pendientes",state.debts.reduce((s,d)=>s+(d.status==="paid"?0:Number(d.balance)||0),0)]].map(([n,v])=>`<div class="list-row" style="grid-template-columns:1fr auto"><span>${n}</span><strong>${money(v)}</strong></div>`).join("");const alerts=[];const pending=state.tasks.filter(t=>t.status!=="done"&&t.date&&t.date<dateNow());if(pending.length)alerts.push(`${pending.length} recordatorio(s) vencido(s)`);const due=state.debts.filter(d=>d.status!=="paid"&&d.due&&d.due<=dateNow());if(due.length)alerts.push(`${due.length} deuda(s) con vencimiento hoy o anterior`);if(sumKey("expenses")>sumKey("income"))alerts.push("Los gastos del hogar superan los ingresos registrados en el periodo");document.getElementById("financialAlerts").innerHTML=alerts.length?alerts.map(a=>`<div class="list-row" style="grid-template-columns:1fr"><span class="negative">⚠ ${esc(a)}</span></div>`).join(""):'<div class="empty">No hay alertas con los datos actuales.</div>';renderAccounts()}
 function exportReportCsv(){const rows=[["Mes","Ingresos","Gastos hogar","Ahorros","Saldo neto"],...monthlyReportData().map(d=>[d.name,d.income,d.expenses,d.savings,d.balance])];const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")).join("\n");const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`nexus-reporte-${(document.getElementById("reportYear")?.value||document.getElementById("filterYear").value)||new Date().getFullYear()}.csv`;a.click();URL.revokeObjectURL(a.href)}
+
+
+/* Nexus mobile shell: drawer navigation and touch-friendly behavior. */
+function closeMobileDrawer(){
+ const sidebar=document.getElementById("sidebar");
+ if(sidebar)sidebar.classList.remove("open");
+ document.body.classList.remove("drawer-open");
+}
+function toggleSidebar(){
+ const sidebar=document.getElementById("sidebar");
+ if(!sidebar)return;
+ const opening=!sidebar.classList.contains("open");
+ sidebar.classList.toggle("open",opening);
+ document.body.classList.toggle("drawer-open",opening);
+}
+document.addEventListener("click",function(event){
+ const navButton=event.target.closest(".nav button");
+ if(navButton)closeMobileDrawer();
+});
+document.addEventListener("keydown",function(event){
+ if(event.key==="Escape"&&document.body.classList.contains("drawer-open"))closeMobileDrawer();
+});
+window.addEventListener("resize",function(){if(window.innerWidth>800)closeMobileDrawer();});
 
 /* Arranque: primero autenticar; luego cargar los datos privados de la cuenta */
 setupYears();
