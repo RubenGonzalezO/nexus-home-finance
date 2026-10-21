@@ -2751,5 +2751,292 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
 })();
 </script>
 
+
+<script id="nexus-mobile-v8-settings">
+/* Nexus Finance V8: dependable settings, Spanish icon labels, profile icons and comfortable spacing. */
+(function(){
+  const $ = (selector, root=document) => root.querySelector(selector);
+  const $$ = (selector, root=document) => Array.from(root.querySelectorAll(selector));
+  const escHtml = value => typeof esc === 'function' ? esc(value) : String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const categoryLabels = {
+    'Arriendo':'Arriendo y vivienda','Mercado':'Mercado y alimentos','Luz':'Energía eléctrica','Agua':'Agua','Gas':'Gas domiciliario','Internet':'Internet','Transporte':'Transporte','Otros':'Otros gastos'
+  };
+  const categoryColorDefaults = {
+    'Arriendo':'#a78bfa','Mercado':'#fb923c','Luz':'#facc15','Agua':'#60a5fa','Gas':'#f97316','Internet':'#22d3ee','Transporte':'#34d399','Otros':'#c084fc'
+  };
+  const defaultCategoryIcons = {
+    'Arriendo':'fa-house','Mercado':'fa-cart-shopping','Luz':'fa-bolt','Agua':'fa-droplet','Gas':'fa-fire-flame-simple','Internet':'fa-wifi','Transporte':'fa-car-side','Otros':'fa-receipt'
+  };
+  const iconChoices = [
+    ['fa-house','Casa'],['fa-cart-shopping','Carrito de mercado'],['fa-basket-shopping','Canasta de mercado'],['fa-utensils','Cubiertos / alimentación'],['fa-bolt','Electricidad'],['fa-lightbulb','Bombilla'],['fa-droplet','Agua'],['fa-fire-flame-simple','Gas'],['fa-wifi','Internet'],['fa-mobile-screen-button','Celular / suscripción'],['fa-car-side','Automóvil'],['fa-bus','Transporte público'],['fa-bicycle','Bicicleta'],['fa-receipt','Recibo / otros gastos'],['fa-broom','Limpieza del hogar'],['fa-shirt','Ropa'],['fa-bag-shopping','Compras'],['fa-heart-pulse','Salud'],['fa-stethoscope','Atención médica'],['fa-film','Entretenimiento'],['fa-tv','Televisión'],['fa-book','Estudio / libros'],['fa-paw','Mascotas'],['fa-gift','Regalos'],['fa-shield-halved','Protección'],['fa-file-invoice-dollar','Deudas y obligaciones'],['fa-piggy-bank','Ahorro personal'],['fa-arrow-trend-up','Ingreso adicional']
+  ];
+  const userIconChoices = [
+    ['fa-person','Hombre'],['fa-person-dress','Mujer'],['fa-user','Persona'],['fa-user-tie','Profesional'],['fa-user-graduate','Estudiante'],['fa-user-doctor','Profesional de salud'],['fa-person-running','Deportista'],['fa-user-astronaut','Explorador espacial'],['fa-user-ninja','Ninja'],['fa-user-secret','Privacidad'],['fa-child','Niño o niña'],['fa-user-shield','Protección']
+  ];
+  const emojiOptions = ['😀','😊','🥰','😎','🤩','😴','🤔','😇','😂','🥳','😌','😺','🐶','🐱','🐼','🦊','🐻','🐸','🐵','🐰','🦁','🐯','🐨','🐧','🦉','🦄','🐢','🐬','🦋','🐙'];
+
+  function prefs(){
+    state.uiSettings = state.uiSettings && typeof state.uiSettings === 'object' ? state.uiSettings : {};
+    const p = state.uiSettings;
+    p.theme = 'purple';
+    p.spacing = 'comfortable';
+    p.meColor = '#38bdf8';
+    p.partnerColor = '#fb7185';
+    p.meIcon = userIconChoices.some(x=>x[0]===p.meIcon) ? p.meIcon : 'fa-person';
+    p.partnerIcon = userIconChoices.some(x=>x[0]===p.partnerIcon) ? p.partnerIcon : 'fa-person-dress';
+    p.avatarEmoji = emojiOptions.includes(p.avatarEmoji) ? p.avatarEmoji : '😊';
+    p.budgetAlerts = p.budgetAlerts !== false;
+    p.dueAlerts = p.dueAlerts !== false;
+    p.categoryIcons = p.categoryIcons && typeof p.categoryIcons === 'object' ? p.categoryIcons : {};
+    p.categoryColors = {...(p.categoryColors||{}),...categoryColorDefaults};
+    return p;
+  }
+  function chosenIcon(person){ const p=prefs(); return person==='partner'?p.partnerIcon:p.meIcon; }
+  function personFromText(text){
+    const s=String(text||'');
+    const partner=String(state.people?.partner||'').trim();
+    const me=String(state.people?.me||'').trim();
+    if(partner && partner!==me && s.includes(partner)) return 'partner';
+    if(me && s.includes(me)) return 'me';
+    return null;
+  }
+  function setIcon(el, person){
+    if(!el) return;
+    const cls=chosenIcon(person);
+    el.className='fa-solid '+cls;
+    el.textContent='';
+    el.removeAttribute('data-v5-fallback');
+    el.classList.remove('m-icon-fallback');
+    el.setAttribute('aria-hidden','true');
+  }
+  function applyUserIcons(){
+    const meIcon=chosenIcon('me'), partnerIcon=chosenIcon('partner');
+    // Rebuild profile icons in the mobile views and shared person labels.
+    $$('.m-v2-person-card.me .m-v2-person-icon i, .m-v2-available-card.me .m-v2-person-icon i').forEach(el=>setIcon(el,'me'));
+    $$('.m-v2-person-card.partner .m-v2-person-icon i, .m-v2-available-card.partner .m-v2-person-icon i').forEach(el=>setIcon(el,'partner'));
+    $$('.m-profile-switch button').forEach((btn,i)=>setIcon($('i',btn),i===1?'partner':'me'));
+    $$('.m-v3-person-tile span, .m-v2-share-line span, .m-v7-history-shares span, .m-v7-saving-owner').forEach(row=>{
+      const person=personFromText(row.textContent);
+      const icon=$('i',row);
+      if(person&&icon)setIcon(icon,person);
+    });
+    $$('.m-v3-profile-title, .m-v3-person-title').forEach(row=>{
+      const person=personFromText(row.textContent);const icon=$('i',row);if(person&&icon)setIcon(icon,person);
+    });
+    // Use the selected icon on identity badges produced by personTag().
+    $$('.identity-tag').forEach(tag=>{
+      const person=personFromText(tag.textContent);const icon=$('i',tag);if(person&&icon)setIcon(icon,person);
+    });
+    // Some income rows use a person glyph as the leading icon; identify those by owner text.
+    $$('.m-v3-row').forEach(row=>{
+      const lead=$('.m-v3-row-icon i',row);if(!lead)return;
+      const person=personFromText(row.textContent);
+      if(person && /fa-person|fa-user/.test(lead.className)) setIcon(lead,person);
+    });
+    // Reinforce comfortable spacing even when an old profile saved the former compact setting.
+    const root=$('#mobileApp');
+    if(root){root.classList.remove('m-v4-compact');root.style.setProperty('--m-person-me','#38bdf8');root.style.setProperty('--m-person-partner','#fb7185');}
+  }
+  window.mobileV8ApplyUserIcons = applyUserIcons;
+
+  // This global helper is used throughout the desktop and mobile templates.
+  if(typeof personTag === 'function'){
+    personTag = function(person,name=null,extraClass=''){
+      const key=person==='partner'?'partner':'me';
+      const label=name||state.people?.[key]||(key==='me'?'Yo':'Mi pareja');
+      const color=key==='partner'?'#fb7185':'#38bdf8';
+      return `<span class="identity-tag ${extraClass}" style="--identity-color:${color}"><i class="fa-solid ${chosenIcon(key)}" aria-hidden="true"></i>${escHtml(label)}</span>`;
+    };
+  }
+
+  window.mobileV8ChooseEmoji = function(emoji){
+    if(!emojiOptions.includes(emoji)) return;
+    const input=$('#mSetAvatarEmoji');if(input)input.value=emoji;
+    const preview=$('#mV7EmojiPreview');if(preview)preview.textContent=emoji;
+    $$('.m-v7-emoji-option').forEach(btn=>btn.classList.toggle('selected',btn.dataset.emoji===emoji));
+  };
+  window.mobileV8PreviewUserIcon = function(person){
+    const field=$('#mSet'+(person==='partner'?'Partner':'Me')+'Icon');
+    const preview=$('#mV8'+(person==='partner'?'Partner':'Me')+'IconPreview');
+    if(field&&preview){preview.className='fa-solid '+field.value;}
+  };
+  window.mobileV8PreviewCategoryIcon = function(index){
+    const field=$('#mSetCatIcon_'+index),preview=$('#mV8CategoryIcon_'+index);
+    if(field&&preview)preview.className='fa-solid '+field.value;
+  };
+  window.mobileV8ResetCategoryIcons = async function(){
+    const p=prefs();p.categoryIcons={};
+    try{await saveState();}catch(_){}
+    renderMobileUI();
+    if(typeof toast==='function')toast('Se restauraron los iconos predeterminados de las categorías.');
+  };
+
+  function settingsHtml(){
+    const p=prefs();
+    const meBoxes=typeof personalSavingBoxes==='function'?personalSavingBoxes('me'):[];
+    const partnerBoxes=typeof personalSavingBoxes==='function'?personalSavingBoxes('partner'):[];
+    const username=authUser?.username||authUser?.name||'';
+    const catItems=(Array.isArray(CATS)?CATS:[]).map((cat,index)=>{
+      const fallback=defaultCategoryIcons[cat]||'fa-receipt';
+      const selected=iconChoices.some(x=>x[0]===p.categoryIcons[cat])?p.categoryIcons[cat]:fallback;
+      const color=categoryColorDefaults[cat]||'#c084fc';
+      return `<article class="m-v8-category-row"><span class="m-v8-category-icon" style="--category-color:${color}"><i id="mV8CategoryIcon_${index}" class="fa-solid ${selected}" aria-hidden="true"></i></span><div class="m-v8-category-content"><b>${escHtml(categoryLabels[cat]||cat)}</b><small>Icono visible en resúmenes e historiales</small><select class="select" id="mSetCatIcon_${index}" aria-label="Icono para ${escHtml(categoryLabels[cat]||cat)}" onchange="mobileV8PreviewCategoryIcon(${index})">${iconChoices.map(([ic,label])=>`<option value="${ic}" ${ic===selected?'selected':''}>${label}</option>`).join('')}</select></div></article>`;
+    }).join('');
+    const userOpts=(current)=>userIconChoices.map(([ic,label])=>`<option value="${ic}" ${ic===current?'selected':''}>${label}</option>`).join('');
+    const emojiGrid=emojiOptions.map(e=>`<button type="button" class="m-v7-emoji-option ${e===p.avatarEmoji?'selected':''}" data-emoji="${e}" aria-label="Elegir emoji ${e}" onclick="mobileV8ChooseEmoji('${e}')">${e}</button>`).join('');
+    const boxSection=(person,title,boxes)=>`<article class="m-v8-box-manager"><div class="m-v8-box-heading"><span class="m-v8-box-owner ${person}"><i class="fa-solid ${chosenIcon(person)}"></i></span><div><b>${escHtml(title)}</b><small>${boxes.length} de 4 cajas configuradas</small></div><button class="m-secondary-btn" type="button" onclick="managePersonalSavingBoxes('${person}')"><i class="fa-solid fa-sliders"></i> Administrar</button></div><div class="m-v8-box-list">${boxes.map((box,i)=>`<span class="m-v8-box-chip" style="--box-color:${box.color||['#34d399','#60a5fa','#fbbf24','#c084fc'][i%4]}"><i class="fa-solid fa-piggy-bank"></i>${escHtml(box.name)}</span>`).join('')}${boxes.length<4?`<small class="m-v8-box-hint">Puedes añadir ${4-boxes.length} caja(s) desde Administrar.</small>`:'<small class="m-v8-box-hint">Límite de cuatro cajas alcanzado.</small>'}</div></article>`;
+    return `<section class="m-v3-section m-v8-settings-page">
+      <div class="m-v3-section-head"><div><h3><i class="fa-solid fa-sliders"></i> Configuración</h3><p>Administra perfiles, categorías, ahorros, alertas y acceso.</p></div></div>
+      <section class="m-v3-card m-v8-settings-card">
+        <form class="m-settings-form" onsubmit="mobileV8SaveSettings(event)">
+          <section class="m-v8-settings-block"><div class="m-v8-block-heading"><span class="m-v8-block-icon purple"><i class="fa-solid fa-users"></i></span><div><h4>Perfiles del hogar</h4><p>Estos nombres aparecerán en ingresos, gastos e informes.</p></div></div>
+            <div class="field"><label for="mSetMe">Tu nombre visible</label><input class="input" id="mSetMe" maxlength="60" value="${escHtml(state.people?.me||'Mi perfil')}" required></div>
+            <div class="field"><label for="mSetPartner">Nombre visible de tu pareja</label><input class="input" id="mSetPartner" maxlength="60" value="${escHtml(state.people?.partner||'Mi pareja')}" required></div>
+            <div class="m-v8-user-icon-grid">
+              <label class="m-v8-user-icon-card"><span class="m-v8-user-icon-preview me"><i id="mV8MeIconPreview" class="fa-solid ${p.meIcon}"></i></span><span><b>Tu icono</b><small>Para identificar tus movimientos</small></span><select class="select" id="mSetMeIcon" onchange="mobileV8PreviewUserIcon('me')">${userOpts(p.meIcon)}</select></label>
+              <label class="m-v8-user-icon-card"><span class="m-v8-user-icon-preview partner"><i id="mV8PartnerIconPreview" class="fa-solid ${p.partnerIcon}"></i></span><span><b>Icono de tu pareja</b><small>Para diferenciar sus movimientos</small></span><select class="select" id="mSetPartnerIcon" onchange="mobileV8PreviewUserIcon('partner')">${userOpts(p.partnerIcon)}</select></label>
+            </div>
+          </section>
+          <section class="m-v8-settings-block"><div class="m-v8-block-heading"><span class="m-v8-block-icon purple"><i class="fa-solid fa-face-smile"></i></span><div><h4>Emoji del Resumen General</h4><p>Se muestra junto al saludo cuando no hay una alerta prioritaria.</p></div></div>
+            <div class="m-v7-emoji-preview-wrap"><span id="mV7EmojiPreview" class="m-v7-emoji-preview" aria-label="Vista previa del emoji">${p.avatarEmoji}</span><div><b>Vista previa animada</b><small>Elige una cara o un animal para personalizar el recuadro del resumen.</small></div></div>
+            <input type="hidden" id="mSetAvatarEmoji" value="${p.avatarEmoji}"><div class="m-v7-emoji-grid" role="group" aria-label="Elegir emoji de perfil">${emojiGrid}</div>
+          </section>
+          <section class="m-v8-settings-block"><div class="m-v8-block-heading"><span class="m-v8-block-icon green"><i class="fa-solid fa-bullseye"></i></span><div><h4>Objetivos y alertas</h4><p>Configura metas y avisos importantes.</p></div></div>
+            <div class="field"><label for="mSetTarget">Meta mensual de ahorro del hogar (COP)</label><input class="input money-input" id="mSetTarget" inputmode="numeric" value="${state.savingTarget?escHtml(fmtInput(state.savingTarget)):''}" placeholder="Ej. 500.000" oninput="formatMoneyField(this)"></div>
+            <label class="m-v4-check-row"><input type="checkbox" id="mSetBudgetAlerts" ${p.budgetAlerts?'checked':''}><span><b>Avisos de presupuesto</b><small>Alertar al superar el 80 % y al llegar al 100 % de los ingresos.</small></span></label>
+            <label class="m-v4-check-row"><input type="checkbox" id="mSetDueAlerts" ${p.dueAlerts?'checked':''}><span><b>Vencimientos y calendario</b><small>Mostrar pagos pendientes, obligaciones próximas y eventos atrasados.</small></span></label>
+            <div class="m-v8-info-strip"><i class="fa-solid fa-circle-info"></i><span>El espaciado se mantiene en modo cómodo para facilitar la lectura y tocar los controles desde el celular.</span></div>
+          </section>
+          <section class="m-v8-settings-block"><div class="m-v8-block-heading"><span class="m-v8-block-icon orange"><i class="fa-solid fa-tags"></i></span><div><h4>Iconos de gastos del hogar</h4><p>Los nombres de las categorías y las opciones de iconos están en español. Los colores asignados a cada categoría se mantienen consistentes en toda la app.</p></div></div>
+            <div class="m-v8-category-list">${catItems}</div><button type="button" class="m-secondary-btn" onclick="mobileV8ResetCategoryIcons()"><i class="fa-solid fa-rotate-left"></i> Restaurar iconos de categorías</button>
+          </section>
+          <button class="m-primary-btn full" type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar configuración</button>
+        </form>
+      </section>
+      <section class="m-v8-settings-block m-v8-boxes-block"><div class="m-v8-block-heading"><span class="m-v8-block-icon green"><i class="fa-solid fa-piggy-bank"></i></span><div><h4>Cajas de ahorro personales</h4><p>Configura los nombres y administra hasta cuatro cajas para cada persona.</p></div></div>${boxSection('me',state.people?.me||'Tu perfil',meBoxes)}${boxSection('partner',state.people?.partner||'Tu pareja',partnerBoxes)}</section>
+      <section class="m-v8-settings-block m-v8-login-block"><div class="m-v8-block-heading"><span class="m-v8-block-icon blue"><i class="fa-solid fa-user-lock"></i></span><div><h4>Usuario de acceso</h4><p>Cambia el nombre que utilizas para iniciar sesión. Se guarda por separado de los nombres visibles de los perfiles.</p></div></div><form class="m-v8-username-form" onsubmit="mobileV8SaveUsername(event)"><div class="field"><label for="mV8Username">Nombre de usuario</label><input class="input" id="mV8Username" value="${escHtml(username)}" maxlength="40" minlength="3" autocomplete="username" autocapitalize="none" required></div><p id="mV8UsernameMessage" class="m-v8-inline-message" aria-live="polite"></p><button class="m-primary-btn full" type="submit"><i class="fa-solid fa-user-pen"></i> Actualizar usuario de acceso</button></form></section>
+      <section class="m-v8-settings-block"><div class="m-v8-block-heading"><span class="m-v8-block-icon blue"><i class="fa-solid fa-box-archive"></i></span><div><h4>Respaldo y mantenimiento</h4><p>Conserva una copia de tus datos y administra la sesión.</p></div></div><div class="m-v8-maintenance-grid"><button class="m-menu-item" onclick="exportData()"><span class="m-menu-icon purple"><i class="fa-solid fa-file-arrow-down"></i></span><span><b>Exportar respaldo</b><small>Descarga los datos en JSON</small></span><i class="fa-solid fa-chevron-right"></i></button><button class="m-menu-item" onclick="importData()"><span class="m-menu-icon blue"><i class="fa-solid fa-file-arrow-up"></i></span><span><b>Importar respaldo</b><small>Restaurar desde JSON</small></span><i class="fa-solid fa-chevron-right"></i></button><button class="m-menu-item" onclick="mobileRefresh()"><span class="m-menu-icon green"><i class="fa-solid fa-rotate"></i></span><span><b>Sincronizar ahora</b><small>Actualizar desde la nube</small></span><i class="fa-solid fa-chevron-right"></i></button><button class="m-menu-item" onclick="mobileLogout()"><span class="m-menu-icon pink"><i class="fa-solid fa-right-from-bracket"></i></span><span><b>Cerrar sesión</b><small>Salir de tu cuenta</small></span><i class="fa-solid fa-chevron-right"></i></button><button class="m-menu-item" onclick="resetAll()"><span class="m-menu-icon orange"><i class="fa-solid fa-triangle-exclamation"></i></span><span><b>Borrar todos los datos</b><small>Confirma solo si deseas empezar de cero</small></span><i class="fa-solid fa-chevron-right"></i></button></div></section>
+    </section>`;
+  }
+  renderMobileSettings = settingsHtml;
+
+  window.mobileV8SaveSettings = async function(event){
+    event.preventDefault();
+    const me=$('#mSetMe')?.value.trim(), partner=$('#mSetPartner')?.value.trim();
+    if(!me||!partner){ if(typeof toast==='function')toast('Completa ambos nombres de perfil.'); return; }
+    const p=prefs();
+    state.people.me=me.slice(0,60);state.people.partner=partner.slice(0,60);
+    state.savingTarget=Number(typeof num==='function'?num($('#mSetTarget')?.value):String($('#mSetTarget')?.value||'').replace(/[^0-9]/g,''))||0;
+    p.meIcon=userIconChoices.some(x=>x[0]===$('#mSetMeIcon')?.value)?$('#mSetMeIcon').value:'fa-person';
+    p.partnerIcon=userIconChoices.some(x=>x[0]===$('#mSetPartnerIcon')?.value)?$('#mSetPartnerIcon').value:'fa-person-dress';
+    p.avatarEmoji=emojiOptions.includes($('#mSetAvatarEmoji')?.value)?$('#mSetAvatarEmoji').value:'😊';
+    p.budgetAlerts=!!$('#mSetBudgetAlerts')?.checked;p.dueAlerts=!!$('#mSetDueAlerts')?.checked;
+    p.theme='purple';p.spacing='comfortable';p.meColor='#38bdf8';p.partnerColor='#fb7185';p.categoryColors={...categoryColorDefaults};
+    const nextIcons={...(p.categoryIcons||{})};
+    (CATS||[]).forEach((cat,index)=>{const value=$('#mSetCatIcon_'+index)?.value;if(iconChoices.some(x=>x[0]===value))nextIcons[cat]=value;});
+    p.categoryIcons=nextIcons;state.uiSettings=p;
+    try{
+      await saveState();
+      if(typeof updateSignedUserLabel==='function')updateSignedUserLabel();
+      if(typeof renderAll==='function')renderAll();
+      if(typeof renderExtendedModules==='function')renderExtendedModules();
+      renderMobileUI();
+      if(typeof toast==='function')toast('Configuración guardada. El usuario de acceso se actualiza en su sección independiente.');
+    }catch(error){
+      if(typeof toast==='function')toast('La configuración quedó aplicada en este dispositivo, pero hubo un problema al sincronizar. Revisa el indicador de conexión.');
+      try{renderMobileUI();}catch(_){}
+    }
+  };
+
+  window.mobileV8SaveUsername = async function(event){
+    event.preventDefault();
+    const field=$('#mV8Username'),message=$('#mV8UsernameMessage');
+    const username=String(field?.value||'').trim();
+    if(username.length<3||username.length>40){if(message)message.textContent='El nombre de usuario debe tener entre 3 y 40 caracteres.';return;}
+    if(!authToken||!authUser){if(message)message.textContent='Debes iniciar sesión para cambiar el usuario de acceso.';return;}
+    const button=$('.m-v8-username-form button[type="submit"]');if(button)button.disabled=true;
+    if(message)message.textContent='Actualizando usuario de acceso…';
+    if(typeof showLoader==='function')showLoader('Actualizando usuario','Verificando y guardando el nuevo nombre de acceso…');
+    try{
+      const result=await apiRequest('updateUsername',{token:authToken,username});
+      const returnedUser=result?.user||result?.data?.user||{};
+      authUser={...authUser,...returnedUser,username};
+      try{localStorage.setItem(AUTH_USER_KEY,JSON.stringify(authUser));}catch(_){}
+      if(typeof updateSignedUserLabel==='function')updateSignedUserLabel();
+      if(message)message.textContent='Usuario de acceso actualizado correctamente.';
+      if(typeof saveState==='function')await saveState();
+      renderMobileUI();
+      if(typeof toast==='function')toast('Nombre de usuario actualizado.');
+    }catch(error){
+      if(message)message.textContent='No se pudo cambiar el usuario de acceso: '+(error?.message||'el servicio rechazó la solicitud')+'. Tus nombres de perfil, iconos y preferencias sí se pueden guardar de forma independiente.';
+      if(typeof toast==='function')toast('No se pudo actualizar el usuario de acceso. Los demás ajustes no se pierden.');
+    }finally{
+      if(button)button.disabled=false;
+      if(typeof hideLoader==='function')hideLoader();
+    }
+  };
+
+  // Persist settings on every view render, and ensure the selected emoji is visible in the summary.
+  prefs();
+  const previousRenderMobileUI=renderMobileUI;
+  renderMobileUI=function mobileV8RenderMobileUI(){
+    prefs();
+    const result=previousRenderMobileUI.apply(this,arguments);
+    try{
+      const avatar=$('#mAvatar');
+      if(avatar){
+        const alerts=typeof window.mobileV4Alerts==='function'?window.mobileV4Alerts():[];
+        const critical=alerts.some(a=>a.severity==='critical'),warning=alerts.some(a=>a.severity==='warning');
+        const isSummary=['summary','home','dashboard'].includes(mobileScreen) || !!$('#mContent .m-v3-four-kpis');
+        if(alerts.length){
+          avatar.classList.add('m-v5-alert-avatar');
+          avatar.classList.toggle('has-critical',critical);avatar.classList.toggle('has-warning',!critical&&warning);
+          avatar.innerHTML=`<i class="fa-solid ${critical?'fa-triangle-exclamation':'fa-bell'}" aria-hidden="true"></i><span class="m-v4-alert-count">${alerts.length>9?'9+':alerts.length}</span>`;
+          avatar.setAttribute('aria-label',`${alerts.length} alertas financieras. Abrir centro de alertas`);avatar.title='Consultar alertas financieras';
+        }else if(isSummary){
+          const emoji=prefs().avatarEmoji||'😊';
+          avatar.classList.remove('has-critical','has-warning');avatar.classList.remove('m-v5-alert-avatar');
+          avatar.innerHTML=`<span class="m-v7-avatar-emoji" aria-hidden="true">${emoji}</span>`;
+          avatar.setAttribute('aria-label','Emoji de perfil; tocar para consultar alertas');avatar.title='Tu emoji de perfil';
+        }
+      }
+      applyUserIcons();
+    }catch(error){console.warn('Nexus V8: no se pudieron aplicar las preferencias visuales',error);}
+    return result;
+  };
+
+  // Larger, consistent spacing; no theme or user-color selector is offered in settings.
+  const style=document.createElement('style');style.id='nexus-mobile-v8-settings-style';style.textContent=`
+    .m-v8-settings-page{padding-bottom:22px!important}
+    .m-v8-settings-card{padding:18px!important}
+    .m-v8-settings-block{display:grid;gap:13px;margin:18px 0 23px;padding:17px;border:1px solid var(--m-line,#30283d);border-radius:17px;background:linear-gradient(150deg,#171420,#100e17);min-width:0}
+    .m-v8-settings-block:first-child{margin-top:0}
+    .m-v8-settings-block h4{margin:0;font-size:13px;line-height:1.4}
+    .m-v8-block-heading{display:flex;align-items:flex-start;gap:11px;margin-bottom:3px}
+    .m-v8-block-heading>div{display:grid;gap:4px;min-width:0;flex:1}
+    .m-v8-block-heading p{margin:0;font-size:10px;line-height:1.55;color:#a89eb7}
+    .m-v8-block-icon{display:grid;place-items:center;flex:0 0 39px;width:39px;height:39px;border-radius:13px;font-size:16px}
+    .m-v8-block-icon.purple{background:#302342;color:#c4b5fd}.m-v8-block-icon.green{background:#17392f;color:#6ee7b7}.m-v8-block-icon.orange{background:#402719;color:#fdba74}.m-v8-block-icon.blue{background:#1e2e49;color:#93c5fd}
+    .m-v8-user-icon-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:4px}
+    .m-v8-user-icon-card{display:grid;grid-template-columns:42px minmax(0,1fr);gap:9px;align-items:center;padding:11px;border:1px solid #30283d;border-radius:14px;background:#100e17;min-width:0}
+    .m-v8-user-icon-preview{grid-row:span 2;display:grid;place-items:center;width:42px;height:42px;border-radius:13px;font-size:18px}.m-v8-user-icon-preview.me{background:#102c3a;color:#7dd3fc;border:1px solid #24546d}.m-v8-user-icon-preview.partner{background:#3b1e2a;color:#fda4af;border:1px solid #71364b}
+    .m-v8-user-icon-card>span:nth-child(2){display:grid;gap:3px}.m-v8-user-icon-card b{font-size:10px}.m-v8-user-icon-card small{font-size:9px;color:#a79db6;line-height:1.4}.m-v8-user-icon-card select{grid-column:1/-1;min-height:39px;font-size:10px}
+    .m-v8-category-list{display:grid;gap:11px}.m-v8-category-row{display:grid;grid-template-columns:39px minmax(0,1fr);gap:10px;padding:11px;border:1px solid #30283d;border-radius:14px;background:#100e17;align-items:start}
+    .m-v8-category-icon{display:grid;place-items:center;width:39px;height:39px;border-radius:12px;color:var(--category-color);background:color-mix(in srgb,var(--category-color) 16%,#12101a);border:1px solid color-mix(in srgb,var(--category-color) 42%,transparent);font-size:15px}
+    .m-v8-category-content{display:grid;gap:6px;min-width:0}.m-v8-category-content b{font-size:11px;line-height:1.35}.m-v8-category-content small{font-size:9px;color:#a89eb7;line-height:1.4}.m-v8-category-content select{min-height:39px;font-size:10px;max-width:100%}
+    .m-v8-info-strip{display:flex;align-items:flex-start;gap:9px;padding:11px;border:1px solid #3b304d;border-radius:12px;background:#20182b;color:#c9bddc;font-size:10px;line-height:1.5}.m-v8-info-strip i{color:#c4b5fd;margin-top:1px}
+    .m-v8-boxes-block{padding:17px!important}.m-v8-box-manager{display:grid;gap:10px;padding:12px;border:1px solid #30283d;border-radius:14px;background:#100e17}.m-v8-box-heading{display:grid;grid-template-columns:37px minmax(0,1fr) auto;gap:9px;align-items:center}.m-v8-box-owner{display:grid;place-items:center;width:37px;height:37px;border-radius:11px}.m-v8-box-owner.me{background:#102c3a;color:#7dd3fc}.m-v8-box-owner.partner{background:#3b1e2a;color:#fda4af}.m-v8-box-heading>div{display:grid;gap:3px;min-width:0}.m-v8-box-heading b{font-size:10px;overflow-wrap:anywhere}.m-v8-box-heading small,.m-v8-box-hint{font-size:9px;color:#a89eb7;line-height:1.4}.m-v8-box-heading button{padding:8px;font-size:9px;min-height:34px}.m-v8-box-list{display:flex;flex-wrap:wrap;gap:7px}.m-v8-box-chip{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border:1px solid color-mix(in srgb,var(--box-color) 35%,transparent);border-radius:99px;background:color-mix(in srgb,var(--box-color) 11%,#100e17);color:#eee6fa;font-size:9px;max-width:100%;overflow-wrap:anywhere}.m-v8-box-chip i{color:var(--box-color)}.m-v8-box-hint{width:100%}
+    .m-v8-username-form{display:grid;gap:12px}.m-v8-inline-message{min-height:0;margin:0;color:#b7a9ca;font-size:10px;line-height:1.5;overflow-wrap:anywhere}.m-v8-maintenance-grid{display:grid;gap:9px}.m-v8-maintenance-grid .m-menu-item{min-height:60px;padding:10px;border-radius:13px}
+    .m-v7-emoji-grid{gap:9px!important}.m-v7-emoji-option{min-height:48px!important;font-size:24px!important}
+    .m-v3-section{margin-top:27px!important;margin-bottom:31px!important}.m-v3-card,.m-panel{padding:18px!important}.m-v3-row{padding:15px 0!important}.m-transaction{padding:15px!important;gap:14px!important}.m-section-heading{margin-top:25px!important;margin-bottom:15px!important}.m-v3-person-split,.m-v3-profile-cards,.m-v3-box-grid,.m-v3-account-grid{gap:13px!important}.m-settings-form{gap:19px!important}.m-v4-check-row{padding:11px 12px!important;border-radius:12px!important;line-height:1.5!important}
+    @media(max-width:420px){.m-v8-user-icon-grid{grid-template-columns:1fr}.m-v8-box-heading{grid-template-columns:34px minmax(0,1fr)}.m-v8-box-heading button{grid-column:1/-1;width:100%}.m-v8-category-row{grid-template-columns:35px minmax(0,1fr);padding:9px}.m-v8-category-icon{width:35px;height:35px}.m-v8-settings-block{padding:13px}.m-v8-settings-card{padding:12px!important}}
+    @media(prefers-reduced-motion:reduce){.m-v7-avatar-emoji,.m-v7-emoji-preview{animation:none!important}}
+  `;document.head.appendChild(style);
+
+  // On load, force the stable palette and comfortable layout from older saved settings.
+  try{prefs();}catch(_){}
+})();
+
+</script>
 </body>
 </html>
