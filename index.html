@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Finance · App móvil V5</title>
+<title>Nexus Finance · App móvil V7</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 :root{
@@ -2503,6 +2503,251 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
   });
   const previousRender=renderMobileUI;
   renderMobileUI=function(){const result=previousRender.apply(this,arguments);normalizeTabs();if(typeof window.mobileV5ApplyIconFallback==='function')window.mobileV5ApplyIconFallback();return result;};
+})();
+</script>
+
+
+
+<script id="nexus-mobile-v7-history-savings-emoji-backnav">
+(function(){
+  'use strict';
+  const $=(s,r=document)=>r.querySelector(s);
+  const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+  const palette={
+    financial:{icon:'fa-chart-line',color:'#34d399',label:'Ahorro Financiero'},
+    unexpected:{icon:'fa-shield-halved',color:'#60a5fa',label:'Imprevistos'},
+    emergency:{icon:'fa-kit-medical',color:'#f472b6',label:'Emergencias'}
+  };
+  const savingMeta=type=>palette[type]||palette.financial;
+  const ownerColor=person=>person==='partner'?(state.uiSettings?.partnerColor||'#fb7185'):(state.uiSettings?.meColor||'#38bdf8');
+  const ownerIcon=person=>person==='partner'?'fa-person-dress':'fa-person';
+  const ensureEmojiSetting=()=>{
+    state.uiSettings=state.uiSettings&&typeof state.uiSettings==='object'?state.uiSettings:{};
+    if(!state.uiSettings.avatarEmoji)state.uiSettings.avatarEmoji='😊';
+    return state.uiSettings.avatarEmoji;
+  };
+
+  /* 1) A resilient, touch-friendly layout for the expense history inside each category modal. */
+  renderExpenseHistory=function renderExpenseHistoryV7(category){
+    const yearEl=$('#histYear'),monthEl=$('#histMonth'),box=$('#historyList');
+    if(!yearEl||!monthEl||!box)return;
+    const year=Number(yearEl.value)||new Date().getFullYear(),month=monthEl.value;
+    const rows=(state.expenses||[])
+      .filter(x=>x.category===category&&inPeriod(x.date,year,month))
+      .slice()
+      .sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))||String(b.id||'').localeCompare(String(a.id||'')));
+    if(!rows.length){box.innerHTML='<div class="m-v7-history-empty"><i class="fa-solid fa-receipt"></i><span>No hay registros para este filtro.</span></div>';return;}
+    box.innerHTML=rows.map(x=>{
+      const pending=x.status==='pending';
+      const catColor=typeof mobileV4CatColor==='function'?mobileV4CatColor(category):'#fb923c';
+      const catIcon=typeof mobileV4CatIcon==='function'?mobileV4CatIcon(category):'fa-receipt';
+      const me=Number.isFinite(Number(x.meAmount))?Number(x.meAmount):(Number(x.amount)||0)/2;
+      const partner=Number.isFinite(Number(x.partnerAmount))?Number(x.partnerAmount):(Number(x.amount)||0)/2;
+      const ownerLine=`<div class="m-v7-history-shares"><span style="--owner:${ownerColor('me')}"><i class="fa-solid fa-person"></i>${esc(state.people.me||'Mi perfil')}: ${money(me)}</span><span style="--owner:${ownerColor('partner')}"><i class="fa-solid fa-person-dress"></i>${esc(state.people.partner||'Pareja')}: ${money(partner)}</span></div>`;
+      const paymentDate=x.paymentDate?`<small class="m-v7-history-due ${pending?'is-pending':'is-paid'}"><i class="fa-solid fa-calendar-check"></i>${pending?'Vence':'Fecha programada'}: ${esc(mobileV3DateLabel(x.paymentDate))}</small>`:'';
+      return `<article class="m-v7-expense-history-row ${pending?'is-pending':'is-paid'}" data-record-id="${esc(x.id||'')}">
+        <div class="m-v7-history-main">
+          <span class="m-v7-history-cat-icon" style="--cat-color:${catColor}"><i class="fa-solid ${catIcon}"></i></span>
+          <div class="m-v7-history-copy"><b>${esc(category)}</b><small><i class="fa-regular fa-calendar"></i> Registro: ${esc(x.date||'Sin fecha')} · ${x.distribution==='manual'?'Distribución manual':'Distribución 50/50'}</small>${ownerLine}${paymentDate}${x.repeatMonthly?'<span class="m-v7-history-repeat"><i class="fa-solid fa-repeat"></i> Recurrente mensual</span>':''}</div>
+          <strong class="m-v7-history-amount ${pending?'pending-text':'negative'}">${money(x.amount||0)}</strong>
+        </div>
+        <div class="m-v7-history-footer">
+          <button type="button" class="m-v7-history-status ${pending?'pending':'paid'}" onclick="mobileV7ToggleHistoryPayment('${String(x.id||'').replace(/'/g,"\\'")}')" aria-label="Estado ${pending?'Pendiente':'Pagado'}; tocar para cambiar" title="Tocar para cambiar el estado"><i class="fa-solid ${pending?'fa-clock':'fa-circle-check'}"></i><span>${pending?'Pendiente':'Pagado'}</span></button>
+          <div class="m-v7-history-actions"><button type="button" class="m-v7-history-action" onclick="openExpense('${String(category).replace(/'/g,"\\'")}','${String(x.id||'').replace(/'/g,"\\'")}')" aria-label="Editar gasto"><i class="fa-solid fa-pen-to-square"></i><span>Editar</span></button><button type="button" class="m-v7-history-action danger" onclick="deleteRecord('expense','${String(x.id||'').replace(/'/g,"\\'")}')" aria-label="Eliminar gasto"><i class="fa-solid fa-trash-can"></i><span>Eliminar</span></button></div>
+        </div>
+      </article>`;
+    }).join('');
+  };
+  window.mobileV7ToggleHistoryPayment=function(id){
+    const rec=(state.expenses||[]).find(x=>String(x.id)===String(id));
+    if(!rec||typeof window.mobileV4TogglePayment!=='function')return;
+    const before=rec.status;
+    const modalBox=$('#modalBox')||$('.modal-box');
+    const scroll=modalBox?.scrollTop||0;
+    window.mobileV4TogglePayment('expense',id);
+    // Refresh only when the payment was actually changed. If a budget-confirmation dialog opened,
+    // leave it intact and let the user's confirmation finish the flow.
+    if(rec.status!==before&&$('#historyList')){
+      renderExpenseHistory(rec.category);
+      requestAnimationFrame(()=>{const box=$('#modalBox')||$('.modal-box');if(box)box.scrollTop=scroll;});
+    }
+  };
+
+  /* 2) Reuse each savings fund's exact icon and color in summaries and movement histories. */
+  const originalShortMovement=mobileV3ShortMovement;
+  mobileV3ShortMovement=function(x,kind,label=''){
+    let markup=originalShortMovement.apply(this,arguments);
+    if(kind!=='saving'||!x)return markup;
+    const meta=savingMeta(x.type);
+    const old='<span class="m-v3-row-icon green"><i class="fa-solid fa-piggy-bank"></i></span>';
+    const icon=`<span class="m-v3-row-icon m-v7-saving-fund-icon" style="color:${meta.color};background:color-mix(in srgb,${meta.color} 18%,#12101a);border:1px solid color-mix(in srgb,${meta.color} 45%,transparent)"><i class="fa-solid ${meta.icon}"></i></span>`;
+    markup=markup.replace(old,icon);
+    const dateLabel=mobileV3DateLabel(x.date);
+    const person=esc(state.people[x.person]||state.people[x.person==='partner'?'partner':'me']||'Perfil');
+    const owner=`<span class="m-v7-saving-owner" style="--owner:${ownerColor(x.person)}"><i class="fa-solid ${ownerIcon(x.person)}"></i>${person}</span>`;
+    markup=markup.replace(`<small>${dateLabel}</small>`,`<small>${dateLabel} · ${owner}</small>`);
+    return markup;
+  };
+
+  const originalMobileTransactionCard=mobileTransactionCard;
+  mobileTransactionCard=function(x,actions=true){
+    if(!x||!(x._kind==='saving'||x.kind==='saving'))return originalMobileTransactionCard.apply(this,arguments);
+    const kind='saving',person=x.person==='partner'?'partner':'me',meta=savingMeta(x.type);
+    const title=x._label||meta.label;
+    const amount=Number(x.amount)||0;
+    const actionButtons=`<button type="button" class="m-icon-btn" aria-label="Editar aporte" title="Editar aporte" onclick="openSaving('${x.type||'financial'}','${String(x.id||'').replace(/'/g,"\\'")}','${person}')"><i class="fa-solid fa-pen-to-square"></i></button>`+(actions?`<button type="button" class="m-icon-btn danger" aria-label="Eliminar aporte" title="Eliminar aporte" onclick="deleteRecord('saving','${String(x.id||'').replace(/'/g,"\\'")}')"><i class="fa-solid fa-trash-can"></i></button>`:'');
+    const personLine=` · <span class="m-v7-saving-owner" style="--owner:${ownerColor(person)}"><i class="fa-solid ${ownerIcon(person)}"></i>${esc(state.people[person]||'Perfil')}</span>`;
+    return `<article class="m-transaction m-v6-transaction m-v7-saving-transaction" data-record-id="${esc(x.id||'')}" data-record-kind="saving"><div class="m-transaction-icon saving m-v7-saving-transaction-icon" style="color:${meta.color};background:color-mix(in srgb,${meta.color} 18%,#12101a);border:1px solid color-mix(in srgb,${meta.color} 46%,transparent)"><i class="fa-solid ${meta.icon}"></i></div><div class="m-transaction-info"><b>${esc(title)}</b><small>${esc(String(x.date||'Sin fecha'))}${personLine}</small></div><div class="m-transaction-side"><strong class="saving-text">+${money(amount)}</strong><div class="m-record-actions ${actions?'':'compact-actions'}">${actionButtons}</div></div></article>`;
+  };
+
+  renderSavingHistory=function renderSavingHistoryV7(type){
+    const yearEl=$('#histYear'),monthEl=$('#histMonth'),box=$('#historyList');if(!yearEl||!monthEl||!box)return;
+    const year=Number(yearEl.value)||new Date().getFullYear(),month=monthEl.value,meta=savingMeta(type);
+    const rows=(state.savings||[]).filter(x=>x.type===type&&inPeriod(x.date,year,month)).slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))||String(b.id||'').localeCompare(String(a.id||'')));
+    box.innerHTML=rows.length?rows.map(x=>`<article class="m-v7-saving-history-row" data-record-id="${esc(x.id||'')}"><span class="m-v7-history-cat-icon" style="--cat-color:${meta.color}"><i class="fa-solid ${meta.icon}"></i></span><div class="m-v7-saving-history-copy"><b>${esc(meta.label)}</b><small><i class="fa-regular fa-calendar"></i> ${esc(x.date||'Sin fecha')}</small><small class="m-v7-saving-owner" style="--owner:${ownerColor(x.person)}"><i class="fa-solid ${ownerIcon(x.person)}"></i>${esc(state.people[x.person]||'Perfil')}</small></div><strong class="m-v7-saving-history-amount">${money(x.amount||0)}</strong><div class="m-v7-history-actions"><button type="button" class="m-v7-history-action" onclick="openSaving('${type}','${String(x.id||'').replace(/'/g,"\\'")}','${x.person||'me'}')" aria-label="Editar aporte"><i class="fa-solid fa-pen-to-square"></i><span>Editar</span></button><button type="button" class="m-v7-history-action danger" onclick="deleteRecord('saving','${String(x.id||'').replace(/'/g,"\\'")}')" aria-label="Eliminar aporte"><i class="fa-solid fa-trash-can"></i><span>Eliminar</span></button></div></article>`).join(''):'<div class="m-v7-history-empty"><i class="fa-solid fa-inbox"></i><span>No hay aportes para este filtro.</span></div>';
+  };
+
+  const originalHome=renderMobileHome;
+  renderMobileHome=function renderMobileHomeV7(){
+    let markup=originalHome.apply(this,arguments);
+    markup=markup.replace(/<span class="m-v3-row-icon green"><i class="fa-solid (fa-chart-line|fa-shield-halved|fa-kit-medical)"><\/i><\/span>/g,(all,icon)=>{
+      const key=icon==='fa-chart-line'?'financial':icon==='fa-shield-halved'?'unexpected':'emergency',meta=savingMeta(key);
+      return `<span class="m-v3-row-icon m-v7-saving-fund-icon" style="color:${meta.color};background:color-mix(in srgb,${meta.color} 18%,#12101a);border:1px solid color-mix(in srgb,${meta.color} 45%,transparent)"><i class="fa-solid ${meta.icon}"></i></span>`;
+    });
+    return markup;
+  };
+
+  /* 3) Make the empty summary avatar a personal emoji, while preserving alert priority. */
+  window.mobileV7ChooseAvatarEmoji=function(emoji){
+    const field=$('#mSetAvatarEmoji');if(field)field.value=emoji;
+    const preview=$('#mV7EmojiPreview');if(preview)preview.textContent=emoji;
+    $$('.m-v7-emoji-option').forEach(btn=>btn.classList.toggle('selected',btn.dataset.emoji===emoji));
+  };
+  const emojiOptions=['😀','😊','🥰','😎','🤩','😴','🤔','😇','😂','🥳','😌','😺','🐶','🐱','🐼','🦊','🐻','🐸','🐵','🐰','🦁','🐯','🐨','🐧','🦉','🦄','🐢','🐬','🦋','🐙'];
+  const originalSettings=renderMobileSettings;
+  renderMobileSettings=function renderMobileSettingsV7(){
+    let markup=originalSettings.apply(this,arguments);
+    const selected=ensureEmojiSetting();
+    const chooser=`<div class="m-v4-settings-block m-v7-emoji-settings"><h4><i class="fa-solid fa-face-smile"></i> Tu emoji de perfil</h4><p class="m-v4-settings-help">Elige una cara o un animal. Se mostrará en el recuadro del Resumen General cuando no haya alertas que destacar.</p><div class="m-v7-emoji-preview-wrap"><span id="mV7EmojiPreview" class="m-v7-emoji-preview" aria-label="Vista previa del emoji">${selected}</span><div><b>Vista previa</b><small>Animación suave, sin distraer del resumen.</small></div></div><input type="hidden" id="mSetAvatarEmoji" value="${selected}"><div class="m-v7-emoji-grid" role="group" aria-label="Elegir emoji de perfil">${emojiOptions.map(e=>`<button type="button" class="m-v7-emoji-option ${e===selected?'selected':''}" data-emoji="${e}" aria-label="Elegir ${e}" onclick="mobileV7ChooseAvatarEmoji('${e}')">${e}</button>`).join('')}</div></div>`;
+    const marker='<div class="m-v4-settings-block"><h4><i class="fa-solid fa-bell"></i> Alertas</h4>';
+    if(markup.includes(marker))markup=markup.replace(marker,chooser+marker);
+    else markup=markup.replace('<button class="m-primary-btn full" type="submit">',chooser+'<button class="m-primary-btn full" type="submit">');
+    return markup;
+  };
+  const originalSaveSettings=mobileSaveSettings;
+  mobileSaveSettings=async function(e){
+    const p=state.uiSettings&&typeof state.uiSettings==='object'?state.uiSettings:(state.uiSettings={});
+    const field=$('#mSetAvatarEmoji');if(field&&field.value)p.avatarEmoji=field.value;
+    else if(!p.avatarEmoji)p.avatarEmoji='👋';
+    return originalSaveSettings.apply(this,arguments);
+  };
+  const originalReset=window.mobileV4ResetAppearance;
+  if(typeof originalReset==='function')window.mobileV4ResetAppearance=function(){
+    originalReset.apply(this,arguments);
+    state.uiSettings=state.uiSettings&&typeof state.uiSettings==='object'?state.uiSettings:{};
+    state.uiSettings.avatarEmoji='😊';
+    if(typeof saveState==='function')saveState();
+    if(typeof renderMobileUI==='function')renderMobileUI();
+  };
+
+  const originalRender=renderMobileUI;
+  renderMobileUI=function renderMobileUIV7(){
+    const result=originalRender.apply(this,arguments);
+    try{
+      const avatar=$('#mAvatar');
+      if(avatar){
+        const alerts=typeof window.mobileV4Alerts==='function'?window.mobileV4Alerts():[];
+        if(!alerts.length&&(mobileScreen==='summary'||mobileScreen==='home')){
+          const emoji=ensureEmojiSetting();
+          avatar.innerHTML=`<span class="m-v7-avatar-emoji" aria-hidden="true">${emoji}</span>`;
+          avatar.setAttribute('aria-label','Emoji de perfil; tocar para consultar alertas');
+          avatar.title='Tu emoji de perfil · tocar para consultar alertas';
+        }
+      }
+    }catch(err){console.warn('Nexus V7: no se pudo dibujar el emoji de perfil',err);}
+    return result;
+  };
+
+  /* 4) Native browser back/edge-swipe navigation between mobile sections. */
+  const priorSetScreen=mobileSetScreen;
+  const normalizeScreen=name=>({home:'summary',reports:'summary',movements:'summary',expenses:'homeExpenses',availableFunds:'available'}[name]||name);
+  mobileSetScreen=function mobileSetScreenV7(name){
+    const next=normalizeScreen(name),hasSession=!!(authToken&&authUser),modalOpen=$('#modal')?.classList.contains('show');
+    if(hasSession&&!window.__nexusV7HandlingPop){
+      try{
+        if(!window.__nexusV7NavReady){
+          history.replaceState({...((history.state&&typeof history.state==='object')?history.state:{}),nexusMobileScreen:mobileScreen||'summary'},'',location.href);
+          window.__nexusV7NavReady=true;
+        }
+        if(!modalOpen&&next!==mobileScreen){
+          history.pushState({...((history.state&&typeof history.state==='object')?history.state:{}),nexusMobileScreen:next},'',location.href);
+        }
+      }catch(err){console.warn('Nexus V7: navegación de historial no disponible',err);}
+    }
+    return priorSetScreen.apply(this,arguments);
+  };
+  const priorCloseModal=closeModal;
+  closeModal=function closeModalV7(fromPop=false){
+    if(fromPop)window.__nexusV7ModalPopInProgress=true;
+    const result=priorCloseModal.apply(this,arguments);
+    if(fromPop){
+      try{history.replaceState({...((history.state&&typeof history.state==='object')?history.state:{}),nexusMobileScreen:mobileScreen||'summary'},'',location.href);}catch(_){}
+      setTimeout(()=>{window.__nexusV7ModalPopInProgress=false;},0);
+    }
+    return result;
+  };
+  window.addEventListener('popstate',function(event){
+    if(window.__nexusV7ModalPopInProgress)return;
+    if($('#modal')?.classList.contains('show'))return;
+    const target=event.state&&event.state.nexusMobileScreen;
+    if(!target||target===mobileScreen)return;
+    window.__nexusV7HandlingPop=true;
+    mobileScreen=target;
+    renderMobileUI();
+    window.scrollTo({top:0,behavior:'auto'});
+    setTimeout(()=>{window.__nexusV7HandlingPop=false;},0);
+  });
+
+  /* Keep save-payment re-renders on the active history visible and style all new records. */
+  const style=document.createElement('style');
+  style.id='nexus-mobile-v7-final-polish';
+  style.textContent=`
+    .m-v7-expense-history-row,.m-v7-saving-history-row{display:grid;gap:10px;padding:13px;margin:7px 0;border:1px solid #30283d;border-radius:15px;background:linear-gradient(145deg,#171420,#100e17);min-width:0;}
+    .m-v7-expense-history-row.is-pending{border-color:#714726;background:linear-gradient(120deg,#fb923c0d,#171420 65%)}
+    .m-v7-expense-history-row.is-paid{border-color:#2d463d}
+    .m-v7-history-main{display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:start;gap:10px;min-width:0}
+    .m-v7-history-cat-icon{display:grid;place-items:center;width:38px;height:38px;border:1px solid color-mix(in srgb,var(--cat-color,#fb923c) 45%,transparent);border-radius:12px;color:var(--cat-color,#fb923c);background:color-mix(in srgb,var(--cat-color,#fb923c) 16%,#12101a);font-size:15px;flex:0 0 38px}
+    .m-v7-history-copy,.m-v7-saving-history-copy{display:grid;gap:5px;min-width:0;overflow-wrap:anywhere}
+    .m-v7-history-copy>b,.m-v7-saving-history-copy>b{font-size:12px;line-height:1.4;color:#f4efff}
+    .m-v7-history-copy>small,.m-v7-saving-history-copy>small{font-size:10px;line-height:1.45;color:#a89eb7;overflow-wrap:anywhere}
+    .m-v7-history-copy>small i,.m-v7-saving-history-copy>small i{margin-right:4px}
+    .m-v7-history-shares{display:grid;gap:4px;margin-top:2px}
+    .m-v7-history-shares span,.m-v7-saving-owner{display:inline-flex;align-items:center;gap:5px;color:var(--owner,#38bdf8);font-size:10px;line-height:1.4;overflow-wrap:anywhere}
+    .m-v7-history-amount,.m-v7-saving-history-amount{font-size:12px;line-height:1.35;max-width:115px;overflow-wrap:anywhere;text-align:right;font-variant-numeric:tabular-nums}
+    .m-v7-history-footer{display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap;padding-top:9px;border-top:1px solid #ffffff0d}
+    .m-v7-history-status{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:34px;padding:7px 10px;border:1px solid;border-radius:10px;font-size:10px;font-weight:850}
+    .m-v7-history-status.pending{border-color:#714726;background:#402719;color:#fdba74}.m-v7-history-status.paid{border-color:#245c49;background:#17392f;color:#6ee7b7}
+    .m-v7-history-actions{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}
+    .m-v7-history-action{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:7px 10px;border:1px solid #373044;border-radius:10px;background:#211c2d;color:#e5dbf5;font-size:10px;font-weight:750}
+    .m-v7-history-action.danger{border-color:#603044;background:#29151f;color:#fda4af}
+    .m-v7-history-repeat{display:inline-flex;align-items:center;gap:5px;width:max-content;max-width:100%;font-size:9px;color:#c4b5fd;border:1px solid #514064;border-radius:99px;padding:4px 7px;margin-top:2px}
+    .m-v7-history-due{color:#fdba74!important}.m-v7-history-due.is-paid{color:#6ee7b7!important}
+    .m-v7-history-empty{display:flex;align-items:center;justify-content:center;gap:9px;padding:23px 10px;color:#a89eb7;font-size:11px;text-align:center}.m-v7-history-empty i{font-size:17px;color:#c4b5fd}
+    .m-v7-saving-history-row{grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:10px}
+    .m-v7-saving-history-row .m-v7-history-actions{grid-column:2/-1;justify-content:flex-end}
+    .m-v7-saving-fund-icon{color:var(--m-v7-fund-color,#34d399)!important}
+    .m-v7-avatar-emoji{display:inline-block;font-family:"Segoe UI Emoji","Apple Color Emoji",sans-serif;font-size:25px;line-height:1;filter:drop-shadow(0 3px 8px #0004);animation:nexus-v7-emoji-float 2.6s ease-in-out infinite;transform-origin:50% 70%}
+    @keyframes nexus-v7-emoji-float{0%,100%{transform:translateY(0) rotate(-3deg) scale(1)}50%{transform:translateY(-3px) rotate(3deg) scale(1.06)}}
+    .m-v7-emoji-settings{overflow:hidden}.m-v7-emoji-preview-wrap{display:flex;align-items:center;gap:13px;padding:12px;margin:8px 0 13px;border:1px solid #40324f;border-radius:14px;background:linear-gradient(120deg,#21192e,#14111d)}
+    .m-v7-emoji-preview{display:grid;place-items:center;width:56px;height:56px;border-radius:18px;border:1px solid #5a466e;background:#2a203a;font-size:31px;animation:nexus-v7-emoji-float 2.6s ease-in-out infinite}
+    .m-v7-emoji-preview-wrap>div{display:grid;gap:4px}.m-v7-emoji-preview-wrap b{font-size:11px}.m-v7-emoji-preview-wrap small{font-size:9px;color:#a89eb7;line-height:1.45}
+    .m-v7-emoji-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}
+    .m-v7-emoji-option{display:grid;place-items:center;min-height:45px;padding:4px;border:1px solid #30283d;border-radius:12px;background:#120f19;font-family:"Segoe UI Emoji","Apple Color Emoji",sans-serif;font-size:23px;transition:transform .18s,border-color .18s,background .18s}
+    .m-v7-emoji-option.selected{border-color:#a78bfa;background:#302342;box-shadow:0 0 0 2px #a78bfa20}.m-v7-emoji-option:active{transform:scale(.94)}
+    @media(max-width:390px){.m-v7-history-main{grid-template-columns:34px minmax(0,1fr)}.m-v7-history-cat-icon{width:34px;height:34px}.m-v7-history-amount{grid-column:2;text-align:left;max-width:none;font-size:14px}.m-v7-history-footer{align-items:stretch}.m-v7-history-status{flex:1}.m-v7-history-actions{flex:1}.m-v7-history-action{flex:1;justify-content:center}.m-v7-saving-history-row{grid-template-columns:34px minmax(0,1fr)}.m-v7-saving-history-amount{grid-column:2;text-align:left;max-width:none}.m-v7-saving-history-row .m-v7-history-actions{grid-column:2}.m-v7-emoji-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+    @media(prefers-reduced-motion:reduce){.m-v7-avatar-emoji,.m-v7-emoji-preview{animation:none}}
+  `;
+  document.head.appendChild(style);
 })();
 </script>
 
