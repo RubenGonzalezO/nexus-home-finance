@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Finance · App móvil V2</title>
+<title>Nexus Finance · App móvil V3</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 :root{
@@ -305,6 +305,61 @@ button,input,select,textarea{-webkit-tap-highlight-color:transparent}button{touc
 .m-v2-calculation{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:7px;align-items:center;margin-top:17px;padding-top:13px;border-top:1px solid #ffffff14}.m-v2-calculation span{display:grid;gap:5px;min-width:0}.m-v2-calculation small{font-size:9px;color:#b2a8c0}.m-v2-calculation b{font-size:clamp(9px,2.8vw,12px);overflow-wrap:anywhere}.m-v2-calculation>i{font-style:normal;color:#91caff;font-size:14px}
 .m-v2-note{display:flex;align-items:flex-start;gap:9px;padding:12px;margin-top:15px;border:1px solid #2c4562;border-radius:14px;background:#152237;color:#b9c8df;font-size:10px;line-height:1.55}.m-v2-note>i{color:#93c5fd;margin-top:2px}
 @media(max-width:380px){.m-v2-person-grid{gap:7px}.m-v2-person-card{padding:11px}.m-v2-person-card>strong{font-size:15px}.m-v2-calculation{gap:4px}.m-v2-calculation b{font-size:9px}.m-v2-current-balance{align-items:flex-start;flex-direction:column}.m-v2-current-balance .m-secondary-btn{width:100%}}
+</style>
+<style id="nexus-mobile-v3">
+/* Nexus Finance móvil V3: resumen principal, edición completa, calendario y cuentas informativas */
+.m-v3-section{margin:19px 0 22px;min-width:0}
+.m-v3-section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin:0 1px 11px}
+.m-v3-section-head h3{display:flex;align-items:center;gap:7px;margin:0 0 4px;font-size:15px;letter-spacing:-.02em}
+.m-v3-section-head h3>i{color:#c4b5fd;font-size:13px}
+.m-v3-section-head p{margin:0;color:var(--m-muted);font-size:10px;line-height:1.45}
+.m-v3-link{display:inline-flex;align-items:center;gap:6px;padding:6px 0;background:transparent;color:#cbb7ff;font-size:10px;font-weight:800;white-space:nowrap}
+.m-v3-four-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0 18px}
+.m-v3-kpi{display:block;text-align:left;width:100%;padding:13px;border:1px solid var(--m-line);border-radius:16px;background:linear-gradient(155deg,#1b1727,#12101a);color:#f6f3ff;min-width:0}
+.m-v3-kpi-top{display:flex;align-items:center;justify-content:space-between;gap:7px;color:#b8aec9;font-size:10px}
+.m-v3-kpi-top i{display:grid;place-items:center;width:28px;height:28px;border-radius:10px;background:#29213b;color:#c4b5fd}
+.m-v3-kpi strong{display:block;margin-top:10px;font-size:clamp(17px,4.6vw,22px);letter-spacing:-.04em;overflow-wrap:anywhere}
+.m-v3-kpi small{display:block;margin-top:4px;color:#958ba6;font-size:9px}
+.m-v3-kpi.income strong{color:#c4b5fd}.m-v3-kpi.expense strong{color:#fdba74}.m-v3-kpi.saving strong{color:#6ee7b7}.m-v3-kpi.available strong{color:#93c5fd}
+.m-v3-quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:6px 0 20px}
+.m-v3-quick button{display:grid;justify-items:center;align-content:start;gap:7px;min-width:0;padding:5px 1px;background:transparent;color:#eae3f5;font-size:9px;line-height:1.3}
+.m-v3-quick-icon{display:grid;place-items:center;width:43px;height:43px;border-radius:15px;border:1px solid #443650;background:#2a2039;color:#c4b5fd;font-size:15px}
+.m-v3-quick-icon.orange{background:#402719;border-color:#69452a;color:#fdba74}.m-v3-quick-icon.green{background:#17392f;border-color:#245c49;color:#6ee7b7}.m-v3-quick-icon.blue{background:#1e2e49;border-color:#304c74;color:#93c5fd}
+.m-v3-card{min-width:0;padding:14px;border:1px solid var(--m-line);border-radius:17px;background:linear-gradient(155deg,rgba(27,23,39,.98),rgba(17,15,24,.98));margin-bottom:10px}
+.m-v3-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:9px;margin-bottom:10px}
+.m-v3-card-top h4{display:flex;align-items:center;gap:7px;margin:0;font-size:12px;line-height:1.4}
+.m-v3-card-top h4 i{color:#c4b5fd}
+.m-v3-card-top p{margin:4px 0 0;color:var(--m-muted);font-size:9px;line-height:1.45}
+.m-v3-highlight{font-size:clamp(20px,5vw,26px);font-weight:900;letter-spacing:-.04em;overflow-wrap:anywhere}
+.m-v3-muted{color:var(--m-muted);font-size:10px;line-height:1.5}
+.m-v3-person-split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.m-v3-person-tile{padding:10px;border:1px solid #ffffff0d;border-radius:12px;background:#100d18;min-width:0}
+.m-v3-person-tile span{display:flex;align-items:center;gap:6px;color:#b9afc8;font-size:9px;overflow-wrap:anywhere}
+.m-v3-person-tile strong{display:block;margin-top:6px;font-size:13px;overflow-wrap:anywhere}
+.m-v3-row{display:flex;align-items:center;gap:9px;padding:10px 0;border-bottom:1px solid #ffffff0b;min-width:0}
+.m-v3-row:last-child{border-bottom:0;padding-bottom:0}.m-v3-row:first-child{padding-top:2px}
+.m-v3-row-icon{display:grid;place-items:center;width:34px;height:34px;flex:0 0 34px;border-radius:11px;background:#29213b;color:#c4b5fd;font-size:12px}
+.m-v3-row-icon.orange{background:#3b281c;color:#fdba74}.m-v3-row-icon.green{background:#17392f;color:#6ee7b7}.m-v3-row-icon.blue{background:#1e2e49;color:#93c5fd}.m-v3-row-icon.pink{background:#3b2030;color:#f9a8d4}
+.m-v3-row-main{display:grid;gap:3px;flex:1;min-width:0}.m-v3-row-main b{font-size:10px;line-height:1.45;overflow-wrap:anywhere}.m-v3-row-main small{font-size:9px;color:#9e94af;line-height:1.4;overflow-wrap:anywhere}
+.m-v3-row-side{display:grid;justify-items:end;align-items:center;gap:5px;min-width:0}.m-v3-row-side strong{font-size:10px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.m-v3-actions{display:flex;align-items:center;justify-content:flex-end;gap:5px;flex-wrap:wrap}
+.m-v3-inline-btn{display:inline-grid;place-items:center;min-width:30px;min-height:30px;padding:0 7px;border:1px solid #393047;border-radius:9px;background:#201a2d;color:#d8c9f4;font-size:10px}
+.m-v3-inline-btn.danger{color:#fda4af;border-color:#4b2938;background:#2c1824}.m-v3-inline-btn.primary{background:#39234f;color:#e9ddff;border-color:#5b3c79}
+.m-v3-progress{height:7px;margin:8px 0 4px;overflow:hidden;border-radius:99px;background:#2b2537}.m-v3-progress i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#8b5cf6,#c4b5fd)}
+.m-v3-categories{display:grid;gap:10px}.m-v3-category{display:grid;grid-template-columns:minmax(75px,1fr) minmax(55px,1.5fr) auto;align-items:center;gap:8px;font-size:9px}.m-v3-category-name{display:flex;align-items:center;gap:6px;min-width:0;overflow-wrap:anywhere}.m-v3-category-name i{color:#fdba74}.m-v3-category-track{height:7px;background:#2b2537;border-radius:99px;overflow:hidden}.m-v3-category-track i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#f97316,#fdba74)}.m-v3-category strong{white-space:nowrap;font-size:9px}
+.m-v3-profile-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.m-v3-profile-card{padding:12px;border:1px solid var(--m-line);border-radius:15px;background:linear-gradient(155deg,#1c1727,#12101a);min-width:0}.m-v3-profile-title{display:flex;align-items:center;gap:7px;font-size:10px;color:#d7c8f3;line-height:1.4}.m-v3-profile-card>strong{display:block;margin:9px 0 7px;font-size:17px;letter-spacing:-.03em;overflow-wrap:anywhere}.m-v3-profile-meta{display:grid;gap:4px;color:#a79db6;font-size:9px;line-height:1.45}.m-v3-profile-card .m-secondary-btn{width:100%;min-height:36px;margin-top:10px;font-size:9px;padding:0 7px}
+.m-v3-disclosure{border:1px solid var(--m-line);border-radius:16px;margin:9px 0;background:#151220;overflow:hidden}.m-v3-disclosure summary{display:flex;align-items:center;gap:9px;padding:13px;cursor:pointer;list-style:none;font-size:11px;font-weight:800}.m-v3-disclosure summary::-webkit-details-marker{display:none}.m-v3-disclosure summary>i:first-child{color:#c4b5fd}.m-v3-disclosure summary .m-v3-disclosure-count{margin-left:auto;color:#a89bbb;font-size:9px;font-weight:600}.m-v3-disclosure[open] summary{border-bottom:1px solid #ffffff0b}.m-v3-disclosure-body{padding:12px}
+.m-v3-box-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.m-v3-box{padding:12px;border:1px solid #ffffff12;border-top:3px solid var(--identity-color,#34d399);border-radius:14px;background:#0f0d16;min-width:0}.m-v3-box h4{margin:0;display:flex;align-items:center;gap:6px;font-size:10px;overflow-wrap:anywhere}.m-v3-box>strong{display:block;margin:9px 0 4px;font-size:18px;overflow-wrap:anywhere}.m-v3-box small{font-size:9px;color:#a79db6;line-height:1.4}.m-v3-box-actions{display:flex;gap:6px;margin-top:10px}.m-v3-box-actions button{flex:1;min-height:32px;padding:0 5px;font-size:9px}
+.m-v3-debt-card{padding:13px;border:1px solid var(--m-line);border-left:3px solid #fb923c;border-radius:15px;background:linear-gradient(150deg,#211a27,#12101a);margin-bottom:9px;min-width:0}.m-v3-debt-card.is-paid{border-left-color:#34d399;opacity:.85}.m-v3-debt-top{display:flex;align-items:flex-start;gap:8px}.m-v3-debt-icon{display:grid;place-items:center;width:35px;height:35px;flex:0 0 35px;border-radius:11px;background:#3b281c;color:#fdba74}.m-v3-debt-title{display:grid;gap:4px;flex:1;min-width:0}.m-v3-debt-title b{font-size:11px;line-height:1.4;overflow-wrap:anywhere}.m-v3-debt-title small{font-size:9px;color:#a89db8;line-height:1.4}.m-v3-debt-balance{font-size:18px;font-weight:900;margin:11px 0 3px;overflow-wrap:anywhere}.m-v3-debt-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;color:#a89db8;font-size:9px}.m-v3-debt-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:11px}.m-v3-debt-actions .m-primary-btn,.m-v3-debt-actions .m-secondary-btn{min-height:35px;padding:0 10px;font-size:9px}.m-v3-status{padding:4px 7px;border-radius:99px;background:#382719;color:#fdba74;font-size:8px;font-weight:800;white-space:nowrap}.m-v3-status.done{background:#17392f;color:#6ee7b7}
+.m-v3-calendar-head{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin:4px 0 12px}.m-v3-calendar-head h2{font-size:18px;text-transform:capitalize;letter-spacing:-.03em;margin:0}.m-v3-calendar-nav{display:flex;align-items:center;gap:5px}.m-v3-calendar-nav button{display:grid;place-items:center;min-width:33px;height:34px;border:1px solid #393047;border-radius:10px;background:#201a2d;color:#e4d8f8;font-size:11px}.m-v3-calendar-nav button.today-btn{padding:0 9px;font-size:9px;font-weight:800}
+.m-v3-calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}.m-v3-calendar-weekday{text-align:center;padding:5px 0;color:#9e94af;font-size:8px;font-weight:800}.m-v3-calendar-day{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;min-width:0;min-height:49px;padding:7px 1px 5px;border:1px solid #2d263a;border-radius:9px;background:#110e19;color:#e9e3f2;font-size:10px}.m-v3-calendar-day.muted{opacity:.25}.m-v3-calendar-day.today{border-color:#a78bfa;box-shadow:inset 0 0 0 1px #a78bfa44}.m-v3-calendar-day.selected{background:#31213f;border-color:#c4b5fd;color:white}.m-v3-calendar-day.has-events{background:#20192d}.m-v3-cal-dots{display:flex;align-items:center;gap:3px;min-height:4px}.m-v3-cal-dots i{display:block;width:4px;height:4px;border-radius:50%;background:#c4b5fd}.m-v3-cal-dots i.debt-dot{background:#fdba74}.m-v3-calendar-legend{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin:11px 0 0;color:#a89db8;font-size:9px}.m-v3-calendar-legend span{display:flex;align-items:center;gap:5px}.m-v3-calendar-legend i{width:7px;height:7px;border-radius:50%;background:#c4b5fd}.m-v3-calendar-legend i.debt-dot{background:#fdba74}
+.m-v3-selected-date{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 0 10px}.m-v3-selected-date h3{margin:0;font-size:13px}.m-v3-event-card{display:flex;align-items:center;gap:9px;padding:11px 0;border-bottom:1px solid #ffffff0b;min-width:0}.m-v3-event-card:last-child{border-bottom:0}.m-v3-event-main{flex:1;min-width:0;display:grid;gap:4px}.m-v3-event-main b{font-size:10px;line-height:1.4;overflow-wrap:anywhere}.m-v3-event-main small{font-size:9px;color:#a89db8;line-height:1.4}.m-v3-event-actions{display:flex;align-items:center;gap:4px}
+.m-v3-account-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.m-v3-account-select{display:block;text-align:left;width:100%;padding:13px;border:1px solid var(--m-line);border-radius:15px;background:linear-gradient(155deg,#1b1727,#12101a);color:#f6f3ff;min-width:0}.m-v3-account-select.selected{border-color:#9d7bcb;box-shadow:inset 0 0 0 1px #9d7bcb33,0 8px 20px #0002}.m-v3-account-title{display:flex;align-items:center;gap:7px;color:#d8cafa;font-size:9px;line-height:1.4}.m-v3-account-title i{font-size:12px}.m-v3-account-select strong{display:block;margin:12px 0 5px;font-size:17px;letter-spacing:-.035em;overflow-wrap:anywhere}.m-v3-account-select small{display:block;min-height:27px;color:#a79db6;font-size:9px;line-height:1.4;overflow-wrap:anywhere}.m-v3-account-select .m-v3-account-cta{display:block;margin-top:8px;color:#c4b5fd;font-size:8px;font-weight:800}
+.m-v3-info-note{display:flex;align-items:flex-start;gap:8px;padding:11px 12px;border:1px solid #2c4562;border-radius:13px;background:#152237;color:#b9c8df;font-size:9px;line-height:1.55;margin:12px 0}.m-v3-info-note i{color:#93c5fd;margin-top:1px}
+.m-v3-readonly-row{display:flex;align-items:center;gap:9px;padding:10px 0;border-bottom:1px solid #ffffff0a}.m-v3-readonly-row:last-child{border-bottom:0}.m-v3-readonly-row .detail{min-width:0;flex:1;display:grid;gap:3px}.m-v3-readonly-row .detail b{font-size:10px;overflow-wrap:anywhere}.m-v3-readonly-row .detail small{color:#9e94af;font-size:9px;line-height:1.4;overflow-wrap:anywhere}.m-v3-readonly-row>strong{font-size:10px;white-space:nowrap}
+.m-brand-mark{cursor:pointer}.m-brand-copy{cursor:pointer}
+@media(max-width:370px){.m-v3-profile-cards,.m-v3-box-grid{grid-template-columns:1fr}.m-v3-category{grid-template-columns:minmax(65px,1fr) minmax(35px,1fr) auto;gap:5px}.m-v3-calendar-day{min-height:43px}.m-v3-account-grid{gap:6px}.m-v3-account-select{padding:10px}}
+
 </style>
 </head>
 <body>
@@ -1459,7 +1514,6 @@ function renderMobileMore() {
     ["goals","fa-bullseye","Metas","Objetivos y progreso de ahorro","green"],
     ["calendar","fa-calendar-days","Calendario","Pagos, compromisos y recordatorios","blue"],
     ["accounts","fa-wallet","Reporte por cuentas","Cuenta hogar, ahorros y cuentas personales","purple"],
-    ["reports","fa-chart-pie","Reportes generales","Evolución y comparativos del periodo","purple"],
     ["settings","fa-sliders","Configuración","Perfiles, meta mensual y respaldos","green"]
   ];
   return `<section class="m-profile-card"><div class="m-profile-avatar">${esc((state.people.me||"N").slice(0,1).toUpperCase())}</div><div><b>${esc(authUser?.username||authUser?.name||authUser?.email||"Tu cuenta Nexus")}</b><small>${esc(authUser?.email||"Finanzas del hogar · cuenta privada")}</small><span class="m-sync-line"><i class="${cloudReady&&!cloudSyncing?'fa-solid fa-circle-check':'fa-solid fa-cloud'}"></i> ${cloudReady&&!cloudSyncing?'Sincronización lista':cloudSyncing?'Sincronizando datos':'Sesión activa'}</span></div><button class="m-icon-btn" onclick="mobileRefresh()" aria-label="Sincronizar"><i class="fa-solid fa-rotate"></i></button></section>
@@ -1589,5 +1643,300 @@ toast=function(){const result=nexusOriginalToast.apply(this,arguments);if(typeof
 setTimeout(()=>bootstrapAuth(),0);
 </script>
 
+<script id="nexus-mobile-v3-patch">
+/* === Nexus Finance móvil V3 === */
+let mobileCalendarMonthV3 = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+let mobileCalendarSelectedDateV3 = dateNow();
+let mobileSelectedAccountV3 = "home";
+
+Object.assign(MOBILE_TITLES, {
+  summary: ["Resumen general", "Todas tus finanzas, claras y conectadas"],
+  home: ["Resumen general", "Todas tus finanzas, claras y conectadas"],
+  reports: ["Resumen general", "Tus indicadores mensuales en un solo lugar"],
+  accounts: ["Reporte por cuentas", "Consulta interactiva de tus cuatro cuentas"],
+  personalMe: ["Finanzas personales", "Tus gastos, cajas de ahorro y obligaciones"],
+  personalPartner: ["Finanzas personales", "Los gastos, ahorros y obligaciones de tu pareja"]
+});
+
+function mobileV3DateLabel(date) {
+  if (!date) return "Sin fecha";
+  const d = new Date(`${date}T00:00:00`);
+  return Number.isNaN(d.getTime()) ? String(date) : d.toLocaleDateString("es-CO", {day:"2-digit", month:"short", year:"numeric"}).replace(".", "");
+}
+function mobileV3PeriodRows(arr, f=getFilter()) {
+  return (arr||[]).filter(x => inPeriod(x.date, f.year, f.month));
+}
+function mobileV3ShortMovement(x, kind, label="") {
+  const title = label || (kind === "income" ? `Ingreso · ${state.people[x.person]||"Perfil"}` : kind === "saving" ? ((SAVINGS.find(s=>s[0]===x.type)||[])[1]||"Ahorro del hogar") : (x.category||"Gasto del hogar"));
+  const amount = Number(x.amount)||0;
+  const icon = kind === "income" ? "fa-arrow-trend-up" : kind === "expense" ? "fa-house-chimney" : "fa-piggy-bank";
+  const tone = kind === "income" ? "" : kind === "expense" ? "orange" : "green";
+  let actions = "";
+  if (kind === "income") actions = `<button class="m-v3-inline-btn" aria-label="Editar ingreso" title="Editar ingreso" onclick="openIncome('${x.person||"me"}','${x.id}')"><i class="fa-solid fa-pen-to-square"></i></button>`;
+  if (kind === "expense") actions = `<button class="m-v3-inline-btn" aria-label="Editar gasto" title="Editar gasto" onclick="openExpense('${esc(x.category||"Otros")}','${x.id}')"><i class="fa-solid fa-pen-to-square"></i></button>`;
+  if (kind === "saving") actions = `<button class="m-v3-inline-btn" aria-label="Editar ahorro" title="Editar ahorro" onclick="openSaving('${x.type||"financial"}','${x.id}','${x.person||"me"}')"><i class="fa-solid fa-pen-to-square"></i></button>`;
+  return `<div class="m-v3-row"><span class="m-v3-row-icon ${tone}"><i class="fa-solid ${icon}"></i></span><div class="m-v3-row-main"><b>${esc(title)}</b><small>${mobileV3DateLabel(x.date)}${kind==="income"?` · ${esc(state.people[x.person]||"")}`:""}</small></div><div class="m-v3-row-side"><strong class="${kind==="expense"?"negative":kind==="saving"?"saving-text":"positive"}">${kind==="expense"?"−":"+"}${money(amount)}</strong><div class="m-v3-actions">${actions}<button class="m-v3-inline-btn danger" aria-label="Eliminar movimiento" title="Eliminar" onclick="deleteRecord('${kind}','${x.id}')"><i class="fa-solid fa-trash-can"></i></button></div></div></div>`;
+}
+function mobileV3DebtCard(d, opts={}) {
+  const pct = Number(d.original)>0 ? Math.min(100,Math.max(0,(1-Number(d.balance||0)/Number(d.original))*100)) : 0;
+  const paid = d.status === "paid" || Number(d.balance)<=0;
+  const owner = d.owner === "home" ? "Hogar" : (state.people[d.owner]||d.owner||"Sin responsable");
+  const payer = opts.payer || null;
+  return `<article class="m-v3-debt-card ${paid?'is-paid':''}"><div class="m-v3-debt-top"><span class="m-v3-debt-icon"><i class="fa-solid fa-file-invoice-dollar"></i></span><div class="m-v3-debt-title"><b>${esc(d.name||"Obligación sin nombre")}</b><small><i class="fa-solid fa-user-check"></i> ${esc(owner)}${d.due?` · <i class="fa-regular fa-calendar"></i> ${mobileV3DateLabel(d.due)}`:" · Sin fecha de vencimiento"}</small></div><span class="m-v3-status ${paid?'done':''}">${paid?'Pagada':'Pendiente'}</span></div><div class="m-v3-debt-balance">${money(d.balance)}</div><div class="m-v3-progress"><i style="width:${pct}%;background:linear-gradient(90deg,#fb923c,#fdba74)"></i></div><div class="m-v3-debt-footer"><span>${pct.toFixed(0)}% pagado</span><span>Inicial ${money(d.original)}${Number(d.installment)>0?` · Cuota ${money(d.installment)}`:""}</span></div>${d.notes?`<p class="m-v3-muted" style="margin:9px 0 0"><i class="fa-regular fa-note-sticky"></i> ${esc(d.notes)}</p>`:""}<div class="m-v3-debt-actions">${!paid?`<button class="m-primary-btn" onclick="payDebt('${d.id}'${payer?`, '${payer}'`:''})"><i class="fa-solid fa-hand-holding-dollar"></i> Abonar</button>`:`<span class="m-v3-muted"><i class="fa-solid fa-circle-check"></i> Obligación saldada</span>`}<button class="m-secondary-btn" onclick="editDebt('${d.id}')"><i class="fa-solid fa-pen-to-square"></i> Editar</button><button class="m-v3-inline-btn danger" aria-label="Eliminar deuda" title="Eliminar deuda" onclick="deleteDebt('${d.id}')"><i class="fa-solid fa-trash-can"></i></button></div></article>`;
+}
+
+/* La vista de entrada es Resumen general; los cuatro apartados prioritarios siguen en el menú inferior. */
+mobileScreen = "summary";
+mobileGoHome = function(){ mobileSetScreen("summary"); };
+mobileSetScreen = function(name) {
+  const aliases = {home:"summary", reports:"summary", movements:"summary", expenses:"homeExpenses", availableFunds:"available"};
+  const next = aliases[name] || name;
+  if (next === "calendar" && mobileScreen !== "calendar") {
+    mobileCalendarMonthV3 = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    mobileCalendarSelectedDateV3 = dateNow();
+  }
+  mobileScreen = next;
+  renderMobileUI();
+  window.scrollTo({top:0, behavior:"smooth"});
+};
+
+renderMobileHome = function renderMobileHomeV3() {
+  const f = getFilter();
+  const inc = mobileV3PeriodRows(state.incomes, f).slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  const exp = mobileV3PeriodRows(state.expenses, f).slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  const sav = mobileV3PeriodRows(state.savings, f).slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  const income = sum(inc), expense = sum(exp), saving = sum(sav), available = income-expense-saving;
+  const pendingDebts = (state.debts||[]).filter(d=>d.status!=="paid"&&Number(d.balance)>0).sort((a,b)=>(a.due||"9999").localeCompare(b.due||"9999"));
+  const debtTotal = pendingDebts.reduce((t,d)=>t+(Number(d.balance)||0),0);
+  const categories = CATS.map((name,i)=>({name,value:sum(exp.filter(x=>x.category===name)),color:CAT_COLORS[i]})).filter(x=>x.value>0).sort((a,b)=>b.value-a.value);
+  const target = Number(state.savingTarget)||0;
+  const username = (authUser?.role==="partner"?state.people.partner:state.people.me)||authUser?.username||"bienvenido";
+  const profiles = ["me","partner"].map(person=>{
+    const stats=personalStats(person,f.year,f.month), assigned=personalAssigned(person,f.year,f.month), balance=assigned+stats.extraIncome-stats.spent-stats.saved;
+    return {person,name:state.people[person],assigned,stats,balance,boxes:personalSavingBoxes(person).length};
+  });
+  const goalCards = (state.goals||[]).slice(0,2);
+  const events = [
+    ...(state.tasks||[]).filter(t=>t.status!=="done"&&t.date).map(t=>({kind:"task",id:t.id,date:t.date,title:t.title,detail:`${t.time||"Sin hora"} · ${t.owner==="home"?"Hogar":state.people[t.owner]||t.owner}`})),
+    ...pendingDebts.filter(d=>d.due).map(d=>({kind:"debt",id:d.id,date:d.due,title:d.name,detail:`Vencimiento de deuda · ${d.owner==="home"?"Hogar":state.people[d.owner]||d.owner}`}))
+  ].sort((a,b)=>(a.date||"").localeCompare(b.date||"")).slice(0,3);
+  const recentCore = [
+    ...inc.slice(0,2).map(x=>({x,kind:"income"})),
+    ...exp.slice(0,2).map(x=>({x,kind:"expense"})),
+    ...sav.slice(0,2).map(x=>({x,kind:"saving"}))
+  ].sort((a,b)=>(b.x.date||"").localeCompare(a.x.date||"")).slice(0,4);
+  const savingsTypes = SAVINGS.map(([key,label])=>({key,label,value:sum(sav.filter(x=>x.type===key)),count:sav.filter(x=>x.type===key).length}));
+  return `${mobilePeriodControls()}
+    <section class="m-welcome"><div><span class="m-eyebrow">RESUMEN GENERAL · NEXUS</span><h2>Hola, ${esc(username)} 👋</h2><p>El estado de tu hogar, tus ahorros y tus finanzas personales.</p></div><div class="m-welcome-orb"><i class="fa-solid fa-sparkles"></i></div></section>
+    <section class="m-balance-card"><div class="m-balance-top"><span><i class="fa-solid fa-wallet"></i> Disponible después del hogar</span><span class="m-live-dot">${esc(f.month==="all"?String(f.year):MONTHS[Number(f.month)-1].toUpperCase())}</span></div><strong class="m-balance-value">${money(available)}</strong><p>Ingresos del periodo menos responsabilidades del hogar y ahorros conjuntos.</p><div class="m-balance-footer"><span><i class="fa-solid fa-arrow-trend-up"></i> Ingresos <b>${money(income)}</b></span><span><i class="fa-solid fa-house-chimney"></i> Gastos <b>${money(expense)}</b></span><span><i class="fa-solid fa-piggy-bank"></i> Ahorros <b>${money(saving)}</b></span></div></section>
+    <div class="m-v3-four-kpis">
+      <button class="m-v3-kpi income" onclick="mobileSetScreen('income')"><span class="m-v3-kpi-top"><span>Ingresos</span><i class="fa-solid fa-arrow-trend-up"></i></span><strong>${money(income)}</strong><small>${inc.length} registro(s) · editar aportes</small></button>
+      <button class="m-v3-kpi expense" onclick="mobileSetScreen('homeExpenses')"><span class="m-v3-kpi-top"><span>Gastos del hogar</span><i class="fa-solid fa-house-chimney"></i></span><strong>${money(expense)}</strong><small>${exp.length} responsabilidad(es)</small></button>
+      <button class="m-v3-kpi saving" onclick="mobileSetScreen('savings')"><span class="m-v3-kpi-top"><span>Ahorros del hogar</span><i class="fa-solid fa-piggy-bank"></i></span><strong>${money(saving)}</strong><small>${sav.length} aporte(s) · meta ${target?money(target):"sin definir"}</small></button>
+      <button class="m-v3-kpi available" onclick="mobileSetScreen('available')"><span class="m-v3-kpi-top"><span>Disponible</span><i class="fa-solid fa-wallet"></i></span><strong>${money(available)}</strong><small>Asignación para ambos perfiles</small></button>
+    </div>
+    <div class="m-section-heading"><div><h3><i class="fa-solid fa-bolt"></i> Accesos rápidos</h3><p>Registra movimientos o entra a las secciones más usadas.</p></div></div>
+    <section class="m-v3-quick"><button onclick="openIncome('me')"><span class="m-v3-quick-icon"><i class="fa-solid fa-plus"></i></span><b>Ingreso</b></button><button onclick="openExpensePicker()"><span class="m-v3-quick-icon orange"><i class="fa-solid fa-receipt"></i></span><b>Gasto hogar</b></button><button onclick="openSavingPicker()"><span class="m-v3-quick-icon green"><i class="fa-solid fa-piggy-bank"></i></span><b>Ahorro hogar</b></button><button onclick="openTaskForm()"><span class="m-v3-quick-icon blue"><i class="fa-solid fa-calendar-plus"></i></span><b>Recordatorio</b></button></section>
+
+    <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-arrow-trend-up"></i> Ingresos</h3><p>Base con la que comienza el cálculo mensual.</p></div><button class="m-v3-link" onclick="mobileSetScreen('income')">Ver todos <i class="fa-solid fa-arrow-right"></i></button></div><article class="m-v3-card"><div class="m-v3-highlight" style="color:#c4b5fd">${money(income)}</div><div class="m-v3-person-split"><div class="m-v3-person-tile"><span><i class="fa-solid fa-user"></i> ${esc(state.people.me)}</span><strong>${money(sum(inc.filter(x=>x.person==="me")))}</strong><button class="m-v3-link" onclick="openIncome('me')"><i class="fa-solid fa-plus"></i> Registrar</button></div><div class="m-v3-person-tile"><span><i class="fa-solid fa-user-group"></i> ${esc(state.people.partner)}</span><strong>${money(sum(inc.filter(x=>x.person==="partner")))}</strong><button class="m-v3-link" onclick="openIncome('partner')"><i class="fa-solid fa-plus"></i> Registrar</button></div></div>${inc.length?inc.slice(0,2).map(x=>mobileV3ShortMovement(x,"income")).join(""):`<p class="m-v3-muted">Sin ingresos para este periodo. Usa los accesos de registro para empezar.</p>`}</article></section>
+
+    <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-house-chimney"></i> Gastos del hogar</h3><p>Responsabilidades compartidas y distribución por categoría.</p></div><button class="m-v3-link" onclick="mobileSetScreen('homeExpenses')">Ver todos <i class="fa-solid fa-arrow-right"></i></button></div><article class="m-v3-card"><div class="m-v3-highlight" style="color:#fdba74">${money(expense)}</div>${categories.length?`<div class="m-v3-categories" style="margin-top:13px">${categories.slice(0,4).map(c=>`<div class="m-v3-category"><span class="m-v3-category-name"><i class="fa-solid fa-circle-dot"></i>${esc(c.name)}</span><span class="m-v3-category-track"><i style="width:${expense?c.value/expense*100:0}%;background:${c.color}"></i></span><strong>${money(c.value)}</strong></div>`).join("")}</div>`:`<p class="m-v3-muted">No hay gastos registrados en este periodo.</p>`}<button class="m-secondary-btn full" onclick="openExpensePicker()"><i class="fa-solid fa-plus"></i> Registrar gasto del hogar</button>${exp.length?`<div style="margin-top:10px">${exp.slice(0,2).map(x=>mobileHouseholdExpenseCard(x)).join("")}</div>`:""}</article></section>
+
+    <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-piggy-bank"></i> Ahorros del hogar</h3><p>Fondos de ahorro compartidos de la pareja.</p></div><button class="m-v3-link" onclick="mobileSetScreen('savings')">Ver todos <i class="fa-solid fa-arrow-right"></i></button></div><article class="m-v3-card"><div class="m-v3-highlight" style="color:#6ee7b7">${money(saving)}</div>${savingsTypes.map(s=>`<div class="m-v3-row"><span class="m-v3-row-icon green"><i class="fa-solid fa-seedling"></i></span><div class="m-v3-row-main"><b>${esc(s.label)}</b><small>${s.count} aporte(s) en el periodo</small></div><div class="m-v3-row-side"><strong>${money(s.value)}</strong><button class="m-v3-inline-btn" title="Registrar aporte" aria-label="Registrar ${esc(s.label)}" onclick="openSaving('${s.key}')"><i class="fa-solid fa-plus"></i></button></div></div>`).join("")}<button class="m-secondary-btn full" onclick="openSavingPicker()"><i class="fa-solid fa-plus"></i> Registrar aporte al hogar</button>${sav.length?`<div style="margin-top:8px">${sav.slice(0,2).map(x=>mobileV3ShortMovement(x,"saving")).join("")}</div>`:""}</article></section>
+
+    <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-users"></i> Disponible por persona</h3><p>Asignación después de restar las responsabilidades del hogar.</p></div><button class="m-v3-link" onclick="mobileSetScreen('available')">Ver detalle <i class="fa-solid fa-arrow-right"></i></button></div><div class="m-v3-profile-cards">${profiles.map(p=>`<article class="m-v3-profile-card"><div class="m-v3-profile-title"><i class="fa-solid ${p.person==="me"?"fa-user":"fa-user-group"}"></i>${esc(p.name)}</div><strong>${money(p.assigned)}</strong><div class="m-v3-profile-meta"><span>Gastos y obligaciones personales: ${money(p.stats.spent)}</span><span>Ahorro personal: ${money(p.stats.saved)}</span><span>Ingresos extra: ${money(p.stats.extraIncome)}</span><span>Cajas personales: ${p.boxes}/4</span><span>Saldo actual: <b class="${p.balance<0?"negative":"positive"}">${money(p.balance)}</b></span></div><button class="m-secondary-btn" onclick="mobileSetScreen('${p.person==="me"?"personalMe":"personalPartner"}')"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir finanzas</button></article>`).join("")}</div></section>
+
+    <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-file-invoice-dollar"></i> Deudas y obligaciones</h3><p>Saldo pendiente, próximos vencimientos y edición rápida.</p></div><button class="m-v3-link" onclick="mobileSetScreen('debts')">Ver todas <i class="fa-solid fa-arrow-right"></i></button></div><article class="m-v3-card"><div class="m-v3-highlight" style="color:#f9a8d4">${money(debtTotal)}</div><p class="m-v3-muted">${pendingDebts.length} obligación(es) pendientes</p>${pendingDebts.length?pendingDebts.slice(0,2).map(d=>mobileV3DebtCard(d,{compact:true})).join(""):`<div class="m-inline-empty"><i class="fa-solid fa-circle-check"></i> No tienes deudas pendientes registradas.</div>`}<button class="m-secondary-btn full" onclick="mobileOpenDebtForm()"><i class="fa-solid fa-plus"></i> Añadir obligación</button></article></section>
+
+    <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-bullseye"></i> Metas</h3><p>Objetivos y avances acumulados.</p></div><button class="m-v3-link" onclick="mobileSetScreen('goals')">Ver todas <i class="fa-solid fa-arrow-right"></i></button></div>${goalCards.length?goalCards.map(g=>{const pct=Number(g.target)>0?Math.min(100,Math.max(0,Number(g.current||0)/Number(g.target)*100)):0;return `<article class="m-v3-card"><div class="m-v3-card-top"><div><h4><i class="fa-solid fa-bullseye"></i> ${esc(g.name||"Meta sin nombre")}</h4><p>${esc(g.desc||"Objetivo personal")}</p></div><button class="m-v3-inline-btn" aria-label="Editar meta" title="Editar meta" onclick="openGoal('${g.id}')"><i class="fa-solid fa-pen-to-square"></i></button></div><div class="m-v3-highlight">${money(g.current)} <span class="m-v3-muted">de ${money(g.target)}</span></div><div class="m-v3-progress"><i style="width:${pct}%"></i></div><div class="m-v3-debt-footer"><span>${pct.toFixed(0)}% completado</span><span>${money(Math.max(0,Number(g.target||0)-Number(g.current||0)))} restantes</span></div><button class="m-secondary-btn full" onclick="contributeGoal('${g.id}')"><i class="fa-solid fa-plus"></i> Abonar a la meta</button></article>`}).join(""):`<article class="m-v3-card"><div class="m-inline-empty"><i class="fa-solid fa-bullseye"></i> Aún no hay metas creadas.</div><button class="m-primary-btn full" onclick="openGoal()"><i class="fa-solid fa-plus"></i> Crear primera meta</button></article>`}</section>
+
+    <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-calendar-days"></i> Calendario y próximos eventos</h3><p>Recordatorios y vencimientos que requieren atención.</p></div><button class="m-v3-link" onclick="mobileSetScreen('calendar')">Abrir calendario <i class="fa-solid fa-arrow-right"></i></button></div><article class="m-v3-card">${events.length?events.map(e=>`<div class="m-v3-event-card"><span class="m-v3-row-icon ${e.kind==="debt"?"orange":"blue"}"><i class="fa-solid ${e.kind==="debt"?"fa-file-invoice-dollar":"fa-calendar-check"}"></i></span><div class="m-v3-event-main"><b>${esc(e.title)}</b><small>${mobileV3DateLabel(e.date)} · ${esc(e.detail)}</small></div><button class="m-v3-inline-btn" aria-label="Editar ${e.kind==="debt"?"obligación":"recordatorio"}" onclick="${e.kind==="debt"?`editDebt('${e.id}')`:`openTaskEdit('${e.id}')`}"><i class="fa-solid fa-pen-to-square"></i></button></div>`).join(""):`<div class="m-inline-empty"><i class="fa-regular fa-calendar-check"></i> No hay recordatorios o vencimientos próximos.</div>`}<button class="m-secondary-btn full" onclick="openTaskForm()"><i class="fa-solid fa-calendar-plus"></i> Crear recordatorio</button></article></section>
+
+    <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-wallet"></i> Reporte por cuentas</h3><p>Cuatro cuentas calculadas a partir de tus movimientos.</p></div><button class="m-v3-link" onclick="mobileSetScreen('accounts')">Ver cuentas <i class="fa-solid fa-arrow-right"></i></button></div><div class="m-v3-account-grid">${ACCOUNT_TYPES.map(a=>{const d=accountPeriodSummary(a.id),icon=a.id==="home"?"fa-house":a.id==="savings"?"fa-piggy-bank":a.id==="me"?"fa-user":"fa-user-group";return `<button class="m-v3-account-select" onclick="mobileSelectedAccountV3='${a.id}';mobileSetScreen('accounts')"><span class="m-v3-account-title"><i class="fa-solid ${icon}"></i>${esc(a.name)}</span><strong>${money(d.value)}</strong><small>${esc(d.detail)}</small><span class="m-v3-account-cta">Ver detalle <i class="fa-solid fa-arrow-right"></i></span></button>`}).join("")}</div><button class="m-secondary-btn full" onclick="exportReportCsv()"><i class="fa-solid fa-file-csv"></i> Exportar resumen del periodo</button></section>
+
+    <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-clock-rotate-left"></i> Actividad reciente</h3><p>Movimientos principales del periodo; puedes editar desde cada registro.</p></div></div><article class="m-v3-card">${recentCore.length?recentCore.map(r=>mobileV3ShortMovement(r.x,r.kind)).join(""):`<div class="m-inline-empty"><i class="fa-solid fa-chart-line"></i> Tus movimientos aparecerán aquí.</div>`}<button class="m-secondary-btn full" onclick="mobileSetScreen('income')"><i class="fa-solid fa-list-check"></i> Ver movimientos del hogar</button></article></section>`;
+};
+
+renderMobileMore = function renderMobileMoreV3() {
+  const items = [
+    ["personalMe","fa-users","Finanzas personales","Gastos, cajas de ahorro y obligaciones por perfil","blue"],
+    ["debts","fa-file-invoice-dollar","Deudas y obligaciones","Saldo pendiente, cuotas, vencimientos y edición","orange"],
+    ["goals","fa-bullseye","Metas","Objetivos, avances y aportes","green"],
+    ["calendar","fa-calendar-days","Calendario","Vista mensual en vivo, recordatorios y vencimientos","blue"],
+    ["accounts","fa-wallet","Reporte por cuentas","Cuenta hogar, ahorros y cuentas personales","purple"],
+    ["settings","fa-sliders","Configuración","Perfiles, meta mensual y respaldos","green"]
+  ];
+  return `<section class="m-profile-card"><div class="m-profile-avatar"><i class="fa-solid fa-user-shield"></i></div><div><b>${esc(authUser?.username||authUser?.name||authUser?.email||"Tu cuenta Nexus")}</b><small>${esc(authUser?.email||"Finanzas del hogar · cuenta privada")}</small><span class="m-sync-line"><i class="${cloudReady&&!cloudSyncing?'fa-solid fa-circle-check':'fa-solid fa-cloud'}"></i> ${cloudReady&&!cloudSyncing?'Sincronización lista':cloudSyncing?'Sincronizando datos':'Sesión activa'}</span></div><button class="m-icon-btn" onclick="mobileRefresh()" aria-label="Sincronizar" title="Sincronizar"><i class="fa-solid fa-rotate"></i></button></section>
+  <div class="m-section-heading"><div><h3><i class="fa-solid fa-layer-group"></i> Secciones secundarias</h3><p>Las herramientas que complementan el control del hogar.</p></div></div><section class="m-menu-list">${items.map(([key,icon,title,desc,color])=>`<button class="m-menu-item" onclick="mobileSetScreen('${key}')"><span class="m-menu-icon ${color}"><i class="fa-solid ${icon}"></i></span><span><b>${title}</b><small>${esc(desc)}</small></span><i class="fa-solid fa-chevron-right"></i></button>`).join("")}</section>
+  <section class="m-panel m-tools-panel"><div class="m-section-heading inside"><div><h3><i class="fa-solid fa-screwdriver-wrench"></i> Datos y mantenimiento</h3><p>Respaldo y sincronización de tu información.</p></div></div><div class="m-tools-grid"><button onclick="exportData()"><i class="fa-solid fa-file-arrow-down"></i><span>Exportar respaldo</span></button><button onclick="importData()"><i class="fa-solid fa-file-arrow-up"></i><span>Importar respaldo</span></button><button onclick="exportReportCsv()"><i class="fa-solid fa-file-csv"></i><span>Exportar datos del periodo</span></button><button onclick="mobileRefresh()"><i class="fa-solid fa-rotate"></i><span>Sincronizar nube</span></button></div></section>
+  <button class="m-logout-btn" onclick="mobileLogout()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button><p class="m-version">Nexus Finance · Hogar & Personal</p>`;
+};
+
+/* Deudas: edición del registro con validación de montos, fecha, responsable y notas. */
+editDebt = function editDebtV3(id) {
+  const d=(state.debts||[]).find(x=>x.id===id); if(!d) return;
+  openModal(`<i class="fa-solid fa-pen-to-square"></i> Editar deuda u obligación`, `<form class="m-form" onsubmit="mobileSaveDebtEditV3(event,'${d.id}')">
+    <p class="m-v3-muted">Actualiza los datos de esta obligación. Los abonos existentes se conservan.</p>
+    <div class="field"><label><i class="fa-solid fa-file-signature"></i> Nombre de la deuda</label><input class="input" id="mv3DebtName" required maxlength="120" value="${esc(d.name||"")}"></div>
+    <div class="field"><label><i class="fa-solid fa-coins"></i> Monto original (COP)</label><input class="input money-input" id="mv3DebtOriginal" inputmode="numeric" value="${fmtInput(d.original||0)}" oninput="formatMoneyField(this)" required></div>
+    <div class="field"><label><i class="fa-solid fa-scale-balanced"></i> Saldo pendiente (COP)</label><input class="input money-input" id="mv3DebtBalance" inputmode="numeric" value="${fmtInput(d.balance||0)}" oninput="formatMoneyField(this)" required></div>
+    <div class="field"><label><i class="fa-solid fa-calendar-check"></i> Cuota mensual (COP)</label><input class="input money-input" id="mv3DebtInstallment" inputmode="numeric" value="${fmtInput(d.installment||0)}" oninput="formatMoneyField(this)"></div>
+    <div class="field"><label><i class="fa-regular fa-calendar"></i> Próximo vencimiento</label><input class="input" id="mv3DebtDue" type="date" value="${esc(d.due||"")}"></div>
+    <div class="field"><label><i class="fa-solid fa-user-check"></i> Responsable</label><select class="select" id="mv3DebtOwner"><option value="home" ${d.owner==="home"?'selected':''}>Hogar</option><option value="me" ${d.owner==="me"?'selected':''}>Personal: ${esc(state.people.me)}</option><option value="partner" ${d.owner==="partner"?'selected':''}>Personal: ${esc(state.people.partner)}</option></select></div>
+    <div class="field"><label><i class="fa-regular fa-note-sticky"></i> Notas</label><textarea class="textarea" id="mv3DebtNotes" rows="3">${esc(d.notes||"")}</textarea></div>
+    <div class="form-actions"><button type="button" class="btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i> Cancelar</button><button class="btn primary"><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button></div>
+  </form>`);
+};
+function mobileSaveDebtEditV3(e,id) {
+  e.preventDefault();
+  const d=(state.debts||[]).find(x=>x.id===id); if(!d) return;
+  const original=num(document.getElementById("mv3DebtOriginal").value), balance=num(document.getElementById("mv3DebtBalance").value), installment=num(document.getElementById("mv3DebtInstallment").value)||0;
+  if(original<0||balance<0||installment<0){toast("Los valores no pueden ser negativos.");return;}
+  if(balance>original){toast("El saldo pendiente no puede superar el monto original.");return;}
+  const before=snapshotNexusState();
+  d.name=document.getElementById("mv3DebtName").value.trim(); d.original=original; d.balance=balance; d.installment=installment; d.due=document.getElementById("mv3DebtDue").value; d.owner=document.getElementById("mv3DebtOwner").value; d.notes=document.getElementById("mv3DebtNotes").value.trim(); d.status=balance===0?"paid":"pending";
+  for(const row of (state.personalSpending||[]).filter(x=>x.debtId===id)){ if(String(row.desc||"").startsWith("Abono a deuda:")) row.desc=`Abono a deuda: ${d.name}`; }
+  saveState(); closeModal(); renderAll(); renderExtendedModules(); renderMobileUI(); showUndoToast("Deuda u obligación actualizada",before,"fa-pen-to-square");
+}
+
+renderMobileDebts = function renderMobileDebtsV3() {
+  const debts=(state.debts||[]).slice().sort((a,b)=>(a.due||"9999").localeCompare(b.due||"9999"));
+  const pending=debts.filter(d=>d.status!=="paid"&&Number(d.balance)>0), total=pending.reduce((s,d)=>s+(Number(d.balance)||0),0);
+  const overdue=pending.filter(d=>d.due&&d.due<dateNow()).length;
+  return `<section class="m-debt-hero"><span><i class="fa-solid fa-file-invoice-dollar"></i> Saldo pendiente total</span><strong>${money(total)}</strong><div><span><i class="fa-solid fa-clock"></i> ${pending.length} activa(s) · ${overdue} vencida(s)</span><button onclick="mobileOpenDebtForm()"><i class="fa-solid fa-plus"></i> Nueva</button></div></section>
+    ${debts.length?`<div class="m-section-heading"><div><h3><i class="fa-solid fa-list-check"></i> Deudas y obligaciones</h3><p>Usa editar para ajustar saldo, responsable o vencimiento.</p></div></div><section class="m-v3-debts">${debts.map(d=>mobileV3DebtCard(d)).join("")}</section>`:`<section class="m-panel"><div class="m-empty"><span><i class="fa-solid fa-file-invoice-dollar"></i></span><b>No hay deudas registradas</b><p>Guarda una obligación para llevar el control de su saldo, las cuotas y los abonos.</p><button class="m-primary-btn" onclick="mobileOpenDebtForm()"><i class="fa-solid fa-plus"></i> Añadir deuda</button></div></section>`}`;
+};
+
+/* Finanzas personales: gastos por categoría, cajas de ahorro hasta cuatro y obligaciones editables. */
+renderMobilePersonal = function renderMobilePersonalV3(person) {
+  const f=getFilter(), stats=personalStats(person,f.year,f.month), assigned=personalAssigned(person,f.year,f.month), balance=assigned+stats.extraIncome-stats.spent-stats.saved;
+  const rows=stats.rows.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  const expenseRows=rows.filter(x=>["expense","other-expense"].includes(personalMovementType(x)));
+  const savingsRows=rows.filter(x=>personalMovementType(x)==="saving");
+  const boxes=personalSavingBoxes(person);
+  const personalDebts=(state.debts||[]).filter(d=>d.status!=="paid"&&Number(d.balance)>0&&(d.owner===person||d.owner==="home")).sort((a,b)=>(a.due||"9999").localeCompare(b.due||"9999"));
+  const byCategory={}; for(const x of expenseRows){const cat=x.category||"Otros";byCategory[cat]=(byCategory[cat]||0)+(Number(x.amount)||0);}
+  const categories=Object.entries(byCategory).map(([name,value])=>({name,value})).sort((a,b)=>b.value-a.value);
+  const personLabel=state.people[person]|| (person==="me"?"Mi perfil":"Mi pareja");
+  return `<div class="m-profile-switch"><button class="${person==='me'?'active':''}" onclick="mobileSetScreen('personalMe')"><i class="fa-solid fa-user"></i> ${esc(state.people.me)}</button><button class="${person==='partner'?'active':''}" onclick="mobileSetScreen('personalPartner')"><i class="fa-solid fa-user-group"></i> ${esc(state.people.partner)}</button></div>
+    ${mobilePeriodControls()}
+    <section class="m-personal-hero"><span><i class="fa-solid fa-wallet"></i> Disponible real · ${esc(personLabel)}</span><strong>${money(balance)}</strong><div class="m-personal-breakdown"><span>Asignado <b>${money(assigned)}</b></span><span>Ingresos extra <b>${money(stats.extraIncome)}</b></span><span>Gastos y obligaciones <b>${money(stats.spent)}</b></span><span>Ahorro personal <b>${money(stats.saved)}</b></span></div></section>
+    <div class="m-section-heading"><div><h3><i class="fa-solid fa-bolt"></i> Registrar movimiento</h3><p>Se mantiene separado del dinero del hogar.</p></div></div><section class="m-personal-actions"><button onclick="openPersonalMovement('${person}','income')"><i class="fa-solid fa-arrow-trend-up"></i><span>Ingreso extra</span></button><button onclick="openPersonalMovement('${person}','expense')"><i class="fa-solid fa-wallet"></i><span>Gasto personal</span></button><button onclick="openPersonalMovement('${person}','saving')"><i class="fa-solid fa-piggy-bank"></i><span>Ahorro personal</span></button><button onclick="mobileOpenDebtForm('${person}')"><i class="fa-solid fa-file-invoice-dollar"></i><span>Nueva deuda</span></button></section>
+    <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-basket-shopping"></i> Gastos personales</h3><p>${expenseRows.length} movimiento(s) del periodo, agrupados por categoría.</p></div><button class="m-v3-link" onclick="openPersonalMovement('${person}','expense')"><i class="fa-solid fa-plus"></i> Añadir</button></div><article class="m-v3-card"><div class="m-v3-highlight" style="color:#fdba74">${money(sum(expenseRows))}</div>${categories.length?`<div class="m-v3-categories" style="margin-top:13px">${categories.map(c=>`<div class="m-v3-category"><span class="m-v3-category-name"><i class="fa-solid fa-circle-dot"></i>${esc(c.name)}</span><span class="m-v3-category-track"><i style="width:${sum(expenseRows)?c.value/sum(expenseRows)*100:0}%"></i></span><strong>${money(c.value)}</strong></div>`).join("")}</div>`:`<div class="m-inline-empty"><i class="fa-solid fa-receipt"></i> No hay gastos personales registrados para este periodo.</div>`}</article></section>
+    <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-boxes-stacked"></i> Cajas de ahorro personales</h3><p>${boxes.length} de 4 cajas utilizadas. Cada aporte queda asociado a su caja.</p></div><button class="m-v3-link" onclick="managePersonalSavingBoxes('${person}')"><i class="fa-solid fa-sliders"></i> Administrar</button></div><div class="m-v3-box-grid">${boxes.map((box,i)=>{const boxRows=savingsRows.filter(x=>(x.savingBoxId||boxes[0].id)===box.id);return `<article class="m-v3-box" style="--identity-color:${box.color||personalSavingColor(i)}"><h4><i class="fa-solid fa-piggy-bank"></i> ${esc(box.name)}</h4><strong>${money(sum(boxRows))}</strong><small>${boxRows.length} aporte(s) en el periodo</small><div class="m-v3-box-actions"><button class="m-secondary-btn" onclick="openPersonalMovement('${person}','saving',null,'${box.id}')"><i class="fa-solid fa-plus"></i> Aportar</button><button class="m-v3-inline-btn" aria-label="Editar cajas de ahorro" title="Cambiar nombre" onclick="managePersonalSavingBoxes('${person}')"><i class="fa-solid fa-pen-to-square"></i></button></div></article>`}).join("")}</div><div class="m-v3-box-actions"><button class="m-secondary-btn" style="flex:1" onclick="managePersonalSavingBoxes('${person}')"><i class="fa-solid fa-sliders"></i> Administrar nombres</button>${boxes.length<4?`<button class="m-primary-btn" style="flex:1" onclick="addPersonalSavingBox('${person}')"><i class="fa-solid fa-plus"></i> Añadir caja (${boxes.length}/4)</button>`:`<span class="m-v3-muted"><i class="fa-solid fa-circle-check"></i> Máximo de 4 cajas</span>`}</div>${savingsRows.length?`<div class="m-section-heading"><div><h3><i class="fa-solid fa-clock-rotate-left"></i> Últimos aportes</h3><p>Entradas en las cajas personales.</p></div></div>${savingsRows.slice(0,3).map(x=>`<div class="m-v3-row"><span class="m-v3-row-icon green"><i class="fa-solid fa-piggy-bank"></i></span><div class="m-v3-row-main"><b>${esc(personalSavingBoxName(person,x.savingBoxId,x.category))}</b><small>${mobileV3DateLabel(x.date)} · ${esc(x.desc||"Aporte personal")}</small></div><div class="m-v3-row-side"><strong class="saving-text">+${money(x.amount)}</strong><button class="m-v3-inline-btn" aria-label="Editar aporte" onclick="editPersonalMovement('${x.id}')"><i class="fa-solid fa-pen-to-square"></i></button></div></div>`).join("")}`:""}</section>
+    <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-file-invoice-dollar"></i> Deudas y obligaciones</h3><p>Las personales de ${esc(personLabel)} y las compartidas del hogar; edita los datos desde aquí.</p></div><button class="m-v3-link" onclick="mobileSetScreen('debts')">Ver todas <i class="fa-solid fa-arrow-right"></i></button></div>${personalDebts.length?personalDebts.map(d=>mobileV3DebtCard(d,{payer:person,compact:true})).join(""):`<article class="m-v3-card"><div class="m-inline-empty"><i class="fa-solid fa-circle-check"></i> No hay deudas pendientes disponibles para este perfil.</div><button class="m-primary-btn full" onclick="mobileOpenDebtForm('${person}')"><i class="fa-solid fa-plus"></i> Crear obligación</button></article>`}</section>
+    <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-clock-rotate-left"></i> Historial personal</h3><p>${rows.length} movimiento(s). Los abonos vinculados se ajustan desde su obligación.</p></div><button class="m-v3-link" onclick="openPersonalMovement('${person}','expense')"><i class="fa-solid fa-plus"></i> Nuevo</button></div><section class="m-panel">${rows.length?`<div class="m-transaction-list">${rows.slice(0,30).map(x=>{const type=personalMovementType(x),amount=Math.abs(Number(x.amount)||0),spent=personalTypeCountsAsSpent(type),sign=type==='income'?'+':spent?'−':'+';const linkedDebt=(state.debts||[]).find(d=>d.id===x.debtId);const category=type==='saving'?personalSavingBoxName(person,x.savingBoxId,x.category):(x.category||personalTypeLabel(type));return `<article class="m-transaction"><div class="m-transaction-icon ${type==='income'?'income':type==='saving'?'saving':type==='debt'?'debt':'expense'}"><i class="fa-solid ${mobileIcon(type)}"></i></div><div class="m-transaction-info"><b>${esc(category)}</b><small>${mobileV3DateLabel(x.date)} · ${esc(x.desc||personalTypeLabel(type))}</small></div><div class="m-transaction-side"><strong class="${type==='income'?'positive':spent?'negative':'saving-text'}">${sign}${money(amount)}</strong><div class="m-record-actions">${x.debtId?`<button class="m-icon-btn" title="Editar obligación vinculada" aria-label="Editar obligación vinculada" onclick="editDebt('${x.debtId}')"><i class="fa-solid fa-file-pen"></i></button>`:`<button class="m-icon-btn" title="Editar movimiento" aria-label="Editar movimiento" onclick="editPersonalMovement('${x.id}')"><i class="fa-solid fa-pen-to-square"></i></button><button class="m-icon-btn danger" title="Eliminar movimiento" aria-label="Eliminar movimiento" onclick="deleteRecord('personal','${x.id}')"><i class="fa-solid fa-trash-can"></i></button>`}</div></div></article>`}).join("")}</div>`:`<div class="m-inline-empty"><i class="fa-solid fa-receipt"></i> No hay movimientos personales aún.</div>`}</section></section>`;
+};
+
+/* Calendario real por mes: recordatorios y deudas que vencen; cada registro se puede editar. */
+function mobileSelectCalendarDayV3(date) { mobileCalendarSelectedDateV3=date; renderMobileUI(); }
+function mobileShiftCalendarV3(delta) { mobileCalendarMonthV3=new Date(mobileCalendarMonthV3.getFullYear(),mobileCalendarMonthV3.getMonth()+delta,1); renderMobileUI(); }
+function mobileCalendarTodayV3() { mobileCalendarMonthV3=new Date(new Date().getFullYear(),new Date().getMonth(),1);mobileCalendarSelectedDateV3=dateNow();renderMobileUI(); }
+function mobileOpenTaskForDateV3(date) {
+  openModal(`<i class="fa-solid fa-calendar-plus"></i> Nuevo recordatorio`, `<form class="m-form" onsubmit="mobileSaveTaskForDateV3(event)"><div class="field"><label><i class="fa-regular fa-calendar"></i> Fecha</label><input class="input" id="mv3TaskDate" type="date" value="${esc(date||dateNow())}" required></div><div class="field"><label><i class="fa-regular fa-clock"></i> Hora (opcional)</label><input class="input" id="mv3TaskTime" type="time"></div><div class="field"><label><i class="fa-solid fa-list-check"></i> Obligación o recordatorio</label><input class="input" id="mv3TaskTitle" maxlength="160" required placeholder="Ej. Pagar servicio de internet"></div><div class="field"><label><i class="fa-solid fa-user-check"></i> Responsable</label><select class="select" id="mv3TaskOwner"><option value="home">Hogar</option><option value="me">${esc(state.people.me)}</option><option value="partner">${esc(state.people.partner)}</option></select></div><div class="field"><label><i class="fa-solid fa-bell"></i> Recordatorio</label><select class="select" id="mv3TaskReminder"><option value="none">Solo en calendario</option><option value="on-day">Recordar el día</option><option value="one-day">Un día antes</option></select></div><div class="field"><label><i class="fa-regular fa-note-sticky"></i> Notas</label><textarea class="textarea" id="mv3TaskNotes" rows="2" placeholder="Detalles opcionales"></textarea></div><div class="form-actions"><button type="button" class="btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i> Cancelar</button><button class="btn primary"><i class="fa-solid fa-floppy-disk"></i> Guardar evento</button></div></form>`);
+}
+function mobileSaveTaskForDateV3(e) {
+  e.preventDefault();
+  state.tasks.push({id:crypto.randomUUID(),date:document.getElementById("mv3TaskDate").value,time:document.getElementById("mv3TaskTime").value,title:document.getElementById("mv3TaskTitle").value.trim(),owner:document.getElementById("mv3TaskOwner").value,reminder:document.getElementById("mv3TaskReminder").value,notes:document.getElementById("mv3TaskNotes").value.trim(),status:"pending",createdAt:new Date().toISOString()});
+  mobileCalendarSelectedDateV3=document.getElementById("mv3TaskDate").value; const parsed=new Date(`${mobileCalendarSelectedDateV3}T00:00:00`);mobileCalendarMonthV3=new Date(parsed.getFullYear(),parsed.getMonth(),1);
+  saveState(); closeModal(); renderMobileUI(); toast("Evento añadido al calendario");
+}
+renderMobileCalendar = function renderMobileCalendarV3() {
+  const today=dateNow(), y=mobileCalendarMonthV3.getFullYear(), m=mobileCalendarMonthV3.getMonth(), first=new Date(y,m,1), last=new Date(y,m+1,0).getDate();
+  const title=first.toLocaleDateString("es-CO",{month:"long",year:"numeric"});
+  const allEvents=[
+    ...(state.tasks||[]).filter(t=>t.date).map(t=>({kind:"task",id:t.id,date:t.date,title:t.title,detail:`${t.time||"Sin hora"} · ${t.owner==="home"?"Hogar":state.people[t.owner]||t.owner}`,status:t.status||"pending",source:t})),
+    ...(state.debts||[]).filter(d=>d.due).map(d=>({kind:"debt",id:d.id,date:d.due,title:d.name,detail:`Vencimiento · ${d.owner==="home"?"Hogar":state.people[d.owner]||d.owner}`,status:d.status||"pending",source:d}))
+  ];
+  const offset=(first.getDay()+6)%7, weekdayNames=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+  let grid=weekdayNames.map(n=>`<div class="m-v3-calendar-weekday">${n}</div>`).join("");
+  for(let i=0;i<offset;i++) grid+=`<span class="m-v3-cal-empty"></span>`;
+  for(let day=1;day<=last;day++){
+    const date=`${y}-${String(m+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+    const events=allEvents.filter(e=>e.date===date&&(e.kind!=="debt"||(e.status!=="paid"&&Number(e.source.balance)>0)));
+    const taskN=events.filter(e=>e.kind==="task"&&e.status!=="done").length, debtN=events.filter(e=>e.kind==="debt").length;
+    grid+=`<button class="m-v3-calendar-day ${date===today?'today':''} ${date===mobileCalendarSelectedDateV3?'selected':''} ${events.length?'has-events':''}" onclick="mobileSelectCalendarDayV3('${date}')" aria-label="${date}, ${events.length} evento(s)"><span>${day}</span><span class="m-v3-cal-dots">${taskN?'<i></i>':''}${debtN?'<i class="debt-dot"></i>':''}</span></button>`;
+  }
+  const selected=mobileCalendarSelectedDateV3||today;
+  const dayEvents=allEvents.filter(e=>e.date===selected&&(e.kind!=="debt"||(e.status!=="paid"&&Number(e.source.balance)>0))).sort((a,b)=>(a.kind===b.kind?String(a.title).localeCompare(String(b.title)):a.kind==="debt"?-1:1));
+  const eventRows=dayEvents.length?dayEvents.map(e=>`<div class="m-v3-event-card"><span class="m-v3-row-icon ${e.kind==="debt"?"orange":"blue"}"><i class="fa-solid ${e.kind==="debt"?"fa-file-invoice-dollar":"fa-calendar-check"}"></i></span><div class="m-v3-event-main"><b>${esc(e.title||"Evento")}</b><small>${e.kind==="debt"?`Saldo: ${money(e.source.balance)} · `:""}${esc(e.detail)}${e.source.notes?` · ${esc(e.source.notes)}`:""}</small></div><div class="m-v3-event-actions">${e.kind==="task"?`<button class="m-v3-inline-btn" title="Completar / pendiente" aria-label="Cambiar estado" onclick="toggleTask('${e.id}')"><i class="fa-solid ${e.status==="done"?"fa-rotate-left":"fa-check"}"></i></button><button class="m-v3-inline-btn" title="Editar recordatorio" aria-label="Editar recordatorio" onclick="openTaskEdit('${e.id}')"><i class="fa-solid fa-pen-to-square"></i></button><button class="m-v3-inline-btn danger" title="Eliminar recordatorio" aria-label="Eliminar recordatorio" onclick="deleteTask('${e.id}')"><i class="fa-solid fa-trash-can"></i></button>`:`<button class="m-v3-inline-btn" title="Editar obligación" aria-label="Editar obligación" onclick="editDebt('${e.id}')"><i class="fa-solid fa-pen-to-square"></i></button><button class="m-v3-inline-btn primary" title="Abonar a deuda" aria-label="Abonar a deuda" onclick="payDebt('${e.id}')"><i class="fa-solid fa-hand-holding-dollar"></i></button>`}</div></div>`).join(""):`<div class="m-inline-empty"><i class="fa-regular fa-calendar-check"></i> No hay eventos para este día.</div>`;
+  return `<div class="m-v3-calendar-head"><h2><i class="fa-solid fa-calendar-days"></i> ${esc(title)}</h2><div class="m-v3-calendar-nav"><button title="Mes anterior" aria-label="Mes anterior" onclick="mobileShiftCalendarV3(-1)"><i class="fa-solid fa-chevron-left"></i></button><button class="today-btn" onclick="mobileCalendarTodayV3()">Hoy</button><button title="Mes siguiente" aria-label="Mes siguiente" onclick="mobileShiftCalendarV3(1)"><i class="fa-solid fa-chevron-right"></i></button></div></div>
+  <section class="m-panel"><div class="m-v3-calendar">${grid}</div><div class="m-v3-calendar-legend"><span><i></i> Recordatorios</span><span><i class="debt-dot"></i> Vencimientos de deudas</span></div></section>
+  <div class="m-v3-selected-date"><h3><i class="fa-regular fa-calendar-check"></i> ${mobileV3DateLabel(selected)}</h3><button class="m-primary-btn compact" onclick="mobileOpenTaskForDateV3('${selected}')"><i class="fa-solid fa-plus"></i> Añadir evento</button></div>
+  <section class="m-panel">${eventRows}</section>
+  <div class="m-v3-info-note"><i class="fa-solid fa-circle-info"></i><span>El calendario utiliza la fecha actual del dispositivo, muestra recordatorios y vencimientos registrados, y permite editar cada recordatorio u obligación tocando su icono de lápiz.</span></div>`;
+};
+
+/* Cuentas separadas: solo lectura, calculadas desde movimientos; al tocar una tarjeta se despliega su detalle. */
+function mobileV3AccountRows(id,f=getFilter()) {
+  if(id==="home") return mobileV3PeriodRows(state.expenses,f).map(x=>({id:x.id,date:x.date,title:x.category||"Gasto del hogar",detail:`${x.distribution==="manual"?"Distribución manual":"Responsabilidad compartida"} · ${state.people.me}: ${money(Number.isFinite(Number(x.meAmount))?Number(x.meAmount):Number(x.amount||0)/2)} · ${state.people.partner}: ${money(Number.isFinite(Number(x.partnerAmount))?Number(x.partnerAmount):Number(x.amount||0)/2)}`,amount:Number(x.amount)||0,kind:"expense"}));
+  if(id==="savings") return mobileV3PeriodRows(state.savings,f).map(x=>({id:x.id,date:x.date,title:(SAVINGS.find(s=>s[0]===x.type)||[])[1]||"Ahorro del hogar",detail:"Fondo compartido de la pareja",amount:Number(x.amount)||0,kind:"saving"}));
+  const person=id==="me"?"me":"partner";
+  return (state.personalSpending||[]).filter(x=>x.person===person&&inPeriod(x.date,f.year,f.month)).map(x=>({id:x.id,date:x.date,title:x.category||personalTypeLabel(personalMovementType(x)),detail:x.desc||personalTypeLabel(personalMovementType(x)),amount:Number(x.amount)||0,kind:personalMovementType(x)})).sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+}
+renderMobileAccounts = function renderMobileAccountsV3() {
+  const f=getFilter();
+  const cards=ACCOUNT_TYPES.map(a=>{const d=accountPeriodSummary(a.id),icon=a.id==="home"?"fa-house":a.id==="savings"?"fa-piggy-bank":a.id==="me"?"fa-user":"fa-user-group";return `<button class="m-v3-account-select ${mobileSelectedAccountV3===a.id?'selected':''}" onclick="mobileSelectedAccountV3='${a.id}';renderMobileUI()"><span class="m-v3-account-title"><i class="fa-solid ${icon}"></i>${esc(a.name)}</span><strong>${money(d.value)}</strong><small>${esc(d.detail)}</small><span class="m-v3-account-cta">${mobileSelectedAccountV3===a.id?'Cuenta seleccionada':'Ver detalle'} <i class="fa-solid fa-chevron-down"></i></span></button>`}).join("");
+  const id=ACCOUNT_TYPES.some(a=>a.id===mobileSelectedAccountV3)?mobileSelectedAccountV3:"home";
+  const selectedType=ACCOUNT_TYPES.find(a=>a.id===id)||ACCOUNT_TYPES[0], d=accountPeriodSummary(id), rows=mobileV3AccountRows(id,f);
+  let intro="", baseline="";
+  if(id==="home") intro="Ingresos y egresos relacionados con las responsabilidades del hogar.";
+  else if(id==="savings") intro="Aportes registrados en los fondos de ahorro conjuntos.";
+  else {const person=id==="me"?"me":"partner",st=personalStats(person,f.year,f.month),assigned=personalAssigned(person,f.year,f.month);intro=`Actividad personal de ${state.people[person]}. Los movimientos personales se muestran como información, sin editarlos desde esta pantalla.`;baseline=`<div class="m-v3-person-split"><div class="m-v3-person-tile"><span><i class="fa-solid fa-house-user"></i> Asignación tras el hogar</span><strong>${money(assigned)}</strong></div><div class="m-v3-person-tile"><span><i class="fa-solid fa-wallet"></i> Saldo personal calculado</span><strong>${money(assigned+st.extraIncome-st.spent-st.saved)}</strong></div></div>`;}
+  const rowsHtml=rows.length?rows.map(x=>{const icon=x.kind==="income"?"fa-arrow-trend-up":x.kind==="saving"?"fa-piggy-bank":x.kind==="debt"?"fa-file-invoice-dollar":x.kind==="expense"||x.kind==="other-expense"?"fa-receipt":"fa-wallet";const color=x.kind==="income"?"blue":x.kind==="saving"?"green":x.kind==="debt"?"pink":"orange";const sign=x.kind==="income"?"+":x.kind==="saving"?"↗":"−";return `<div class="m-v3-readonly-row"><span class="m-v3-row-icon ${color}"><i class="fa-solid ${icon}"></i></span><div class="detail"><b>${esc(x.title)}</b><small>${mobileV3DateLabel(x.date)} · ${esc(x.detail||"")}</small></div><strong class="${sign==='−'?'negative':sign==='+'?'positive':'saving-text'}">${sign}${money(Math.abs(x.amount))}</strong></div>`}).join(""):`<div class="m-inline-empty"><i class="fa-solid fa-inbox"></i> No hay movimientos para esta cuenta en el periodo.</div>`;
+  return `${mobilePeriodControls()}<div class="m-v3-info-note"><i class="fa-solid fa-shield-halved"></i><span>Estas cuentas son informativas y automáticas. No se crean, editan ni eliminan movimientos aquí; usa la sección correspondiente (Ingresos, Gastos, Ahorros o Finanzas personales) para modificar el dato de origen.</span></div>
+    <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-wallet"></i> Cuentas del hogar y personales</h3><p>Toca una cuenta para ver sus movimientos calculados.</p></div></div><div class="m-v3-account-grid">${cards}</div></section>
+    <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-circle-info"></i> ${esc(selectedType.name)}</h3><p>${esc(intro)}</p></div><span class="m-v3-status done"><i class="fa-solid fa-lock"></i> Solo lectura</span></div><article class="m-v3-card"><div class="m-v3-muted">Total del periodo</div><div class="m-v3-highlight">${money(d.value)}</div>${baseline}<div class="m-section-heading"><div><h3><i class="fa-solid fa-list-check"></i> Detalle automático</h3><p>${rows.length} registro(s) del periodo seleccionado.</p></div></div>${rowsHtml}</article></section>`;
+};
+
+renderMobileGoals = function renderMobileGoalsV3() {
+  const goals=state.goals||[];
+  return `<div class="m-inline-toolbar"><div><h2 class="m-h2"><i class="fa-solid fa-bullseye"></i> Metas a futuro</h2><p>Objetivos medibles, avances y aportes.</p></div><button class="m-primary-btn compact" onclick="openGoal()"><i class="fa-solid fa-plus"></i> Crear meta</button></div>${goals.length?`<section class="m-goal-list">${goals.map(g=>{const pct=Number(g.target)>0?Math.min(100,Math.max(0,Number(g.current||0)/Number(g.target)*100)):0;return `<article class="m-goal-card"><div class="m-goal-top"><div class="m-goal-symbol"><i class="fa-solid fa-bullseye"></i></div><div class="m-goal-head"><b>${esc(g.name||"Meta sin nombre")}</b><small>${esc(g.desc||"Objetivo personal")}</small></div><button class="m-icon-btn" aria-label="Editar meta" title="Editar meta" onclick="openGoal('${g.id}')"><i class="fa-solid fa-pen-to-square"></i></button></div><div class="m-goal-money"><strong>${money(g.current)}</strong><span>de ${money(g.target)}</span></div><div class="m-track"><i class="purple" style="width:${pct}%"></i></div><div class="m-goal-bottom"><span>${pct.toFixed(0)}% completado</span><span>${pct>=100?'¡Objetivo cumplido!':money(Math.max(0,Number(g.target||0)-Number(g.current||0)))+' restantes'}</span></div><div class="m-goal-actions"><button class="m-primary-btn" onclick="contributeGoal('${g.id}')"><i class="fa-solid fa-plus"></i> Abonar</button><button class="m-secondary-btn" onclick="openGoal('${g.id}')"><i class="fa-solid fa-pen-to-square"></i> Editar</button><button class="m-icon-btn danger" aria-label="Eliminar meta" title="Eliminar meta" onclick="deleteGoal('${g.id}')"><i class="fa-solid fa-trash-can"></i></button></div></article>`}).join("")}</section>`:`<section class="m-panel"><div class="m-empty"><span><i class="fa-solid fa-bullseye"></i></span><b>Define tu primera meta</b><p>Puede ser un viaje, un fondo de emergencia u otro objetivo.</p><button class="m-primary-btn" onclick="openGoal()"><i class="fa-solid fa-plus"></i> Crear meta</button></div></section>`}`;
+};
+
+/* Renderer móvil final: el Resumen General no marca ninguno de los cuatro módulos principales. */
+renderMobileUI = function renderMobileUIV3() {
+  const root=document.getElementById("mobileApp"),content=document.getElementById("mContent"); if(!root||!content)return;
+  if(!authToken||!authUser){root.style.display="none";return;}
+  root.style.display="block";
+  const entry=MOBILE_TITLES[mobileScreen]||MOBILE_TITLES.summary;
+  document.getElementById("mTitle").textContent=entry[0];document.getElementById("mSubtitle").textContent=entry[1];
+  document.getElementById("mAvatar").textContent=((authUser?.role==="partner"?state.people.partner:state.people.me)||authUser?.username||"N").slice(0,1).toUpperCase();
+  const primary={income:"income",homeExpenses:"homeExpenses",savings:"savings",available:"available"};
+  const secondary=new Set(["more","debts","goals","calendar","accounts","personalMe","personalPartner","settings"]);
+  document.querySelectorAll(".m-tab").forEach(btn=>{const key=btn.dataset.screen;let active=false;if(primary[mobileScreen])active=key===primary[mobileScreen];else if(mobileScreen!=="summary"&&secondary.has(mobileScreen))active=key==="more";btn.classList.toggle("active",active);});
+  const renderers={summary:renderMobileHome,home:renderMobileHome,income:renderMobileIncomes,homeExpenses:renderMobileHomeExpenses,savings:renderMobileSavings,available:renderMobileAvailable,goals:renderMobileGoals,more:renderMobileMore,debts:renderMobileDebts,calendar:renderMobileCalendar,accounts:renderMobileAccounts,personalMe:()=>renderMobilePersonal("me"),personalPartner:()=>renderMobilePersonal("partner"),settings:renderMobileSettings};
+  content.innerHTML=(renderers[mobileScreen]||renderMobileHome)();
+  const sync=document.getElementById("mSync");if(sync){sync.className="m-sync-pill "+(cloudSyncing?"syncing":cloudReady?"synced":"offline");sync.innerHTML=`<i class="fa-solid ${cloudSyncing?'fa-rotate fa-spin':cloudReady?'fa-cloud-check':'fa-cloud'}"></i><span>${cloudSyncing?'Sincronizando':cloudReady?'En línea':'Sesión activa'}</span>`;}
+};
+
+/* Identidad Nexus en cabecera: tocar el isotipo vuelve al Resumen General. */
+(function bindMobileHomeMarkV3(){
+  const mark=document.querySelector(".m-brand-mark"); if(mark){mark.setAttribute("role","button");mark.setAttribute("tabindex","0");mark.setAttribute("aria-label","Volver al Resumen General");mark.setAttribute("onclick","mobileSetScreen('summary')");mark.setAttribute("onkeydown","if(event.key==='Enter'||event.key===' '){event.preventDefault();mobileSetScreen('summary')}");}
+  const copy=document.querySelector(".m-brand-copy"); if(copy){copy.setAttribute("role","button");copy.setAttribute("tabindex","0");copy.setAttribute("aria-label","Volver al Resumen General");copy.setAttribute("onclick","mobileSetScreen('summary')");copy.setAttribute("onkeydown","if(event.key==='Enter'||event.key===' '){event.preventDefault();mobileSetScreen('summary')}");}
+})();
+
+/* Cada nuevo inicio de sesión vuelve al resumen en vez de abrir la última sección consultada. */
+const mobileV3WrappedSubmitAuth = submitAuth;
+submitAuth = async function(event){ await mobileV3WrappedSubmitAuth(event); if(authToken&&authUser){mobileScreen="summary";renderMobileUI();} };
+const mobileV3WrappedBootstrapAuth = bootstrapAuth;
+bootstrapAuth = async function(){ await mobileV3WrappedBootstrapAuth(); if(authToken&&authUser){mobileScreen="summary";renderMobileUI();} };
+
+/* En finanzas personales, el formulario de una deuda abre con ese perfil como responsable por defecto. */
+mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
+  const owner = ["home","me","partner"].includes(ownerDefault) ? ownerDefault : "home";
+  openModal(`<i class="fa-solid fa-file-invoice-dollar"></i> Registrar deuda u obligación`, `<form class="m-form" onsubmit="mobileAddDebt(event)">
+    <div class="field"><label><i class="fa-solid fa-file-signature"></i> Nombre de la deuda</label><input class="input" id="mDebtName" required maxlength="120" placeholder="Ej. Tarjeta de crédito"></div>
+    <div class="field"><label><i class="fa-solid fa-coins"></i> Monto original (COP)</label><input class="input money-input" id="mDebtOriginal" inputmode="numeric" required placeholder="1.000.000" oninput="formatMoneyField(this)"></div>
+    <div class="field"><label><i class="fa-solid fa-scale-balanced"></i> Saldo pendiente (COP)</label><input class="input money-input" id="mDebtBalance" inputmode="numeric" required placeholder="850.000" oninput="formatMoneyField(this)"></div>
+    <div class="field"><label><i class="fa-solid fa-calendar-check"></i> Cuota mensual (opcional)</label><input class="input money-input" id="mDebtInstallment" inputmode="numeric" value="0" oninput="formatMoneyField(this)"></div>
+    <div class="field"><label><i class="fa-regular fa-calendar"></i> Próximo vencimiento</label><input class="input" id="mDebtDue" type="date"></div>
+    <div class="field"><label><i class="fa-solid fa-user-check"></i> Responsable</label><select class="select" id="mDebtOwner"><option value="home" ${owner==="home"?'selected':''}>Hogar</option><option value="me" ${owner==="me"?'selected':''}>Personal: ${esc(state.people.me)}</option><option value="partner" ${owner==="partner"?'selected':''}>Personal: ${esc(state.people.partner)}</option></select></div>
+    <div class="field"><label><i class="fa-regular fa-note-sticky"></i> Notas</label><textarea class="textarea" id="mDebtNotes" rows="2" placeholder="Detalles opcionales"></textarea></div>
+    <div class="form-actions"><button type="button" class="btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i> Cancelar</button><button class="btn primary"><i class="fa-solid fa-floppy-disk"></i> Guardar obligación</button></div>
+  </form>`);
+};
+
+</script>
 </body>
 </html>
