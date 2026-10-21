@@ -462,6 +462,44 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
  .donut-layout{grid-template-columns:100px minmax(0,1fr);gap:9px}.donut{width:100px}.person{padding:9px}.person .amount{font-size:14px}
 }
 @media(min-width:520px) and (max-width:800px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))!important}.kpi.available{grid-column:1/-1}.mobile-quick-grid button{min-height:96px}.section-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.donut-layout{grid-template-columns:1fr}.donut-layout .donut{margin:0 auto 10px}.people{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+
+/* MOBILE APP SHELL — final precedence layer (fixes duplicated legacy media rules) */
+@media (max-width:800px){
+  :root{--mobile-nav-height:74px}
+  body{padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom))!important}
+  .main{padding-bottom:calc(var(--mobile-nav-height) + 24px + env(safe-area-inset-bottom))!important}
+  /* The drawer is a true modal layer: backdrop below drawer, both above app chrome. */
+  .mobile-drawer-backdrop{z-index:140!important;display:block!important;pointer-events:none;opacity:0;visibility:hidden}
+  .sidebar{z-index:141!important;transform:translateX(-110%);visibility:hidden}
+  .sidebar.open{transform:translateX(0)!important;visibility:visible!important}
+  body.drawer-open .mobile-drawer-backdrop{opacity:1!important;visibility:visible!important;pointer-events:auto!important}
+  body.drawer-open{overflow:hidden!important;touch-action:none}
+  body.drawer-open .mobile-bottom-nav{display:none!important;visibility:hidden!important;pointer-events:none!important}
+  body.drawer-open .mobile-appbar{z-index:30!important}
+  .mobile-bottom-nav{z-index:100!important;isolation:isolate;padding-bottom:calc(9px + env(safe-area-inset-bottom))!important}
+  .mobile-bottom-nav button{touch-action:manipulation}
+  .mobile-bottom-nav .mobile-nav-add{transform:translateY(-2px)}
+  /* Make the most important number the first thing seen on the home screen. */
+  .kpis{display:flex!important;flex-wrap:wrap!important;overflow:visible!important;scroll-snap-type:none!important;gap:8px!important;margin:0 0 17px!important;padding:0!important}
+  .kpis>.kpi{flex:1 1 calc(33.333% - 8px)!important;min-width:0!important;min-height:105px!important;padding:12px 10px!important;border-radius:16px!important;scroll-snap-align:none!important;box-shadow:none!important}
+  .kpis>.kpi.available{order:-1;flex:1 0 100%!important;min-height:164px!important;padding:19px!important;border-radius:23px!important;justify-content:center!important;position:relative;overflow:hidden;border:1px solid rgba(52,211,153,.24)!important;background:radial-gradient(ellipse at 100% 0,rgba(52,211,153,.19),transparent 48%),linear-gradient(135deg,#17251f 0%,#151720 66%,#171225 100%)!important}
+  .kpi.available:after{content:"DISPONIBLE PARA TI";display:block;position:absolute;right:16px;top:17px;font-size:8px;letter-spacing:.13em;font-weight:850;color:rgba(167,243,208,.6)}
+  .kpis>.kpi.available .label{font-size:10px!important;letter-spacing:.12em;color:#a7f3d0!important}
+  .kpis>.kpi.available .value{font-size:clamp(32px,9vw,43px)!important;line-height:1.04!important;margin-top:15px!important;max-width:100%;color:#ecfdf5!important}
+  .kpis>.kpi.available .sub{font-size:11px!important;max-width:28ch;color:#b6cfc2!important}
+  .kpis>.kpi:not(.available){min-height:105px!important;display:flex;flex-direction:column;justify-content:space-between;background:#15121e!important;border:1px solid #2b2438!important}
+  .kpis>.kpi .value{font-size:clamp(13px,3.7vw,19px)!important;line-height:1.18!important;overflow-wrap:anywhere;margin-top:9px!important}
+  .kpis>.kpi .label{font-size:8px!important;letter-spacing:.045em!important;line-height:1.3!important}
+  .kpis>.kpi .sub{font-size:8px!important;line-height:1.3!important;margin-top:5px!important}
+  .mobile-quick-actions{margin-top:0!important}
+}
+@media(max-width:390px){
+ .kpis>.kpi:not(.available){flex-basis:calc(50% - 8px)!important}
+ .kpis>.kpi.available{min-height:150px!important}
+ .kpis>.kpi.available .value{font-size:32px!important}
+}
+
 </style>
 
 </head>
@@ -660,7 +698,7 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
  <button type="button" data-mobile-route="personalMe" onclick="showModule('personalMe')"><i class="fa-solid fa-user"></i><span>Personal</span></button>
  <button type="button" class="mobile-nav-add" aria-label="Registrar movimiento" onclick="openMobileActionSheet()"><i class="fa-solid fa-plus"></i></button>
  <button type="button" data-mobile-route="debts" onclick="showModule('debts')"><i class="fa-solid fa-credit-card"></i><span>Deudas</span></button>
- <button type="button" data-mobile-more="true" onclick="toggleSidebar()"><i class="fa-solid fa-grid-2"></i><span>Más</span></button>
+ <button type="button" data-mobile-more="true" aria-expanded="false" aria-controls="sidebar" onclick="toggleSidebar()"><i class="fa-solid fa-grid-2"></i><span>Más</span></button>
 </nav>
 
 <div class="modal" id="modal"><div class="modal-box" id="modalBox"></div></div>
@@ -1356,7 +1394,7 @@ function showModule(name,fromHistory=false){
  if(!fromHistory){const url=location.pathname+location.search+"#"+name;history.pushState({nexusRoute:name},"",url)}
  if(name==="personalMe"||name==="personalPartner")renderPersonalModule();if(name==="settings")populateSettings();
  if(name!=="dashboard")renderExtendedModules();
- document.getElementById("sidebar").classList.remove("open");if(!fromHistory)window.scrollTo({top:0,behavior:"auto"});
+ closeMobileDrawer();if(!fromHistory)window.scrollTo({top:0,behavior:"auto"});
 }
 window.addEventListener("popstate",(event)=>{if(document.getElementById("modal").classList.contains("show")){if(typeof event.state?.scrollY==="number")modalScrollY=event.state.scrollY;closeModal(true);return}showModule(routeFromHash(),true)});
 // Escape closes only an active overlay/callout; it never changes the page scroll or route by itself.
@@ -1426,6 +1464,10 @@ function closeMobileDrawer(){
  const sidebar=document.getElementById("sidebar");
  if(sidebar)sidebar.classList.remove("open");
  document.body.classList.remove("drawer-open");
+ const backdrop=document.getElementById("mobileDrawerBackdrop");
+ if(backdrop)backdrop.setAttribute("aria-hidden","true");
+ const more=document.querySelector("[data-mobile-more]");
+ if(more)more.setAttribute("aria-expanded","false");
 }
 function toggleSidebar(){
  const sidebar=document.getElementById("sidebar");
@@ -1433,6 +1475,10 @@ function toggleSidebar(){
  const opening=!sidebar.classList.contains("open");
  sidebar.classList.toggle("open",opening);
  document.body.classList.toggle("drawer-open",opening);
+ const backdrop=document.getElementById("mobileDrawerBackdrop");
+ if(backdrop)backdrop.setAttribute("aria-hidden",String(!opening));
+ const more=document.querySelector("[data-mobile-more]");
+ if(more)more.setAttribute("aria-expanded",String(opening));
 }
 document.addEventListener("click",function(event){
  const navButton=event.target.closest(".nav button");
