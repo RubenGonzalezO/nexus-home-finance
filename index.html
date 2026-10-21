@@ -194,7 +194,6 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 .card:has(#availablePeople) .card-head h2 i{color:#60a5fa}
 .identity-inline .identity-dot{box-shadow:0 0 0 2px color-mix(in srgb,var(--identity-color,#8b5cf6) 18%,transparent)}
 
-
 </style>
 
 <style id="nexus-chart-contextual-detail-fix">
@@ -244,255 +243,66 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 @media(max-width:420px){.personal-summary-grid{grid-template-columns:1fr}}
 </style>
 
-
-<style id="nexus-mobile-first-refinement">
-/* Mobile-first refinement layer. Keeps the existing data model and backend integration untouched. */
-:root{--mobile-nav-height:68px;--mobile-safe-bottom:env(safe-area-inset-bottom,0px)}
-html{scroll-padding-top:16px;scroll-padding-bottom:calc(var(--mobile-nav-height) + 20px)}
-button,.btn,.mini-btn,.nav button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--purple2);outline-offset:2px}
-.mobile-bottom-nav{display:none}
-@media(max-width:800px){
-  body{background:radial-gradient(circle at 20% -10%,#211642 0,#0b0a12 42%);}
-  .app{min-height:100dvh}
-  .main{margin-left:0;width:100%;max-width:none;padding:clamp(12px,3.8vw,20px);padding-bottom:calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 24px)}
-  .sidebar{width:min(300px,86vw);padding:18px 14px;overflow-y:auto;overscroll-behavior:contain;box-shadow:var(--shadow);padding-bottom:calc(22px + var(--mobile-safe-bottom))}
-  .sidebar.open{z-index:450}
-  .app:has(.sidebar.open)::before{content:"";position:fixed;inset:0;background:rgba(3,2,8,.64);backdrop-filter:blur(3px);z-index:400}
-  .logo{padding-bottom:18px}
-  .nav button{padding:14px;border-radius:13px;margin:4px 0;font-size:14px;min-height:46px}
-  .topbar{align-items:flex-start;gap:12px;margin-bottom:16px;flex-wrap:wrap}
-  .title{flex:1;min-width:180px}
-  .title h1{font-size:clamp(21px,5.4vw,27px);line-height:1.2;letter-spacing:-.025em}
-  .title p{font-size:12px;line-height:1.5;max-width:42ch}
-  .topbar .actions{display:flex;align-items:center;gap:7px;width:100%}
-  .topbar .mobile-menu{display:none}
-  .topbar .sync-status{order:0;width:auto;flex:1;justify-content:flex-start;min-width:0}
-  .topbar .account-strip{order:1;max-width:100%;overflow-wrap:anywhere}
-  .topbar .actions>.btn{min-height:40px;padding:9px 11px}
-  .filterbar{gap:8px;padding:10px;margin-bottom:14px;border-radius:14px}
-  .filterbar .field{min-width:0;flex:1 1 115px}
-  .filterbar .field label{font-size:11px}
-  .filterbar .select,.filterbar .input{min-height:42px}
-  .filterbar>.btn{min-height:42px}
-  .filterbar #periodLabel{width:100%;line-height:1.4}
-  .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
-  .kpi{min-height:112px;padding:14px;border-radius:16px}
-  .kpi .label{font-size:10px;letter-spacing:.04em}
-  .kpi .value{font-size:clamp(20px,5.2vw,27px);line-height:1.2;margin-top:12px;overflow-wrap:anywhere}
-  .kpi .sub{font-size:10px;line-height:1.45}
-  .card{padding:14px;border-radius:17px}
-  .grid{gap:12px}
-  .section-grid,.section-grid.secondary-grid{grid-template-columns:minmax(0,1fr);gap:12px;margin-bottom:12px}
-  .section-grid>.card,.section-grid .wide{grid-column:auto}
-  .card-head{align-items:flex-start;gap:10px;margin-bottom:12px}
-  .card-head h2{font-size:15px;line-height:1.4}
-  .card-head span{font-size:11px;line-height:1.4}
-  .card-head .head-actions{flex-wrap:wrap}
-  .head-actions,.personal-block-actions{gap:6px}
-  .mini-btn{min-height:36px;padding:8px 10px}
-  .donut-layout{grid-template-columns:minmax(110px,140px) minmax(0,1fr);gap:12px}
-  .donut{width:min(140px,100%);height:auto;aspect-ratio:1}
-  .donut:after{inset:23px}
-  .people{grid-template-columns:minmax(0,1fr);gap:8px}
-  .person{padding:11px;border-radius:12px}
-  .person .amount{font-size:18px;overflow-wrap:anywhere}
-  .person button{min-height:38px}
-  .comparison-grid{grid-template-columns:minmax(0,1fr);gap:12px}
-  .comparison-card .bar-chart{height:175px;min-width:0}
-  .bar-chart{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
-  .future-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-  .dashboard-mini-grid{grid-template-columns:minmax(0,1fr);gap:12px;margin-bottom:12px}
-  .form-grid{grid-template-columns:minmax(0,1fr);gap:12px}
-  .form-grid .full{grid-column:auto}
-  .module-form{grid-template-columns:minmax(0,1fr)!important;gap:12px}
-  .module-form>*{min-width:0}
-  .input,.select,.textarea{min-height:44px;font-size:16px;border-radius:11px}
-  .textarea{min-height:100px}
-  .btn{min-height:42px;padding:10px 12px}
-  .actions{gap:8px}
-  .actions .btn{min-width:0}
-  .record{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
-  .record .record-actions{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:7px}
-  .record .record-actions button{flex:1 1 auto;min-height:38px}
-  .report-row{grid-template-columns:1fr;gap:10px;padding:13px 0}
-  .report-balance{align-items:flex-start;flex-direction:row;justify-content:space-between;flex-wrap:wrap}
-  .report-metric{grid-template-columns:62px minmax(40px,1fr) auto;gap:6px}
-  .report-metric small{font-size:10px}
-  .report-metric em{grid-column:2/4}
-  .modal{padding:10px!important;align-items:flex-end!important}
-  .modal-box{width:100%!important;max-width:620px;max-height:calc(100dvh - 20px - var(--mobile-safe-bottom));overflow:auto;overscroll-behavior:contain;border-radius:20px 20px 14px 14px!important;padding:16px!important;margin:0 auto var(--mobile-safe-bottom)!important}
-  .modal-head{position:sticky;top:-16px;z-index:3;background:var(--panel);padding:10px 0 12px;margin-top:-4px}
-  .modal-head h3{font-size:17px;line-height:1.35}
-  .mobile-bottom-nav{position:fixed;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));left:0;right:0;bottom:0;z-index:380;min-height:var(--mobile-nav-height);padding:7px 8px calc(7px + var(--mobile-safe-bottom));background:rgba(15,12,23,.96);border-top:1px solid rgba(167,139,250,.2);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 -10px 28px rgba(0,0,0,.22)}
-  .mobile-bottom-nav button{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;min-width:0;min-height:48px;padding:4px 2px;background:transparent;color:var(--muted);border-radius:12px;font-size:10px;font-weight:750;line-height:1.15}
-  .mobile-bottom-nav button i{font-size:17px}
-  .mobile-bottom-nav button.is-active{color:#e9ddff;background:rgba(139,92,246,.16)}
-  .mobile-bottom-nav button:active{background:rgba(139,92,246,.22)}
-  #authScreen{padding:16px;min-height:100dvh;overflow:auto}
-  .auth-card{padding:clamp(20px,6vw,28px);border-radius:22px}
-  #authForm .input{margin-top:7px}
-  #authSubmit{width:100%;min-height:46px}
-  .toast{left:12px;right:12px;bottom:calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 10px);max-width:none}
-  #loadingOverlay{padding:16px}
-}
-@media(max-width:520px){
-  .main{padding:12px;padding-bottom:calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 20px)}
-  .topbar{margin-bottom:13px}
-  .topbar .actions{gap:6px}
-  .topbar .account-strip{font-size:10px}
-  .topbar .actions>.btn{font-size:12px;padding:8px 9px}
-  .topbar .actions>.btn i{margin-right:3px}
-  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px}
-  .kpi{padding:12px;min-height:105px}
-  .kpi .value{font-size:clamp(18px,5.1vw,24px);letter-spacing:-.035em}
-  .kpi .sub{font-size:9px}
-  .card{padding:12px}
-  .donut-layout{grid-template-columns:1fr;justify-items:stretch}
-  .donut-layout>.donut{width:136px;justify-self:center}
-  .people{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .person .amount{font-size:16px}
-  .future-grid{grid-template-columns:minmax(0,1fr)}
-  .filterbar .field{flex-basis:calc(50% - 5px)}
-  .filterbar>.btn{flex:1 1 auto}
-  .report-metric{grid-template-columns:58px minmax(28px,1fr);}
-  .report-metric small{grid-column:2;white-space:normal;text-align:right}
-  .report-metric em{grid-column:2}
-  .auth-brand h1{font-size:24px}
-}
-@media(min-width:801px){.mobile-bottom-nav{display:none!important}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
-
-/* V2 · navegación flotante, vistas de detalle y accesibilidad táctil */
-.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.detail-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0 20px}.detail-kpi{padding:15px;border:1px solid var(--line);border-radius:15px;background:rgba(9,8,15,.5);min-width:0}.detail-kpi small{display:block;color:var(--muted);font-size:11px;margin-bottom:7px}.detail-kpi strong{font-size:clamp(17px,3vw,24px);overflow-wrap:anywhere}.detail-subheading{font-size:14px;margin:20px 0 10px}.detail-categories{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.detail-category{display:flex;flex-direction:column;align-items:stretch;text-align:left;gap:10px;min-width:0;padding:14px;border:1px solid var(--line);border-radius:15px;background:rgba(12,10,19,.72);color:var(--text);transition:border-color .16s,transform .16s}.detail-category:hover,.detail-category:focus-visible{border-color:#7655a4;transform:translateY(-1px)}.detail-category-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;min-width:0}.detail-category-top strong{font-size:13px;text-align:right;overflow-wrap:anywhere}.detail-category small{color:var(--muted);font-size:10px;line-height:1.5}.detail-track{height:6px;border-radius:99px;background:#282333;overflow:hidden}.detail-track i{display:block;height:100%;border-radius:99px}.detail-open{font-size:10px;color:#c4b5fd;font-weight:800}.detail-open i{margin-left:4px}.detail-note{margin:14px 0}.text-link{background:none;color:#c4b5fd;text-decoration:underline;padding:0}.quick-choice-grid,.quick-action-grid{display:grid;gap:10px}.quick-choice{display:flex;align-items:center;gap:12px;width:100%;padding:14px;border:1px solid var(--line);border-radius:14px;background:#15111f;color:var(--text);text-align:left;min-height:66px}.quick-choice>i:first-child{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:#29203b;color:#d8ccff}.quick-choice span{display:flex;flex:1;flex-direction:column;gap:4px}.quick-choice small,.quick-action small{font-size:10px;color:var(--muted)}.quick-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.quick-action{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-height:112px;padding:14px;border:1px solid var(--line);border-radius:15px;background:#15111f;color:var(--text);text-align:left}.quick-action>i{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:rgba(139,92,246,.16);color:#d8ccff;font-size:15px}.quick-action strong{font-size:12px}.quick-action small{line-height:1.4}
-@media(max-width:800px){
- :root{--mobile-safe-bottom:env(safe-area-inset-bottom, 0px);--mobile-nav-height:72px}
- .main{padding-bottom:calc(112px + var(--mobile-safe-bottom))}
- .topbar .mobile-menu{display:inline-flex;align-items:center;justify-content:center;min-width:42px;min-height:42px;padding:8px 11px}
- .mobile-bottom-nav{position:fixed;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));left:50%;right:auto;bottom:calc(12px + var(--mobile-safe-bottom));transform:translateX(-50%);width:min(560px,calc(100vw - 24px));min-height:66px;padding:7px 8px;background:rgba(19,15,29,.96);border:1px solid rgba(167,139,250,.28);border-radius:23px;box-shadow:0 12px 36px rgba(0,0,0,.45),0 2px 12px rgba(139,92,246,.12);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);gap:3px;z-index:380}
- .mobile-bottom-nav button{min-height:50px;gap:4px;border-radius:15px;font-size:10px;touch-action:manipulation}
- .mobile-bottom-nav button i{font-size:17px}
- .mobile-bottom-nav .mobile-quick-add{align-self:center;justify-self:center;width:52px;height:52px;min-height:52px;margin-top:-23px;border:4px solid #100d18;border-radius:19px;background:linear-gradient(145deg,#a78bfa,#7c3aed);color:white;box-shadow:0 7px 18px rgba(124,58,237,.4);font-size:22px}
- .mobile-bottom-nav .mobile-quick-add i{font-size:22px}
- .mobile-bottom-nav button.is-active:not(.mobile-quick-add){background:rgba(139,92,246,.17);color:#e9ddff}
- .main{scroll-padding-bottom:120px}
- .toast{bottom:calc(92px + var(--mobile-safe-bottom))}
- .detail-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.detail-kpi:last-child{grid-column:1/-1}
- .detail-categories{grid-template-columns:1fr}
- .detail-category{padding:13px}
-}
-@media(max-width:520px){.mobile-bottom-nav{width:calc(100vw - 20px);bottom:calc(10px + var(--mobile-safe-bottom));border-radius:21px}.mobile-bottom-nav button{font-size:9px}.mobile-bottom-nav .mobile-quick-add{width:50px;height:50px;min-height:50px;margin-top:-22px}.quick-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.quick-action{min-height:105px;padding:12px}.detail-kpis{gap:8px}.detail-kpi{padding:12px}.detail-kpi strong{font-size:17px}}
-@media(min-width:801px){.mobile-bottom-nav{display:none!important}}
-
-
+<style id="nexus-mobile-first-style">
+:root{color-scheme:dark;--m-bg:#0b0a12;--m-panel:#14111e;--m-panel2:#1b1728;--m-line:#30283e;--m-muted:#a39bb5;--m-purple:#a78bfa;--m-orange:#fb923c;--m-green:#34d399;--m-blue:#60a5fa}
+html,body{margin:0;min-height:100%;max-width:100%;overflow-x:hidden;background:var(--m-bg);-webkit-tap-highlight-color:transparent;overscroll-behavior-x:none}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+body>.app{display:none!important}
+#mobileApp{display:none;min-height:100svh;padding-bottom:calc(92px + env(safe-area-inset-bottom));background:radial-gradient(circle at 0% 0%,rgba(93,54,150,.25),transparent 28rem),linear-gradient(180deg,#0d0b15,#0b0a12 45%);color:#f6f3ff}
+.m-topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:11px;padding:calc(10px + env(safe-area-inset-top)) 17px 11px;background:rgba(12,10,19,.82);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-bottom:1px solid rgba(255,255,255,.055)}
+.m-brand-mark{display:grid;place-items:center;width:41px;height:41px;flex:0 0 41px;border-radius:14px;background:linear-gradient(140deg,#8b5cf6,#fb923c);box-shadow:0 8px 26px #8b5cf633;font-size:18px;color:#fff}
+.m-brand-copy{display:grid;gap:2px;flex:1}.m-brand-copy strong{font-size:15px;letter-spacing:-.025em}.m-brand-copy small{font-size:9px;letter-spacing:.16em;color:#a49ab8;font-weight:800}
+.m-sync-pill{display:flex;align-items:center;gap:6px;padding:7px 9px;border:1px solid var(--m-line);border-radius:99px;background:#151220;color:#bdb4cc;font-size:9px;white-space:nowrap}.m-sync-pill i{font-size:9px;color:var(--m-green)}.m-sync-pill.syncing i{color:var(--m-orange)}.m-sync-pill.offline i{color:#fda4af}
+.m-wrap{width:100%;max-width:650px;margin:0 auto;padding:18px 16px 28px}.m-page-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0 17px}.m-page-heading h1{font-size:26px;line-height:1.12;letter-spacing:-.045em;margin:0 0 5px;font-weight:850}.m-page-heading p{margin:0;color:var(--m-muted);font-size:12px;line-height:1.45}.m-avatar{display:grid;place-items:center;width:42px;height:42px;flex:0 0 42px;border-radius:15px;background:linear-gradient(145deg,#302342,#21192e);border:1px solid #514064;color:#e9ddff;font-weight:850;font-size:15px}
+.m-period{display:grid;grid-template-columns:minmax(0,1fr) minmax(85px,.52fr);gap:9px;margin:0 0 18px}.m-period label{display:grid;gap:6px;color:#a79db8;font-size:10px;font-weight:700}.m-period select{appearance:none;min-height:43px;border:1px solid var(--m-line);border-radius:12px;padding:0 35px 0 12px;color:#f7f2ff;background:#171321 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%23a78bfa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;font:inherit;font-size:12px;min-width:0}
+.m-welcome{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:3px 0 15px;padding:0 1px}.m-eyebrow{font-size:9px;letter-spacing:.14em;color:#b3a1dd;font-weight:850}.m-welcome h2{font-size:22px;letter-spacing:-.045em;margin:5px 0 4px;line-height:1.18}.m-welcome p{font-size:11px;color:var(--m-muted);margin:0}.m-welcome-orb{display:grid;place-items:center;width:50px;height:50px;flex:0 0 50px;border-radius:18px;background:linear-gradient(145deg,#312044,#211a2f);border:1px solid #49365e;color:#d4bcff;font-size:19px}
+.m-balance-card{position:relative;overflow:hidden;margin-bottom:23px;padding:19px 18px 16px;border-radius:23px;border:1px solid #5d477b;background:radial-gradient(circle at 100% 0,rgba(251,146,60,.18),transparent 43%),radial-gradient(circle at 0% 100%,rgba(139,92,246,.25),transparent 60%),linear-gradient(135deg,#211831,#15111f 70%);box-shadow:0 22px 55px #0003,inset 0 1px #ffffff0b}.m-balance-card:after{content:"";position:absolute;right:-62px;bottom:-88px;width:180px;height:180px;border-radius:50%;border:1px solid #ffffff0d;box-shadow:0 0 0 18px #ffffff04,0 0 0 40px #ffffff03;pointer-events:none}.m-balance-top{display:flex;justify-content:space-between;align-items:center;gap:8px;color:#c8badf;font-size:11px}.m-balance-top i{margin-right:6px;color:#c4b5fd}.m-live-dot{padding:5px 7px;border:1px solid #69517a;border-radius:99px;font-size:8px;letter-spacing:.08em;color:#d8c6fa;background:#362449aa}.m-balance-value{display:block;font-size:clamp(28px,8vw,39px);line-height:1.14;letter-spacing:-.05em;margin:18px 0 8px;font-weight:900;overflow-wrap:anywhere}.m-balance-card p{margin:0;color:#b2a8c4;font-size:10px;line-height:1.5;max-width:300px}.m-balance-footer{display:flex;gap:14px;flex-wrap:wrap;margin-top:20px;padding-top:13px;border-top:1px solid #ffffff16;color:#bcb0ce;font-size:10px}.m-balance-footer span{display:flex;gap:5px;align-items:center}.m-balance-footer b{color:#fff;font-size:10px}.m-balance-footer i{color:#c4b5fd}
+.m-section-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin:23px 1px 12px}.m-section-heading.inside{margin:0 0 13px}.m-section-heading h3{font-size:15px;letter-spacing:-.02em;margin:0 0 4px}.m-section-heading p{font-size:10px;color:var(--m-muted);margin:0;line-height:1.4}.m-text-action{background:transparent;color:#c9b3ff;padding:5px 0;font-weight:750;font-size:10px;white-space:nowrap}.m-text-action i{margin-left:4px}
+.m-stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:20px}.m-stat{min-width:0;border:1px solid var(--m-line);border-radius:17px;padding:13px;background:linear-gradient(155deg,#1b1727,#12101a);box-shadow:0 10px 24px #0002}.m-stat-top{display:flex;justify-content:space-between;align-items:center;gap:6px;color:#aaa1bc;font-size:10px}.m-stat-top i{font-size:12px;color:var(--m-purple)}.m-stat strong{display:block;margin-top:13px;font-size:clamp(17px,4.6vw,22px);font-weight:850;letter-spacing:-.045em;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}.m-stat small{display:block;color:#91879f;font-size:9px;margin-top:5px}.m-stat.m-income .m-stat-top i,.m-stat.m-income strong{color:#c4b5fd}.m-stat.m-expense .m-stat-top i,.m-stat.m-expense strong{color:#fdba74}.m-stat.m-saving .m-stat-top i,.m-stat.m-saving strong{color:#6ee7b7}.m-stat.m-debt .m-stat-top i,.m-stat.m-debt strong{color:#f9a8d4}.m-stat.m-available .m-stat-top i{color:#7dd3fc}
+.m-quick-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:5px 0 22px}.m-quick-actions button{display:grid;justify-items:center;gap:8px;background:none;color:#e7e0f1;padding:6px 1px;min-width:0;font-size:10px}.m-quick-actions b{font-size:10px;font-weight:650}.quick-icon{display:grid;place-items:center;width:49px;height:49px;border-radius:17px;font-size:17px;border:1px solid transparent}.quick-icon.purple,.m-menu-icon.purple{background:#37234d;color:#c4b5fd;border-color:#4c3568}.quick-icon.orange,.m-menu-icon.orange{background:#402719;color:#fdba74;border-color:#6c4528}.quick-icon.green,.m-menu-icon.green{background:#17392f;color:#6ee7b7;border-color:#245c49}.quick-icon.blue,.m-menu-icon.blue{background:#1e2e49;color:#93c5fd;border-color:#304c74}
+.m-panel{border:1px solid var(--m-line);border-radius:19px;padding:15px;background:linear-gradient(160deg,rgba(26,22,37,.96),rgba(17,15,24,.98));margin-bottom:14px;min-width:0;box-shadow:0 12px 28px #0002}.m-transaction-list{display:grid;gap:0}.m-transaction{display:flex;align-items:center;gap:10px;min-width:0;padding:12px 0;border-bottom:1px solid #ffffff0a}.m-transaction:first-child{padding-top:3px}.m-transaction:last-child{border-bottom:0;padding-bottom:3px}.m-transaction-icon{display:grid;place-items:center;width:39px;height:39px;flex:0 0 39px;border-radius:13px;background:#29213b;color:#c4b5fd;font-size:14px}.m-transaction-icon.expense{background:#3a281e;color:#fdba74}.m-transaction-icon.saving{background:#18382e;color:#6ee7b7}.m-transaction-icon.debt{background:#3b2030;color:#f9a8d4}.m-transaction-icon.income{background:#29213b;color:#c4b5fd}.m-transaction-info{display:grid;gap:4px;flex:1;min-width:0}.m-transaction-info b{font-size:11px;line-height:1.4;overflow-wrap:anywhere}.m-transaction-info small{font-size:9px;color:#968ca7;line-height:1.35;overflow-wrap:anywhere}.m-transaction-side{display:grid;justify-items:end;gap:5px;min-width:0}.m-transaction-side>strong{font-size:11px;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}.positive{color:#a7f3d0!important}.negative{color:#fda4af!important}.saving-text{color:#6ee7b7!important}.m-record-actions{display:flex;gap:4px}.m-icon-btn{display:inline-grid;place-items:center;min-width:31px;min-height:31px;border:1px solid #393047;border-radius:10px;background:#201a2d;color:#c7b6e8;font-size:10px;padding:0 8px}.m-icon-btn.danger{color:#fda4af;border-color:#4b2938;background:#2c1824}.m-empty{display:grid;justify-items:center;text-align:center;padding:22px 12px 20px}.m-empty>span{display:grid;place-items:center;width:53px;height:53px;border-radius:18px;background:#29203a;color:#c4b5fd;font-size:20px;margin-bottom:12px}.m-empty b{font-size:13px}.m-empty p{font-size:10px;color:var(--m-muted);line-height:1.55;max-width:250px;margin:7px 0 15px}.m-inline-empty{padding:18px 4px;color:var(--m-muted);font-size:11px;line-height:1.5;text-align:center}.m-inline-empty i{margin-right:6px;color:#c4b5fd}.m-primary-btn,.m-secondary-btn{display:inline-flex;justify-content:center;align-items:center;gap:7px;min-height:44px;padding:0 14px;border-radius:12px;font-size:11px;font-weight:800;white-space:normal;text-align:center;line-height:1.35}.m-primary-btn{color:white;background:linear-gradient(135deg,#7c3aed,#9461ee);box-shadow:0 8px 22px #7137c42b}.m-secondary-btn{color:#e4d8f8;border:1px solid #42364f;background:#201a2d}.m-primary-btn.full,.m-secondary-btn.full{width:100%;margin-top:12px}.m-primary-btn.compact{min-height:39px;padding:0 11px;font-size:10px}.m-h2{font-size:19px;margin:0 0 5px;letter-spacing:-.035em}.m-inline-toolbar{display:flex;align-items:center;justify-content:space-between;gap:9px;margin:4px 0 15px}.m-inline-toolbar p{font-size:10px;color:var(--m-muted);margin:0;line-height:1.4}.m-chip-row{display:flex;gap:7px;overflow-x:auto;margin-bottom:13px;padding:0 0 3px;scrollbar-width:none}.m-chip-row::-webkit-scrollbar{display:none}.m-chip{flex:0 0 auto;min-height:36px;padding:0 12px;border-radius:99px;border:1px solid var(--m-line);background:#171321;color:#bcb1cc;font-size:10px;font-weight:750}.m-chip.active{background:#322343;border-color:#72539a;color:#eadfff}.m-list-caption{font-size:10px;color:#978da8;margin:0 0 7px}
+.m-progress-item{margin:16px 0}.m-progress-label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;color:#ddd4eb;margin-bottom:8px}.m-progress-label b{font-size:10px;color:#c4b5fd}.m-track{height:8px;overflow:hidden;background:#30283b;border-radius:99px}.m-track i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#8b5cf6,#c4b5fd)}.m-track i.green{background:linear-gradient(90deg,#10b981,#a3e635)}.m-track i.orange{background:linear-gradient(90deg,#f97316,#fdba74)}.m-progress-item small{display:block;color:#978da8;font-size:9px;margin-top:7px}.m-saving-hero{border:1px solid #2b5748;border-radius:21px;padding:18px;background:radial-gradient(circle at 100% 0,#1c584034,transparent 50%),linear-gradient(145deg,#172922,#15111d);margin-bottom:19px}.m-hero-title{display:flex;justify-content:space-between;align-items:center}.m-hero-title i{display:grid;place-items:center;width:36px;height:36px;border-radius:12px;color:#6ee7b7;background:#1c4536}.m-saving-hero h2{font-size:31px;letter-spacing:-.05em;margin:14px 0 3px;overflow-wrap:anywhere}.m-saving-hero p{font-size:10px;color:#a9bbae;margin:0}.m-saving-hero .m-progress-label b{color:#6ee7b7}.m-saving-hero .m-track i{background:linear-gradient(90deg,#10b981,#bef264)}.m-saving-list{display:grid;gap:9px;margin-bottom:18px}.m-saving-card{display:flex;align-items:center;gap:11px;padding:13px;border:1px solid var(--m-line);border-radius:16px;background:#171420;min-width:0}.m-saving-symbol{display:grid;place-items:center;width:42px;height:42px;flex:0 0 42px;border-radius:14px;background:#17392f;color:#6ee7b7}.m-saving-symbol.unexpected{background:#1e2e49;color:#93c5fd}.m-saving-symbol.emergency{background:#422137;color:#f9a8d4}.m-saving-detail{display:grid;gap:4px;flex:1;min-width:0}.m-saving-detail b{font-size:11px}.m-saving-detail small{font-size:9px;color:#9d93ad}.m-saving-detail strong{font-size:14px;color:#6ee7b7;margin-top:3px;overflow-wrap:anywhere}.m-saving-card>.m-icon-btn{flex:0 0 34px;min-height:34px}
+.m-goal-list{display:grid;gap:11px}.m-goal-card{padding:15px;border-radius:18px;border:1px solid var(--m-line);background:linear-gradient(160deg,#1b1727,#13111b)}.m-goal-top{display:flex;gap:10px;align-items:center}.m-goal-symbol{display:grid;place-items:center;width:39px;height:39px;flex:0 0 39px;border-radius:13px;background:#2d2240;color:#c4b5fd}.m-goal-head{display:grid;gap:4px;flex:1;min-width:0}.m-goal-head b{font-size:12px;overflow-wrap:anywhere}.m-goal-head small{font-size:9px;color:#9e94ae;line-height:1.45;overflow-wrap:anywhere}.m-goal-money{display:flex;align-items:baseline;gap:6px;margin:17px 0 10px}.m-goal-money strong{font-size:21px;letter-spacing:-.04em;overflow-wrap:anywhere}.m-goal-money span{font-size:10px;color:#a39ab2}.m-goal-bottom{display:flex;justify-content:space-between;gap:8px;color:#9c92aa;font-size:9px;margin-top:8px;line-height:1.45}.m-goal-actions{display:flex;align-items:center;gap:7px;margin-top:14px}.m-goal-actions .m-primary-btn,.m-goal-actions .m-secondary-btn{flex:1}.m-goal-actions .m-icon-btn{flex:0 0 34px}
+.m-profile-card{display:flex;align-items:center;gap:10px;padding:15px;border:1px solid #4a395e;border-radius:18px;background:linear-gradient(140deg,#241a34,#171320);margin-bottom:21px}.m-profile-avatar{display:grid;place-items:center;width:46px;height:46px;flex:0 0 46px;border-radius:15px;background:linear-gradient(145deg,#8b5cf6,#f59e0b);font-size:18px;font-weight:900}.m-profile-card>div:nth-child(2){display:grid;gap:4px;flex:1;min-width:0}.m-profile-card b{font-size:12px;overflow-wrap:anywhere}.m-profile-card small{font-size:9px;color:#a59ab7;overflow-wrap:anywhere}.m-sync-line{display:flex;gap:5px;align-items:center;font-size:9px;color:#93d9b9;margin-top:3px}.m-menu-list{display:grid;gap:8px;margin-bottom:17px}.m-menu-item{display:flex;align-items:center;gap:11px;width:100%;padding:12px;border:1px solid var(--m-line);border-radius:15px;background:#171420;color:#f5efff;text-align:left;min-height:66px}.m-menu-icon{display:grid;place-items:center;width:41px;height:41px;flex:0 0 41px;border:1px solid transparent;border-radius:13px;font-size:15px}.m-menu-item>span:nth-child(2){display:grid;gap:4px;flex:1;min-width:0}.m-menu-item b{font-size:11px}.m-menu-item small{font-size:9px;color:#9c92aa;line-height:1.4}.m-menu-item>i:last-child{font-size:11px;color:#8f819f;margin:0 2px}.m-tools-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.m-tools-grid button{display:grid;justify-items:start;align-content:center;gap:10px;text-align:left;min-height:81px;padding:13px;border:1px solid var(--m-line);border-radius:14px;background:#100e17;color:#ded4ef;font-size:10px}.m-tools-grid button i{font-size:17px;color:#c4b5fd}.m-logout-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:46px;margin:15px 0 8px;border:1px solid #542a3d;border-radius:14px;background:#28141e;color:#fda4af;font-size:11px;font-weight:800}.m-version{text-align:center;color:#716781;font-size:9px;margin:18px 0 0}
+.m-debt-hero{padding:18px;border-radius:20px;background:radial-gradient(circle at 100% 0,#fb923c22,transparent 55%),linear-gradient(145deg,#2b1b22,#17111a);border:1px solid #62402d;margin-bottom:17px}.m-debt-hero>span{font-size:10px;color:#c6ac9f}.m-debt-hero>strong{display:block;font-size:29px;letter-spacing:-.04em;margin:10px 0 14px;color:#fdba74;overflow-wrap:anywhere}.m-debt-hero>div{display:flex;align-items:center;justify-content:space-between;border-top:1px solid #ffffff14;padding-top:12px;font-size:10px;color:#bca49a}.m-debt-hero button{display:flex;gap:6px;align-items:center;background:#492c1e;border:1px solid #7d4c2c;border-radius:10px;padding:9px 11px;color:#ffddb8;font-size:10px;font-weight:800}.m-debt-list{display:grid;gap:10px}.m-debt-card{padding:15px;border:1px solid var(--m-line);border-radius:18px;background:linear-gradient(160deg,#1b1726,#131019)}.m-debt-card.mini{padding:12px}.m-debt-card-top{display:flex;align-items:center;gap:10px}.m-debt-icon{display:grid;place-items:center;width:39px;height:39px;flex:0 0 39px;border-radius:13px;background:#38251e;color:#fdba74}.m-debt-name{display:grid;gap:4px;flex:1;min-width:0}.m-debt-name b{font-size:12px;overflow-wrap:anywhere}.m-debt-name small{font-size:9px;color:#a39ab1;line-height:1.4;overflow-wrap:anywhere}.m-status{font-size:8px;padding:5px 7px;border-radius:99px;background:#422b1b;color:#fdba74;white-space:nowrap}.m-status.done{background:#19392e;color:#6ee7b7}.m-debt-balance{display:block;font-size:23px;letter-spacing:-.035em;margin:14px 0 10px;color:#fdba74}.m-debt-notes{font-size:10px;color:#a99eb8;line-height:1.45}.m-paid-label{color:#6ee7b7;font-size:10px}.m-form{display:grid;gap:13px}.m-form .field,.m-settings-form .field{display:grid;gap:7px}.m-form label,.m-settings-form label{font-size:11px;color:#b9afc9}.m-form .input,.m-form .select,.m-form .textarea,.m-settings-form .input{min-height:45px;padding:11px 12px;border-radius:12px;background:#0d0b14;border:1px solid #373046;color:#fff;width:100%;max-width:100%;font-size:13px}.m-agenda-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:20px}.m-agenda-summary>div{padding:12px 9px;border:1px solid var(--m-line);border-radius:14px;background:#181420;display:grid;gap:7px}.m-agenda-summary span{font-size:9px;color:#a59bb4;line-height:1.3}.m-agenda-summary b{font-size:15px;overflow-wrap:anywhere}.m-task-list{display:grid;gap:8px}.m-task-card{display:flex;gap:9px;align-items:center;padding:11px;border:1px solid var(--m-line);border-radius:15px;background:#171420}.m-task-card.completed{opacity:.65}.m-task-check{display:grid;place-items:center;width:28px;height:28px;flex:0 0 28px;border-radius:9px;border:1px solid #514065;background:#211a2d;color:#fff}.m-task-check.checked{background:#1b4a38;border-color:#317653;color:#a7f3d0}.m-task-main{display:grid;gap:5px;flex:1;text-align:left;background:none;color:#f7f1ff;min-width:0}.m-task-main b{font-size:11px;overflow-wrap:anywhere}.m-task-main small{font-size:9px;color:#a39ab0;line-height:1.4;overflow-wrap:anywhere}.m-task-card.completed .m-task-main b{text-decoration:line-through}.m-report-year{margin-bottom:14px}.m-report-year>div:first-child{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;color:#a89db9;font-size:10px}.m-report-year>div:first-child b{color:#f7f1ff;font-size:13px}.m-report-year .m-period{margin:0}.m-chart-legend{display:flex;gap:13px;flex-wrap:wrap;font-size:9px;color:#a79db6;margin:3px 0 17px}.m-chart-legend span{display:flex;gap:5px;align-items:center}.m-chart-legend i{width:7px;height:7px;border-radius:50%}.m-chart-legend i.income{background:#a78bfa}.m-chart-legend i.expense{background:#fb923c}.m-chart-legend i.saving{background:#34d399}.m-report-list{display:grid;gap:14px}.m-report-month{display:grid;grid-template-columns:42px minmax(0,1fr);gap:7px 10px;align-items:center;padding-bottom:12px;border-bottom:1px solid #ffffff0c}.m-report-month> b{grid-row:span 3;font-size:10px;color:#d0c6de;align-self:start;padding-top:2px}.m-report-series{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px}.m-report-series>span{display:block;height:7px;border-radius:99px;background:#2b2436;overflow:hidden}.m-report-series i{display:block;height:100%;min-width:0;border-radius:99px}.m-report-series i.income{background:linear-gradient(90deg,#8b5cf6,#c4b5fd)}.m-report-series i.expense{background:linear-gradient(90deg,#ea580c,#fdba74)}.m-report-series i.saving{background:linear-gradient(90deg,#10b981,#a3e635)}.m-report-series small{font-size:9px;color:#bcb2ca;font-variant-numeric:tabular-nums;white-space:nowrap}.m-account-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.m-account-card{display:grid;gap:8px;padding:13px;border:1px solid var(--m-line);border-radius:15px;background:#181421;min-width:0}.m-account-card>span{font-size:10px;color:#a59ab6;line-height:1.4}.m-account-card strong{font-size:16px;letter-spacing:-.03em;overflow-wrap:anywhere}.m-account-card small{font-size:9px;line-height:1.5;color:#978da8;overflow-wrap:anywhere}.m-account-card em{font-size:9px;color:#b3a0db;font-style:normal}
+.m-profile-switch{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:15px;padding:4px;border:1px solid var(--m-line);border-radius:14px;background:#15111d}.m-profile-switch button{display:flex;align-items:center;justify-content:center;gap:7px;min-height:39px;border-radius:10px;background:transparent;color:#a89db9;font-size:10px;font-weight:750}.m-profile-switch button.active{background:#30213f;color:#e8d9ff}.m-personal-hero{padding:18px;border:1px solid #3a4a68;border-radius:20px;background:radial-gradient(circle at 100% 0,#60a5fa19,transparent 50%),linear-gradient(140deg,#1b2132,#15121e);margin-bottom:18px}.m-personal-hero>span{font-size:10px;color:#b7c3db}.m-personal-hero>strong{display:block;font-size:27px;letter-spacing:-.045em;margin:10px 0 15px;overflow-wrap:anywhere}.m-personal-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-top:13px;border-top:1px solid #ffffff13}.m-personal-breakdown span{display:grid;gap:4px;color:#a39bb0;font-size:9px}.m-personal-breakdown b{font-size:11px;color:#f0eaf8;overflow-wrap:anywhere}.m-personal-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:21px}.m-personal-actions button{display:grid;justify-items:center;gap:8px;padding:10px 2px;border:1px solid var(--m-line);border-radius:14px;background:#181421;color:#ded4ee;font-size:9px;text-align:center}.m-personal-actions button i{font-size:16px;color:#c4b5fd}.m-settings-form{display:grid;gap:13px}.m-settings-form .m-section-heading{margin-top:0}.m-settings-tools .m-menu-item{margin-bottom:8px}.m-settings-tools .m-menu-item:last-child{margin-bottom:0}.m-quick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.m-quick-option{display:grid;justify-items:start;gap:8px;padding:15px;border:1px solid var(--m-line);border-radius:15px;background:#1a1525;color:#eee5fc;text-align:left;min-height:115px}.m-quick-option>i{font-size:19px;margin-bottom:5px}.m-quick-option b{font-size:11px}.m-quick-option small{font-size:9px;color:#a89eb6}.m-quick-option.purple>i{color:#c4b5fd}.m-quick-option.orange>i{color:#fdba74}.m-quick-option.green>i{color:#6ee7b7}.m-quick-option.blue>i{color:#93c5fd}.m-modal-footer{display:flex;justify-content:flex-end;margin-top:12px}.m-tiny-label{font-size:8px;color:#a89dba}
+.m-tabbar{position:fixed;z-index:90;left:50%;bottom:0;transform:translateX(-50%);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;width:min(100%,650px);padding:7px 9px calc(7px + env(safe-area-inset-bottom));border:1px solid #342a42;border-bottom:0;border-radius:21px 21px 0 0;background:rgba(17,14,25,.94);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 -10px 35px #0004}.m-tab{display:grid;justify-items:center;align-content:center;gap:5px;min-width:0;min-height:52px;border-radius:13px;color:#8f859e;background:transparent;font-size:8px;font-weight:750}.m-tab i{font-size:17px}.m-tab.active{color:#e8d9ff;background:linear-gradient(180deg,#342348,#21182d)}.m-tab.active i{color:#c4b5fd;filter:drop-shadow(0 0 8px #a78bfa33)}
+#authScreen{z-index:500!important;padding:18px!important;align-items:center!important;overflow:auto}.auth-card{width:min(420px,100%)!important;padding:26px 22px!important;border-radius:25px!important;background:rgba(18,16,27,.98)!important;border:1px solid #49365d!important;box-shadow:0 30px 90px #0009!important}.auth-brand .logo-mark{border-radius:15px!important}.auth-card h1{font-size:24px!important;letter-spacing:-.04em}.auth-card p{font-size:12px;line-height:1.65}.auth-card form{gap:15px!important}.auth-card label{font-size:11px!important}.auth-card .input{min-height:47px!important;font-size:14px!important;padding:12px!important}.auth-card .btn{min-height:48px;border-radius:13px!important;font-size:12px!important}.auth-card .small{line-height:1.5}
+#modal{z-index:800!important;padding:10px 9px 0!important;align-items:flex-end!important;background:rgba(4,3,8,.65)!important}.modal-box{width:min(650px,100%)!important;max-height:min(91svh,850px)!important;margin:0 auto!important;padding:20px 17px calc(18px + env(safe-area-inset-bottom))!important;border-radius:24px 24px 0 0!important;border:1px solid #443653!important;border-bottom:0!important;background:#15121f!important;box-shadow:0 -18px 80px #0008!important}.modal-head{position:sticky;top:-20px;z-index:2;padding:5px 0 12px;background:#15121f}.modal-head h3{font-size:16px!important}.modal-box .form-grid{grid-template-columns:1fr!important}.modal-box .form-grid .full{grid-column:auto!important}.modal-box .form-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.modal-box .form-actions .btn{flex:1;min-height:43px}.modal-box .input,.modal-box .select,.modal-box .textarea{min-height:45px;font-size:13px}.modal-box .record{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:7px;padding:10px}.modal-box .record .record-actions{grid-column:1/-1}.modal-box .history-head{align-items:flex-start}.modal-box .history-head select{max-width:50%;font-size:10px}.modal-box .future-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px}.modal-box .category-pick-btn{min-height:44px}.modal-box .btn{min-height:41px;border-radius:11px}.modal-box .form-grid .field{min-width:0}.modal-box .data-table{min-width:480px}
+#loadingOverlay{z-index:1200!important}.toast{z-index:1300!important;left:12px!important;right:12px!important;bottom:calc(84px + env(safe-area-inset-bottom))!important;max-width:none!important}
+button,input,select,textarea{-webkit-tap-highlight-color:transparent}button{touch-action:manipulation}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #a78bfa;outline-offset:2px}
+@media(min-width:700px){.m-wrap{padding:22px 22px 34px}.m-stat-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.m-period{grid-template-columns:190px 110px}.m-welcome h2{font-size:25px}.m-transaction{gap:13px}.m-tabbar{bottom:12px;border:1px solid #342a42;border-radius:22px;padding:7px 10px}.m-tab{min-height:48px}#mobileApp{padding-bottom:105px}#modal{align-items:center!important;padding:20px!important}.modal-box{max-height:88vh!important;border:1px solid #443653!important;border-radius:22px!important;padding:22px!important}.modal-head{top:-22px} .modal-box .form-grid{grid-template-columns:1fr 1fr!important}.modal-box .form-grid .full{grid-column:1/-1!important}}
+@media(max-width:360px){.m-wrap{padding-left:12px;padding-right:12px}.m-page-heading h1{font-size:23px}.m-stat{padding:11px}.m-balance-footer{gap:9px}.m-balance-footer span{font-size:9px}.m-personal-actions{grid-template-columns:repeat(2,minmax(0,1fr))}.m-quick-actions{gap:1px}.m-tools-grid{gap:6px}.m-report-month{grid-template-columns:36px minmax(0,1fr)}.m-debt-card-top{gap:7px}.m-status{font-size:7px;padding:4px 5px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
-
-
-<style id="nexus-v3-ux-polish">
-/* V3: visual consistency, legibility, responsive ergonomics. Presentation only. */
-:root{--radius:18px;--line:#302940;--panel:#15121f;--panel2:#1b1727;--shadow:0 16px 38px rgba(0,0,0,.22)}
-body{background:radial-gradient(ellipse at 15% -12%,rgba(124,58,237,.18),transparent 38%),#0b0a12;letter-spacing:-.008em}
-.main{padding-top:28px}
-.title h1{letter-spacing:-.04em;font-weight:850}
-.title p{max-width:60ch;line-height:1.55}
-.card{border-color:rgba(167,139,250,.14);background:linear-gradient(155deg,rgba(28,24,41,.97),rgba(16,14,24,.98));box-shadow:0 10px 28px rgba(0,0,0,.14)}
-.card-head h2{letter-spacing:-.018em}
-.card-head span{display:block;line-height:1.5}
-.kpi{background:linear-gradient(145deg,rgba(29,24,43,.98),rgba(18,16,27,.98))}
-.kpi:after{background:radial-gradient(circle,rgba(167,139,250,.16),transparent 68%)}
-.btn,.mini-btn,.category-btn{transition:transform .16s ease,border-color .16s ease,background-color .16s ease}
-.btn:active,.mini-btn:active,.quick-action:active,.quick-choice:active{transform:scale(.985)}
-.btn.primary{background:linear-gradient(135deg,#8b5cf6,#6d3bd1);box-shadow:0 5px 14px rgba(124,58,237,.16)}
-.input,.select,.textarea{border-color:#393148;background:#100d18}
-.input::placeholder,.textarea::placeholder{color:#777084}
-.input:focus,.select:focus,.textarea:focus{border-color:#a78bfa;box-shadow:0 0 0 3px rgba(167,139,250,.12)}
-.module-section{scroll-margin-top:18px}
-.detail-kpi{background:linear-gradient(145deg,rgba(26,22,38,.9),rgba(12,10,18,.85));border-color:rgba(167,139,250,.18)}
-.detail-category{background:linear-gradient(145deg,rgba(24,20,35,.94),rgba(13,11,19,.94));border-color:#30283d;min-height:150px}
-.detail-category:hover,.detail-category:focus-visible{border-color:#a78bfa;box-shadow:0 8px 22px rgba(0,0,0,.18)}
-.detail-category-top .identity-inline{min-width:0;overflow-wrap:anywhere}
-.detail-category-top strong{font-variant-numeric:tabular-nums}
-.quick-action,.quick-choice{background:linear-gradient(145deg,#1c1729,#12101b);border-color:#352b47;transition:transform .16s ease,border-color .16s ease}
-.quick-action:hover,.quick-choice:hover{border-color:#8b5cf6}
-.quick-action>i:first-child{box-shadow:inset 0 0 0 1px rgba(167,139,250,.12)}
-.record{border-color:#2e273a;background:#100d18;border-radius:12px;min-width:0}
-.record>*{min-width:0;overflow-wrap:anywhere}
-.record-actions button{min-height:36px;border:1px solid #3a304c;background:#201a2e;color:#e9ddff;border-radius:9px;padding:7px 10px}
-.empty{border:1px dashed rgba(167,139,250,.2);border-radius:14px;background:rgba(10,8,15,.22);line-height:1.65}
-.data-table th{position:sticky;top:0;background:#171321}
-.mobile-bottom-nav button{position:relative;transition:background .16s ease,color .16s ease}
-.mobile-bottom-nav button.is-active:not(.mobile-quick-add)::after{content:"";position:absolute;bottom:1px;width:15px;height:3px;border-radius:99px;background:#a78bfa}
-.mobile-bottom-nav .mobile-quick-add{outline:1px solid rgba(221,214,254,.18);outline-offset:1px}
-.modal-box{border-color:rgba(167,139,250,.24)}
-@media(max-width:800px){
- .main{padding-top:16px;padding-left:14px;padding-right:14px}
- .topbar{align-items:center}
- .topbar .title{min-width:0}
- .topbar .actions{display:flex;flex-wrap:wrap}
- .topbar .sync-status{font-size:10px;max-width:100%;overflow:hidden;text-overflow:ellipsis}
- .card{box-shadow:0 7px 22px rgba(0,0,0,.12)}
- .card-head{flex-wrap:wrap}
- .card-head>div:first-child{min-width:0;flex:1 1 180px}
- .card-head>.btn{flex:0 0 auto;max-width:100%;white-space:normal}
- .detail-category{min-height:136px}
- .filterbar{align-items:stretch}
- .filterbar .field{min-width:0}
- .filterbar .btn{white-space:normal}
- .mobile-bottom-nav{bottom:calc(16px + var(--mobile-safe-bottom));padding:8px 9px;min-height:70px;background:rgba(21,17,31,.94);border-color:rgba(196,181,253,.25);box-shadow:0 14px 38px rgba(0,0,0,.48),0 3px 14px rgba(139,92,246,.1)}
- .mobile-bottom-nav button{min-height:50px;font-size:10px;gap:5px}
- .mobile-bottom-nav button i{font-size:18px}
- .mobile-bottom-nav .mobile-quick-add{width:54px;height:54px;min-height:54px;margin-top:-25px;border-radius:19px}
- .main{padding-bottom:calc(128px + var(--mobile-safe-bottom))}
- .toast{bottom:calc(104px + var(--mobile-safe-bottom))}
- .modal{padding:8px!important}
- .modal-box{max-height:calc(100dvh - 16px - var(--mobile-safe-bottom));border-radius:22px 22px 14px 14px!important}
- .detail-kpis{margin-top:10px;margin-bottom:16px}
- .detail-subheading{margin-top:22px}
-}
-@media(max-width:420px){
- .main{padding-left:10px;padding-right:10px}
- .kpi .value{font-size:clamp(17px,5vw,22px)}
- .mobile-bottom-nav{width:calc(100vw - 16px);bottom:calc(14px + var(--mobile-safe-bottom));padding:7px 6px}
- .mobile-bottom-nav button{font-size:9px}
- .mobile-bottom-nav .mobile-quick-add{width:50px;height:50px;min-height:50px}
- .quick-action{min-height:110px}
- .detail-category{min-height:0}
-}
-@media(min-width:801px){.main{padding-top:30px}.section-grid>.card:hover,.kpis>.card:hover{border-color:rgba(167,139,250,.23)}}
-@media(prefers-reduced-motion:reduce){.btn,.mini-btn,.category-btn,.detail-category,.quick-action,.quick-choice{transition:none}}
-</style>
-
-
-<style id="nexus-visual-redesign-v1">
-:root{--bg:#090b12;--panel:#111521;--panel2:#171d2b;--line:#252d40;--text:#f4f7ff;--muted:#9ba7bd;--purple:#8b7cff;--purple2:#b4a8ff;--orange:#ffb86b;--green:#4be0b2;--red:#ff8299;--blue:#7cb9ff;--radius:22px;--shadow:0 18px 55px rgba(0,0,0,.22)}
-body{background:radial-gradient(ellipse at 85% 0%,rgba(93,75,184,.17),transparent 32%),radial-gradient(ellipse at 0% 40%,rgba(39,113,143,.08),transparent 30%),#090b12;letter-spacing:-.012em}
-.sidebar{background:rgba(10,13,22,.97);border-right:1px solid #20283a;box-shadow:8px 0 40px #00000012}
-.logo{font-size:18px;letter-spacing:-.04em;padding:12px 8px 30px}.logo-mark{background:linear-gradient(145deg,#a99cff,#6e59ec);box-shadow:0 7px 22px #8b7cff35;border-radius:13px}
-.nav button{position:relative;border:1px solid transparent;color:#9ba7bd;transition:background .18s,border-color .18s,color .18s}.nav button.active{background:linear-gradient(100deg,#8b7cff25,#8b7cff08);border-color:#8b7cff28;color:#f3efff}.nav button.active:before{content:"";position:absolute;left:-1px;top:25%;bottom:25%;width:3px;border-radius:0 4px 4px 0;background:#a99cff}.nav button:hover{background:#171d2b;color:white}
-.main{padding:32px clamp(18px,2.2vw,38px)}.topbar{align-items:center;margin-bottom:22px}.title h1{font-size:clamp(25px,2.1vw,34px);letter-spacing:-.055em;font-weight:850}.title p{font-size:13px;color:#9ba7bd}.sync-status{background:#111925;border-color:#263347;color:#c1cce0}.sync-status i{color:#4be0b2;text-shadow:0 0 10px #4be0b280}
-.nexus-welcome{isolation:isolate;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:188px;padding:clamp(23px,3vw,36px);margin:0 0 22px;border-radius:28px;border:1px solid #8f83ff3b;background:linear-gradient(115deg,#1a2035 0%,#19172d 48%,#202044 100%);box-shadow:0 22px 60px #0002}
-.nexus-welcome:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(100deg,transparent 35%,#8b7cff0d 65%,#9b8cff18 100%)}
-.nexus-welcome-copy,.nexus-welcome-actions{position:relative;z-index:2}.nexus-welcome-copy{max-width:570px}.nexus-eyebrow{display:inline-flex;align-items:center;gap:8px;color:#b8b0ff;font-size:10px;font-weight:850;letter-spacing:.16em}.nexus-welcome h2{font-size:clamp(29px,3vw,43px);line-height:1.04;letter-spacing:-.06em;margin:15px 0 10px;font-weight:900}.nexus-welcome h2 em{font-style:normal;color:#b7acff}.nexus-welcome p{margin:0;color:#b3bdd0;font-size:13px;line-height:1.6}.nexus-welcome-actions{display:flex;flex-direction:column;gap:10px;min-width:195px}.nexus-welcome-actions button{display:flex;align-items:center;justify-content:center;gap:9px;min-height:46px;padding:12px 15px;border-radius:13px;font-size:12px;font-weight:800;transition:transform .18s,filter .18s}.nexus-welcome-actions button:hover{transform:translateY(-2px);filter:brightness(1.08)}.nexus-hero-primary{background:linear-gradient(135deg,#a99cff,#7967f3);color:#fff;box-shadow:0 8px 24px #7666f53b}.nexus-hero-secondary{background:#ffffff08;border:1px solid #ffffff20;color:#e3e5f6}.nexus-orb{position:absolute;z-index:1;pointer-events:none;border-radius:50%;filter:blur(1px)}.nexus-orb-one{width:250px;height:250px;right:15%;top:-160px;border:1px solid #b8adff22;box-shadow:0 0 0 28px #b8adff05,0 0 0 58px #b8adff04}.nexus-orb-two{width:170px;height:170px;right:24%;bottom:-140px;background:#8879ff10}
-.filterbar{background:#111622;border-color:#252d40;border-radius:16px;padding:14px 16px;box-shadow:0 8px 24px #00000010}.filterbar label{font-size:10px;letter-spacing:.06em;text-transform:uppercase}.input,.select,.textarea{background:#0b101a;border-color:#2b3448;border-radius:12px;transition:border-color .18s,box-shadow .18s}.input:focus,.select:focus,.textarea:focus{border-color:#a99cff;box-shadow:0 0 0 3px #8b7cff20}
-.card{background:linear-gradient(145deg,rgba(21,27,41,.98),rgba(15,20,31,.98));border-color:#252e42;border-radius:21px;box-shadow:0 10px 30px #00000013;transition:transform .18s,border-color .18s,box-shadow .18s}.card-head h2{letter-spacing:-.025em}.kpi{min-height:150px;padding:21px;border-radius:22px}.kpi:after{width:125px;height:125px;right:-42px;top:-42px;background:radial-gradient(circle,#8b7cff1c 0%,#8b7cff00 72%)}.kpi .label{font-size:10px;letter-spacing:.11em;font-weight:800}.kpi .value{font-size:clamp(24px,2.2vw,34px);letter-spacing:-.055em;margin-top:19px}.income .value{color:#b8adff}.expense .value{color:#ffb86b}.saving .value{color:#4be0b2}.available .value{color:#7cb9ff}.kpi .sub{font-size:11px;line-height:1.45;color:#8f9bb2}
-.btn{background:#1a2232;border-color:#2b354a;border-radius:12px;transition:transform .15s,border-color .15s,background .15s}.btn:hover{border-color:#7065b6;transform:translateY(-1px)}.btn.primary{background:linear-gradient(135deg,#9282ff,#705be8);box-shadow:0 5px 18px #7868ed25}.mini-btn{background:#1b2232;border-color:#2c3548;border-radius:10px}.section-grid{gap:18px}.dashboard-mini-grid{gap:18px}.card-head{margin-bottom:17px}.mobile-bottom-nav{border-color:#30334c!important;background:rgba(14,17,28,.94)!important;box-shadow:0 18px 45px #0007,0 0 0 1px #ffffff04!important}.mobile-bottom-nav button.is-active:not(.mobile-quick-add){background:#8b7cff20!important;color:#cfc7ff!important}.mobile-bottom-nav .mobile-quick-add{background:linear-gradient(145deg,#b1a4ff,#7762f0)!important;box-shadow:0 8px 24px #7666f55c!important}
-#authScreen{background:radial-gradient(ellipse at 50% 0%,#30295b 0%,#17172d 34%,#090b12 75%);padding:24px;overflow:auto}#authScreen:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff08 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,#000,transparent 80%)}.auth-card{position:relative;width:min(440px,100%);padding:clamp(26px,4vw,38px);border-radius:28px;background:linear-gradient(150deg,#171c2bfa,#101420fa);border:1px solid #b5aaff30;box-shadow:0 35px 100px #0008,0 0 55px #8b7cff0d}.auth-brand{gap:14px;margin-bottom:27px}.auth-brand .logo-mark{width:54px;height:54px;border-radius:17px;font-size:24px;box-shadow:0 10px 28px #8b7cff40}.auth-card h1{font-size:28px;letter-spacing:-.055em}.auth-card .small{color:#929fb6}.auth-card #authIntro{font-size:13px;line-height:1.7;color:#b4bfd2;margin:0 0 23px}.auth-card form{gap:17px}.auth-card label{font-size:11px;font-weight:750;color:#c0c8d8;letter-spacing:.01em}.auth-card .input{margin-top:3px;padding:14px 15px;min-height:49px;background:#0b101a;border-color:#2c3549;border-radius:13px;font-size:14px}.auth-card .input::placeholder{color:#637087}.auth-card #authSubmit{width:100%;min-height:49px;margin-top:3px;border-radius:13px;background:linear-gradient(115deg,#a99cff,#7763ef);font-size:13px;box-shadow:0 9px 26px #7868ed30}.auth-card>p:last-child{border-top:1px solid #ffffff0c;padding-top:16px;margin-top:21px;font-size:11px}.auth-message{font-size:12px}
-@media(hover:hover) and (min-width:801px){.card:hover{transform:translateY(-2px);border-color:#3a4560;box-shadow:0 15px 36px #0002}.kpi:hover{transform:translateY(-3px)}}
-@media(max-width:800px){.main{padding:18px 15px calc(132px + var(--mobile-safe-bottom))}.topbar{align-items:flex-start}.title h1{font-size:25px}.nexus-welcome{min-height:0;display:block;padding:23px 20px 20px;margin-bottom:16px;border-radius:24px}.nexus-welcome h2{font-size:clamp(29px,8vw,37px);margin-top:14px}.nexus-welcome p{max-width:30ch;font-size:12px}.nexus-welcome-actions{display:grid;grid-template-columns:1.3fr 1fr;gap:8px;margin-top:22px;min-width:0}.nexus-welcome-actions button{min-height:45px;padding:10px 11px;font-size:11px}.nexus-orb-one{right:-100px;top:-130px}.nexus-orb-two{right:8%;bottom:-145px}.filterbar{padding:11px;border-radius:15px}.kpis{gap:10px}.kpi{min-height:120px;padding:15px;border-radius:18px}.kpi .value{font-size:clamp(19px,5.2vw,27px);margin-top:13px}.card{border-radius:18px}.dashboard-mini-grid{gap:12px}}
-@media(max-width:380px){.main{padding-left:11px;padding-right:11px}.nexus-welcome{padding:20px 16px}.nexus-welcome-actions{grid-template-columns:1fr}.nexus-welcome-actions button{width:100%}.kpi{padding:12px}.kpi .label{font-size:9px}.kpi .value{font-size:18px}.auth-card{padding:23px}}
-@media(prefers-reduced-motion:reduce){.nexus-welcome-actions button,.card,.btn{transition:none}}
-</style>
-
 </head>
 <body>
+<div id="mobileApp" aria-label="Nexus Finance móvil">
+  <header class="m-topbar">
+    <div class="m-brand-mark"><i class="fa-solid fa-wallet"></i></div>
+    <div class="m-brand-copy"><strong>Nexus Finance</strong><small>HOGAR & PERSONAL</small></div>
+    <div class="m-sync-pill" id="mSync"><i class="fa-solid fa-cloud"></i><span>Sesión activa</span></div>
+  </header>
+  <div class="m-wrap">
+    <header class="m-page-heading"><div><h1 id="mTitle">Resumen</h1><p id="mSubtitle">Tus finanzas, de un vistazo</p></div><div class="m-avatar" id="mAvatar">N</div></header>
+    <main id="mContent"></main>
+  </div>
+  <nav class="m-tabbar" aria-label="Navegación principal">
+    <button class="m-tab active" data-screen="home" onclick="mobileSetScreen('home')"><i class="fa-solid fa-house"></i><span>Inicio</span></button>
+    <button class="m-tab" data-screen="movements" onclick="mobileSetScreen('movements')"><i class="fa-solid fa-arrow-right-arrow-left"></i><span>Movimientos</span></button>
+    <button class="m-tab" data-screen="savings" onclick="mobileSetScreen('savings')"><i class="fa-solid fa-piggy-bank"></i><span>Ahorros</span></button>
+    <button class="m-tab" data-screen="goals" onclick="mobileSetScreen('goals')"><i class="fa-solid fa-bullseye"></i><span>Metas</span></button>
+    <button class="m-tab" data-screen="more" onclick="mobileSetScreen('more')"><i class="fa-solid fa-grid-2"></i><span>Más</span></button>
+  </nav>
+</div>
+
 <div class="app">
 <aside class="sidebar" id="sidebar">
   <div class="logo"><div class="logo-mark"><i class="fa-solid fa-wallet" aria-hidden="true"></i></div><div>Nexus Finance<div class="small">Hogar & Personal</div></div></div>
   <nav class="nav">
     <button class="active" data-route="dashboard" onclick="showModule('dashboard')"><i class="fa-solid fa-house"></i>Dashboard</button>
-    <button data-route="homeDetails" onclick="showModule('homeDetails')"><i class="fa-solid fa-house-chimney"></i>Hogar · Detalle</button>
-    <button data-route="savingsDetails" onclick="showModule('savingsDetails')"><i class="fa-solid fa-piggy-bank"></i>Ahorros · Detalle</button>
+    <button onclick="openExpensePicker()"><i class="fa-solid fa-house-chimney"></i>Gastos del hogar</button>
+    <button onclick="openSavingPicker()"><i class="fa-solid fa-piggy-bank"></i>Ahorros</button>
     <button data-route="personalMe" onclick="showModule('personalMe')"><i class="fa-solid fa-person"></i><span id="navMeName">Finanza · Mi perfil</span></button>
     <button data-route="personalPartner" onclick="showModule('personalPartner')"><i class="fa-solid fa-person-dress"></i><span id="navPartnerName">Finanza · Pareja</span></button>
     <button onclick="navigateToGoals()"><i class="fa-solid fa-bullseye"></i>Metas a futuro</button>
@@ -507,17 +317,12 @@ body{background:radial-gradient(ellipse at 85% 0%,rgba(93,75,184,.17),transparen
 <header class="topbar">
   <div class="title"><h1>Dashboard General</h1><p>Control de tus finanzas personales y del hogar.</p></div>
   <div class="actions">
-    <button class="btn mobile-menu" onclick="toggleSidebar()" aria-label="Abrir todas las secciones" title="Todas las secciones"><i class="fa-solid fa-bars"></i></button>
+    <button class="btn mobile-menu" onclick="toggleSidebar()">☰</button>
     <span class="sync-status" id="syncStatus" role="status"><i class="fa-solid fa-circle"></i><span id="syncStatusText">Sincronizando…</span></span><span class="account-strip">Sesión: <strong id="signedUserName">—</strong></span><button class="btn" onclick="refreshDashboard()"><i class="fa-solid fa-rotate"></i> Refrescar</button><button class="btn ghost" onclick="logoutNexus()"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
   </div>
 </header>
 
 <div id="dashboardModule" class="module-section">
-<section class="nexus-welcome" aria-label="Resumen de bienvenida">
-  <div class="nexus-welcome-copy"><span class="nexus-eyebrow"><i class="fa-solid fa-sparkles" aria-hidden="true"></i> TU CENTRO FINANCIERO</span><h2>Tu dinero, <em>más claro.</em></h2><p>Todo lo que pasa con tus finanzas, en un solo lugar.</p></div>
-  <div class="nexus-welcome-actions"><button class="nexus-hero-primary" type="button" onclick="openQuickActions()"><i class="fa-solid fa-plus" aria-hidden="true"></i> Registrar movimiento</button><button class="nexus-hero-secondary" type="button" onclick="showModule('reports')"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> Ver reportes</button></div>
-  <div class="nexus-orb nexus-orb-one" aria-hidden="true"></div><div class="nexus-orb nexus-orb-two" aria-hidden="true"></div>
-</section>
 <div class="filterbar">
   <div class="field"><label>Año</label><select class="select" id="filterYear" onchange="renderAll()"></select></div>
   <div class="field"><label>Periodo</label><select class="select" id="filterMonth" onchange="renderAll()"><option value="all">Año completo</option><option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option><option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option><option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option></select></div>
@@ -632,14 +437,8 @@ body{background:radial-gradient(ellipse at 85% 0%,rgba(93,75,184,.17),transparen
 </section>
 
 <section id="reportsModule" class="module-section hidden">
- <div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-chart-column"></i> Reportes</h2><span>Resumen financiero filtrable por año y periodo</span></div><button class="btn" onclick="exportReportCsv()">Exportar CSV</button></div><div class="filterbar report-filter"><div class="field"><label>Año del reporte</label><select class="select" id="reportYear" onchange="renderReports()"></select></div><div class="field"><label>Mes</label><select class="select" id="reportMonth" onchange="renderReports()"><option value="all">Año completo</option><option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option><option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option><option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option></select></div></div><div id="reportKpis" class="grid kpis"></div><div class="report-legend"><span>● Ingresos</span><span>● Gastos</span><span>● Ahorros</span></div><div id="reportChart" class="report-bars"></div></div><div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-wallet"></i> Saldos por cuenta</h2><span>Resumen automático de los movimientos registrados</span></div><button class="btn primary" onclick="openAccountMovement()"><i class="fa-solid fa-plus"></i> Movimiento</button></div><div class="grid savings-grid" id="accountsGridReport"></div><div class="table-wrap" id="accountMovementTableReport"></div></div>
+ <div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-chart-column"></i> Reportes</h2><span>Resumen financiero filtrable por año y periodo</span></div><button class="btn" onclick="exportReportCsv()">Exportar CSV</button></div><div class="filterbar report-filter"><div class="field"><label>Año del reporte</label><select class="select" id="reportYear" onchange="renderReports()"></select></div><div class="field"><label>Mes</label><select class="select" id="reportMonth" onchange="renderReports()"><option value="all">Año completo</option><option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option><option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option><option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option></select></div></div><div id="reportKpis" class="grid kpis"></div><div class="report-legend"><span>● Ingresos</span><span>● Gastos</span><span>● Ahorros</span></div><div id="reportChart" class="report-bars"></div></div><div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-wallet"></i> Saldos por cuenta</h2><span>Resumen automático de los movimientos registrados</span></div><button class="btn primary" onclick="openAccountMovement()"><i class="fa-solid fa-plus"></i> Movimiento</button></div><div class="grid savings-grid" id="accountsGrid"></div><div class="table-wrap" id="accountMovementTable"></div></div>
  <div class="module-grid"><div class="card"><h2>Resumen del periodo</h2><div id="reportSummary" class="list"></div></div><div class="card"><h2>Alertas financieras</h2><div id="financialAlerts" class="list"></div></div></div>
-</section>
-<section id="homeDetailsModule" class="module-section hidden" aria-label="Detalles del hogar">
- <div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-house-chimney"></i> Hogar · Detalle de gastos</h2><span>Consulta tus categorías, el comportamiento del gasto y los movimientos recientes.</span></div><button class="btn primary" onclick="openExpensePicker()"><i class="fa-solid fa-plus"></i> Registrar gasto</button></div><div id="homeDetailsContent"></div></div>
-</section>
-<section id="savingsDetailsModule" class="module-section hidden" aria-label="Detalles de ahorros">
- <div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-piggy-bank"></i> Ahorros · Seguimiento</h2><span>Revisa tus objetivos de ahorro, aportes y movimientos recientes.</span></div><button class="btn primary" onclick="openSavingPicker()"><i class="fa-solid fa-plus"></i> Registrar ahorro</button></div><div id="savingsDetailsContent"></div></div>
 </section>
 <section id="settingsModule" class="module-section hidden">
  <div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-sliders"></i> Configuración de Nexus</h2><span>Personaliza perfiles, metas y opciones de datos</span></div></div>
@@ -647,13 +446,6 @@ body{background:radial-gradient(ellipse at 85% 0%,rgba(93,75,184,.17),transparen
  <div class="card"><div class="card-head"><div><h2>Respaldo y mantenimiento</h2><span>Protege o restaura tus datos financieros</span></div></div><div class="actions"><button class="btn" onclick="exportData()">Exportar respaldo</button><button class="btn" onclick="importData()">Importar respaldo</button><button class="btn danger" onclick="resetAll()">Borrar todos los datos</button></div></div>
 </section>
 </main>
-<nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Navegación principal móvil">
-  <button type="button" data-mobile-route="dashboard" class="is-active" onclick="showModule('dashboard')" aria-label="Inicio"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Inicio</span></button>
-  <button type="button" data-mobile-route="homeDetails" onclick="showModule('homeDetails')" aria-label="Detalles del hogar"><i class="fa-solid fa-house-chimney" aria-hidden="true"></i><span>Hogar</span></button>
-  <button type="button" class="mobile-quick-add" onclick="openQuickActions()" aria-label="Acción rápida"><i class="fa-solid fa-plus" aria-hidden="true"></i><span class="sr-only">Acción rápida</span></button>
-  <button type="button" data-mobile-route="savingsDetails" onclick="showModule('savingsDetails')" aria-label="Detalles de ahorros"><i class="fa-solid fa-piggy-bank" aria-hidden="true"></i><span>Ahorro</span></button>
-  <button type="button" data-mobile-route="personal" onclick="openPersonalChooser()" aria-label="Finanzas personales"><i class="fa-solid fa-user" aria-hidden="true"></i><span>Personal</span></button>
-</nav>
 </div>
 
 <div id="authScreen">
@@ -907,7 +699,7 @@ function renderAll(){
  renderGoals();
  let target=Number(state.savingTarget)||0; const targetPct=target?Math.min(100,saving/target*100):0; document.getElementById("savingTargetStatus").innerHTML=target?`<div class="goal-top"><div><div class="goal-label"><i class="fa-solid fa-bullseye"></i> Meta mensual de ahorro</div><div class="goal-number">${money(target)}</div></div><div class="goal-progress-label"><b>${money(saving)}</b><br>ahorrado este periodo<br><strong>${targetPct.toFixed(0)}%</strong> completado</div></div><div class="progress"><i style="width:${targetPct}%"></i></div><div class="saving-meta"><span>${money(Math.max(0,target-saving))} para alcanzar la meta</span><span>${targetPct>=100?"¡Meta alcanzada!":"Progreso del periodo seleccionado"}</span></div>`:`<div class="goal-top"><div><div class="goal-label"><i class="fa-solid fa-bullseye"></i> Meta mensual de ahorro</div><div class="goal-number">Sin configurar</div></div><div class="goal-progress-label">Define tu objetivo en <b>Configuración</b> para seguir el avance.</div></div>`;
  if(activeModule==="personalMe"||activeModule==="personalPartner")renderPersonalModule();
- renderDashboardMinis();renderAccounts();if(activeModule==="homeDetails")renderHomeDetailsModule();if(activeModule==="savingsDetails")renderSavingsDetailsModule();
+ renderDashboardMinis();renderAccounts();
 }
 const CAT_COLORS=["#8b5cf6","#fb923c","#34d399","#60a5fa","#f472b6","#facc15","#22d3ee","#a3e635"];
 const PERSON_COLORS={me:"#8b5cf6",partner:"#fb923c"};
@@ -1337,25 +1129,12 @@ function nexusToastIcon(msg){const m=String(msg||"").toLowerCase();if(/elimin|bo
 function toast(msg){const t=document.getElementById("toast");if(!t)return;if(nexusUndoSnapshot&&t.classList.contains("undoable")){const icon=t.querySelector(".toast-icon i"),message=t.querySelector(".toast-message");if(icon)icon.className=`fa-solid ${nexusToastIcon(msg)}`;if(message)message.innerHTML=`${esc(String(msg))}<br><span style="color:var(--muted);font-size:10px">Aún puedes deshacer: ${esc(window.__undoLabel||"la última acción")}.</span>`;return}clearTimeout(window.__toast);clearTimeout(nexusUndoTimer);nexusUndoSnapshot=null;window.__undoLabel="";t.classList.remove("undoable");t.innerHTML=`<span class="toast-icon"><i class="fa-solid ${nexusToastIcon(msg)}"></i></span><span class="toast-message">${esc(String(msg))}</span>`;t.classList.add("show");window.__toast=setTimeout(()=>t.classList.remove("show"),3200)}
 function showUndoToast(msg,snapshot,icon="fa-rotate-left"){const t=document.getElementById("toast");if(!t||!snapshot)return toast(msg);clearTimeout(window.__toast);clearTimeout(nexusUndoTimer);nexusUndoSnapshot=snapshot;window.__undoLabel=String(msg||"la última acción");t.classList.add("undoable","show");t.innerHTML=`<span class="toast-icon"><i class="fa-solid ${icon}"></i></span><span class="toast-message">${esc(msg)}<br><span style="color:var(--muted);font-size:10px">Puedes deshacer durante 15 segundos.</span></span><button class="toast-undo" onclick="undoLastNexusAction()"><i class="fa-solid fa-rotate-left"></i> Deshacer</button>`;nexusUndoTimer=setTimeout(()=>{nexusUndoSnapshot=null;window.__undoLabel="";t.classList.remove("show","undoable")},15000)}
 function toastUndo(msg,snapshot,icon){showUndoToast(msg,snapshot,icon)}
-function undoLastNexusAction(){if(!nexusUndoSnapshot)return;const snapshot=nexusUndoSnapshot;nexusUndoSnapshot=null;window.__undoLabel="";clearTimeout(nexusUndoTimer);clearTimeout(window.__toast);try{state=normalizeClientState(JSON.parse(snapshot));closeModal(true);saveState();renderAll();renderExtendedModules();if(activeModule==="personalMe"||activeModule==="personalPartner")renderPersonalModule();if(activeModule==="homeDetails")renderHomeDetailsModule();if(activeModule==="savingsDetails")renderSavingsDetailsModule();toast("Cambios deshechos correctamente")}catch(err){toast("No se pudo deshacer esta acción")}}
+function undoLastNexusAction(){if(!nexusUndoSnapshot)return;const snapshot=nexusUndoSnapshot;nexusUndoSnapshot=null;window.__undoLabel="";clearTimeout(nexusUndoTimer);clearTimeout(window.__toast);try{state=normalizeClientState(JSON.parse(snapshot));closeModal(true);saveState();renderAll();renderExtendedModules();if(activeModule==="personalMe"||activeModule==="personalPartner")renderPersonalModule();toast("Cambios deshechos correctamente")}catch(err){toast("No se pudo deshacer esta acción")}}
 
 document.getElementById("filterMonth").addEventListener("change",()=>{let f=getFilter();document.getElementById("incomeComparison").textContent=comparison(state.incomes);document.getElementById("expenseComparison").textContent=comparison(state.expenses)});
 setInterval(()=>{document.getElementById("incomeComparison").textContent=comparison(state.incomes);document.getElementById("expenseComparison").textContent=comparison(state.expenses)},1000);
 /* ===== MÓDULOS EXTRA: calendario, deudas, cuentas e informes ===== */
-function renderHomeDetailsModule(){
- const box=document.getElementById("homeDetailsContent");if(!box)return;const f=getFilter(),rows=state.expenses.filter(x=>inPeriod(x.date,f.year,f.month)).slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));const total=sum(rows);
- const categories=CATS.map(c=>{const items=rows.filter(x=>x.category===c),amount=sum(items),pct=total?amount/total*100:0;return `<button class="detail-category" type="button" onclick="openExpense('${c}')"><span class="detail-category-top"><span class="identity-inline" style="--identity-color:${categoryColor(c)}"><i class="identity-dot"></i>${esc(c)}</span><strong>${money(amount)}</strong></span><span class="detail-track"><i style="width:${pct}%;background:${categoryColor(c)}"></i></span><small>${items.length} movimiento(s) · ${pct.toFixed(1)}% del gasto del periodo</small><span class="detail-open">Ver historial <i class="fa-solid fa-arrow-right"></i></span></button>`}).join("");
- box.innerHTML=`<div class="detail-kpis"><div class="detail-kpi"><small>Gasto del periodo</small><strong>${money(total)}</strong></div><div class="detail-kpi"><small>Movimientos</small><strong>${rows.length}</strong></div><div class="detail-kpi"><small>Categorías con actividad</small><strong>${CATS.filter(c=>rows.some(x=>x.category===c)).length} / ${CATS.length}</strong></div></div><div class="filterbar"><div class="field"><label>Periodo del dashboard</label><span class="small">${esc(document.getElementById('filterMonth')?.selectedOptions?.[0]?.textContent||'Periodo actual')} ${f.year}</span></div><button class="btn" onclick="showModule('dashboard')"><i class="fa-solid fa-chart-pie"></i> Ver resumen general</button></div><h3 class="detail-subheading">Categorías del hogar</h3><div class="detail-categories">${categories}</div><h3 class="detail-subheading">Movimientos recientes</h3><div class="history-list">${rows.slice(0,8).map(x=>`<div class="record"><span>${esc(x.date||'—')}</span><b>${money(x.amount)}</b><span>${categoryTag(x.category||'Otros')}</span><div class="record-actions"><button onclick="openExpense('${x.category||'Otros'}','${x.id}')"><i class="fa-solid fa-pen"></i> Ver / editar</button></div></div>`).join('')||'<div class="empty">Aún no hay gastos registrados en este periodo. Usa “Registrar gasto” para comenzar.</div>'}</div>`;
-}
-function renderSavingsDetailsModule(){
- const box=document.getElementById("savingsDetailsContent");if(!box)return;const f=getFilter(),rows=state.savings.filter(x=>inPeriod(x.date,f.year,f.month)).slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")),total=sum(rows),target=Number(state.savingTarget)||0,pct=target?Math.min(100,total/target*100):0;
- const categories=SAVINGS.map(([key,label])=>{const items=rows.filter(x=>x.type===key),amount=sum(items),share=total?amount/total*100:0;return `<button class="detail-category" type="button" onclick="openSaving('${key}')"><span class="detail-category-top">${savingTag(key,label)}<strong>${money(amount)}</strong></span><span class="detail-track"><i style="width:${share}%;background:${SAVING_COLORS[key]}"></i></span><small>${items.length} aporte(s) · ${share.toFixed(1)}% del ahorro del periodo</small><span class="detail-open">Ver historial <i class="fa-solid fa-arrow-right"></i></span></button>`}).join("");
- box.innerHTML=`<div class="detail-kpis"><div class="detail-kpi"><small>Ahorro del periodo</small><strong>${money(total)}</strong></div><div class="detail-kpi"><small>Aportes registrados</small><strong>${rows.length}</strong></div><div class="detail-kpi"><small>Meta mensual configurada</small><strong>${target?money(target):'Sin meta'}</strong></div></div>${target?`<div class="saving-goal-feature"><div class="goal-top"><div><div class="goal-label">Progreso de la meta en el periodo</div><div class="goal-number">${pct.toFixed(1)}%</div></div><div class="goal-progress-label">${money(total)} de ${money(target)}</div></div><div class="progress"><i style="width:${pct}%"></i></div></div>`:`<div class="empty detail-note">Configura una meta mensual en <button class="text-link" onclick="showModule('settings')">Configuración</button> para seguir tu progreso.</div>`}<div class="filterbar"><div class="field"><label>Periodo del dashboard</label><span class="small">${esc(document.getElementById('filterMonth')?.selectedOptions?.[0]?.textContent||'Periodo actual')} ${f.year}</span></div><button class="btn" onclick="showModule('reports')"><i class="fa-solid fa-chart-column"></i> Ver reportes</button></div><h3 class="detail-subheading">Tipos de ahorro</h3><div class="detail-categories">${categories}</div><h3 class="detail-subheading">Aportes recientes</h3><div class="history-list">${rows.slice(0,8).map(x=>`<div class="record"><span>${esc(x.date||'—')}</span><b>${money(x.amount)}</b><span>${savingTag(x.type)}</span><div class="record-actions"><button onclick="openSaving('${x.type}','${x.id}')"><i class="fa-solid fa-pen"></i> Ver / editar</button></div></div>`).join('')||'<div class="empty">Aún no hay ahorros registrados en este periodo. Usa “Registrar ahorro” para comenzar.</div>'}</div>`;
-}
-function openPersonalChooser(){openModal('¿Qué finanzas personales quieres consultar?',`<p class="small" style="margin-bottom:14px">Selecciona el perfil para abrir su espacio personal.</p><div class="quick-choice-grid"><button class="quick-choice" onclick="closeModal();showModule('personalMe')"><i class="fa-solid fa-user"></i><span><strong>${esc(state.people.me||'Mi perfil')}</strong><small>Mis finanzas personales</small></span><i class="fa-solid fa-chevron-right"></i></button><button class="quick-choice" onclick="closeModal();showModule('personalPartner')"><i class="fa-solid fa-user-group"></i><span><strong>${esc(state.people.partner||'Pareja')}</strong><small>Sus finanzas personales</small></span><i class="fa-solid fa-chevron-right"></i></button></div>`)}
-function openPersonalActionChooser(type){const title=type==="income"?"¿De quién es el ingreso?":type==="saving"?"¿Quién registra el ahorro personal?":"¿Quién registra el gasto personal?";openModal(title,`<div class="quick-choice-grid"><button class="quick-choice" onclick="closeModal();${type==="income"?"openIncome('me')":"openPersonalMovement('me','"+type+"')"}"><i class="fa-solid fa-user"></i><span><strong>${esc(state.people.me||'Mi perfil')}</strong><small>Continuar con este perfil</small></span><i class="fa-solid fa-chevron-right"></i></button><button class="quick-choice" onclick="closeModal();${type==="income"?"openIncome('partner')":"openPersonalMovement('partner','"+type+"')"}"><i class="fa-solid fa-user-group"></i><span><strong>${esc(state.people.partner||'Pareja')}</strong><small>Continuar con este perfil</small></span><i class="fa-solid fa-chevron-right"></i></button></div>`)}
-function openQuickActions(){openModal('Acciones rápidas',`<p class="small" style="margin-bottom:14px">Elige una acción para abrir directamente su formulario.</p><div class="quick-action-grid"><button class="quick-action" onclick="closeModal();openExpensePicker()"><i class="fa-solid fa-house-chimney"></i><strong>Gasto del hogar</strong><small>Elegir categoría</small></button><button class="quick-action" onclick="closeModal();openSavingPicker()"><i class="fa-solid fa-piggy-bank"></i><strong>Ahorro del hogar</strong><small>Registrar aporte</small></button><button class="quick-action" onclick="closeModal();openPersonalActionChooser('income')"><i class="fa-solid fa-arrow-trend-up"></i><strong>Ingreso personal</strong><small>Elegir perfil</small></button><button class="quick-action" onclick="closeModal();openPersonalActionChooser('expense')"><i class="fa-solid fa-wallet"></i><strong>Gasto personal</strong><small>Elegir perfil</small></button><button class="quick-action" onclick="closeModal();openPersonalActionChooser('saving')"><i class="fa-solid fa-piggy-bank"></i><strong>Ahorro personal</strong><small>Elegir perfil</small></button><button class="quick-action" onclick="closeModal();openTaskForm()"><i class="fa-solid fa-calendar-check"></i><strong>Recordatorio</strong><small>Crear pendiente</small></button><button class="quick-action" onclick="closeModal();showModule('debts')"><i class="fa-solid fa-file-invoice-dollar"></i><strong>Deudas</strong><small>Administrar deudas</small></button><button class="quick-action" onclick="closeModal();showModule('calendar')"><i class="fa-solid fa-calendar-days"></i><strong>Calendario</strong><small>Ver pendientes</small></button></div>`) }
-function routeFromHash(){const raw=(location.hash||"#dashboard").replace(/^#/ ,"").replace(/\/modal$/ ,"");const allowed=["dashboard","calendar","debts","accounts","reports","settings","personalMe","personalPartner","homeDetails","savingsDetails"];return raw==="accounts"?"reports":(allowed.includes(raw)?raw:"dashboard")}
+function routeFromHash(){const raw=(location.hash||"#dashboard").replace(/^#/ ,"").replace(/\/modal$/ ,"");const allowed=["dashboard","calendar","debts","accounts","reports","settings","personalMe","personalPartner"];return raw==="accounts"?"reports":(allowed.includes(raw)?raw:"dashboard")}
 function navigateToGoals(){
  const goals=document.getElementById("goals");
  if(!goals)return;
@@ -1365,15 +1144,15 @@ function navigateToGoals(){
  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.textContent.includes("Metas a futuro")));
 }
 function showModule(name,fromHistory=false){
- const allowed=["dashboard","calendar","debts","accounts","reports","settings","personalMe","personalPartner","homeDetails","savingsDetails"];if(name==="accounts")name="reports";if(!allowed.includes(name))name="dashboard";
+ const allowed=["dashboard","calendar","debts","accounts","reports","settings","personalMe","personalPartner"];if(name==="accounts")name="reports";if(!allowed.includes(name))name="dashboard";
  activeModule=name;
- ["dashboard","calendar","debts","accounts","reports","settings","personal","homeDetails","savingsDetails"].forEach(m=>{const el=document.getElementById(m+"Module");if(el)el.classList.toggle("hidden",m!==name&&!(m==="personal"&&(name==="personalMe"||name==="personalPartner")))});
+ ["dashboard","calendar","debts","accounts","reports","settings","personal"].forEach(m=>{const el=document.getElementById(m+"Module");if(el)el.classList.toggle("hidden",m!==name&&!(m==="personal"&&(name==="personalMe"||name==="personalPartner")))});
  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.route===name));
- const title={dashboard:"Dashboard General",calendar:"Calendario y recordatorios",debts:"Gestión de deudas",accounts:"Cuentas separadas",reports:"Reportes",settings:"Configuración",personalMe:"Finanza · "+(state.people.me||"Mi perfil"),personalPartner:"Finanza · "+(state.people.partner||"Pareja"),homeDetails:"Hogar · Gastos y categorías",savingsDetails:"Ahorros · Objetivos y movimientos"};
+ const title={dashboard:"Dashboard General",calendar:"Calendario y recordatorios",debts:"Gestión de deudas",accounts:"Cuentas separadas",reports:"Reportes",settings:"Configuración",personalMe:"Finanza · "+(state.people.me||"Mi perfil"),personalPartner:"Finanza · "+(state.people.partner||"Pareja")};
  const h=document.querySelector(".title h1");if(h)h.textContent=title[name]||"Nexus Finance";
- const p=document.querySelector(".title p");if(p)p.textContent=name.startsWith("personal")?"Control de tus finanzas personales.":name==="homeDetails"?"Detalle por categoría y seguimiento de los gastos del hogar.":name==="savingsDetails"?"Consulta aportes, objetivos y movimientos de ahorro.":name==="dashboard"?"Resumen general de tus finanzas.":"Consulta y administra tu información financiera.";
+ const p=document.querySelector(".title p");if(p)p.textContent=name.startsWith("personal")?"Control de tus finanzas personales.":name==="dashboard"?"Resumen general de tus finanzas.":"Consulta y administra tu información financiera.";
  if(!fromHistory){const url=location.pathname+location.search+"#"+name;history.pushState({nexusRoute:name},"",url)}
- if(name==="personalMe"||name==="personalPartner")renderPersonalModule();if(name==="homeDetails")renderHomeDetailsModule();if(name==="savingsDetails")renderSavingsDetailsModule();if(name==="settings")populateSettings();
+ if(name==="personalMe"||name==="personalPartner")renderPersonalModule();if(name==="settings")populateSettings();
  if(name!=="dashboard")renderExtendedModules();
  document.getElementById("sidebar").classList.remove("open");if(!fromHistory)window.scrollTo({top:0,behavior:"auto"});
 }
@@ -1431,14 +1210,7 @@ function accountPeriodSummary(id){
  const person=id==="me"?"me":"partner",assigned=personalAssigned(person,f.year,f.month),stats=personalStats(person,f.year,f.month),balance=assigned+stats.extraIncome-stats.spent-stats.saved;
  return {value:balance,detail:`Asignado ${money(assigned)} · Gastado ${money(stats.spent)} · Ahorrado ${money(stats.saved)}`};
 }
-function renderAccounts(){
- const grids=[...document.querySelectorAll('#accountsGrid, #accountsGridReport')];
- const gridHtml=ACCOUNT_TYPES.map(a=>{const d=accountPeriodSummary(a.id),ledger=state.transactions.filter(t=>t.account===a.id);return `<div class="account-card"><h3>${esc(a.name)}</h3><div class="balance">${money(d.value)}</div><small>${esc(d.detail)}</small><div class="small" style="margin-top:8px">Libro manual: ${money(accountBalance(a.id))} · ${ledger.length} movimiento(s) total</div></div>`}).join("");
- grids.forEach(grid=>grid.innerHTML=gridHtml);
- const tables=[...document.querySelectorAll('#accountMovementTable, #accountMovementTableReport')];
- const tableHtml=!state.transactions.length?'<div class="empty">Aún no hay movimientos manuales de cuentas. Los valores superiores se calculan automáticamente con tus ingresos, gastos y ahorros del periodo.</div>':`<table class="data-table"><thead><tr><th>Fecha</th><th>Cuenta</th><th>Tipo</th><th>Descripción</th><th>Valor</th><th></th></tr></thead><tbody>${[...state.transactions].sort((a,b)=>(b.date||"").localeCompare(a.date||"")).map(t=>`<tr><td>${esc(t.date)}</td><td>${esc((ACCOUNT_TYPES.find(a=>a.id===t.account)||{}).name||t.account)}</td><td><span class="pill">${t.type==="income"?"Ingreso":"Egreso"}</span></td><td>${esc(t.description)}</td><td>${t.type==="income"?"+":"−"}${money(t.amount)}</td><td><button class="mini-btn" onclick="deleteAccountMovement('${t.id}')">Eliminar</button></td></tr>`).join("")}</tbody></table>`;
- tables.forEach(box=>box.innerHTML=tableHtml);
-}
+function renderAccounts(){const grid=document.getElementById("accountsGrid");if(grid)grid.innerHTML=ACCOUNT_TYPES.map(a=>{const d=accountPeriodSummary(a.id),ledger=state.transactions.filter(t=>t.account===a.id);return `<div class="account-card"><h3>${esc(a.name)}</h3><div class="balance">${money(d.value)}</div><small>${esc(d.detail)}</small><div class="small" style="margin-top:8px">Libro manual: ${money(accountBalance(a.id))} · ${ledger.length} movimiento(s) total</div></div>`}).join("");const box=document.getElementById("accountMovementTable");if(!box)return;if(!state.transactions.length){box.innerHTML='<div class="empty">Aún no hay movimientos manuales de cuentas. Los valores superiores se calculan automáticamente con tus ingresos, gastos y ahorros del periodo.</div>';return}box.innerHTML=`<table class="data-table"><thead><tr><th>Fecha</th><th>Cuenta</th><th>Tipo</th><th>Descripción</th><th>Valor</th><th></th></tr></thead><tbody>${[...state.transactions].sort((a,b)=>(b.date||"").localeCompare(a.date||"")).map(t=>`<tr><td>${esc(t.date)}</td><td>${esc((ACCOUNT_TYPES.find(a=>a.id===t.account)||{}).name||t.account)}</td><td><span class="pill">${t.type==="income"?"Ingreso":"Egreso"}</span></td><td>${esc(t.description)}</td><td>${t.type==="income"?"+":"−"}${money(t.amount)}</td><td><button class="mini-btn" onclick="deleteAccountMovement('${t.id}')">Eliminar</button></td></tr>`).join("")}</tbody></table>`}
 function openAccountMovement(){openModal("Nuevo movimiento de cuenta",`<form onsubmit="saveAccountMovement(event)">${editModeBanner(false,"movimiento de cuenta")}<div class="form-grid"><div class="field"><label>Fecha</label><input class="input" id="amDate" type="date" value="${dateNow()}" required></div><div class="field"><label>Cuenta</label><select class="select" id="amAccount">${ACCOUNT_TYPES.map(a=>`<option value="${a.id}">${a.name}</option>`).join("")}</select></div><div class="field"><label>Tipo</label><select class="select" id="amType"><option value="income">Ingreso / abono</option><option value="expense">Egreso / retiro</option></select></div><div class="field"><label>Valor</label><input class="input money-input" id="amAmount" type="text" inputmode="numeric" oninput="formatMoneyField(this)" required placeholder="Ej. 100.000"></div><div class="field full"><label>Descripción</label><input class="input" id="amDescription" required placeholder="Ej. transferencia, pago de servicio"></div></div><div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary">Guardar movimiento</button></div></form>`)}
 function saveAccountMovement(e){e.preventDefault();state.transactions.push({id:crypto.randomUUID(),date:document.getElementById("amDate").value,account:document.getElementById("amAccount").value,type:document.getElementById("amType").value,amount:num(document.getElementById("amAmount").value),description:document.getElementById("amDescription").value.trim()});saveState();closeModal();renderAccounts();toast("Movimiento guardado")}
 function deleteAccountMovement(id){confirmInApp("¿Eliminar este movimiento de cuenta?",()=>{state.transactions=state.transactions.filter(t=>t.id!==id);saveState();renderAccounts();toast("Movimiento eliminado")})}
@@ -1446,57 +1218,266 @@ function monthlyReportData(){const year=Number(document.getElementById("reportYe
 function renderReports(){const yearSel=document.getElementById("reportYear"),globalYear=document.getElementById("filterYear");if(!yearSel||!globalYear)return;const years=[...new Set([new Date().getFullYear(),Number(globalYear.value),...state.incomes,...state.expenses,...state.savings].map(x=>typeof x==="number"?x:Number(String(x.date||"").slice(0,4))).filter(y=>y>=2000&&y<=2100))].sort((a,b)=>b-a);const old=yearSel.value;yearSel.innerHTML=years.map(y=>`<option value="${y}">${y}</option>`).join("");yearSel.value=years.includes(Number(old))?old:String(globalYear.value||years[0]);const data=monthlyReportData(),box=document.getElementById("reportChart"),max=Math.max(1,...data.flatMap(x=>[x.income,x.expenses,x.savings]));const fmtPct=(v,base)=>base>0?(v/base*100).toFixed(1)+"%":"—";if(box)box.innerHTML=data.map((d,i)=>{if(!(d.income||d.expenses||d.savings))return "";const prev=data[i-1],delta=(key)=>prev&&prev[key]>0?((d[key]-prev[key])/prev[key]*100):null;return `<div class="report-row"><strong>${d.fullName}</strong><div class="report-metrics"><div class="report-metric"><span>Ingresos</span><div class="report-track"><i class="report-income" style="width:${d.income/max*100}%"></i></div><small>${money(d.income)} · ${fmtPct(d.income,max)}</small>${delta("income")!==null?`<em class="${delta("income")>=0?'positive':'negative'}">${delta("income")>=0?'↑':'↓'} ${Math.abs(delta("income")).toFixed(1)}% vs mes anterior</em>`:""}</div><div class="report-metric"><span>Gastos</span><div class="report-track"><i class="report-expense" style="width:${d.expenses/max*100}%"></i></div><small>${money(d.expenses)} · ${fmtPct(d.expenses,max)}</small>${delta("expenses")!==null?`<em class="${delta("expenses")<=0?'positive':'negative'}">${delta("expenses")>=0?'↑':'↓'} ${Math.abs(delta("expenses")).toFixed(1)}% vs mes anterior</em>`:""}</div><div class="report-metric"><span>Ahorros</span><div class="report-track"><i class="report-savings" style="width:${d.savings/max*100}%"></i></div><small>${money(d.savings)} · ${fmtPct(d.savings,max)}</small>${delta("savings")!==null?`<em class="${delta("savings")>=0?'positive':'negative'}">${delta("savings")>=0?'↑':'↓'} ${Math.abs(delta("savings")).toFixed(1)}% vs mes anterior</em>`:""}</div></div><div class="report-balance"><b>${money(d.balance)}</b><small>Saldo neto</small><span class="report-callout">${d.income?`Gasto/ingreso: ${(d.expenses/d.income*100).toFixed(1)}%`:"Sin ingresos"}</span></div></div>`}).join("")||'<div class="empty">No hay movimientos en el periodo seleccionado.</div>';const sumKey=k=>data.reduce((s,d)=>s+d[k],0);const kpi=document.getElementById("reportKpis");if(kpi)kpi.innerHTML=[["Ingresos",sumKey("income"),"#a78bfa"],["Gastos",sumKey("expenses"),"#fb923c"],["Ahorros",sumKey("savings"),"#34d399"],["Saldo neto",sumKey("balance"),"#60a5fa"]].map(([n,v,c])=>`<div class="card kpi"><div class="label">${n.toUpperCase()}</div><div class="value" style="color:${c}">${money(v)}</div><div class="sub">${sumKey("income")?((v/sumKey("income"))*100).toFixed(1)+"% de los ingresos":"Sin ingresos en el periodo"}</div></div>`).join("");const summary=document.getElementById("reportSummary");if(summary)summary.innerHTML=[["Ingresos",sumKey("income")],["Gastos del hogar",sumKey("expenses")],["Ahorros",sumKey("savings")],["Saldo neto",sumKey("balance")],["Deudas pendientes",state.debts.reduce((s,d)=>s+(d.status==="paid"?0:Number(d.balance)||0),0)]].map(([n,v])=>`<div class="list-row" style="grid-template-columns:1fr auto"><span>${n}</span><strong>${money(v)}</strong></div>`).join("");const alerts=[];const pending=state.tasks.filter(t=>t.status!=="done"&&t.date&&t.date<dateNow());if(pending.length)alerts.push(`${pending.length} recordatorio(s) vencido(s)`);const due=state.debts.filter(d=>d.status!=="paid"&&d.due&&d.due<=dateNow());if(due.length)alerts.push(`${due.length} deuda(s) con vencimiento hoy o anterior`);if(sumKey("expenses")>sumKey("income"))alerts.push("Los gastos del hogar superan los ingresos registrados en el periodo");document.getElementById("financialAlerts").innerHTML=alerts.length?alerts.map(a=>`<div class="list-row" style="grid-template-columns:1fr"><span class="negative">⚠ ${esc(a)}</span></div>`).join(""):'<div class="empty">No hay alertas con los datos actuales.</div>';renderAccounts()}
 function exportReportCsv(){const rows=[["Mes","Ingresos","Gastos hogar","Ahorros","Saldo neto"],...monthlyReportData().map(d=>[d.name,d.income,d.expenses,d.savings,d.balance])];const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")).join("\n");const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`nexus-reporte-${(document.getElementById("reportYear")?.value||document.getElementById("filterYear").value)||new Date().getFullYear()}.csv`;a.click();URL.revokeObjectURL(a.href)}
 
-
-/* Navegación móvil: sincroniza el estado visual con las rutas ya existentes. No realiza llamadas al backend. */
-(function setupMobileNavigation(){
- const nav=document.getElementById("mobileBottomNav");
- const sidebar=document.getElementById("sidebar");
- const more=document.getElementById("mobileMoreButton");
- if(!nav||!sidebar)return;
- function syncMobileNav(){
-  const route=typeof activeModule!=="undefined"?activeModule:"dashboard";
-  nav.querySelectorAll("[data-mobile-route]").forEach(button=>{
-   const target=button.dataset.mobileRoute;const active=target===route||(target==="personal"&&String(route).startsWith("personal"));
-   button.classList.toggle("is-active",active);
-   if(active)button.setAttribute("aria-current","page");else button.removeAttribute("aria-current");
-  });
-  if(more)more.setAttribute("aria-expanded",String(sidebar.classList.contains("open")));
- }
- const originalToggleSidebar=window.toggleSidebar;
- window.toggleSidebar=function(){
-  if(typeof originalToggleSidebar==="function")originalToggleSidebar();
-  else sidebar.classList.toggle("open");
-  syncMobileNav();
- };
- const originalShowModule=window.showModule;
- if(typeof originalShowModule==="function")window.showModule=function(...args){
-  const result=originalShowModule.apply(this,args);
-  syncMobileNav();
-  return result;
- };
- sidebar.addEventListener("click",event=>{
-  if(event.target.closest("button")){
-   sidebar.classList.remove("open");
-   syncMobileNav();
-  }
- });
- document.addEventListener("click",event=>{
-  if(sidebar.classList.contains("open")&&!sidebar.contains(event.target)&&!event.target.closest("#mobileMoreButton")&&!event.target.closest(".mobile-menu")){
-   sidebar.classList.remove("open");syncMobileNav();
-  }
- });
- window.addEventListener("hashchange",syncMobileNav);
- document.addEventListener("click",event=>{
-  if(event.target.closest(".mobile-bottom-nav [data-mobile-route]"))setTimeout(syncMobileNav,0);
- });
- syncMobileNav();
-})();
-
 /* Arranque: primero autenticar; luego cargar los datos privados de la cuenta */
 setupYears();
 document.querySelector(".app").classList.add("auth-locked");
 document.getElementById("authScreen").style.display="flex";
-bootstrapAuth();
+// La inicialización del módulo móvil se programa al final del documento.
 </script>
+<script id="nexus-mobile-experience">
+let mobileScreen = "home";
+let mobileMovementFilter = "all";
+const MOBILE_TITLES = {
+  home: ["Resumen", "Tus finanzas, de un vistazo"],
+  movements: ["Movimientos", "Ingresos y gastos del hogar"],
+  savings: ["Ahorros", "Cuida lo que estás construyendo"],
+  goals: ["Metas", "Objetivos que avanzan contigo"],
+  more: ["Explorar Nexus", "Todos tus módulos en un solo lugar"],
+  debts: ["Deudas", "Saldos y próximos vencimientos"],
+  calendar: ["Agenda", "Recordatorios del hogar y personales"],
+  reports: ["Reportes", "Cómo se mueve tu dinero"],
+  personalMe: ["Mis finanzas", "Tu dinero, tus decisiones"],
+  personalPartner: ["Finanzas de pareja", "Seguimiento independiente por perfil"],
+  settings: ["Configuración", "Personaliza tu espacio financiero"],
+  accounts: ["Cuentas", "Saldos por destino"]
+};
+
+function mobileSetScreen(name) {
+  mobileScreen = name;
+  renderMobileUI();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+function mobileGoHome() { mobileSetScreen("home"); }
+function mobileSetMonth(value) {
+  const el = document.getElementById("filterMonth"); if (el) el.value = value;
+  if (typeof renderAll === "function") renderAll(); renderMobileUI();
+}
+function mobileSetYear(value) {
+  const el = document.getElementById("filterYear"); if (el) el.value = value;
+  const reportYear = document.getElementById("reportYear"); if (reportYear) reportYear.value = value;
+  if (typeof renderAll === "function") renderAll(); renderMobileUI();
+}
+function mobilePeriodControls() {
+  const f = typeof getFilter === "function" ? getFilter() : {year:new Date().getFullYear(), month:String(new Date().getMonth()+1)};
+  const monthOptions = [['all','Año completo'], ...MONTHS.map((m,i)=>[String(i+1),m])]
+    .map(([v,label])=>`<option value="${v}" ${String(f.month)===v?'selected':''}>${label}</option>`).join("");
+  const years = new Set([new Date().getFullYear(), Number(f.year), ...(state.incomes||[]), ...(state.expenses||[]), ...(state.savings||[])].map(x=>typeof x==="number"?x:Number(String(x.date||"").slice(0,4))).filter(y=>y>=2000&&y<=2100));
+  const yearOptions = [...years].sort((a,b)=>b-a).map(y=>`<option value="${y}" ${y===Number(f.year)?'selected':''}>${y}</option>`).join("");
+  return `<div class="m-period"><label><span>Periodo</span><select aria-label="Periodo" onchange="mobileSetMonth(this.value)">${monthOptions}</select></label><label><span>Año</span><select aria-label="Año" onchange="mobileSetYear(this.value)">${yearOptions}</select></label></div>`;
+}
+function mobileRange(arr) { return typeof filtered === "function" ? filtered(arr||[]) : (arr||[]); }
+function mobileIcon(type) {
+  return type==="income"?"fa-arrow-down-left":type==="expense"?"fa-house-chimney":type==="saving"?"fa-piggy-bank":type==="debt"?"fa-credit-card":type==="task"?"fa-calendar-check":"fa-wallet";
+}
+function mobileSummaryCard(label,value,type,sub="") {
+  return `<article class="m-stat m-${type}"><div class="m-stat-top"><span>${label}</span><i class="fa-solid ${mobileIcon(type)}"></i></div><strong>${money(value)}</strong>${sub?`<small>${sub}</small>`:""}</article>`;
+}
+function mobileProgress(label,value,target,color="purple") {
+  const pct=target>0?Math.min(100,Math.max(0,value/target*100)):0;
+  return `<div class="m-progress-item"><div class="m-progress-label"><span>${label}</span><b>${target>0?Math.round(pct)+"%":"Sin meta"}</b></div><div class="m-track"><i class="${color}" style="width:${pct}%"></i></div><small>${money(value)} ${target>0?`de ${money(target)}`:"registrados"}</small></div>`;
+}
+function mobileTransactions(filter="all",limit=50) {
+  const rows = [
+    ...(state.incomes||[]).map(x=>({...x,_kind:"income",_label:`Ingreso · ${state.people[x.person]||"Perfil"}`})),
+    ...(state.expenses||[]).map(x=>({...x,_kind:"expense",_label:x.category||"Gasto del hogar"})),
+    ...(state.savings||[]).map(x=>({...x,_kind:"saving",_label:(SAVINGS.find(s=>s[0]===x.type)||[])[1]||"Ahorro"}))
+  ].filter(x=>filter==="all"||x._kind===filter);
+  return rows.sort((a,b)=>(b.date||"").localeCompare(a.date||"")).slice(0,limit);
+}
+function mobileTransactionCard(x,actions=true) {
+  const kind=x._kind||x.kind;
+  const sign=kind==="expense"?"−":"+";
+  const title=x._label||x.category||(kind==="income"?`Ingreso · ${state.people[x.person]||"Perfil"}`:kind==="saving"?((SAVINGS.find(s=>s[0]===x.type)||[])[1]||"Ahorro"):"Gasto del hogar");
+  let actionButtons="";
+  if(actions && kind==="income") actionButtons=`<button class="m-icon-btn" aria-label="Editar ingreso" onclick="openIncome('${x.person||"me"}','${x.id}')"><i class="fa-solid fa-pen"></i></button><button class="m-icon-btn danger" aria-label="Eliminar ingreso" onclick="deleteRecord('income','${x.id}')"><i class="fa-solid fa-trash"></i></button>`;
+  if(actions && kind==="expense") actionButtons=`<button class="m-icon-btn" aria-label="Editar gasto" onclick="openExpense('${esc(x.category||"Otros")}','${x.id}')"><i class="fa-solid fa-pen"></i></button><button class="m-icon-btn danger" aria-label="Eliminar gasto" onclick="deleteRecord('expense','${x.id}')"><i class="fa-solid fa-trash"></i></button>`;
+  if(actions && kind==="saving") actionButtons=`<button class="m-icon-btn" aria-label="Editar ahorro" onclick="openSaving('${x.type||"financial"}','${x.id}','${x.person||"me"}')"><i class="fa-solid fa-pen"></i></button><button class="m-icon-btn danger" aria-label="Eliminar ahorro" onclick="deleteRecord('saving','${x.id}')"><i class="fa-solid fa-trash"></i></button>`;
+  return `<article class="m-transaction"><div class="m-transaction-icon ${kind}"><i class="fa-solid ${mobileIcon(kind)}"></i></div><div class="m-transaction-info"><b>${esc(title)}</b><small>${esc(x.date||"Sin fecha")}${kind==="income"?` · ${esc(state.people[x.person]||"")}`:""}</small></div><div class="m-transaction-side"><strong class="${kind==="expense"?"negative":kind==="saving"?"saving-text":"positive"}">${sign}${money(x.amount)}</strong>${actions?`<div class="m-record-actions">${actionButtons}</div>`:""}</div></article>`;
+}
+function mobileQuickAdd() {
+  openModal("¿Qué deseas registrar?", `<div class="m-quick-grid">
+    <button class="m-quick-option purple" onclick="openIncome('me')"><i class="fa-solid fa-arrow-trend-up"></i><b>Ingreso</b><small>Registrar aporte</small></button>
+    <button class="m-quick-option orange" onclick="openExpensePicker()"><i class="fa-solid fa-house-chimney"></i><b>Gasto del hogar</b><small>Elegir categoría</small></button>
+    <button class="m-quick-option green" onclick="openSavingPicker()"><i class="fa-solid fa-piggy-bank"></i><b>Ahorro del hogar</b><small>Registrar aporte</small></button>
+    <button class="m-quick-option blue" onclick="openPersonalMovement('me','expense')"><i class="fa-solid fa-wallet"></i><b>Gasto personal</b><small>Mi perfil</small></button>
+  </div><div class="m-modal-footer"><button class="btn" onclick="closeModal()">Cerrar</button></div>`);
+}
+function renderMobileHome() {
+  const inc=mobileRange(state.incomes), exp=mobileRange(state.expenses), sav=mobileRange(state.savings);
+  const income=sum(inc), expense=sum(exp), saving=sum(sav), available=income-expense-saving;
+  const username=(authUser?.role==="partner"?state.people.partner:state.people.me)||authUser?.username||"bienvenido";
+  const upcoming=(state.tasks||[]).filter(t=>t.status!=="done"&&t.date).sort((a,b)=>(a.date||"").localeCompare(b.date||"")).slice(0,2);
+  const pendingDebt=(state.debts||[]).filter(d=>d.status!=="paid"&&Number(d.balance)>0);
+  const recent=mobileTransactions("all",4);
+  return `${mobilePeriodControls()}
+    <section class="m-welcome"><div><span class="m-eyebrow">TU RESUMEN FINANCIERO</span><h2>Hola, ${esc(username)} 👋</h2><p>Un paso a la vez. Tus finanzas en orden.</p></div><div class="m-welcome-orb"><i class="fa-solid fa-sparkles"></i></div></section>
+    <section class="m-balance-card"><div class="m-balance-top"><span><i class="fa-solid fa-wallet"></i> Disponible del periodo</span><span class="m-live-dot">ACTUAL</span></div><strong class="m-balance-value">${money(available)}</strong><p>Ingresos menos gastos del hogar y ahorros registrados.</p><div class="m-balance-footer"><span><i class="fa-solid fa-arrow-trend-up"></i> Ingresos <b>${money(income)}</b></span><span><i class="fa-solid fa-arrow-trend-down"></i> Gastos <b>${money(expense)}</b></span></div></section>
+    <div class="m-section-heading"><div><h3>Vista rápida</h3><p>Resumen del periodo elegido</p></div><button class="m-text-action" onclick="mobileSetScreen('reports')">Ver reporte <i class="fa-solid fa-arrow-right"></i></button></div>
+    <section class="m-stat-grid">${mobileSummaryCard("Ingresos",income,"income")}${mobileSummaryCard("Gastos del hogar",expense,"expense")}${mobileSummaryCard("Ahorros",saving,"saving")}${mobileSummaryCard("Deudas pendientes",pendingDebt.reduce((s,d)=>s+(Number(d.balance)||0),0),"debt",`${pendingDebt.length} obligación(es)`)}</section>
+    <div class="m-section-heading"><div><h3>Acciones rápidas</h3><p>Registra lo que acaba de pasar</p></div></div>
+    <section class="m-quick-actions"><button onclick="openIncome('me')"><span class="quick-icon purple"><i class="fa-solid fa-plus"></i></span><b>Ingreso</b></button><button onclick="openExpensePicker()"><span class="quick-icon orange"><i class="fa-solid fa-receipt"></i></span><b>Gasto</b></button><button onclick="openSavingPicker()"><span class="quick-icon green"><i class="fa-solid fa-piggy-bank"></i></span><b>Ahorro</b></button><button onclick="openTaskForm()"><span class="quick-icon blue"><i class="fa-solid fa-calendar-plus"></i></span><b>Recordatorio</b></button></section>
+    <section class="m-panel"><div class="m-section-heading inside"><div><h3>Actividad reciente</h3><p>Últimos movimientos registrados</p></div><button class="m-text-action" onclick="mobileSetScreen('movements')">Ver todos <i class="fa-solid fa-arrow-right"></i></button></div>${recent.length?`<div class="m-transaction-list">${recent.map(x=>mobileTransactionCard(x,false)).join("")}</div>`:`<div class="m-empty"><span><i class="fa-solid fa-chart-line"></i></span><b>Tu historia empieza aquí</b><p>Registra tu primer ingreso, gasto o ahorro para ver el movimiento de tus finanzas.</p><button class="m-primary-btn" onclick="mobileQuickAdd()"><i class="fa-solid fa-plus"></i> Primer registro</button></div>`}</section>
+    <section class="m-panel"><div class="m-section-heading inside"><div><h3>En el radar</h3><p>Lo próximo que requiere atención</p></div><button class="m-icon-btn" onclick="mobileSetScreen('calendar')" aria-label="Abrir agenda"><i class="fa-solid fa-arrow-up-right-from-square"></i></button></div>${upcoming.length?upcoming.map(t=>`<button class="m-upcoming" onclick="openTaskEdit('${t.id}')"><span class="m-upcoming-date"><b>${new Date(t.date+"T00:00:00").getDate()}</b><small>${new Date(t.date+"T00:00:00").toLocaleDateString("es-CO",{month:"short"}).replace(".","")}</small></span><span class="m-upcoming-info"><b>${esc(t.title)}</b><small>${esc(t.time||"Sin hora")} · ${esc(t.date)}</small></span><i class="fa-solid fa-chevron-right"></i></button>`).join(""):`<div class="m-inline-empty"><i class="fa-regular fa-calendar-check"></i> No hay recordatorios pendientes.</div>`}</section>
+  `;
+}
+function renderMobileMovements() {
+  const f=getFilter();
+  const inSelectedPeriod=x=>inPeriod(x.date,f.year,f.month);
+  const rows=mobileTransactions(mobileMovementFilter,1000).filter(inSelectedPeriod);
+  const periodCount=mobileTransactions('all',1000).filter(inSelectedPeriod).length;
+  const tabs=[['all','Todos'],['income','Ingresos'],['expense','Gastos'],['saving','Ahorros']];
+  return `${mobilePeriodControls()}<div class="m-inline-toolbar"><div><h2 class="m-h2">Registro del hogar</h2><p>Busca, revisa o edita tus movimientos.</p></div><button class="m-primary-btn compact" onclick="mobileQuickAdd()"><i class="fa-solid fa-plus"></i> Nuevo</button></div>
+    <div class="m-chip-row">${tabs.map(([k,label])=>`<button class="m-chip ${mobileMovementFilter===k?'active':''}" onclick="mobileMovementFilter='${k}';renderMobileUI()">${label}${k==='all'?` · ${periodCount}`:''}</button>`).join("")}</div>
+    <section class="m-panel"><div class="m-list-caption">${rows.length} movimiento(s) ${mobileMovementFilter==='all'?'en total':'en esta categoría'}</div>${rows.length?`<div class="m-transaction-list">${rows.map(x=>mobileTransactionCard(x,true)).join("")}</div>`:`<div class="m-empty"><span><i class="fa-solid fa-receipt"></i></span><b>Sin movimientos por ahora</b><p>Los registros nuevos aparecerán aquí para que puedas consultarlos y editarlos.</p><button class="m-primary-btn" onclick="mobileQuickAdd()"><i class="fa-solid fa-plus"></i> Registrar movimiento</button></div>`}</section>`;
+}
+function renderMobileSavings() {
+  const sav=mobileRange(state.savings), total=sum(sav), target=Number(state.savingTarget)||0;
+  const types=SAVINGS.map(([key,label],i)=>{const value=sum(sav.filter(x=>x.type===key));return `<article class="m-saving-card"><div class="m-saving-symbol ${key}"><i class="fa-solid fa-piggy-bank"></i></div><div class="m-saving-detail"><b>${esc(label)}</b><small>${sav.filter(x=>x.type===key).length} aporte(s) en el periodo</small><strong>${money(value)}</strong></div><button class="m-icon-btn" onclick="openSaving('${key}')" aria-label="Añadir ${esc(label)}"><i class="fa-solid fa-plus"></i></button></article>`}).join("");
+  return `${mobilePeriodControls()}<section class="m-saving-hero"><div class="m-hero-title"><span class="m-eyebrow">CONSTANCIA SOBRE CANTIDAD</span><i class="fa-solid fa-seedling"></i></div><h2>${money(total)}</h2><p>Ahorrado en el periodo seleccionado</p>${mobileProgress("Meta mensual",total,target,"green")}<button class="m-primary-btn full" onclick="openSavingPicker()"><i class="fa-solid fa-plus"></i> Registrar ahorro</button></section>
+    <div class="m-section-heading"><div><h3>Mis bolsillos</h3><p>Ahorro del hogar por objetivo</p></div></div><section class="m-saving-list">${types}</section>
+    <div class="m-section-heading"><div><h3>Últimos aportes</h3><p>Movimientos de ahorro del hogar</p></div></div><section class="m-panel">${sav.length?`<div class="m-transaction-list">${sav.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).map(x=>mobileTransactionCard({...x,_kind:"saving",_label:(SAVINGS.find(s=>s[0]===x.type)||[])[1]||"Ahorro"},true)).join("")}</div>`:`<div class="m-inline-empty">Aún no hay aportes en el periodo.</div>`}</section>
+    <button class="m-secondary-btn full" onclick="mobileSetScreen('personalMe')"><i class="fa-solid fa-user"></i> Ver ahorros personales</button>`;
+}
+function renderMobileGoals() {
+  const goals=state.goals||[];
+  return `<div class="m-inline-toolbar"><div><h2 class="m-h2">Metas a futuro</h2><p>Convierte tus planes en avances medibles.</p></div><button class="m-primary-btn compact" onclick="openGoal()"><i class="fa-solid fa-plus"></i> Crear</button></div>
+  ${goals.length?`<section class="m-goal-list">${goals.map(g=>{const pct=Number(g.target)>0?Math.min(100,Math.max(0,Number(g.current||0)/Number(g.target)*100)):0;return `<article class="m-goal-card"><div class="m-goal-top"><div class="m-goal-symbol"><i class="fa-solid fa-bullseye"></i></div><div class="m-goal-head"><b>${esc(g.name||"Meta sin nombre")}</b><small>${esc(g.desc||"Objetivo personal")}</small></div><button class="m-icon-btn" aria-label="Editar meta" onclick="openGoal('${g.id}')"><i class="fa-solid fa-ellipsis"></i></button></div><div class="m-goal-money"><strong>${money(g.current)}</strong><span>de ${money(g.target)}</span></div><div class="m-track"><i class="purple" style="width:${pct}%"></i></div><div class="m-goal-bottom"><span>${pct.toFixed(0)}% completado</span><span>${pct>=100?'¡Objetivo cumplido!':money(Math.max(0,Number(g.target||0)-Number(g.current||0)))+' restantes'}</span></div><div class="m-goal-actions"><button class="m-primary-btn" onclick="contributeGoal('${g.id}')"><i class="fa-solid fa-plus"></i> Abonar</button><button class="m-secondary-btn" onclick="openGoal('${g.id}')">Editar</button><button class="m-icon-btn danger" aria-label="Eliminar meta" onclick="deleteGoal('${g.id}')"><i class="fa-solid fa-trash"></i></button></div></article>`}).join("")}</section>`:`<section class="m-panel"><div class="m-empty"><span><i class="fa-solid fa-bullseye"></i></span><b>Define tu primera meta</b><p>Puede ser un viaje, un fondo de emergencia o cualquier objetivo que quieras alcanzar.</p><button class="m-primary-btn" onclick="openGoal()"><i class="fa-solid fa-plus"></i> Crear meta</button></div></section>`}`;
+}
+function renderMobileMore() {
+  const items=[
+    ["personalMe","fa-user","Mis finanzas",state.people.me,"blue"],
+    ["personalPartner","fa-user-group","Finanzas de pareja",state.people.partner,"orange"],
+    ["debts","fa-credit-card","Deudas","Control de saldos y abonos","orange"],
+    ["calendar","fa-calendar-days","Agenda y recordatorios","Fechas importantes del hogar","blue"],
+    ["reports","fa-chart-pie","Reportes y cuentas","Evolución, saldos y balances","purple"],
+    ["settings","fa-sliders","Configuración","Perfiles, metas y respaldos","green"]
+  ];
+  return `<section class="m-profile-card"><div class="m-profile-avatar">${esc((state.people.me||"N").slice(0,1).toUpperCase())}</div><div><b>${esc(authUser?.username||authUser?.name||authUser?.email||"Tu cuenta Nexus")}</b><small>${esc(authUser?.email||"Finanzas del hogar · cuenta privada")}</small><span class="m-sync-line"><i class="${cloudReady&&!cloudSyncing?'fa-solid fa-circle-check':'fa-solid fa-cloud'}"></i> ${cloudReady&&!cloudSyncing?'Sincronización lista':cloudSyncing?'Sincronizando datos':'Sesión activa'}</span></div><button class="m-icon-btn" onclick="mobileRefresh()" aria-label="Sincronizar"><i class="fa-solid fa-rotate"></i></button></section>
+  <div class="m-section-heading"><div><h3>Tu espacio</h3><p>Abre cualquier módulo de Nexus</p></div></div><section class="m-menu-list">${items.map(([key,icon,title,desc,color])=>`<button class="m-menu-item" onclick="mobileSetScreen('${key}')"><span class="m-menu-icon ${color}"><i class="fa-solid ${icon}"></i></span><span><b>${title}</b><small>${esc(desc)}</small></span><i class="fa-solid fa-chevron-right"></i></button>`).join("")}</section>
+  <section class="m-panel m-tools-panel"><div class="m-section-heading inside"><div><h3>Datos y mantenimiento</h3><p>Ten siempre una copia de seguridad</p></div></div><div class="m-tools-grid"><button onclick="exportData()"><i class="fa-solid fa-file-arrow-down"></i><span>Exportar respaldo</span></button><button onclick="importData()"><i class="fa-solid fa-file-arrow-up"></i><span>Importar respaldo</span></button><button onclick="exportReportCsv()"><i class="fa-solid fa-file-csv"></i><span>Exportar reporte</span></button><button onclick="mobileRefresh()"><i class="fa-solid fa-rotate"></i><span>Sincronizar</span></button></div></section>
+  <button class="m-logout-btn" onclick="mobileLogout()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button><p class="m-version">Nexus Finance · Hogar & Personal</p>`;
+}
+function mobileOpenDebtForm() {
+  openModal("Registrar deuda", `<form class="m-form" onsubmit="mobileAddDebt(event)">
+    <div class="field"><label>Nombre de la deuda</label><input class="input" id="mDebtName" required maxlength="120" placeholder="Ej. Tarjeta de crédito"></div>
+    <div class="field"><label>Monto original (COP)</label><input class="input money-input" id="mDebtOriginal" inputmode="numeric" required placeholder="1.000.000" oninput="formatMoneyField(this)"></div>
+    <div class="field"><label>Saldo pendiente (COP)</label><input class="input money-input" id="mDebtBalance" inputmode="numeric" required placeholder="850.000" oninput="formatMoneyField(this)"></div>
+    <div class="field"><label>Cuota mensual (opcional)</label><input class="input money-input" id="mDebtInstallment" inputmode="numeric" value="0" oninput="formatMoneyField(this)"></div>
+    <div class="field"><label>Próximo vencimiento</label><input class="input" id="mDebtDue" type="date"></div>
+    <div class="field"><label>Responsable</label><select class="select" id="mDebtOwner"><option value="home">Hogar</option><option value="me">Personal: ${esc(state.people.me)}</option><option value="partner">Personal: ${esc(state.people.partner)}</option></select></div>
+    <div class="field"><label>Notas</label><textarea class="textarea" id="mDebtNotes" rows="2" placeholder="Detalles opcionales"></textarea></div>
+    <div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary">Guardar deuda</button></div>
+  </form>`);
+}
+function mobileAddDebt(e) {
+  e.preventDefault();
+  const original=num(document.getElementById("mDebtOriginal").value), balance=num(document.getElementById("mDebtBalance").value);
+  if(balance>original){toast("El saldo pendiente no puede superar el monto inicial.");return;}
+  state.debts.push({id:crypto.randomUUID(),name:document.getElementById("mDebtName").value.trim(),original,balance,installment:num(document.getElementById("mDebtInstallment").value)||0,due:document.getElementById("mDebtDue").value,owner:document.getElementById("mDebtOwner").value,notes:document.getElementById("mDebtNotes").value,status:balance===0?"paid":"pending",createdAt:dateNow()});
+  saveState();closeModal();renderMobileUI();toast("Deuda registrada");
+}
+function renderMobileDebts() {
+  const debts=(state.debts||[]).slice().sort((a,b)=>(a.due||"9999").localeCompare(b.due||"9999"));
+  const pending=debts.filter(d=>d.status!=="paid"&&Number(d.balance)>0), total=pending.reduce((s,d)=>s+(Number(d.balance)||0),0);
+  return `<section class="m-debt-hero"><span>Saldo pendiente total</span><strong>${money(total)}</strong><div><span>${pending.length} deuda(s) activas</span><button onclick="mobileOpenDebtForm()"><i class="fa-solid fa-plus"></i> Nueva</button></div></section>
+  ${debts.length?`<section class="m-debt-list">${debts.map(d=>{const pct=Number(d.original)>0?Math.min(100,Math.max(0,(1-Number(d.balance||0)/Number(d.original))*100)):0;return `<article class="m-debt-card"><div class="m-debt-card-top"><span class="m-debt-icon"><i class="fa-solid fa-credit-card"></i></span><div class="m-debt-name"><b>${esc(d.name)}</b><small>${d.owner==='home'?'Hogar':esc(state.people[d.owner]||d.owner)} · ${d.due?`vence ${esc(d.due)}`:'sin fecha'}</small></div><span class="m-status ${d.status==='paid'?'done':''}">${d.status==='paid'?'Pagada':'Pendiente'}</span></div><strong class="m-debt-balance">${money(d.balance)}</strong><div class="m-track"><i class="orange" style="width:${pct}%"></i></div><div class="m-goal-bottom"><span>${pct.toFixed(0)}% pagado</span><span>Inicial ${money(d.original)}</span></div>${d.notes?`<p class="m-debt-notes">${esc(d.notes)}</p>`:""}<div class="m-goal-actions">${d.status!=='paid'&&Number(d.balance)>0?`<button class="m-primary-btn" onclick="payDebt('${d.id}')"><i class="fa-solid fa-hand-holding-dollar"></i> Abonar</button>`:`<span class="m-paid-label"><i class="fa-solid fa-circle-check"></i> Deuda saldada</span>`}<button class="m-secondary-btn" onclick="deleteDebt('${d.id}')">Eliminar</button></div></article>`}).join("")}</section>`:`<section class="m-panel"><div class="m-empty"><span><i class="fa-solid fa-credit-card"></i></span><b>No hay deudas registradas</b><p>Guarda una obligación para llevar el control del saldo, las cuotas y los abonos.</p><button class="m-primary-btn" onclick="mobileOpenDebtForm()"><i class="fa-solid fa-plus"></i> Añadir deuda</button></div></section>`}`;
+}
+function renderMobileCalendar() {
+  const today=dateNow();
+  const tasks=(state.tasks||[]).slice().sort((a,b)=>(a.date||"").localeCompare(b.date||"")||(a.time||"").localeCompare(b.time||""));
+  const pending=tasks.filter(t=>t.status!=="done"), done=tasks.filter(t=>t.status==="done");
+  const taskCard=t=>`<article class="m-task-card ${t.status==='done'?'completed':''}"><button class="m-task-check ${t.status==='done'?'checked':''}" aria-label="${t.status==='done'?'Marcar pendiente':'Completar'}" onclick="toggleTask('${t.id}')">${t.status==='done'?'<i class="fa-solid fa-check"></i>':''}</button><button class="m-task-main" onclick="openTaskEdit('${t.id}')"><b>${esc(t.title)}</b><small><i class="fa-regular fa-calendar"></i> ${esc(t.date||"Sin fecha")} ${esc(t.time||"")}</small><small>${t.owner==='home'?'Hogar':esc(state.people[t.owner]||t.owner)}${t.notes?` · ${esc(t.notes)}`:""}</small></button><button class="m-icon-btn" onclick="deleteTask('${t.id}')" aria-label="Eliminar"><i class="fa-solid fa-trash"></i></button></article>`;
+  return `<div class="m-inline-toolbar"><div><h2 class="m-h2">Tu agenda</h2><p>Organiza pagos y compromisos importantes.</p></div><button class="m-primary-btn compact" onclick="openTaskForm()"><i class="fa-solid fa-plus"></i> Nuevo</button></div>
+    <section class="m-agenda-summary"><div><span>Por hacer</span><b>${pending.length}</b></div><div><span>Completados</span><b>${done.length}</b></div><div><span>Fecha de hoy</span><b>${new Date(today+"T00:00:00").toLocaleDateString("es-CO",{day:"2-digit",month:"short"}).replace(".","")}</b></div></section>
+    <div class="m-section-heading"><div><h3>Pendientes</h3><p>Toca un pendiente para ver o editar</p></div></div><section class="m-task-list">${pending.length?pending.map(taskCard).join(""):`<div class="m-panel"><div class="m-inline-empty">Todo al día. No tienes recordatorios pendientes.</div></div>`}</section>
+    ${done.length?`<div class="m-section-heading"><div><h3>Completados</h3><p>Lo que ya quedó resuelto</p></div></div><section class="m-task-list">${done.map(taskCard).join("")}</section>`:""}`;
+}
+function renderMobileReports() {
+  const year=Number(getFilter().year)||new Date().getFullYear();
+  const years=[...new Set([new Date().getFullYear(),year,...state.incomes,...state.expenses,...state.savings].map(x=>typeof x==="number"?x:Number(String(x.date||"").slice(0,4))).filter(y=>y>=2000&&y<=2100))].sort((a,b)=>b-a);
+  const yearOptions=years.map(y=>`<option value="${y}" ${y===year?'selected':''}>${y}</option>`).join("");
+  const data=MONTHS.map((name,i)=>{const key=`${year}-${String(i+1).padStart(2,"0")}`;const calc=arr=>(arr||[]).filter(x=>String(x.date||"").slice(0,7)===key).reduce((s,x)=>s+(Number(x.amount)||0),0);return {name:name.slice(0,3),fullName:name,income:calc(state.incomes),expenses:calc(state.expenses),savings:calc(state.savings)}});
+  const totals=data.reduce((o,d)=>({income:o.income+d.income,expenses:o.expenses+d.expenses,savings:o.savings+d.savings}),{income:0,expenses:0,savings:0});
+  const max=Math.max(1,...data.flatMap(d=>[d.income,d.expenses,d.savings]));
+  const active=data.filter(d=>d.income||d.expenses||d.savings);
+  return `<div class="m-report-year"><div><span>Resumen anual</span><b>${year}</b></div><label class="m-report-year-picker">Año del reporte<select aria-label="Año del reporte" onchange="mobileSetYear(this.value)">${yearOptions}</select></label></div>
+    <section class="m-stat-grid">${mobileSummaryCard("Ingresos",totals.income,"income")}${mobileSummaryCard("Gastos",totals.expenses,"expense")}${mobileSummaryCard("Ahorros",totals.savings,"saving")}${mobileSummaryCard("Saldo neto",totals.income-totals.expenses-totals.savings,"available")}</section>
+    <section class="m-panel"><div class="m-section-heading inside"><div><h3>Comparativo mensual</h3><p>Ingresos, gastos y ahorros</p></div><button class="m-icon-btn" onclick="exportReportCsv()" aria-label="Exportar reporte"><i class="fa-solid fa-file-csv"></i></button></div>
+    <div class="m-chart-legend"><span><i class="income"></i>Ingresos</span><span><i class="expense"></i>Gastos</span><span><i class="saving"></i>Ahorros</span></div>
+    ${active.length?`<div class="m-report-list">${active.map(d=>`<div class="m-report-month"><b>${d.fullName}</b><div class="m-report-series"><span><i class="income" style="width:${d.income/max*100}%"></i></span><small>${money(d.income)}</small></div><div class="m-report-series"><span><i class="expense" style="width:${d.expenses/max*100}%"></i></span><small>${money(d.expenses)}</small></div><div class="m-report-series"><span><i class="saving" style="width:${d.savings/max*100}%"></i></span><small>${money(d.savings)}</small></div></div>`).join("")}</div>`:`<div class="m-inline-empty">No hay datos financieros registrados para ${year}.</div>`}</section>
+    <div class="m-section-heading"><div><h3>Cuentas automáticas</h3><p>Calculadas a partir de tus movimientos</p></div><button class="m-text-action" onclick="mobileSetScreen('accounts')">Ver detalle</button></div>
+    <button class="m-secondary-btn full" onclick="exportReportCsv()"><i class="fa-solid fa-download"></i> Exportar reporte CSV</button>`;
+}
+function renderMobileAccounts() {
+  const cards=ACCOUNT_TYPES.map(a=>{const d=accountPeriodSummary(a.id);return `<article class="m-account-card"><span>${esc(a.name)}</span><strong>${money(d.value)}</strong><small>${esc(d.detail)}</small><em>${state.transactions.filter(t=>t.account===a.id).length} movimiento(s) manuales</em></article>`}).join("");
+  return `<div class="m-inline-toolbar"><div><h2 class="m-h2">Cuentas separadas</h2><p>Hogar, ahorro y saldos personales.</p></div><button class="m-primary-btn compact" onclick="openAccountMovement()"><i class="fa-solid fa-plus"></i> Movimiento</button></div><section class="m-account-list">${cards}</section>
+  <div class="m-section-heading"><div><h3>Libro manual</h3><p>Movimientos ingresados a una cuenta</p></div></div><section class="m-panel">${state.transactions.length?state.transactions.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).map(t=>`<article class="m-transaction"><div class="m-transaction-icon ${t.type==='income'?'income':'expense'}"><i class="fa-solid ${t.type==='income'?'fa-arrow-down-left':'fa-arrow-up-right-from-square'}"></i></div><div class="m-transaction-info"><b>${esc(t.description)}</b><small>${esc(t.date)} · ${esc((ACCOUNT_TYPES.find(a=>a.id===t.account)||{}).name||t.account)}</small></div><div class="m-transaction-side"><strong class="${t.type==='income'?'positive':'negative'}">${t.type==='income'?'+':'−'}${money(t.amount)}</strong><div class="m-record-actions"><button class="m-icon-btn danger" onclick="deleteAccountMovement('${t.id}')"><i class="fa-solid fa-trash"></i></button></div></div></article>`).join(""):`<div class="m-inline-empty">No hay movimientos manuales guardados.</div>`}</section>`;
+}
+function renderMobilePersonal(person) {
+  const stats=personalStats(person),assigned=personalAssigned(person),balance=assigned+stats.extraIncome-stats.spent-stats.saved;
+  const rows=(state.personalSpending||[]).filter(x=>x.person===person).sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  const labels={income:"Ingreso adicional",expense:"Gasto personal","other-expense":"Otro egreso",saving:"Ahorro personal",debt:"Abono a deuda"};
+  const recent=rows.slice(0,12);
+  return `<div class="m-profile-switch"><button class="${person==='me'?'active':''}" onclick="mobileSetScreen('personalMe')"><i class="fa-solid fa-user"></i> ${esc(state.people.me)}</button><button class="${person==='partner'?'active':''}" onclick="mobileSetScreen('personalPartner')"><i class="fa-solid fa-user-group"></i> ${esc(state.people.partner)}</button></div>
+  <section class="m-personal-hero"><span>Disponible real · ${esc(state.people[person])}</span><strong>${money(balance)}</strong><div class="m-personal-breakdown"><span>Asignado <b>${money(assigned)}</b></span><span>Ingresos extra <b>${money(stats.extraIncome)}</b></span><span>Gastos y pagos <b>${money(stats.spent)}</b></span><span>Ahorro personal <b>${money(stats.saved)}</b></span></div></section>
+  <div class="m-section-heading"><div><h3>Registrar movimiento</h3><p>Se mantiene separado del dinero del hogar.</p></div></div><section class="m-personal-actions"><button onclick="openPersonalMovement('${person}','income')"><i class="fa-solid fa-arrow-trend-up"></i><span>Ingreso extra</span></button><button onclick="openPersonalMovement('${person}','expense')"><i class="fa-solid fa-wallet"></i><span>Gasto</span></button><button onclick="openPersonalMovement('${person}','saving')"><i class="fa-solid fa-piggy-bank"></i><span>Ahorro</span></button><button onclick="managePersonalSavingBoxes('${person}')"><i class="fa-solid fa-boxes-stacked"></i><span>Cajas ahorro</span></button></section>
+  <div class="m-section-heading"><div><h3>Deudas que puedes abonar</h3><p>Obligaciones personales y del hogar</p></div></div>${(()=>{const ds=(state.debts||[]).filter(d=>d.status!=='paid'&&Number(d.balance)>0&&(d.owner===person||d.owner==='home'));return ds.length?`<section class="m-debt-list">${ds.map(d=>`<article class="m-debt-card mini"><div class="m-debt-card-top"><div class="m-debt-name"><b>${esc(d.name)}</b><small>${d.owner==='home'?'Hogar':esc(state.people[d.owner]||d.owner)}</small></div><strong>${money(d.balance)}</strong></div><button class="m-primary-btn full" onclick="payDebt('${d.id}','${person}')">Abonar</button></article>`).join("")}</section>`:`<div class="m-inline-empty">No hay deudas disponibles para este perfil.</div>`})()}
+  <div class="m-section-heading"><div><h3>Historial personal</h3><p>${rows.length} movimiento(s) registrados</p></div></div><section class="m-panel">${recent.length?`<div class="m-transaction-list">${recent.map(x=>{const type=personalMovementType(x),amount=Math.abs(Number(x.amount)||0),isSpent=personalTypeCountsAsSpent(type),sign=type==='income'?'+':isSpent?'−':'+';return `<article class="m-transaction"><div class="m-transaction-icon ${type==='income'?'income':type==='saving'?'saving':type==='debt'?'debt':'expense'}"><i class="fa-solid ${mobileIcon(type)}"></i></div><div class="m-transaction-info"><b>${esc(x.category||labels[type]||type)}</b><small>${esc(x.date||'Sin fecha')} · ${esc(x.desc||labels[type]||'Movimiento personal')}</small></div><div class="m-transaction-side"><strong class="${type==='income'?'positive':isSpent?'negative':'saving-text'}">${sign}${money(amount)}</strong>${x.debtId?'<span class="m-tiny-label">Vinculado</span>':`<div class="m-record-actions"><button class="m-icon-btn" onclick="editPersonalMovement('${x.id}')"><i class="fa-solid fa-pen"></i></button><button class="m-icon-btn danger" onclick="deleteRecord('personal','${x.id}')"><i class="fa-solid fa-trash"></i></button></div>`}</div></article>`}).join("")}</div>`:`<div class="m-inline-empty">No hay movimientos personales aún.</div>`}</section>`;
+}
+function renderMobileSettings() {
+  return `<section class="m-panel"><form class="m-settings-form" onsubmit="mobileSaveSettings(event)"><div class="m-section-heading inside"><div><h3>Perfiles del hogar</h3><p>Los nombres se reflejan en ingresos y reportes.</p></div></div><div class="field"><label>Tu perfil</label><input class="input" id="mSetMe" maxlength="60" value="${esc(state.people.me||"")}" required></div><div class="field"><label>Perfil de pareja</label><input class="input" id="mSetPartner" maxlength="60" value="${esc(state.people.partner||"")}" required></div><div class="field"><label>Meta mensual de ahorro (COP)</label><input class="input money-input" id="mSetTarget" inputmode="numeric" value="${state.savingTarget?fmtInput(state.savingTarget):""}" placeholder="Ej. 500.000" oninput="formatMoneyField(this)"></div><div class="field"><label>Nombre de usuario</label><input class="input" id="mSetUsername" value="${esc(authUser?.username||authUser?.name||"")}" maxlength="40" required></div><button class="m-primary-btn full" type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar configuración</button></form></section>
+  <section class="m-panel m-settings-tools"><div class="m-section-heading inside"><div><h3>Respaldo y mantenimiento</h3><p>Exporta o restaura tu información.</p></div></div><button class="m-menu-item" onclick="exportData()"><span class="m-menu-icon purple"><i class="fa-solid fa-file-arrow-down"></i></span><span><b>Exportar respaldo</b><small>Descarga tus datos en JSON</small></span><i class="fa-solid fa-chevron-right"></i></button><button class="m-menu-item" onclick="importData()"><span class="m-menu-icon blue"><i class="fa-solid fa-file-arrow-up"></i></span><span><b>Importar respaldo</b><small>Restaurar desde un archivo JSON</small></span><i class="fa-solid fa-chevron-right"></i></button><button class="m-menu-item" onclick="resetAll()"><span class="m-menu-icon orange"><i class="fa-solid fa-triangle-exclamation"></i></span><span><b>Borrar todos los datos</b><small>Acción irreversible tras confirmar</small></span><i class="fa-solid fa-chevron-right"></i></button></section>`;
+}
+function mobileSaveSettings(e) {
+  e.preventDefault();
+  const username=document.getElementById("mSetUsername").value.trim();
+  showLoader("Guardando configuración","Actualizando tu perfil y sincronizando datos…");
+  (async()=>{try{
+    const result=await apiRequest("updateUsername",{token:authToken,username});authUser=result.user;localStorage.setItem(AUTH_USER_KEY,JSON.stringify(authUser));
+    state.people.me=document.getElementById("mSetMe").value.trim()||"Mi perfil";state.people.partner=document.getElementById("mSetPartner").value.trim()||"Pareja";state.savingTarget=num(document.getElementById("mSetTarget").value);
+    await saveState();while(cloudSyncing) await new Promise(resolve=>setTimeout(resolve,80));updateSignedUserLabel();renderAll();renderExtendedModules();renderMobileUI();toast("Configuración guardada");
+  }catch(err){toast("No se pudo guardar: "+err.message)}finally{hideLoader()}})();
+}
+function mobileRefresh() {
+  if(typeof refreshDashboard==="function") refreshDashboard().then(()=>{renderMobileUI();}).catch(()=>renderMobileUI());
+  else renderMobileUI();
+}
+function mobileLogout() { logoutNexus(true); }
+function renderMobileUI() {
+  const root=document.getElementById("mobileApp"),content=document.getElementById("mContent");
+  if(!root||!content)return;
+  if(!authToken||!authUser){root.style.display="none";return;}
+  root.style.display="block";
+  const entry=MOBILE_TITLES[mobileScreen]||MOBILE_TITLES.home;
+  document.getElementById("mTitle").textContent=entry[0];document.getElementById("mSubtitle").textContent=entry[1];
+  document.getElementById("mAvatar").textContent=((authUser?.role==="partner"?state.people.partner:state.people.me)||authUser?.username||"N").slice(0,1).toUpperCase();
+  const navMap={home:"home",movements:"movements",savings:"savings",goals:"goals"};
+  document.querySelectorAll(".m-tab").forEach(btn=>{const key=btn.dataset.screen;btn.classList.toggle("active",key===(navMap[mobileScreen]||"more"));});
+  const renderers={home:renderMobileHome,movements:renderMobileMovements,savings:renderMobileSavings,goals:renderMobileGoals,more:renderMobileMore,debts:renderMobileDebts,calendar:renderMobileCalendar,reports:renderMobileReports,accounts:renderMobileAccounts,personalMe:()=>renderMobilePersonal("me"),personalPartner:()=>renderMobilePersonal("partner"),settings:renderMobileSettings};
+  content.innerHTML=(renderers[mobileScreen]||renderMobileHome)();
+  const sync=document.getElementById("mSync");if(sync){sync.className="m-sync-pill "+(cloudSyncing?"syncing":cloudReady?"synced":"offline");sync.innerHTML=`<i class="fa-solid ${cloudSyncing?'fa-rotate fa-spin':cloudReady?'fa-cloud-check':'fa-cloud'}"></i><span>${cloudSyncing?'Sincronizando':cloudReady?'En línea':'Sesión activa'}</span>`;}
+}
+function syncMobileVisibility() {
+  const auth=document.getElementById("authScreen"),root=document.getElementById("mobileApp");
+  if(auth&&auth.style.display==="none"&&authToken&&authUser){if(root)root.style.display="block";renderMobileUI();}
+  else if(root)root.style.display="none";
+}
+
+/* El HTML de escritorio se conserva oculto como motor de datos/formularios; la interfaz visible es móvil. */
+const nexusOriginalSaveState=saveState;
+saveState=function(){const result=nexusOriginalSaveState.apply(this,arguments);if(typeof renderMobileUI==="function")Promise.resolve().then(renderMobileUI);return result;};
+const nexusOriginalSubmitAuth=submitAuth;
+submitAuth=async function(event){await nexusOriginalSubmitAuth(event);syncMobileVisibility();};
+const nexusOriginalBootstrapAuth=bootstrapAuth;
+bootstrapAuth=async function(){await nexusOriginalBootstrapAuth();syncMobileVisibility();};
+const nexusOriginalLogout=logoutNexus;
+logoutNexus=async function(){await nexusOriginalLogout.apply(this,arguments);syncMobileVisibility();};
+const nexusOriginalToast=toast;
+toast=function(){const result=nexusOriginalToast.apply(this,arguments);if(typeof renderMobileUI==="function")Promise.resolve().then(()=>{const root=document.getElementById("mobileApp");if(root&&root.style.display!=="none")renderMobileUI();});return result;};
+
+/* Si ya existe una sesión guardada, se restaura usando la misma API de Nexus. */
+setTimeout(()=>bootstrapAuth(),0);
+</script>
+
 </body>
 </html>
