@@ -443,205 +443,7 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
  .main{max-width:760px!important;margin:0 auto!important;padding-left:22px!important;padding-right:22px!important}.topbar{padding-top:24px}.kpis{grid-template-columns:repeat(3,minmax(0,1fr))!important}.kpi.available{grid-column:1/-1}.mobile-quick-grid button{min-height:95px}.donut-layout{grid-template-columns:125px minmax(0,1fr)}.donut{width:125px}.people{grid-template-columns:repeat(2,minmax(0,1fr))}.goals-grid,.future-grid,.savings-grid,.mini-account-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
 
-
-/* Nexus mobile UX v3 — native-feeling touch, readable content and real connection state */
-.mobile-live-dot{display:inline-block;flex:0 0 8px;width:8px;height:8px;border-radius:50%;background:#8b8498;box-shadow:0 0 0 4px rgba(139,132,152,.12);transition:background .2s,box-shadow .2s}
-.mobile-live-dot.synced{background:#34d399;box-shadow:0 0 0 4px rgba(52,211,153,.12)}
-.mobile-live-dot.syncing{background:#fbbf24;box-shadow:0 0 0 4px rgba(251,191,36,.13);animation:nexus-pulse 1.4s ease-in-out infinite}
-.mobile-live-dot.offline{background:#fb7185;box-shadow:0 0 0 4px rgba(251,113,133,.13);animation:none}
-@keyframes nexus-pulse{50%{box-shadow:0 0 0 7px rgba(251,191,36,0)}}
-@media(max-width:800px){
- html{height:auto!important;min-height:100%;overflow-x:hidden!important;overflow-y:auto!important;touch-action:pan-y;scrollbar-gutter:auto}
- body{height:auto!important;min-height:100%;overflow-x:hidden!important;overflow-y:auto!important;touch-action:pan-y;overscroll-behavior-y:auto!important;-webkit-overflow-scrolling:touch}
- body.drawer-open,body.modal-open{overflow:hidden!important;touch-action:auto}
- body.drawer-open .sidebar,body.drawer-open .mobile-drawer-backdrop{touch-action:pan-y}
- .app{display:block!important;position:relative;min-height:100dvh;height:auto!important;overflow:visible!important}
- .main{display:block!important;position:relative;height:auto!important;min-height:100dvh;overflow:visible!important;touch-action:pan-y}
- .module-section{overflow:visible!important;touch-action:pan-y}
- .mobile-appbar{min-height:60px;padding-top:calc(7px + env(safe-area-inset-top));padding-bottom:8px}
- .mobile-brand-mark{border-radius:13px;background:linear-gradient(145deg,#a78bfa,#6d43b6);box-shadow:0 5px 16px #8b5cf62b}
- .mobile-brand-copy small{display:none}
- .mobile-appbar-actions{gap:10px}
- .mobile-icon-button,.mobile-avatar{width:42px;height:42px;min-width:42px;min-height:42px;border-radius:14px;font-size:15px}
- .topbar{gap:5px;padding-top:18px;margin-bottom:12px}
- .title h1{font-size:24px;line-height:1.15;letter-spacing:-.04em;margin-bottom:4px}
- .title p{font-size:11px;line-height:1.4;color:#9e95ad;max-width:100%}
- .filterbar{padding:10px;border-radius:16px;gap:8px;margin-bottom:12px}
- .filterbar .field label{font-size:9px}
- .filterbar .select{min-height:44px;font-size:13px}
- .filterbar .btn{min-height:44px;font-size:11px}
- .mobile-quick-actions{padding:12px;margin-bottom:13px;border-radius:19px;background:linear-gradient(150deg,#191523,#111019);border-color:#30263f}
- .mobile-quick-heading{margin-bottom:10px}
- .mobile-quick-heading span{display:none}
- .mobile-quick-heading strong{font-size:14px}
- .mobile-quick-grid{gap:8px}
- .mobile-quick-grid button{min-height:96px;min-height:clamp(88px,24vw,104px);padding:10px 5px;border-radius:16px;gap:8px;box-shadow:inset 0 1px rgba(255,255,255,.025);touch-action:manipulation}
- .mobile-quick-grid button b{font-size:10px;line-height:1.25;overflow-wrap:anywhere}
- .quick-icon{width:39px;height:39px;border-radius:14px;font-size:15px}
- .kpis{gap:8px;margin-bottom:12px}
- .kpi{min-height:105px;padding:12px;border-radius:17px;background:linear-gradient(150deg,#191522,#111019);border-color:#2d263a;box-shadow:0 6px 16px #0002}
- .kpi .label{font-size:9px;letter-spacing:.035em;line-height:1.35;overflow-wrap:anywhere}
- .kpi .value{font-size:clamp(16px,4.6vw,22px);line-height:1.15;letter-spacing:-.04em;margin-top:12px;overflow-wrap:anywhere}
- .kpi .sub{font-size:9px;line-height:1.35;overflow-wrap:anywhere}
- .kpi.available{min-height:124px;background:radial-gradient(circle at 100% 0,#382751 0,transparent 52%),linear-gradient(145deg,#21192f,#15111f);border-color:#514064}
- .kpi.available .value{font-size:clamp(25px,7.4vw,33px);margin-top:13px}
- .section-grid,.comparison-grid,.dashboard-mini-grid,.module-grid{gap:10px;margin-bottom:10px}
- .card{padding:14px;border-radius:18px;background:linear-gradient(150deg,#191622,#121019);border-color:#2d2639;box-shadow:0 7px 18px #0002}
- .card-head{margin-bottom:11px;gap:8px;align-items:center}
- .card-head h2{font-size:13px;line-height:1.35;letter-spacing:-.01em;overflow-wrap:anywhere}
- .card-head span{display:none}
- .card-head .btn,.card-head .mini-btn{flex-shrink:0;min-height:40px;padding:9px 11px;border-radius:12px;font-size:10px}
- .card-head .btn i{margin-right:2px}
- .btn,.mini-btn{min-height:42px;border-radius:13px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
- .btn.primary{background:linear-gradient(135deg,#8053dc,#9a75f4);box-shadow:0 5px 14px #8b5cf625}
- .btn:active,.mini-btn:active,.mobile-icon-button:active,.mobile-avatar:active{transform:scale(.97);filter:brightness(1.12)}
- .input,.select,.textarea{min-height:46px;font-size:16px}
- .donut-layout{grid-template-columns:102px minmax(0,1fr);gap:10px}
- .donut{width:102px;max-width:100%}
- .donut-center{font-size:10px}
- .people{gap:7px}
- .person{padding:10px;border-radius:13px}
- .person .amount{font-size:14px;line-height:1.2;overflow-wrap:anywhere}
- .person .mini-btn{min-height:36px}
- .list-row,.mini-list-item{gap:8px;overflow-wrap:anywhere;line-height:1.4}
- .list-row strong,.mini-list-item strong{overflow-wrap:anywhere;text-align:right}
- .saving-card,.goal,.account-card,.upcoming-item,.debt-preview{border-radius:15px}
- .upcoming-item{grid-template-columns:44px minmax(0,1fr) auto;gap:8px;padding:9px}
- .upcoming-date{min-height:48px}
- .upcoming-date strong{font-size:17px}
- .upcoming-badge{white-space:normal;text-align:center;max-width:82px;line-height:1.2}
- .module-section>.card,.module-section .card{margin-bottom:10px}
- .module-section .card-head{gap:8px}
- .module-section .card-head .btn{white-space:normal;max-width:46%;overflow-wrap:anywhere}
- .actions{gap:7px}
- .actions .btn{flex:1 1 110px;min-height:42px}
- .form-actions .btn{min-height:46px}
- .month-list{gap:3px}
- .calendar-day{min-height:48px;overflow:hidden;overflow-wrap:anywhere}
- .report-metric small,.report-metric em{line-height:1.4;overflow-wrap:anywhere}
- .table-wrap{-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y}
- .modal{touch-action:pan-y}
- .modal-box{touch-action:pan-y;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
- .mobile-drawer-backdrop{touch-action:pan-y}
- .sidebar{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}
-}
-@media(max-width:380px){
- :root{--mobile-gutter:11px}
- .mobile-brand-copy strong{font-size:15px}
- .mobile-appbar-actions{gap:7px}
- .mobile-icon-button,.mobile-avatar{width:39px;height:39px;min-width:39px;min-height:39px}
- .mobile-quick-grid{gap:5px}
- .mobile-quick-grid button{padding:8px 3px;min-height:88px}
- .mobile-quick-grid button b{font-size:9px}
- .quick-icon{width:35px;height:35px;flex-basis:35px}
- .kpi{padding:10px}
- .kpi .value{font-size:clamp(14px,4.3vw,18px)}
- .kpi.available .value{font-size:25px}
- .donut-layout{grid-template-columns:88px minmax(0,1fr);gap:8px}
- .donut{width:88px}
-}
-
 </style>
-
-<style id="nexus-mobile-art-direction-2026">
-/* NEXUS / MOBILE ART DIRECTION — redesigned surfaces, concise hierarchy, tactile controls */
-@media(max-width:800px){
- :root{--mobile-gutter:16px;--n-ink:#0b0911;--n-panel:#15121d;--n-panel-hi:#1c1728;--n-stroke:#30263f;--n-lilac:#c4b5fd;--n-green:#6ee7b7;--n-coral:#fda4af}
- html,body{height:auto!important;min-height:100%!important;overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior-y:auto!important;touch-action:auto!important;-webkit-overflow-scrolling:touch!important;scrollbar-gutter:auto!important}
- body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px;line-height:1.42;background:var(--n-ink)!important;background-image:radial-gradient(ellipse at 85% -10%,#2b1b45 0,transparent 36%),linear-gradient(180deg,#0b0911 0%,#0c0a12 60%,#0a0810 100%)!important;color:#f7f3ff}
- .app,.main,#dashboard,.module-section{height:auto!important;min-height:0;overflow:visible!important;touch-action:auto!important;contain:none!important}
- .app{display:block!important;position:relative!important;overflow:visible!important;min-height:100dvh!important}
- .main{display:block!important;position:relative!important;width:100%!important;max-width:100%!important;margin:0!important;padding:0 var(--mobile-gutter) calc(44px + env(safe-area-inset-bottom))!important}
- body.drawer-open{overflow:hidden!important;touch-action:auto!important}body.modal-open{overflow:hidden!important;touch-action:auto!important}
- .mobile-appbar{position:sticky;top:0;z-index:80;display:flex;align-items:center;min-height:64px;margin:0 calc(-1 * var(--mobile-gutter)) 0;padding:calc(9px + env(safe-area-inset-top)) var(--mobile-gutter) 10px;background:rgba(11,9,17,.88);border:0;border-bottom:1px solid #ffffff0b;box-shadow:0 8px 28px #0002;backdrop-filter:blur(24px) saturate(1.25);-webkit-backdrop-filter:blur(24px) saturate(1.25)}
- .mobile-brand-button{gap:10px;min-width:0}.mobile-brand-mark{width:42px;height:42px;flex:0 0 42px;border-radius:15px;background:linear-gradient(145deg,#b8a1ff 0%,#8b5cf6 52%,#6440a6 100%);box-shadow:0 7px 20px #8b5cf632,inset 0 1px #ffffff45;color:#fff;font-size:17px}
- .mobile-brand-copy{gap:0}.mobile-brand-copy strong{font-size:18px;font-weight:850;letter-spacing:-.055em;line-height:1.05}.mobile-brand-copy small{display:block!important;margin-top:4px;font-size:7px;letter-spacing:.16em;color:#a99bbd;font-weight:800}
- .mobile-appbar-actions{gap:8px}.mobile-icon-button,.mobile-avatar{width:42px;height:42px;min-width:42px;min-height:42px;border-radius:15px;background:#17131f;border:1px solid #342a43;color:#e9e0f8;font-size:14px;box-shadow:inset 0 1px #ffffff08;transition:transform .15s,background .15s,border-color .15s}
- .mobile-avatar{background:#261d35;border-color:#46345f;color:#d7c8ff}.mobile-icon-button:active,.mobile-avatar:active{transform:scale(.94);background:#302440}
- .mobile-live-dot{width:9px;height:9px;flex-basis:9px;margin:0 2px;background:#777080;box-shadow:0 0 0 4px #77708016}.mobile-live-dot.synced{background:#34d399;box-shadow:0 0 0 4px #34d39919}.mobile-live-dot.syncing{background:#fbbf24;box-shadow:0 0 0 4px #fbbf2419}.mobile-live-dot.offline{background:#fb7185;box-shadow:0 0 0 4px #fb718519}
- .topbar{display:flex;flex-direction:row;align-items:center;gap:8px;margin:0 -2px 14px;padding:21px 2px 4px;border:0;min-width:0}
- .topbar .title{flex:1;min-width:0}.title h1{font-size:clamp(23px,6.5vw,29px);font-weight:800;letter-spacing:-.06em;line-height:1.08;margin:0!important;overflow-wrap:anywhere}.title p{display:none!important}
- .topbar .actions{max-width:none;width:auto;flex:0 0 auto;display:flex;align-items:center;gap:6px}.topbar .actions .sync-status{display:none!important}.topbar .actions .account-strip,.topbar .actions .mobile-menu,.topbar .actions>button:not(.ghost){display:none!important}.topbar .actions .btn.ghost{display:none!important}
- /* Period control becomes a compact filter chip panel. */
- #dashboardModule{display:flex!important;flex-direction:column;gap:0;min-width:0;overflow:visible!important}
- #dashboardModule>.filterbar{order:0;display:grid;grid-template-columns:minmax(64px,.7fr) minmax(0,1.3fr) 42px;align-items:end;gap:8px;margin:0 0 13px;padding:10px;border:1px solid #2b2337;border-radius:17px;background:#13101b;box-shadow:inset 0 1px #ffffff04}
- .filterbar .field{min-width:0}.filterbar .field label{font-size:8px;text-transform:uppercase;letter-spacing:.11em;color:#9c90b1;font-weight:800;margin:0 0 5px 2px}.filterbar .select{height:42px;min-height:42px;width:100%;min-width:0;padding:0 10px;border-radius:12px;border:1px solid #342a45;background:#211a2d;color:#f5efff;font-size:12px;font-weight:650}
- .filterbar .btn{grid-column:auto;justify-self:stretch;min-width:42px;min-height:42px;padding:8px 9px;font-size:10px;border-radius:12px;white-space:normal}.filterbar #periodLabel{display:none!important}
- /* Balance card: hero treatment; supporting figures are compact, colorful tiles. */
- .kpis{order:1;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px;margin:0 0 13px;min-width:0}
- .kpi{position:relative;display:flex;flex-direction:column;justify-content:space-between;min-width:0;min-height:112px;padding:14px;border-radius:19px;background:linear-gradient(145deg,#1a1624,#13101a 85%);border:1px solid #30263d;box-shadow:0 8px 20px #0002,inset 0 1px #ffffff07;overflow:hidden}
- .kpi .label{font-size:9px;font-weight:850;letter-spacing:.09em;line-height:1.3;color:#b7abc8;overflow-wrap:anywhere}.kpi .value{font-size:clamp(16px,4.6vw,22px);font-weight:850;letter-spacing:-.055em;line-height:1.12;margin-top:12px;max-width:100%;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;word-break:normal}.kpi .sub{font-size:9px;line-height:1.3;color:#978ba8;margin-top:7px;overflow-wrap:anywhere}
- .kpi.available{grid-column:1/-1;order:-1;min-height:164px;padding:20px 19px;border-radius:24px;border-color:#594477;background:radial-gradient(ellipse at 100% 0,rgba(179,146,255,.24),transparent 45%),linear-gradient(125deg,#332348 0%,#21182f 55%,#17121f 100%);box-shadow:0 14px 34px #0003,inset 0 1px #ffffff13}
- .kpi.available .label{display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:.13em;color:#d7c8f1}.kpi.available .label:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#a78bfa;box-shadow:0 0 0 4px #a78bfa20}
- .kpi.available .value{font-size:clamp(30px,8.5vw,39px);line-height:1.02;letter-spacing:-.065em;margin-top:17px;color:#fff;text-shadow:0 2px 20px #0002}.kpi.available .sub{max-width:75%;font-size:10px;line-height:1.4;color:#c7b8dc;margin-top:10px}.kpi.available:after{content:"";position:absolute;right:-30px;bottom:-65px;width:174px;height:174px;border:1px solid #c4b5fd28;border-radius:50%;box-shadow:0 0 0 16px #c4b5fd0a,0 0 0 35px #c4b5fd07,0 0 0 55px #c4b5fd04;pointer-events:none}
- .kpi.income{background:linear-gradient(145deg,#17342d,#14121b 82%);border-color:#29493d}.kpi.income .label:before{content:"↙";display:inline-grid;place-items:center;width:19px;height:19px;margin-right:6px;border-radius:7px;background:#1b4738;color:#7ee7b8;font-size:12px}
- .kpi.expense{background:linear-gradient(145deg,#3b202c,#17111b 85%);border-color:#52303d}.kpi.expense .label:before{content:"↗";display:inline-grid;place-items:center;width:19px;height:19px;margin-right:6px;border-radius:7px;background:#512737;color:#ffb1bd;font-size:12px}
- .kpi.saving{grid-column:1/-1;min-height:75px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:4px 12px;padding:13px 15px;background:linear-gradient(115deg,#2a203a,#17121f 85%);border-color:#433351}.kpi.saving .label{grid-column:1;grid-row:1}.kpi.saving .value{grid-column:2;grid-row:1;margin:0;text-align:right;font-size:clamp(17px,4.6vw,22px)}.kpi.saving .sub{grid-column:1/-1;grid-row:2;margin:0;font-size:9px}
- /* New movement shortcuts: three icon-first touch targets, not rows of text. */
- .mobile-quick-actions{order:2;margin:0 0 17px;padding:15px;border:1px solid #2d243a;border-radius:22px;background:linear-gradient(145deg,#171320,#110e17);box-shadow:0 10px 25px #0002}
- .mobile-quick-heading{margin:0 1px 12px;align-items:center}.mobile-quick-heading>div{display:flex;align-items:center;gap:8px;min-width:0}.mobile-quick-heading span{display:none}.mobile-quick-heading strong{font-size:14px;font-weight:800;letter-spacing:-.025em}.mobile-quick-heading>i{width:31px;height:31px;display:grid;place-items:center;padding:0;border:1px solid #3a2b4d;border-radius:11px;background:#261c35;color:#c9b7ff;font-size:12px}
- .mobile-quick-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.mobile-quick-grid button{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:10px;min-width:0;min-height:105px;padding:11px 10px 10px;border:1px solid #342a43;border-radius:17px;background:linear-gradient(160deg,#211a2c,#191421);box-shadow:inset 0 1px #ffffff08;white-space:normal;text-align:left;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:transform .14s,border-color .14s,background .14s}
- .mobile-quick-grid button:active{transform:scale(.965);border-color:#8061aa;background:#2a2039}.mobile-quick-grid button>span:nth-child(2){display:block;flex:0 0 auto;width:100%;min-width:0}.mobile-quick-grid button b{font-size:11px;line-height:1.2;font-weight:800;overflow-wrap:anywhere}.mobile-quick-grid button small{display:none}.mobile-quick-grid button>i{display:none}
- .quick-icon{width:39px;height:39px;flex:0 0 39px;border-radius:14px;font-size:15px;box-shadow:inset 0 1px #ffffff12}.quick-income{background:linear-gradient(145deg,#224e3e,#193629);color:#82f0bd}.quick-expense{background:linear-gradient(145deg,#592b3b,#3b202c);color:#ffb0bd}.quick-saving{background:linear-gradient(145deg,#49315f,#2d2140);color:#d4c0ff}
- /* All content panels share one restrained component language. */
- #dashboardModule>.section-grid{order:3;display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:11px;margin:0 0 12px}#dashboardModule>.secondary-grid{order:4;display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:11px;margin:0 0 12px}#dashboardModule>.dashboard-mini-grid{order:5;display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:11px;margin:0 0 12px}#dashboardModule>.comparison-grid{order:6;display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:11px;margin:0 0 12px}#dashboardModule>#goals{order:7;margin:0 0 13px}
- .card,.module-section>.card{min-width:0;max-width:100%;padding:16px;border:1px solid #2b2438;border-radius:21px;background:linear-gradient(145deg,#191521,#121019 80%);box-shadow:0 9px 24px #0002,inset 0 1px #ffffff04}
- .card-head{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-bottom:13px;min-width:0}.card-head>div{min-width:0}.card-head h2,.module-section .card-head h2{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;letter-spacing:-.02em;line-height:1.3;overflow-wrap:anywhere}.card-head h2>i{display:inline-grid;place-items:center;flex:0 0 29px;width:29px;height:29px;margin:0!important;border-radius:10px;background:#2a2038;color:#c8b4ff;font-size:12px}.card-head span{display:none!important}.card-head .btn,.card-head .mini-btn{flex:0 0 auto;max-width:45%;min-height:38px;padding:8px 10px;border-radius:12px;font-size:10px;line-height:1.2}
- .card-head .btn i,.card-head .mini-btn i{margin-right:3px}.section-grid,.comparison-grid,.dashboard-mini-grid,.module-grid{gap:11px;margin-bottom:12px}
- .donut-layout{grid-template-columns:106px minmax(0,1fr);gap:12px;align-items:center}.donut{width:106px;max-width:100%;aspect-ratio:1}.donut-center{font-size:10px;line-height:1.2}.donut-center small{font-size:8px}.people{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.person{min-width:0;padding:10px;border-radius:14px;background:#201a2b;border:1px solid #342a43}.person .name{font-size:10px;line-height:1.3;overflow-wrap:anywhere}.person .amount{font-size:clamp(12px,3.8vw,16px);letter-spacing:-.04em;line-height:1.2;overflow-wrap:anywhere}.person .mini-btn{width:100%;min-height:35px;padding:7px 5px;font-size:9px}
- .list-row,.mini-list-item{gap:8px;padding:10px 0;font-size:11px;line-height:1.35}.list-row strong,.mini-list-item strong{font-size:11px;overflow-wrap:anywhere;text-align:right}.list-row .small,.mini-list-item .muted{font-size:9px;line-height:1.3}
- .btn,.mini-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:0;min-height:43px;padding:10px 12px;border-radius:14px;font-size:11px;font-weight:750;line-height:1.2;white-space:normal;overflow-wrap:anywhere;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:transform .13s,filter .13s,background .13s,border-color .13s}
- .btn.primary{background:linear-gradient(135deg,#9063ef,#7143c2);border:1px solid #a17af1;color:#fff;box-shadow:0 5px 15px #794acb2c,inset 0 1px #ffffff25}.btn:not(.primary):not(.danger){background:#211a2d;border-color:#3a2d4b;color:#e9e0f8}.btn.danger{background:#351d29;border-color:#57303f;color:#ffb2c0}.mini-btn{min-height:37px;padding:8px 10px;border:1px solid #3a2d4b;background:#211a2d;color:#e6dcf5;border-radius:12px;font-size:10px}
- .btn:active,.mini-btn:active{transform:scale(.965);filter:brightness(1.15)}.btn:focus-visible,.mini-btn:focus-visible,.mobile-icon-button:focus-visible,.mobile-avatar:focus-visible{outline:2px solid #c4b5fd;outline-offset:2px}
- .input,.select,.textarea{width:100%;min-width:0;max-width:100%;min-height:47px;padding:12px;border:1px solid #382d49;border-radius:14px;background:#171320;color:#f7f3ff;font-size:16px;line-height:1.3}.input:focus,.select:focus,.textarea:focus{outline:2px solid #8b5cf6;outline-offset:1px;border-color:#a78bfa}.field label{font-size:11px;font-weight:700;line-height:1.35;color:#c9bfd8;overflow-wrap:anywhere}
- .module-section{padding:0 0 15px;margin:0;min-width:0}.module-section>.card{margin-bottom:11px}.module-section .card-head{align-items:center;flex-wrap:nowrap}.module-section .card-head .btn{max-width:48%;font-size:10px}.module-section .actions{gap:8px}.module-section .actions .btn{flex:1 1 125px}
- .goals-grid,.future-grid,.savings-grid,.mini-account-grid{grid-template-columns:minmax(0,1fr)!important;gap:9px}.goal,.saving-card,.account-card,.upcoming-item,.debt-preview{border-radius:16px;overflow-wrap:anywhere}.goal .goal-actions{gap:7px}.goal .goal-actions .mini-btn{flex:1 1 95px}
- .evolution-grid{grid-template-columns:minmax(0,1fr)!important;gap:9px}.evolution-panel{padding:12px;border-radius:16px;background:#171320;border-color:#2e263d}.evolution-title{font-size:11px}.evolution-panel .modern-chart{height:158px}.chart-tip{font-size:9px;line-height:1.4}
- .form-grid,.form-row{grid-template-columns:minmax(0,1fr)!important;gap:12px}.form-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.form-actions .btn{min-height:46px}.table-wrap{width:100%;max-width:100%;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y}.data-table{min-width:560px}.record,.account-card,.goal,.saving-card{min-width:0;overflow-wrap:anywhere}.record-actions{display:flex;flex-wrap:wrap;gap:6px}
- .report-row{grid-template-columns:minmax(0,1fr);gap:9px}.report-balance{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px}.report-balance .report-callout{grid-column:1/-1;justify-self:start}.report-metric small,.report-metric em{white-space:normal;overflow-wrap:anywhere;line-height:1.4}
- .calendar-day{min-height:48px;overflow:hidden;overflow-wrap:anywhere}.month-list{gap:3px}.calendar-task{font-size:8px;line-height:1.2}.upcoming-item{grid-template-columns:44px minmax(0,1fr) auto;gap:8px;padding:9px}.upcoming-name,.upcoming-item .upcoming-name{font-size:11px;overflow-wrap:anywhere}.upcoming-meta,.upcoming-item .upcoming-meta{font-size:9px;line-height:1.35;overflow-wrap:anywhere}.upcoming-badge{font-size:8px;white-space:normal;max-width:80px;line-height:1.2}
- .personal-summary,.personal-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px}.personal-summary .summary-box{padding:11px;border-radius:14px;background:#1b1626}.personal-summary small{font-size:9px;line-height:1.3}.personal-summary strong{font-size:13px;line-height:1.25;overflow-wrap:anywhere}.personal-finance-blocks{grid-template-columns:minmax(0,1fr)!important;gap:10px}.personal-saving-boxes{grid-template-columns:minmax(0,1fr)!important}
- .modal{align-items:flex-end;padding:8px 8px env(safe-area-inset-bottom);touch-action:auto!important}.modal-box{width:100%;max-width:100%;max-height:88dvh;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;padding:17px;border-radius:24px 24px 12px 12px;background:#171320;border:1px solid #3a2c4c}.modal-head{position:sticky;top:-17px;z-index:3;margin:-17px -17px 15px;padding:17px;background:rgba(23,19,32,.96);backdrop-filter:blur(18px);border-bottom:1px solid #ffffff0a}
- .sidebar{z-index:120;position:fixed;top:0;bottom:0;left:0;width:min(326px,88vw);max-width:88vw;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;transform:translateX(-105%);visibility:hidden;padding:calc(18px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom));background:linear-gradient(180deg,#1a1425,#100d17 72%);border-right:1px solid #3a2d4c;box-shadow:20px 0 70px #0008}.sidebar.open{transform:translateX(0);visibility:visible}.mobile-drawer-backdrop{position:fixed;inset:0;z-index:110;display:block;opacity:0;visibility:hidden;pointer-events:none;background:#05030ab8;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:opacity .2s,visibility .2s;touch-action:auto}.mobile-drawer-backdrop[style*="display: none"]{display:none!important}body.drawer-open .mobile-drawer-backdrop{opacity:1;visibility:visible;pointer-events:auto}
- .mobile-drawer-intro{margin:12px 0 18px;padding:15px;border-radius:17px;background:radial-gradient(circle at 100% 0,#49306470,transparent 58%),#1a1425;border-color:#413052}.mobile-drawer-intro strong{font-size:19px}.mobile-drawer-intro small{display:none}.nav{display:grid;gap:5px}.nav button{display:flex;align-items:center;gap:10px;min-height:49px;padding:11px 12px;border:1px solid transparent;border-radius:14px;font-size:12px;line-height:1.25}.nav button i{flex:0 0 23px;width:23px;text-align:center;font-size:14px}.nav button.active{background:linear-gradient(100deg,#342445,#21192e);border-color:#4b385e;color:#fff}.nav button.active i{color:#d0bcff}
- .mobile-drawer-footer{display:grid;gap:12px;margin-top:18px;padding:14px 2px 0;border-top:1px solid #ffffff12}.mobile-drawer-footer>span{display:flex;align-items:center;gap:8px;color:#9c90b0;font-size:10px;overflow-wrap:anywhere}.mobile-drawer-footer>span i{color:#8f75c5}.mobile-drawer-footer .btn{width:100%;justify-content:center;min-height:44px;background:#251b2a;border-color:#49303d;color:#ffb6c3}
- .toast{left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));max-width:none;border-radius:16px}.empty{font-size:11px;line-height:1.5;padding:16px;border-radius:14px}
-}
-@media(max-width:390px){
- :root{--mobile-gutter:12px}.mobile-brand-copy small{font-size:6px}.mobile-appbar-actions{gap:6px}.mobile-icon-button,.mobile-avatar{width:39px;height:39px;min-width:39px;min-height:39px}.topbar{padding-top:18px}.title h1{font-size:23px}.kpi{min-height:105px;padding:12px}.kpi.available{min-height:151px;padding:18px 16px}.kpi.available .value{font-size:clamp(27px,8vw,34px)}.kpi.saving{min-height:70px}.mobile-quick-actions{padding:12px}.mobile-quick-grid{gap:6px}.mobile-quick-grid button{min-height:96px;padding:9px 8px;border-radius:15px}.mobile-quick-grid button b{font-size:10px}.quick-icon{width:35px;height:35px;flex-basis:35px}.card,.module-section>.card{padding:13px;border-radius:18px}.card-head h2{font-size:12px}.card-head h2>i{width:27px;height:27px;flex-basis:27px}.donut-layout{grid-template-columns:90px minmax(0,1fr);gap:9px}.donut{width:90px}.person{padding:8px}.person .amount{font-size:12px}.person .mini-btn{font-size:8px;padding:7px 3px}.upcoming-item{grid-template-columns:40px minmax(0,1fr)}.upcoming-badge{grid-column:2;justify-self:start}.report-filter{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-@media(min-width:540px) and (max-width:800px){.main{max-width:760px!important;margin:0 auto!important;padding-left:22px!important;padding-right:22px!important}.kpis{grid-template-columns:repeat(3,minmax(0,1fr))!important}.kpi.available,.kpi.saving{grid-column:1/-1}.mobile-quick-grid button{min-height:100px}.section-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.donut-layout{grid-template-columns:110px minmax(0,1fr)}.donut{width:110px}.people{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(prefers-reduced-motion:reduce){.mobile-quick-grid button,.btn,.mini-btn,.mobile-icon-button,.mobile-avatar{transition:none!important}}
-</style>
-
-
-<style id="nexus-mobile-layout-refinement">
-@media(max-width:800px){
- /* The app bar belongs to the page flow: it scrolls away naturally instead of trapping the viewport. */
- .mobile-appbar{position:relative!important;top:auto!important;z-index:5!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:#100d17!important;box-shadow:0 5px 18px #0002!important}
- /* Household expenses become a vertical story: chart first, then readable category progress. */
- .card:has(#expenseDonut) .donut-layout{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:14px!important}
- .card:has(#expenseDonut) #expenseDonut{width:clamp(126px,38vw,158px)!important;max-width:100%;align-self:center;margin:2px auto 0;box-shadow:0 0 0 9px #ffffff04,0 12px 30px #0004;cursor:pointer}
- .card:has(#expenseDonut) #expenseDonut .donut-center{font-size:12px!important;font-weight:850!important}
- .card:has(#expenseDonut) #expenseDonut .donut-center small{font-size:9px!important;margin-top:4px}
- .card:has(#expenseDonut) #expenseList{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:2px!important;width:100%;min-width:0}
- .home-category-row{padding:11px 0 10px;border-bottom:1px solid #ffffff0b;min-width:0}
- .home-category-row:last-child{border-bottom:0}
- .home-category-top{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0}
- .home-category-name{display:block;min-width:0;overflow-wrap:anywhere}
- .home-category-name .identity-tag,.home-category-name .category-tag{max-width:100%;white-space:normal}
- .home-category-top>strong{font-size:12px;font-weight:800;letter-spacing:-.02em;color:#f7f2ff;white-space:nowrap}
- .home-category-track{height:6px;margin:8px 0 5px;border-radius:99px;background:#292332;overflow:hidden}
- .home-category-track i{display:block;height:100%;border-radius:99px;background:var(--cat-color,#a78bfa);box-shadow:0 0 12px color-mix(in srgb,var(--cat-color,#a78bfa) 28%,transparent);min-width:0;transition:width .35s ease}
- .home-category-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#978ba8;font-size:9px;line-height:1.3}
- .home-category-bottom .category-btn{display:inline-grid;place-items:center;flex:0 0 29px;width:29px;height:29px;min-height:29px;border:1px solid #413253;border-radius:10px;background:#241b31;color:#d8c5ff;font-size:10px}
- .home-category-bottom .category-btn:active{transform:scale(.93);background:#38264a}
- .card:has(#expenseDonut) .card-head{margin-bottom:15px}
-}
-@media(max-width:390px){.card:has(#expenseDonut) .donut-layout{gap:11px!important}.home-category-row{padding:10px 0 9px}.home-category-top>strong{font-size:11px}}
-@media(prefers-reduced-motion:reduce){.home-category-track i{transition:none!important}}
-</style>
-
 </head>
 <body>
 <div class="app">
@@ -661,7 +463,6 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
     <button data-route="reports" onclick="showModule('reports')"><i class="fa-solid fa-chart-column"></i>Reportes</button>
     <button data-route="settings" onclick="showModule('settings')"><i class="fa-solid fa-gear"></i>Configuración</button>
   </nav>
-  <div class="mobile-drawer-footer"><span><i class="fa-solid fa-shield-halved"></i> <b id="drawerUserName">Sesión segura</b></span><button class="btn" onclick="logoutNexus()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</button></div>
 </aside>
 
 <main class="main" id="dashboard">
@@ -671,7 +472,7 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
     <span class="mobile-brand-copy"><strong>Nexus</strong><small>FINANZAS DEL HOGAR</small></span>
   </button>
   <div class="mobile-appbar-actions">
-    <span class="mobile-live-dot syncing" id="mobileConnectionDot" role="status" aria-label="Verificando conexión" title="Verificando conexión"></span>
+    <span class="mobile-live-dot" title="Aplicación activa"></span>
     <button class="mobile-icon-button" onclick="refreshDashboard()" aria-label="Actualizar"><i class="fa-solid fa-rotate"></i></button>
     <button class="mobile-avatar" onclick="showModule('settings')" aria-label="Abrir configuración"><i class="fa-solid fa-user"></i></button>
   </div>
@@ -688,7 +489,7 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 <div class="filterbar">
   <div class="field"><label>Año</label><select class="select" id="filterYear" onchange="renderAll()"></select></div>
   <div class="field"><label>Periodo</label><select class="select" id="filterMonth" onchange="renderAll()"><option value="all">Año completo</option><option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option><option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option><option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option></select></div>
-  <button class="btn ghost" onclick="setCurrentPeriod()" aria-label="Ir al periodo actual" title="Periodo actual"><i class="fa-solid fa-calendar-day"></i></button>
+  <button class="btn ghost" onclick="setCurrentPeriod()">Periodo actual</button>
   <span class="small" id="periodLabel"></span>
 </div>
 
@@ -700,11 +501,11 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
  <div class="card kpi available"><div class="label">DISPONIBLE</div><div class="value" id="kpiAvailable">$0</div><div class="sub">Después de hogar y ahorros</div></div>
 </section>
 <section class="mobile-quick-actions" aria-label="Acciones rápidas">
-  <div class="mobile-quick-heading"><div><span>ACCESOS DIRECTOS</span><strong>Nuevo movimiento</strong></div><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+  <div class="mobile-quick-heading"><div><span>ACCIONES RÁPIDAS</span><strong>¿Qué quieres registrar?</strong></div><i class="fa-solid fa-bolt"></i></div>
   <div class="mobile-quick-grid">
-    <button aria-label="Registrar ingreso" onclick="openIncome('me')"><span class="quick-icon quick-income"><i class="fa-solid fa-circle-plus"></i></span><span><b>Ingreso</b><small>Entrada de dinero</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
-    <button aria-label="Registrar gasto del hogar" onclick="openExpensePicker()"><span class="quick-icon quick-expense"><i class="fa-solid fa-receipt"></i></span><span><b>Gasto</b><small>Gasto del hogar</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
-    <button aria-label="Registrar ahorro" onclick="openSavingPicker()"><span class="quick-icon quick-saving"><i class="fa-solid fa-vault"></i></span><span><b>Ahorro</b><small>Guardar dinero</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+    <button onclick="openIncome('me')"><span class="quick-icon quick-income"><i class="fa-solid fa-arrow-down"></i></span><span><b>Ingreso</b><small>Registrar entrada</small></span><i class="fa-solid fa-chevron-right"></i></button>
+    <button onclick="openExpensePicker()"><span class="quick-icon quick-expense"><i class="fa-solid fa-arrow-up"></i></span><span><b>Gasto del hogar</b><small>Registrar salida</small></span><i class="fa-solid fa-chevron-right"></i></button>
+    <button onclick="openSavingPicker()"><span class="quick-icon quick-saving"><i class="fa-solid fa-piggy-bank"></i></span><span><b>Ahorro</b><small>Sumar a una meta</small></span><i class="fa-solid fa-chevron-right"></i></button>
   </div>
 </section>
 
@@ -869,7 +670,7 @@ function normalizeClientState(remote){
  return out;
 }
 
-function apiRequest(action, data = {}, timeoutMs = 25000) {
+function apiRequest(action, data = {}) {
   return new Promise((resolve, reject) => {
     const nonce = "nx_" + crypto.randomUUID().replace(/-/g, "");
     const frameName = "nexus_api_" + nonce;
@@ -916,7 +717,7 @@ function apiRequest(action, data = {}, timeoutMs = 25000) {
           "Nexus tardó demasiado en responder. Intenta nuevamente."
         )
       );
-    }, timeoutMs);
+    }, 25000);
 
     const listener = (event) => {
       let message = event.data;
@@ -960,13 +761,7 @@ function apiRequest(action, data = {}, timeoutMs = 25000) {
     form.submit();
   });
 }
-function setSyncStatus(status,message){
- const el=document.getElementById("syncStatus"),txt=document.getElementById("syncStatusText"),dot=document.getElementById("mobileConnectionDot");
- if(!navigator.onLine)status="offline";
- const labels={synced:"Conectado",syncing:"Conectando…",offline:"Sin conexión"};
- if(el&&txt){el.classList.remove("syncing","offline");if(status==="syncing")el.classList.add("syncing");if(status==="offline")el.classList.add("offline");txt.textContent=message||labels[status]||status;el.setAttribute("aria-label",message||labels[status]||status)}
- if(dot){dot.classList.remove("synced","syncing","offline");dot.classList.add(status==="synced"?"synced":status==="offline"?"offline":"syncing");dot.title=message||labels[status]||status;dot.setAttribute("aria-label",message||labels[status]||status)}
-}
+function setSyncStatus(status,message){const el=document.getElementById("syncStatus"),txt=document.getElementById("syncStatusText");if(!el||!txt)return;el.classList.remove("syncing","offline");if(status==="syncing")el.classList.add("syncing");if(status==="offline")el.classList.add("offline");txt.textContent=message||({synced:"Sincronizado",syncing:"Sincronizando…",offline:"Sin conexión"}[status]||status)}
 function showLoader(title="Cargando datos",subtitle=null){const options=["Sincronizando con la nube…","Actualizando tu información…","Un momento, estamos preparando tus datos…"];loadingCount++;document.getElementById("loadingTitle").textContent=title;document.getElementById("loadingSubtitle").textContent=subtitle||options[Math.floor(Math.random()*options.length)];document.getElementById("loadingOverlay").classList.add("show")}
 function hideLoader(force=false){loadingCount=force?0:Math.max(0,loadingCount-1);if(!loadingCount)document.getElementById("loadingOverlay").classList.remove("show")}
 function saveState(){
@@ -1008,7 +803,7 @@ async function submitAuth(event){
 }
 function setAuth(token,user){authToken=token;authUser=user;sessionStorage.removeItem(AUTH_TOKEN_KEY);localStorage.setItem(AUTH_TOKEN_KEY,token);localStorage.setItem(AUTH_USER_KEY,JSON.stringify(user));localStorage.setItem(AUTH_KEEP_KEY,"yes")}
 function clearAuth(){authToken="";authUser=null;sessionStorage.removeItem(AUTH_TOKEN_KEY);localStorage.removeItem(AUTH_TOKEN_KEY);localStorage.removeItem(AUTH_USER_KEY);localStorage.removeItem(AUTH_KEEP_KEY)}
-function updateSignedUserLabel(){const role=authUser?.role||"admin";const fallback=role==="partner"?state.people.partner:state.people.me;const userLabel=fallback||authUser?.username||authUser?.name||authUser?.email||"Usuario";const label=document.getElementById("signedUserName");if(label)label.textContent=userLabel;const drawer=document.getElementById("drawerUserName");if(drawer)drawer.textContent=userLabel;const me=document.getElementById("navMeName"),pa=document.getElementById("navPartnerName");if(me)me.textContent="Finanza · "+(state.people.me||"Mi perfil");if(pa)pa.textContent="Finanza · "+(state.people.partner||"Pareja")}
+function updateSignedUserLabel(){const role=authUser?.role||"admin";const fallback=role==="partner"?state.people.partner:state.people.me;const label=document.getElementById("signedUserName");if(label)label.textContent=fallback||authUser?.username||authUser?.name||authUser?.email||"Usuario";const me=document.getElementById("navMeName"),pa=document.getElementById("navPartnerName");if(me)me.textContent="Finanza · "+(state.people.me||"Mi perfil");if(pa)pa.textContent="Finanza · "+(state.people.partner||"Pareja") }
 
 async function logoutNexus(callServer=true){
  showLoader("Cerrando sesión","Cerrando tu sesión de forma segura…");
@@ -1097,7 +892,7 @@ function renderDonut(id,a,b,expense=false,filteredExpenses=null){
 function openDonutDetails(kind){const f=getFilter();let title="Detalle del gráfico",rows=[];if(kind==="income"){title="Distribución de ingresos";const data=filtered(state.incomes);const total=sum(data);rows=[{name:state.people.me,value:sum(data.filter(x=>x.person==="me")),color:"#8b5cf6"},{name:state.people.partner,value:sum(data.filter(x=>x.person==="partner")),color:"#fb923c"}]}else if(kind==="expense"){title="Distribución de gastos del hogar";const data=filtered(state.expenses),total=sum(data);rows=CATS.map((name,i)=>({name,value:sum(data.filter(x=>x.category===name)),color:CAT_COLORS[i]})).filter(x=>x.value>0)}else{title="Saldos disponibles";rows=[{name:state.people.me,value:Math.max(0,personalAssigned("me")+personalStats("me").extraIncome-personalStats("me").spent-personalStats("me").saved),color:"#8b5cf6"},{name:state.people.partner,value:Math.max(0,personalAssigned("partner")+personalStats("partner").extraIncome-personalStats("partner").spent-personalStats("partner").saved),color:"#fb923c"}]}const total=rows.reduce((a,x)=>a+x.value,0);openModal(title,`<div class="small" style="margin-bottom:12px">Toca los gráficos para consultar esta distribución. Total: <b>${money(total)}</b></div>${rows.length?rows.map(r=>`<div class="list-row"><div><b>${kind==="expense"?categoryTag(r.name):personTag(kind==="income"?(r.name===state.people.partner?"partner":"me"):(r.name===state.people.partner?"partner":"me"),r.name)}</b><div class="pct">${total?(r.value/total*100).toFixed(1):"0.0"}% del total</div></div><b>${money(r.value)}</b><div class="report-track"><i style="width:${total?r.value/total*100:0}%;background:${r.color}"></i></div></div>`).join(""):'<div class="empty">No hay datos para mostrar en este periodo.</div>'}`)}
 function renderExpenseList(exp){
  const total=sum(exp), box=document.getElementById("expenseList");
- box.innerHTML=CATS.map((c,i)=>{let n=sum(exp.filter(x=>x.category===c)),p=total?n/total*100:0;return `<div class="home-category-row" style="--cat-color:${categoryColor(c)||CAT_COLORS[i]||'#a78bfa'}"><div class="home-category-top"><span class="home-category-name">${categoryTag(c)}</span><strong>${money(n)}</strong></div><div class="home-category-track" aria-label="${p.toFixed(1)}% del gasto"><i style="width:${p}%"></i></div><div class="home-category-bottom"><span>${p.toFixed(1)}% del gasto del hogar</span><button class="category-btn" aria-label="Registrar gasto: ${esc(c)}" onclick="openExpense('${c}')"><i class="fa-solid fa-plus"></i></button></div></div>`}).join("");
+ box.innerHTML=CATS.map(c=>{let n=sum(exp.filter(x=>x.category===c)),p=total?n/total*100:0;return `<div class="list-row"><div><b>${categoryTag(c)}</b><div class="pct">${p.toFixed(1)}% del gasto del hogar</div></div><b>${money(n)}</b><span class="pct">${p.toFixed(0)}%</span><button class="category-btn" onclick="openExpense('${c}')">+</button></div>`}).join("");
 }
 function renderSavings(sav){
  const box=document.getElementById("savingsGrid"); const target=Number(state.savingTarget)||0;
@@ -1601,8 +1396,6 @@ function closeMobileDrawer(){
  const sidebar=document.getElementById("sidebar");
  if(sidebar)sidebar.classList.remove("open");
  document.body.classList.remove("drawer-open");
- const backdrop=document.getElementById("mobileDrawerBackdrop");
- if(backdrop)backdrop.setAttribute("aria-hidden","true");
 }
 function toggleSidebar(){
  const sidebar=document.getElementById("sidebar");
@@ -1610,8 +1403,6 @@ function toggleSidebar(){
  const opening=!sidebar.classList.contains("open");
  sidebar.classList.toggle("open",opening);
  document.body.classList.toggle("drawer-open",opening);
- const backdrop=document.getElementById("mobileDrawerBackdrop");
- if(backdrop)backdrop.setAttribute("aria-hidden",String(!opening));
 }
 document.addEventListener("click",function(event){
  const navButton=event.target.closest(".nav button");
@@ -1622,33 +1413,8 @@ document.addEventListener("keydown",function(event){
 });
 window.addEventListener("resize",function(){if(window.innerWidth>800)closeMobileDrawer();});
 
-/* Connection status is based on a real API response, not navigator.onLine alone. */
-let nexusConnectionProbeRunning=false;
-async function verifyCloudConnection(){
- if(!authToken||!authUser){setSyncStatus("offline","Sin sesión");return false}
- if(!navigator.onLine){setSyncStatus("offline","Sin conexión");return false}
- if(nexusConnectionProbeRunning||cloudSyncing)return null;
- nexusConnectionProbeRunning=true;setSyncStatus("syncing","Verificando nube…");
- try{
-  if(loadingCount>0)return null;
-  const result=await apiRequest("get",{token:authToken},10000);
-  if(result&&result.success===true){setSyncStatus("synced","Conectado a la nube");return true}
-  setSyncStatus("offline","Servidor no disponible");return false;
- }catch(err){setSyncStatus("offline","Sin conexión con la nube");return false}
- finally{nexusConnectionProbeRunning=false}
-}
-window.addEventListener("offline",()=>setSyncStatus("offline","Sin conexión"));
-window.addEventListener("online",()=>{if(!authToken){setSyncStatus("offline","Sin sesión");return}verifyCloudConnection()});
-window.addEventListener("focus",()=>{if(authToken&&navigator.onLine)verifyCloudConnection()});
-document.addEventListener("visibilitychange",()=>{if(!document.hidden&&authToken&&navigator.onLine)verifyCloudConnection()});
-/* A short heartbeat prevents a stale green light if the router or API stops responding. */
-setInterval(()=>{if(authToken&&navigator.onLine&&!document.hidden)verifyCloudConnection()},45000);
-if(!navigator.onLine)setSyncStatus("offline","Sin conexión");
-
 /* Arranque: primero autenticar; luego cargar los datos privados de la cuenta */
 setupYears();
-document.body.classList.remove("drawer-open","modal-open");
-document.documentElement.style.overflowY="auto";document.body.style.overflowY="auto";
 document.querySelector(".app").classList.add("auth-locked");
 document.getElementById("authScreen").style.display="flex";
 bootstrapAuth();
