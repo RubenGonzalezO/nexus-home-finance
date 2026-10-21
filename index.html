@@ -247,7 +247,7 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 <style id="nexus-mobile-app">
 /* NEXUS MOBILE APP SHELL — no desktop layout is used */
 html,body{width:100%;min-height:100%;background:var(--bg)}
-body{overflow-x:hidden;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
+body{overflow-x:hidden;-webkit-tap-highlight-color:transparent}
 body.mobile-app-mode{font-size:14px}
 body.mobile-app-mode .app{display:block;min-height:100dvh;width:100%;max-width:520px;margin:0 auto;background:var(--bg);position:relative;box-shadow:none}
 body.mobile-app-mode .sidebar{display:none!important}
@@ -305,13 +305,13 @@ body.mobile-app-mode .modal .modal-box,body.mobile-app-mode .modal-box{width:100
 .nx-quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.nx-quick-item{min-height:64px}
 @media(min-width:700px){body.mobile-app-mode{background:#07060b}body.mobile-app-mode .app{border-left:1px solid #1e1a29;border-right:1px solid #1e1a29}}
 /* v2 interaction hardening: native touch scrolling */
-html.mobile-scroll-root,body.mobile-scroll-root{overflow-x:hidden!important;overflow-y:auto!important;height:auto!important;min-height:100%!important;touch-action:pan-y!important;-webkit-overflow-scrolling:touch!important}
-body.mobile-app-mode{overflow-x:hidden!important;overflow-y:auto!important;touch-action:pan-y!important;-webkit-overflow-scrolling:touch!important}
-body.mobile-app-mode .app{min-height:100svh;height:auto!important}
-body.mobile-app-mode .main{min-height:calc(100svh - 1px);overflow:visible!important;touch-action:pan-y}
+body.mobile-app-mode{overflow:hidden!important;width:100%;height:100dvh;min-height:100dvh;touch-action:none!important}
+body.mobile-app-mode .app{height:100dvh;min-height:100dvh;overflow:hidden!important}
+body.mobile-app-mode .main{height:100dvh;min-height:0;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior-y:contain;touch-action:pan-y!important;-webkit-overflow-scrolling:touch!important;padding-bottom:120px!important}
 body.mobile-app-mode #nxMoreSheet,body.mobile-app-mode #nxQuickSheet{touch-action:auto}
 body.mobile-app-mode .nx-sheet{touch-action:pan-y;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 body.mobile-app-mode .modal-box{touch-action:pan-y;-webkit-overflow-scrolling:touch}
+body.mobile-app-mode.modal-open .main{overflow:hidden!important;touch-action:none!important}
 </style>
 </head>
 <body>
@@ -1281,11 +1281,11 @@ bootstrapAuth();
   function syncTabs(name){nav.querySelectorAll('.nx-tab').forEach(x=>x.classList.toggle('active',x.dataset.nx==='dashboard'&&name==='dashboard'));}
   nav.addEventListener('click',e=>{const b=e.target.closest('.nx-tab');if(!b)return;const a=b.dataset.nx;if(a==='dashboard')go('dashboard');if(a==='more'){closeSheets();more.classList.add('show')}if(a==='add'){closeSheets();quick.classList.add('show')}});
   more.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(b.dataset.go);if(e.target===more)closeSheets()});
-  quick.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;closeSheets();const a=b.dataset.action;
+  quick.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;const a=b.dataset.action;closeSheets();
     if(a==='income')openIncome('me');
     else if(a==='expense')openExpensePicker();
     else if(a==='saving')openSavingPicker();
-    else if(a==='personal')openPersonalSpending();
+    else if(a==='personal')openPersonalMovement('me','expense');
     else if(a==='debt')openPersonalDebtPicker('me');
     else if(a==='goal')openGoal();
   });
@@ -1296,43 +1296,94 @@ bootstrapAuth();
   document.getElementById('nxLogout').onclick=()=>logoutNexus();
 
   // --- Mobile interaction hardening ---
-  document.documentElement.classList.add('mobile-scroll-root');
-  document.body.classList.add('mobile-scroll-root');
-  document.documentElement.style.overflowY='auto';
-  document.body.style.overflowY='auto';
-  document.documentElement.style.touchAction='pan-y';
-  document.body.style.touchAction='pan-y';
-
-  // The personal quick action opens the actual movement editor.
-  quick.addEventListener('click',e=>{
-    const b=e.target.closest('[data-action]');
-    if(!b || b.dataset.action!=='personal')return;
-    e.stopPropagation();
-    closeSheets();
-    openPersonalMovement('me','expense');
-  },true);
 
   // Recover the page scroll if a modal/navigation transition is interrupted.
   const recoverScrollLock=()=>{
     const modal=document.getElementById('modal');
-    if(!modal?.classList.contains('show'))document.body.classList.remove('modal-open');
-    if(!document.body.classList.contains('modal-open')){
-      document.documentElement.style.overflowY='auto';
-      document.body.style.overflowY='auto';
+    if(!modal?.classList.contains('show')){
+      document.body.classList.remove('modal-open');
+      const main=document.getElementById('dashboard');
+      if(main)main.style.overflowY='auto';
     }
   };
   window.addEventListener('pageshow',recoverScrollLock);
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')recoverScrollLock()});
 
   // Keep existing window.scrollTo calls compatible with the native mobile document scroll.
-  const nativeScrollTo=window.scrollTo.bind(window);
+  const nativeWindowScrollTo=window.scrollTo.bind(window);
+  const getMobileScroller=()=>document.getElementById('dashboard');
   window.scrollTo=function(x,y){
-    if(typeof x==='object'){nativeScrollTo({left:x.left||0,top:x.top||0,behavior:x.behavior||'auto'});return;}
-    nativeScrollTo(x||0,y||0);
+    const scroller=getMobileScroller();
+    if(scroller){
+      if(typeof x==='object'){scroller.scrollTo({left:x.left||0,top:x.top||0,behavior:x.behavior||'auto'});return;}
+      scroller.scrollTo(x||0,y||0);return;
+    }
+    if(typeof x==='object'){nativeWindowScrollTo({left:x.left||0,top:x.top||0,behavior:x.behavior||'auto'});return;}
+    nativeWindowScrollTo(x||0,y||0);
   };
 
   // Keep the app on General when the document first initializes.
   window.addEventListener('load',()=>{setTimeout(()=>{syncTabs(activeModule||'dashboard');},50)});
+})();
+</script>
+
+<script id="nexus-mobile-final-fixes">
+(function(){
+  const scroller=()=>document.getElementById('dashboard');
+  const scrollTop=(behavior='auto')=>{const el=scroller();if(el)el.scrollTo({top:0,left:0,behavior});};
+  const scrollElement=(target,behavior='smooth')=>{const el=scroller(),node=typeof target==='string'?document.getElementById(target):target;if(!el||!node)return;const er=el.getBoundingClientRect(),nr=node.getBoundingClientRect();el.scrollTo({top:Math.max(0,el.scrollTop+(nr.top-er.top)-12),behavior});};
+  window.nexusMobileScrollTop=scrollTop;
+  window.nexusMobileScrollElement=scrollElement;
+
+  const originalOpenModal=window.openModal;
+  const originalCloseModal=window.closeModal;
+  window.openModal=function(title,body){
+    const el=scroller();
+    if(el) document.body.dataset.nxScrollTop=String(el.scrollTop);
+    document.body.classList.add('modal-open');
+    return originalOpenModal(title,body);
+  };
+  window.closeModal=function(fromPop=false){
+    const result=originalCloseModal(fromPop);
+    if(!document.getElementById('modal')?.classList.contains('show')){
+      document.body.classList.remove('modal-open');
+      const el=scroller(),saved=Number(document.body.dataset.nxScrollTop||0);
+      if(el)requestAnimationFrame(()=>el.scrollTo({top:saved,left:0,behavior:'auto'}));
+    }
+    return result;
+  };
+
+  const originalShowModule=window.showModule;
+  window.showModule=function(name,fromHistory){
+    const result=originalShowModule(name,fromHistory);
+    if(!fromHistory)requestAnimationFrame(()=>scrollTop('auto'));
+    return result;
+  };
+  window.navigateToGoals=function(){
+    const goals=document.getElementById('goals');
+    if(!goals)return;
+    if(window.activeModule!=='dashboard') originalShowModule('dashboard',false);
+    requestAnimationFrame(()=>scrollElement(goals,'smooth'));
+    document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.textContent.includes('Metas a futuro')));
+  };
+  window.scrollToId=function(id){scrollElement(id,'smooth');document.getElementById('sidebar')?.classList.remove('open');};
+
+  // Prevent background scrolling while app sheets are open, but keep the sheet itself scrollable.
+  const sheetObserver=new MutationObserver(()=>{
+    const open=document.getElementById('nxMoreSheet')?.classList.contains('show')||document.getElementById('nxQuickSheet')?.classList.contains('show');
+    document.body.classList.toggle('nx-sheet-open',!!open);
+  });
+  ['nxMoreSheet','nxQuickSheet'].forEach(id=>{const el=document.getElementById(id);if(el)sheetObserver.observe(el,{attributes:true,attributeFilter:['class']});});
+
+  // Touch scrolling safety: only the app scroller or an open sheet/modal may consume vertical gestures.
+  document.addEventListener('touchmove',function(e){
+    const target=e.target;
+    const sheet=target.closest?.('.nx-sheet');
+    const modal=target.closest?.('.modal-box');
+    const main=target.closest?.('#dashboard');
+    if(sheet||modal||main)return;
+    if(document.body.classList.contains('modal-open')||document.body.classList.contains('nx-sheet-open'))e.preventDefault();
+  },{passive:false});
 })();
 </script>
 </body>
