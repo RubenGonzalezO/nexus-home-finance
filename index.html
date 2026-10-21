@@ -200,75 +200,82 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 
 
 
-/* Nexus Finance · mobile-first experience layer (presentation only) */
+/* NEXUS FINANCE — MOBILE-FIRST EXPERIENCE LAYER
+   Presentational overrides only: existing business logic, data model and API remain untouched. */
 .mobile-bottom-nav{display:none}
 @media(max-width:800px){
-  :root{--mobile-gutter:16px;--mobile-nav-height:68px}
-  body{padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom) + 14px)}
-  .main{padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom) + 28px)!important}
-  .mobile-bottom-nav{position:fixed;z-index:90;left:10px;right:10px;bottom:calc(8px + env(safe-area-inset-bottom));height:var(--mobile-nav-height);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:stretch;padding:6px;background:rgba(23,19,34,.94);border:1px solid rgba(167,139,250,.2);border-radius:22px;box-shadow:0 12px 38px rgba(0,0,0,.42);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
-  .mobile-bottom-nav button{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;background:transparent;color:#9188a5;border-radius:15px;padding:5px 2px;transition:background .18s,color .18s}
-  .mobile-bottom-nav button i{font-size:17px;line-height:1}
-  .mobile-bottom-nav button span{font-size:10px;font-weight:750;letter-spacing:-.01em;white-space:nowrap}
-  .mobile-bottom-nav button.active{background:linear-gradient(145deg,rgba(139,92,246,.24),rgba(139,92,246,.1));color:#d8c9ff;box-shadow:inset 0 0 0 1px rgba(167,139,250,.13)}
-  .mobile-bottom-nav button:active{transform:scale(.96)}
-  .topbar{padding-top:16px;margin-bottom:12px}
-  .title h1{font-size:clamp(26px,7.4vw,32px);font-weight:850;letter-spacing:-.055em}
-  .title p{font-size:12px;max-width:32ch;color:#aaa1ba}
-  .filterbar{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:12px;margin:0 0 15px;border:1px solid rgba(167,139,250,.12);border-radius:18px;background:rgba(22,18,32,.76)}
-  .filterbar .field{min-width:0;width:100%}.filterbar .field label{font-size:10px;letter-spacing:.05em;text-transform:uppercase}
-  .filterbar .select{min-height:43px}.filterbar>.btn{grid-column:1/-1;width:100%;min-height:40px}
-  .filterbar #periodLabel{grid-column:1/-1;font-size:11px}
-  .kpis{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px;margin-bottom:14px}
-  .kpi{min-width:0;min-height:112px;padding:14px;border-radius:19px;display:flex;flex-direction:column;justify-content:center;gap:7px}
-  .kpi .label{font-size:9px;letter-spacing:.08em;line-height:1.35}
-  .kpi .value{font-size:clamp(16px,4.6vw,21px);line-height:1.15;letter-spacing:-.045em;overflow-wrap:anywhere}
-  .kpi .sub{font-size:10px;line-height:1.4}
-  .kpi.available{grid-column:1/-1;order:-1;min-height:154px;padding:20px 19px;position:relative;overflow:hidden;border:1px solid rgba(52,211,153,.25);background:radial-gradient(ellipse at 95% 0,rgba(52,211,153,.17),transparent 50%),linear-gradient(135deg,#1c2928,#171321 80%)}
-  .kpi.available:after{content:"";position:absolute;width:125px;height:125px;right:-38px;bottom:-66px;border-radius:50%;border:1px solid rgba(52,211,153,.18);box-shadow:0 0 0 14px rgba(52,211,153,.035),0 0 0 29px rgba(52,211,153,.025);pointer-events:none}
-  .kpi.available .label{color:#a7e8c8;font-size:10px}
-  .kpi.available .value{font-size:clamp(30px,8vw,39px);color:#e4fff0;letter-spacing:-.055em}
-  .kpi.available .sub{color:#b7c9c0;font-size:11px}
-  .mobile-quick-actions{display:block;margin:0 0 18px;padding:15px 12px 12px;border-radius:21px;border:1px solid rgba(167,139,250,.13);background:linear-gradient(145deg,rgba(31,25,45,.94),rgba(18,16,27,.96))}
-  .mobile-quick-heading{margin:0 3px 12px}.mobile-quick-heading strong{font-size:15px;letter-spacing:-.025em}
-  .mobile-quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-  .mobile-quick-grid button{min-width:0;min-height:105px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:9px;padding:11px 9px;border-radius:16px;border:1px solid rgba(167,139,250,.13);background:#191522;text-align:left}
-  .mobile-quick-grid button>span:nth-child(2){display:grid;gap:4px}.mobile-quick-grid button b{font-size:11px;line-height:1.25}.mobile-quick-grid button small{font-size:9px;line-height:1.3;color:#a59bb7}.mobile-quick-grid button>.fa-chevron-right{display:none}
-  .quick-icon{width:35px;height:35px;border-radius:12px}
-  .section-grid,.comparison-grid,.dashboard-mini-grid,.module-grid{display:grid;grid-template-columns:minmax(0,1fr)!important;gap:13px}
-  .card{min-width:0;border-radius:20px;padding:15px}
-  .card-head{gap:10px;align-items:flex-start}.card-head h2{font-size:15px;line-height:1.35;letter-spacing:-.025em}.card-head span{font-size:11px;line-height:1.45}
-  .donut-layout{grid-template-columns:minmax(96px, .75fr) minmax(0,1fr)!important;gap:12px;align-items:center}
-  .donut{width:min(100%,132px);margin-inline:auto}.people{grid-template-columns:1fr!important;gap:8px}.person{padding:10px;border-radius:14px}.person .amount{font-size:15px}
-  .comparison-grid{gap:13px}.comparison-card .card-head{flex-wrap:wrap}.bar-chart{overflow-x:auto;max-width:100%}
-  .secondary-grid .wide{grid-column:auto}.savings-grid,.future-grid{grid-template-columns:minmax(0,1fr)!important;gap:10px}
-  .dashboard-mini-grid{margin-top:14px}.dashboard-mini-grid .card-head{align-items:center}
-  .module-section>.card,.module-section .card{margin-bottom:13px}
-  .module-form,.form-grid{grid-template-columns:minmax(0,1fr)!important;gap:13px}
-  .module-form .full,.form-grid .full{grid-column:1/-1}
-  .field input,.field select,.field textarea,.input,.select,.textarea{min-height:46px;font-size:16px}
-  .btn,.mini-btn{min-height:42px;touch-action:manipulation}
-  .form-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.form-actions .btn{width:100%;justify-content:center}
-  .table-wrap{border-radius:14px}.data-table{min-width:620px}.record{gap:9px}
-  .modal{align-items:flex-end;padding:0!important}.modal-box{width:100%;max-width:none;max-height:92dvh;border-radius:24px 24px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));overflow:auto}
-  .modal-head{position:sticky;top:-18px;z-index:2;margin:-18px -16px 16px;padding:16px;background:rgba(21,18,30,.97);backdrop-filter:blur(18px);border-radius:24px 24px 0 0}
-  #authScreen{align-items:flex-end;padding:12px}.auth-card{padding:23px 20px 25px;border-radius:25px;margin-bottom:env(safe-area-inset-bottom)}
+ :root{--mobile-gutter:16px;--mobile-nav-height:72px;--radius:20px}
+ html{scroll-padding-top:100px;scroll-padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom))}
+ body{background:radial-gradient(ellipse at 10% -12%,rgba(139,92,246,.24),transparent 38%),linear-gradient(180deg,#0b0a12 0%,#0b0a12 70%,#100d19 100%);padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));}
+ .app{min-height:100dvh;display:block}
+ .main{margin:0!important;padding:0 var(--mobile-gutter) calc(var(--mobile-nav-height) + 28px + env(safe-area-inset-bottom))!important;width:100%!important;max-width:none!important;min-height:100dvh}
+ .mobile-appbar{position:sticky;top:0;z-index:36;margin:0 calc(-1 * var(--mobile-gutter)) 0;padding:calc(10px + env(safe-area-inset-top)) var(--mobile-gutter) 11px;background:rgba(11,10,18,.91);border-bottom:1px solid rgba(167,139,250,.13);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
+ .mobile-brand-mark{width:42px;height:42px;border-radius:15px;box-shadow:0 8px 24px rgba(139,92,246,.18)}
+ .mobile-brand-copy strong{font-size:17px}.mobile-brand-copy small{font-size:8px;letter-spacing:.13em}
+ .mobile-appbar-actions{gap:7px}.mobile-icon-button,.mobile-avatar{width:39px;height:39px;border-radius:14px}
+ .topbar{display:flex;flex-direction:column;align-items:stretch;gap:13px;margin:0 -2px 18px;padding:19px 2px 0}
+ .title h1{font-size:25px;line-height:1.15;letter-spacing:-.045em;margin:0 0 6px}
+ .title p{font-size:12px;line-height:1.5;max-width:34ch}
+ .topbar .actions{width:100%;display:flex;align-items:center;gap:7px;margin:0}
+ .topbar .actions .mobile-menu,.topbar .actions .account-strip,.topbar .actions button[onclick="logoutNexus()"]{display:none!important}
+ .sync-status{width:auto!important;order:0!important;flex:1;justify-content:flex-start!important;padding:8px 10px;border:1px solid rgba(52,211,153,.17);border-radius:12px;background:rgba(52,211,153,.055);font-size:10px}
+ .topbar .actions button{padding:9px 12px;min-height:38px}
+ .filterbar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px;padding:12px;margin:0 0 15px;border-radius:17px;background:rgba(18,16,27,.9);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+ .filterbar .field{min-width:0!important;width:100%;gap:5px}.filterbar label{font-size:10px;letter-spacing:.035em}.filterbar .select{min-height:43px;font-size:12px;padding:10px 11px}.filterbar #periodLabel{grid-column:1/-1;font-size:10px}.filterbar button{min-height:42px;grid-column:1/-1}
+ .kpis{display:flex!important;gap:11px!important;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 calc(-1 * var(--mobile-gutter)) 18px!important;padding:0 var(--mobile-gutter) 4px!important}
+ .kpis::-webkit-scrollbar,.mobile-quick-grid::-webkit-scrollbar{display:none}
+ .kpis>.kpi{flex:0 0 min(72vw,275px);min-width:0;min-height:154px;padding:17px 16px;border-radius:21px;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;box-shadow:0 12px 30px rgba(0,0,0,.18)}
+ .kpi .label{font-size:10px;font-weight:850;letter-spacing:.09em;margin-bottom:8px}.kpi .value{font-size:clamp(25px,7vw,34px);line-height:1.08;letter-spacing:-.045em;overflow-wrap:anywhere}.kpi .sub{font-size:10px;line-height:1.45;margin-top:8px;max-width:29ch}
+ .kpi.available{border-color:rgba(52,211,153,.28);background:radial-gradient(circle at 100% 0,rgba(52,211,153,.12),transparent 52%),linear-gradient(150deg,#17231f,#12101b 74%)}
+ .mobile-quick-actions{display:block;margin:0 0 22px;padding:15px 14px 13px;border:1px solid rgba(167,139,250,.15);border-radius:21px;background:linear-gradient(145deg,rgba(31,24,45,.94),rgba(18,16,27,.95));box-shadow:0 12px 28px rgba(0,0,0,.12)}
+ .mobile-quick-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:13px}.mobile-quick-heading>div{display:grid;gap:4px}.mobile-quick-heading span{font-size:9px;font-weight:850;letter-spacing:.13em;color:var(--purple2)}.mobile-quick-heading strong{font-size:16px;letter-spacing:-.025em}.mobile-quick-heading>i{width:35px;height:35px;display:grid;place-items:center;border-radius:12px;background:rgba(139,92,246,.13);color:var(--purple2)}
+ .mobile-quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+ .mobile-quick-grid button{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:12px;min-width:0;min-height:116px;padding:12px 10px;border:1px solid #332a45;border-radius:15px;background:rgba(12,10,19,.64);color:var(--text);text-align:left}
+ .mobile-quick-grid button>span:nth-child(2){display:grid;gap:4px}.mobile-quick-grid button b{font-size:11px;line-height:1.3}.mobile-quick-grid button small{font-size:9px;color:var(--muted);line-height:1.35}.mobile-quick-grid button>i{display:none}
+ .quick-icon{width:35px;height:35px;border-radius:12px;display:grid;place-items:center}.quick-income{background:rgba(52,211,153,.13);color:var(--green)}.quick-expense{background:rgba(251,146,60,.13);color:var(--orange)}.quick-saving{background:rgba(139,92,246,.16);color:var(--purple2)}
+ .section-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:13px!important;margin-bottom:16px}
+ .section-grid>.card,.module-section>.card,.module-section .module-grid>.card{min-width:0;margin-bottom:13px;padding:16px;border-radius:20px;background:linear-gradient(155deg,rgba(25,21,37,.98),rgba(16,14,24,.98));box-shadow:0 9px 24px rgba(0,0,0,.13)}
+ .card-head{align-items:flex-start;gap:10px;margin-bottom:14px}.card-head h2{font-size:15px;line-height:1.35;letter-spacing:-.02em}.card-head span{display:block;font-size:10px;line-height:1.45;margin-top:3px}.card-head .head-actions{flex-wrap:wrap;justify-content:flex-end}
+ .card-head .btn,.card-head .mini-btn{font-size:10px;padding:8px 10px;white-space:nowrap}
+ .donut-layout{grid-template-columns:minmax(0,1fr)!important;gap:12px}.donut-layout .donut{margin:0 auto;width:148px;max-width:100%}.people{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.person{min-width:0;padding:12px;border-radius:15px}.person .name{font-size:10px;overflow-wrap:anywhere}.person .amount{font-size:17px;overflow-wrap:anywhere}.person .mini-btn{width:100%;margin-top:8px}
+ .list{gap:8px}.list-row{padding:12px;border-radius:14px;gap:10px}.list-row .identity-tag{max-width:100%}
+ .module-section{margin-top:8px}.module-section .module-grid{grid-template-columns:minmax(0,1fr)!important;gap:12px}.module-grid .wide{grid-column:auto}
+ .module-section .card-head{flex-wrap:wrap}.module-section .card-head>div:last-child{max-width:100%}
+ .table-wrap{border-radius:13px;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.data-table{min-width:540px;font-size:11px}.data-table th,.data-table td{padding:10px 8px}
+ .calendar-grid,.month-grid{min-width:0}.calendar-day{min-height:60px!important}.calendar-task{overflow-wrap:anywhere}
+ .future-grid{grid-template-columns:minmax(0,1fr)!important}.dashboard-mini-grid,.evolution-grid,.comparison-grid{grid-template-columns:minmax(0,1fr)!important}
+ .personal-summary,.personal-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px}.personal-summary>*,.personal-summary-grid>*{min-width:0}.personal-summary strong{font-size:16px;overflow-wrap:anywhere}
+ .personal-finance-blocks{grid-template-columns:minmax(0,1fr)!important;gap:12px}.personal-saving-boxes{grid-template-columns:minmax(0,1fr)!important}.personal-saving-box .box-history .record{grid-template-columns:minmax(0,1fr) auto}
+ .report-filter{grid-template-columns:repeat(2,minmax(0,1fr))}.report-filter .field{min-width:0}.report-row{grid-template-columns:66px minmax(0,1fr) 84px;gap:7px}
+ .module-form{grid-template-columns:minmax(0,1fr)!important}.module-form .full{grid-column:auto}.formgrid{grid-template-columns:minmax(0,1fr)!important}.formgrid .full{grid-column:auto}
+ .input,.select,.textarea,input,select,textarea{max-width:100%;min-height:45px;font-size:16px!important}.textarea{min-height:100px}.field{min-width:0}.field label{font-size:11px;line-height:1.35}
+ .btn,.mini-btn,.category-pick-btn{min-height:42px}.form-actions{display:flex;gap:8px;flex-wrap:wrap}.form-actions .btn{flex:1 1 130px}
+ .mobile-bottom-nav{position:fixed;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:end;gap:2px;z-index:80;left:0;right:0;bottom:0;padding:8px 9px calc(8px + env(safe-area-inset-bottom));min-height:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));background:rgba(16,13,24,.94);border-top:1px solid rgba(167,139,250,.16);backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);box-shadow:0 -12px 35px rgba(0,0,0,.22)}
+ .mobile-bottom-nav button{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:0;min-height:52px;padding:5px 2px;background:transparent;color:#81798f;border-radius:14px;font-size:9px;font-weight:750;letter-spacing:.005em}
+ .mobile-bottom-nav button i{font-size:18px;line-height:1}.mobile-bottom-nav button.active{color:#c4b5fd}.mobile-bottom-nav button.active:before{content:"";position:absolute;top:0;width:24px;height:3px;border-radius:9px;background:var(--purple2)}
+ .mobile-bottom-nav .mobile-nav-add{align-self:center;justify-self:center;width:53px;height:53px;min-height:53px;margin-top:-22px;border:4px solid #0b0a12;border-radius:19px;background:linear-gradient(145deg,#a78bfa,#7c3aed 70%,#6841b5);color:white;box-shadow:0 8px 24px rgba(124,58,237,.38);font-size:23px}
+ .mobile-bottom-nav .mobile-nav-add i{font-size:21px}.mobile-bottom-nav .mobile-nav-add:before{display:none}
+ .app.auth-locked~.mobile-bottom-nav{display:none!important}
+ .sidebar{z-index:91;width:min(330px,88vw);padding:20px 15px 30px;overflow-y:auto;background:rgba(15,12,23,.98);box-shadow:25px 0 60px rgba(0,0,0,.38);transform:translateX(-105%);transition:transform .25s ease}.sidebar.open{transform:translateX(0)}
+ .mobile-drawer-backdrop{position:fixed;inset:0;z-index:90;background:rgba(4,3,8,.66);backdrop-filter:blur(3px)}.mobile-drawer-backdrop[aria-hidden="false"],.mobile-drawer-backdrop:has(+ .sidebar.open){display:block}
+ body.drawer-open{overflow:hidden}.nav button{display:flex;align-items:center;gap:10px;padding:13px 14px;min-height:47px;font-size:13px;border-radius:13px}.nav button i{width:22px;text-align:center}
+ .modal{align-items:flex-end!important;justify-content:center;padding:0!important;background:rgba(4,3,8,.68);backdrop-filter:blur(5px)}.modal-box{width:100%!important;max-width:none!important;max-height:91dvh!important;padding:19px 16px calc(20px + env(safe-area-inset-bottom))!important;border-radius:25px 25px 0 0!important;border:1px solid rgba(167,139,250,.2);border-bottom:0;box-shadow:0 -18px 70px rgba(0,0,0,.35);overscroll-behavior:contain}
+ .modal-head{position:sticky;top:-19px;z-index:2;margin:-1px -1px 15px;padding:8px 1px 12px;background:#14111e}.modal-head:before{content:"";position:absolute;top:-7px;left:50%;transform:translateX(-50%);width:38px;height:4px;border-radius:5px;background:#51475f}.modal-head h3{font-size:18px;letter-spacing:-.03em}.modal .formgrid,.modal .module-form{grid-template-columns:minmax(0,1fr)!important}.modal .field{margin-bottom:10px}.modal .btn{min-height:46px}.modal .record{grid-template-columns:minmax(0,1fr) auto}
+ #authScreen{padding:20px 16px!important;align-items:center}.auth-card{width:100%;max-width:430px;padding:25px 21px;border-radius:25px}.auth-card h1{font-size:26px;line-height:1.15}.auth-card input{min-height:48px}.auth-card .btn{min-height:48px}
+ .toast{left:12px;right:12px;bottom:calc(var(--mobile-nav-height) + 12px + env(safe-area-inset-bottom));max-width:none}
+ .bar-callout{bottom:calc(var(--mobile-nav-height) + 12px + env(safe-area-inset-bottom))!important}
+ .small{line-height:1.5}.hidden{display:none!important}
 }
-@media(max-width:390px){
-  :root{--mobile-gutter:13px}
-  .mobile-bottom-nav{left:7px;right:7px;border-radius:19px}
-  .mobile-bottom-nav button span{font-size:9px}
-  .mobile-quick-grid{gap:6px}.mobile-quick-grid button{padding:9px 7px;min-height:100px}
-  .kpi{padding:12px}.kpi.available{padding:18px 16px}
-  .donut-layout{grid-template-columns:94px minmax(0,1fr)!important}.donut{width:94px}
+@media(max-width:420px){
+ :root{--mobile-gutter:13px}
+ .topbar{padding-top:16px}.title h1{font-size:23px}
+ .kpis>.kpi{flex-basis:78vw;min-height:146px;padding:15px}.mobile-quick-actions{padding:13px 11px}.mobile-quick-grid{gap:6px}.mobile-quick-grid button{padding:10px 8px;min-height:110px}.mobile-quick-grid button b{font-size:10px}.quick-icon{width:32px;height:32px}
+ .section-grid>.card,.module-section>.card{padding:14px}.personal-summary,.personal-summary-grid{gap:7px}.mobile-bottom-nav{padding-left:6px;padding-right:6px}.mobile-bottom-nav button{font-size:8px}.mobile-bottom-nav .mobile-nav-add{width:50px;height:50px;min-height:50px}
 }
-@media(min-width:520px) and (max-width:800px){
-  .kpis{grid-template-columns:repeat(3,minmax(0,1fr))!important}
-  .kpi.available{grid-column:1/-1}
-  .section-grid,.comparison-grid,.dashboard-mini-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  .secondary-grid .wide{grid-column:1/-1}
-  .mobile-quick-grid button{min-height:98px}
+@media(min-width:521px) and (max-width:800px){
+ .kpis>.kpi{flex-basis:36vw;min-height:145px}.section-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.section-grid>.card.wide,.section-grid>.wide{grid-column:1/-1}.donut-layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}.donut-layout .donut{width:130px}.module-section .module-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.module-section .module-grid .wide{grid-column:1/-1}
 }
+
 </style>
 
 <style id="nexus-chart-contextual-detail-fix">
@@ -631,23 +638,6 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
  <div class="card"><div class="card-head"><div><h2>Respaldo y mantenimiento</h2><span>Protege o restaura tus datos financieros</span></div></div><div class="actions"><button class="btn" onclick="exportData()">Exportar respaldo</button><button class="btn" onclick="importData()">Importar respaldo</button><button class="btn danger" onclick="resetAll()">Borrar todos los datos</button></div></div>
 </section>
 </main>
-<nav class="mobile-bottom-nav" aria-label="Navegación principal móvil">
-  <button type="button" class="active" data-route="dashboard" onclick="showModule('dashboard')" aria-label="Inicio">
-    <i class="fa-solid fa-house" aria-hidden="true"></i><span>Inicio</span>
-  </button>
-  <button type="button" data-route="personalMe" onclick="showModule('personalMe')" aria-label="Finanzas personales">
-    <i class="fa-solid fa-user" aria-hidden="true"></i><span>Personal</span>
-  </button>
-  <button type="button" data-route="debts" onclick="showModule('debts')" aria-label="Deudas">
-    <i class="fa-solid fa-credit-card" aria-hidden="true"></i><span>Deudas</span>
-  </button>
-  <button type="button" data-route="reports" onclick="showModule('reports')" aria-label="Reportes">
-    <i class="fa-solid fa-chart-pie" aria-hidden="true"></i><span>Reportes</span>
-  </button>
-  <button type="button" onclick="toggleSidebar()" aria-label="Abrir todas las secciones">
-    <i class="fa-solid fa-grid-2" aria-hidden="true"></i><span>Más</span>
-  </button>
-</nav>
 </div>
 
 <div id="authScreen">
@@ -664,6 +654,15 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
   <p class="small">Utiliza tus credenciales de acceso.</p>
  </div>
 </div>
+
+<nav class="mobile-bottom-nav" aria-label="Navegación principal móvil">
+ <button type="button" data-mobile-route="dashboard" class="active" onclick="showModule('dashboard')"><i class="fa-solid fa-house"></i><span>Inicio</span></button>
+ <button type="button" data-mobile-route="personalMe" onclick="showModule('personalMe')"><i class="fa-solid fa-user"></i><span>Personal</span></button>
+ <button type="button" class="mobile-nav-add" aria-label="Registrar movimiento" onclick="openMobileActionSheet()"><i class="fa-solid fa-plus"></i></button>
+ <button type="button" data-mobile-route="debts" onclick="showModule('debts')"><i class="fa-solid fa-credit-card"></i><span>Deudas</span></button>
+ <button type="button" data-mobile-more="true" onclick="toggleSidebar()"><i class="fa-solid fa-grid-2"></i><span>Más</span></button>
+</nav>
+
 <div class="modal" id="modal"><div class="modal-box" id="modalBox"></div></div>
 <div class="toast" id="toast"></div>
 <div id="loadingOverlay" aria-live="polite" aria-busy="true"><div class="loading-card"><div class="loading-spinner"></div><div class="loading-title" id="loadingTitle">Cargando datos</div><div class="loading-subtitle" id="loadingSubtitle">Sincronizando con la nube…</div></div></div>
@@ -1348,8 +1347,9 @@ function navigateToGoals(){
 function showModule(name,fromHistory=false){
  const allowed=["dashboard","calendar","debts","accounts","reports","settings","personalMe","personalPartner"];if(name==="accounts")name="reports";if(!allowed.includes(name))name="dashboard";
  activeModule=name;
+ document.querySelectorAll(".mobile-bottom-nav [data-mobile-route]").forEach(b=>b.classList.toggle("active",b.dataset.mobileRoute===name || (b.dataset.mobileRoute==="personalMe"&&name==="personalPartner")));
  ["dashboard","calendar","debts","accounts","reports","settings","personal"].forEach(m=>{const el=document.getElementById(m+"Module");if(el)el.classList.toggle("hidden",m!==name&&!(m==="personal"&&(name==="personalMe"||name==="personalPartner")))});
- document.querySelectorAll(".nav button, .mobile-bottom-nav button[data-route]").forEach(b=>b.classList.toggle("active",b.dataset.route===name));
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.route===name));
  const title={dashboard:"Dashboard General",calendar:"Calendario y recordatorios",debts:"Gestión de deudas",accounts:"Cuentas separadas",reports:"Reportes",settings:"Configuración",personalMe:"Finanza · "+(state.people.me||"Mi perfil"),personalPartner:"Finanza · "+(state.people.partner||"Pareja")};
  const h=document.querySelector(".title h1");if(h)h.textContent=title[name]||"Nexus Finance";
  const p=document.querySelector(".title p");if(p)p.textContent=name.startsWith("personal")?"Control de tus finanzas personales.":name==="dashboard"?"Resumen general de tus finanzas.":"Consulta y administra tu información financiera.";
@@ -1448,6 +1448,16 @@ setupYears();
 document.querySelector(".app").classList.add("auth-locked");
 document.getElementById("authScreen").style.display="flex";
 bootstrapAuth();
+
+function openMobileActionSheet(){
+ const body=`<div class="mobile-action-sheet"><p class="small" style="margin-top:-4px">Elige el movimiento que quieres registrar.</p><div style="display:grid;gap:10px">
+ <button class="btn" style="display:flex;align-items:center;gap:12px;text-align:left;padding:14px" onclick="openIncome('me')"><span class="quick-icon quick-income"><i class="fa-solid fa-arrow-down"></i></span><span><b>Registrar ingreso</b><small style="display:block;color:var(--muted);margin-top:3px">Añadir una entrada de dinero</small></span></button>
+ <button class="btn" style="display:flex;align-items:center;gap:12px;text-align:left;padding:14px" onclick="openExpensePicker()"><span class="quick-icon quick-expense"><i class="fa-solid fa-arrow-up"></i></span><span><b>Gasto del hogar</b><small style="display:block;color:var(--muted);margin-top:3px">Registrar una salida</small></span></button>
+ <button class="btn" style="display:flex;align-items:center;gap:12px;text-align:left;padding:14px" onclick="openSavingPicker()"><span class="quick-icon quick-saving"><i class="fa-solid fa-piggy-bank"></i></span><span><b>Registrar ahorro</b><small style="display:block;color:var(--muted);margin-top:3px">Añadir dinero a una meta</small></span></button>
+ </div></div>`;
+ openModal('Nuevo movimiento',body);
+}
+
 </script>
 </body>
 </html>
