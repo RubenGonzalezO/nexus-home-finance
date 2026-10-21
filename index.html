@@ -3,13 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Finance · Mobile</title>
-<meta name="theme-color" content="#0b0a12">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Nexus Finance">
-
+<title>Nexus Home Finance</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 :root{
@@ -250,330 +244,57 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 </style>
 
 
-/* =========================================================
-   NEXUS FINANCE MOBILE — Mobile-first product layer
-   Mantiene la lógica, API, autenticación y datos del producto base.
-   ========================================================= */
-:root{
-  --mobile-safe-bottom: env(safe-area-inset-bottom, 0px);
-  --mobile-nav-h: 72px;
-}
-@media (max-width:800px){
-  html,body{
-    width:100%;
-    min-width:0;
-    background:
-      radial-gradient(circle at 50% -12%,#2a1749 0,#0b0a12 34%,#0b0a12 100%);
-  }
-  body{
-    padding-bottom:calc(var(--mobile-nav-h) + var(--mobile-safe-bottom) + 12px);
-    -webkit-tap-highlight-color:transparent;
-  }
-
-  .app{display:block;min-height:100dvh}
-  .sidebar{
-    width:min(300px,88vw);
-    background:rgba(13,11,20,.98);
-    border-right:1px solid #332b42;
-    box-shadow:18px 0 55px rgba(0,0,0,.45);
-    padding:18px 14px;
-    z-index:900;
-  }
-  .sidebar.open{transform:translateX(0)}
-  .sidebar .nav button{
-    min-height:48px;
-    font-size:13px;
-    margin:3px 0;
-  }
-
-  .main{
-    width:100%;
-    margin:0;
-    padding:12px 12px 18px;
-    max-width:none;
-  }
-
-  .topbar{
-    position:sticky;
-    top:0;
-    z-index:100;
-    margin:0 -12px 14px;
-    padding:12px;
-    background:rgba(11,10,18,.88);
-    backdrop-filter:blur(16px);
-    -webkit-backdrop-filter:blur(16px);
-    border-bottom:1px solid rgba(57,48,72,.55);
-  }
-  .title h1{font-size:21px;letter-spacing:-.02em}
-  .title p{font-size:11px;max-width:240px}
-  .actions{gap:6px}
-  .actions .btn:not(.mobile-menu){display:none}
-  .actions .sync-status{
-    display:inline-flex;
-    width:auto;
-    order:0;
-    padding:7px 9px;
-    font-size:10px;
-  }
-  .mobile-menu{
-    display:grid!important;
-    place-items:center;
-    width:40px;
-    height:40px;
-    padding:0!important;
-    border-radius:12px;
-    order:-1;
-    font-size:0;
-  }
-  .mobile-menu:after{
-    content:"☰";
-    font-size:18px;
-  }
-
-  .filterbar{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
-    padding:10px;
-    margin-bottom:12px;
-    border-radius:15px;
-  }
-  .filterbar .field{min-width:0}
-  .filterbar .btn{grid-column:1/-1;min-height:42px}
-  .filterbar #periodLabel{
-    grid-column:1/-1;
-    padding:0 2px;
-  }
-
-  /* Resumen financiero como "hero" */
-  .kpis{
-    grid-template-columns:1fr 1fr!important;
-    gap:9px;
-    margin-bottom:12px;
-  }
-  .kpis .available{
-    grid-column:1/-1;
-    min-height:128px;
-    padding:18px;
-    background:
-      radial-gradient(circle at 100% 0,rgba(96,165,250,.18),transparent 42%),
-      linear-gradient(145deg,rgba(35,27,54,.98),rgba(16,14,24,.98));
-    border-color:rgba(96,165,250,.3);
-  }
-  .kpis .available .value{
-    font-size:32px;
-    letter-spacing:-.035em;
-  }
-  .kpi{
-    min-height:105px;
-    padding:14px;
-    border-radius:17px;
-  }
-  .kpi .value{
-    margin-top:10px;
-    font-size:21px;
-    line-height:1.1;
-  }
-  .kpi .sub{font-size:9px;line-height:1.35}
-
-  /* Acciones rápidas */
-  .mobile-quick-actions{
-    display:grid!important;
-    grid-template-columns:repeat(4,1fr);
-    gap:7px;
-    margin:0 0 13px;
-  }
-  .mobile-quick-actions button{
-    min-height:68px;
-    padding:8px 5px;
-    border:1px solid var(--line);
-    border-radius:15px;
-    background:linear-gradient(145deg,#1d172a,#14111d);
-    color:#fff;
-    font-size:9px;
-    font-weight:800;
-  }
-  .mobile-quick-actions i{
-    display:block;
-    font-size:17px;
-    margin-bottom:6px;
-    color:var(--purple2);
-  }
-  .mobile-quick-actions button:nth-child(2) i{color:var(--orange)}
-  .mobile-quick-actions button:nth-child(3) i{color:var(--green)}
-  .mobile-quick-actions button:nth-child(4) i{color:var(--blue)}
-
-  .section-grid,
-  .comparison-grid,
-  .dashboard-mini-grid,
-  .module-grid{
-    grid-template-columns:1fr!important;
-    gap:11px;
-    margin-bottom:11px;
-  }
-  .card{
-    border-radius:18px;
-    padding:15px;
-    box-shadow:0 12px 32px rgba(0,0,0,.18);
-  }
-  .card-head{
-    margin-bottom:12px;
-    align-items:flex-start;
-  }
-  .card-head h2{font-size:14px;line-height:1.3}
-  .card-head span{font-size:9px;line-height:1.35}
-  .mini-btn,.btn{min-height:38px}
-  .donut-layout{grid-template-columns:112px 1fr;gap:13px}
-  .donut{width:112px;height:112px}
-  .donut:after{inset:23px}
-  .donut-center{font-size:10px}
-  .donut-center small{font-size:8px}
-  .people{grid-template-columns:1fr;gap:7px}
-  .person{padding:10px}
-  .person .amount{font-size:16px;margin:4px 0 7px}
-
-  .comparison-card .bar-chart{height:165px}
-  .evolution-grid{grid-template-columns:1fr!important;gap:9px}
-  .evolution-panel{padding:11px;border-radius:14px}
-  .evolution-panel .modern-chart{height:160px}
-
-  .savings-grid{grid-template-columns:1fr!important;gap:8px}
-  .saving-card{padding:12px}
-  .saving-card>div[style*="font-size:20px"]{font-size:19px!important}
-
-  .future-grid{grid-template-columns:1fr!important;gap:9px}
-  .goals-grid{grid-template-columns:1fr!important}
-  .goal{padding:13px}
-
-  .upcoming-item{grid-template-columns:46px minmax(0,1fr);gap:9px}
-  .upcoming-badge{grid-column:2;justify-self:start}
-
-  .module-section .card{margin-bottom:11px}
-  .module-form{grid-template-columns:1fr!important;gap:9px}
-  .module-form .full{grid-column:auto}
-  .data-table{min-width:620px}
-  .table-wrap{margin:0 -4px;padding:0 4px;overflow-x:auto}
-  .report-row{grid-template-columns:1fr!important}
-  .report-balance{align-items:flex-start!important}
-  .report-filter{grid-template-columns:1fr 1fr!important}
-  .report-filter .field{min-width:0}
-  .month-list{grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
-  .calendar-day{min-height:58px;font-size:8px}
-  .calendar-task{font-size:7px}
-
-  /* Modales optimizados para una sola mano */
-  .modal{padding:0!important;align-items:flex-end!important}
-  .modal-box{
-    width:100%;
-    max-width:none;
-    max-height:92dvh;
-    border-radius:22px 22px 0 0;
-    padding:16px;
-    border-bottom:0;
-    animation:nexus-mobile-sheet .2s ease-out;
-  }
-  .modal-head{position:sticky;top:0;background:#14111e;z-index:2;padding-bottom:10px}
-  .form-grid{grid-template-columns:1fr!important}
-  .form-grid .full{grid-column:auto}
-  .form-actions{
-    position:sticky;
-    bottom:0;
-    margin:12px -16px -16px;
-    padding:12px 16px calc(12px + var(--mobile-safe-bottom));
-    background:rgba(20,17,30,.97);
-    border-top:1px solid var(--line);
-  }
-  .form-actions .btn{flex:1}
-  @keyframes nexus-mobile-sheet{
-    from{transform:translateY(18px);opacity:.7}
-    to{transform:translateY(0);opacity:1}
-  }
-
-  /* Login móvil */
-  #authScreen{padding:18px;align-items:center}
-  .auth-card{
-    width:100%;
-    padding:22px 18px;
-    border-radius:22px;
-  }
-  .auth-brand .logo-mark{width:44px;height:44px}
-  .auth-card h1{font-size:23px}
-  .auth-card .btn{width:100%;min-height:46px}
-
-  .toast{
-    left:12px;
-    right:12px;
-    bottom:calc(var(--mobile-nav-h) + var(--mobile-safe-bottom) + 10px);
-    max-width:none;
-  }
-
-  /* Barra de navegación nativa */
-  .mobile-bottom-nav{
-    position:fixed;
-    left:0;
-    right:0;
-    bottom:0;
-    z-index:800;
-    display:grid!important;
-    grid-template-columns:repeat(5,1fr);
-    gap:2px;
-    height:calc(var(--mobile-nav-h) + var(--mobile-safe-bottom));
-    padding:7px 7px var(--mobile-safe-bottom);
-    background:rgba(15,12,23,.96);
-    border-top:1px solid #31283e;
-    box-shadow:0 -14px 35px rgba(0,0,0,.28);
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
-  }
-  .mobile-bottom-nav button{
-    position:relative;
-    border:0;
-    background:transparent;
-    color:#8f889f;
-    border-radius:13px;
-    font-size:9px;
-    font-weight:800;
-    min-width:0;
-  }
-  .mobile-bottom-nav button i{
-    display:block;
-    font-size:17px;
-    margin-bottom:4px;
-  }
-  .mobile-bottom-nav button.active{
-    color:#d9ccff;
-    background:rgba(139,92,246,.11);
-  }
-  .mobile-bottom-nav .mobile-add{
-    margin-top:-25px;
-    width:52px;
-    height:52px;
-    justify-self:center;
-    align-self:start;
-    border-radius:18px;
-    color:#fff;
-    background:linear-gradient(135deg,#7c3aed,#fb923c);
-    box-shadow:0 9px 25px rgba(124,58,237,.38);
-    border:4px solid #0f0c17;
-  }
-  .mobile-bottom-nav .mobile-add i{margin:0;font-size:20px}
-}
-
-@media(max-width:420px){
-  .main{padding-left:10px;padding-right:10px}
-  .topbar{margin-left:-10px;margin-right:-10px;padding-left:10px;padding-right:10px}
-  .mobile-quick-actions{gap:5px}
-  .mobile-quick-actions button{font-size:8px}
-  .mobile-quick-actions i{font-size:15px}
-  .kpi .value{font-size:19px}
-  .kpis .available .value{font-size:29px}
-  .donut-layout{grid-template-columns:100px 1fr}
-  .donut{width:100px;height:100px}
-}
-
-@media(min-width:801px){
-  .mobile-quick-actions,.mobile-bottom-nav{display:none!important}
-}
+<style id="nexus-mobile-native-css">
+/* ===== Nexus Finance Mobile: native mobile UI ===== */
+#nexusMobileApp{display:none}
+body.nexus-mobile-ready{overflow-x:hidden}
+body.nexus-mobile-ready .sidebar,
+body.nexus-mobile-ready .main{display:none!important}
+body.nexus-mobile-ready #authScreen,
+body.nexus-mobile-ready #modal,
+body.nexus-mobile-ready #toast,
+body.nexus-mobile-ready #loadingOverlay{z-index:9999}
+body.nexus-mobile-ready #nexusMobileApp{display:block;min-height:100vh;background:#0b0a12;color:#f6f3ff}
+.nm-shell{min-height:100vh;max-width:560px;margin:0 auto;padding-bottom:92px}
+.nm-top{position:sticky;top:0;z-index:30;padding:16px 16px 12px;background:rgba(11,10,18,.94);backdrop-filter:blur(16px);border-bottom:1px solid #292438}
+.nm-toprow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nm-brand{display:flex;align-items:center;gap:10px}
+.nm-mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#8b5cf6,#fb923c);display:grid;place-items:center;font-weight:900}
+.nm-brand strong{font-size:16px}.nm-brand span{display:block;color:#9c96ad;font-size:11px;margin-top:2px}
+.nm-iconbtn{width:42px;height:42px;border-radius:13px;border:1px solid #292438;background:#181523;color:#fff;font-size:16px}
+.nm-content{padding:16px}
+.nm-greeting{margin:8px 0 16px}.nm-greeting h1{font-size:25px;margin:0 0 5px;letter-spacing:-.5px}.nm-greeting p{margin:0;color:#9c96ad;font-size:13px}
+.nm-period{display:flex;gap:8px;margin-bottom:14px}.nm-period select{flex:1;background:#12101b;color:#fff;border:1px solid #292438;border-radius:12px;padding:11px}
+.nm-hero{padding:18px;border-radius:22px;background:linear-gradient(145deg,#241741,#171221);border:1px solid #3b2a57;margin-bottom:14px}
+.nm-hero-label{color:#b7adc9;font-size:12px}.nm-hero-value{font-size:31px;font-weight:900;margin:5px 0 12px;letter-spacing:-1px}.nm-hero-meta{display:flex;justify-content:space-between;color:#a89fb8;font-size:11px}
+.nm-kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.nm-card{background:linear-gradient(180deg,#181523,#100e18);border:1px solid #292438;border-radius:18px;padding:14px}
+.nm-kpi-label{font-size:11px;color:#9c96ad}.nm-kpi-value{font-size:17px;font-weight:800;margin-top:6px;overflow-wrap:anywhere}
+.nm-accent-purple{color:#a78bfa}.nm-accent-orange{color:#fb923c}.nm-accent-green{color:#34d399}.nm-accent-blue{color:#60a5fa}
+.nm-section{display:flex;align-items:center;justify-content:space-between;margin:22px 0 10px}.nm-section h2{font-size:15px;margin:0}.nm-section button{background:none;color:#a78bfa;border:0;font-size:12px}
+.nm-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.nm-action{border:1px solid #292438;background:#12101b;color:#fff;border-radius:15px;padding:11px 5px;min-height:70px;font-size:11px;font-weight:700}
+.nm-action i{display:block;font-size:17px;margin-bottom:7px}.nm-action.income i{color:#34d399}.nm-action.expense i{color:#fb7185}.nm-action.save i{color:#60a5fa}.nm-action.debt i{color:#fb923c}
+.nm-list{display:grid;gap:8px}.nm-row{display:flex;align-items:center;gap:10px;padding:12px;border-radius:14px;background:#12101b;border:1px solid #292438}
+.nm-dot{width:10px;height:10px;border-radius:50%;background:#8b5cf6;flex:none}.nm-row-main{min-width:0;flex:1}.nm-row-title{font-size:12px;font-weight:700}.nm-row-sub{font-size:10px;color:#9c96ad;margin-top:3px}.nm-row-value{font-size:12px;font-weight:800;white-space:nowrap}
+.nm-empty{padding:20px;text-align:center;color:#9c96ad;font-size:12px;border:1px dashed #292438;border-radius:15px}
+.nm-screen{display:none}.nm-screen.active{display:block}
+.nm-bottom{position:fixed;z-index:40;left:50%;bottom:0;transform:translateX(-50%);width:min(560px,100%);padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:rgba(12,10,19,.97);border-top:1px solid #292438;display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.nm-nav{border:0;background:transparent;color:#777184;border-radius:13px;padding:8px 3px;font-size:10px}.nm-nav i{display:block;font-size:16px;margin-bottom:4px}.nm-nav.active{color:#fff;background:#1c1729}
+.nm-fab{margin-top:-25px;width:48px;height:48px;margin-left:auto;margin-right:auto;border-radius:16px;border:1px solid #8b5cf6;background:linear-gradient(135deg,#8b5cf6,#6d3fd0);color:#fff;font-size:18px}
+.nm-auth{min-height:100vh;padding:28px 18px;display:flex;align-items:center}
+.nm-authbox{width:100%;background:#12101b;border:1px solid #292438;border-radius:25px;padding:22px}
+.nm-authbox h1{font-size:25px;margin:14px 0 5px}.nm-authbox p{color:#9c96ad;font-size:13px;line-height:1.5}
+.nm-field{display:block;margin:14px 0;font-size:11px;color:#bcb5c9}.nm-field input{display:block;width:100%;margin-top:7px;padding:14px;border-radius:13px;border:1px solid #302a3d;background:#0d0b14;color:#fff;outline:none;font-size:16px}
+.nm-login{width:100%;padding:14px;border-radius:13px;border:0;background:linear-gradient(135deg,#7c3aed,#9b6cff);color:#fff;font-weight:800;margin-top:6px}
+.nm-msg{min-height:18px;color:#fb7185;font-size:12px;margin:7px 0}
+.nm-sheet{display:none;position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.55);align-items:flex-end}
+.nm-sheet.show{display:flex}.nm-sheetbox{width:100%;max-width:560px;margin:auto auto 0;background:#12101b;border:1px solid #292438;border-bottom:0;border-radius:24px 24px 0 0;padding:18px}
+.nm-sheethead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.nm-sheethead h3{margin:0;font-size:16px}.nm-sheetgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.nm-sheet button{min-height:56px}
+.nm-reportbar{height:8px;background:#292438;border-radius:99px;overflow:hidden;margin-top:8px}.nm-reportfill{height:100%;background:linear-gradient(90deg,#8b5cf6,#fb923c);border-radius:99px}
+.nm-setting{display:flex;justify-content:space-between;align-items:center;gap:12px}.nm-setting strong{font-size:12px}.nm-setting span{font-size:11px;color:#9c96ad;text-align:right}
+@media(min-width:561px){#nexusMobileApp{background:radial-gradient(circle at 20% -10%,#211642 0,#0b0a12 35%)}}
+</style>
 
 </head>
 <body>
@@ -609,14 +330,6 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
   <div class="field"><label>Periodo</label><select class="select" id="filterMonth" onchange="renderAll()"><option value="all">Año completo</option><option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option><option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option><option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option></select></div>
   <button class="btn ghost" onclick="setCurrentPeriod()">Periodo actual</button>
   <span class="small" id="periodLabel"></span>
-</div>
-
-
-<div class="mobile-quick-actions" aria-label="Acciones rápidas">
-  <button onclick="openIncome('me')"><i class="fa-solid fa-arrow-down"></i>Ingreso</button>
-  <button onclick="openExpensePicker()"><i class="fa-solid fa-house-chimney"></i>Gasto hogar</button>
-  <button onclick="openSavingPicker()"><i class="fa-solid fa-piggy-bank"></i>Ahorro</button>
-  <button onclick="showModule('debts')"><i class="fa-solid fa-credit-card"></i>Deudas</button>
 </div>
 
 <section class="grid kpis">
@@ -1514,56 +1227,300 @@ document.getElementById("authScreen").style.display="flex";
 bootstrapAuth();
 </script>
 
-<nav class="mobile-bottom-nav" aria-label="Navegación principal móvil">
-  <button data-mobile-route="dashboard" class="active" onclick="mobileNavigate('dashboard')">
-    <i class="fa-solid fa-house"></i>Inicio
-  </button>
-  <button data-mobile-route="personalMe" onclick="mobileNavigate('personalMe')">
-    <i class="fa-solid fa-user"></i>Mi dinero
-  </button>
-  <button class="mobile-add" aria-label="Registrar movimiento" onclick="openMobileAddMenu()">
-    <i class="fa-solid fa-plus"></i>
-  </button>
-  <button data-mobile-route="reports" onclick="mobileNavigate('reports')">
-    <i class="fa-solid fa-chart-pie"></i>Reportes
-  </button>
-  <button data-mobile-route="settings" onclick="mobileNavigate('settings')">
-    <i class="fa-solid fa-gear"></i>Ajustes
-  </button>
-</nav>
-
-<script>
-/* Nexus Finance Mobile UX */
-function mobileNavigate(route){
-  document.querySelectorAll(".mobile-bottom-nav [data-mobile-route]").forEach(b=>{
-    b.classList.toggle("active",b.dataset.mobileRoute===route);
-  });
-  if(typeof showModule==="function") showModule(route);
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-function openMobileAddMenu(){
-  openModal("Registrar movimiento",`
-    <div class="small" style="margin-bottom:14px">Elige qué quieres registrar.</div>
-    <div class="future-grid">
-      <button class="btn primary" onclick="openIncome('me')"><i class="fa-solid fa-arrow-down"></i> Ingreso personal</button>
-      <button class="btn" onclick="openExpensePicker()"><i class="fa-solid fa-house-chimney"></i> Gasto del hogar</button>
-      <button class="btn" onclick="openSavingPicker()"><i class="fa-solid fa-piggy-bank"></i> Ahorro</button>
-      <button class="btn" onclick="showModule('debts');closeModal()"><i class="fa-solid fa-credit-card"></i> Nueva deuda</button>
+<div id="nexusMobileApp">
+  <div id="nmLogin" class="nm-auth">
+    <div class="nm-authbox">
+      <div class="nm-mark">N</div>
+      <h1>Nexus Finance</h1>
+      <p>Tu dinero, tus decisiones. Una experiencia financiera diseñada para móvil.</p>
+      <form id="nmLoginForm">
+        <label class="nm-field">Correo o usuario
+          <input id="nmEmail" type="text" autocomplete="username" required placeholder="Correo o usuario">
+        </label>
+        <label class="nm-field">Contraseña
+          <input id="nmPassword" type="password" autocomplete="current-password" required placeholder="Tu contraseña">
+        </label>
+        <div id="nmLoginMsg" class="nm-msg"></div>
+        <button class="nm-login" type="submit">Iniciar sesión</button>
+      </form>
     </div>
-  `);
-}
-document.addEventListener("DOMContentLoaded",()=>{
-  const originalShowModule=window.showModule;
-  if(typeof originalShowModule==="function" && !window.__mobileShowModulePatched){
-    window.__mobileShowModulePatched=true;
-    window.showModule=function(route,...args){
-      originalShowModule(route,...args);
-      document.querySelectorAll(".mobile-bottom-nav [data-mobile-route]").forEach(b=>{
-        b.classList.toggle("active",b.dataset.mobileRoute===route);
-      });
-    };
+  </div>
+
+  <div id="nmApp" class="nm-shell" style="display:none">
+    <header class="nm-top">
+      <div class="nm-toprow">
+        <div class="nm-brand"><div class="nm-mark">N</div><div><strong>Nexus Finance</strong><span id="nmUser">Mi espacio financiero</span></div></div>
+        <button class="nm-iconbtn" id="nmRefresh" type="button" aria-label="Actualizar"><i class="fa-solid fa-rotate"></i></button>
+      </div>
+    </header>
+
+    <main class="nm-content">
+      <section id="nmHome" class="nm-screen active">
+        <div class="nm-greeting"><h1>Resumen financiero</h1><p id="nmPeriodText">Este periodo</p></div>
+        <div class="nm-period">
+          <select id="nmYear"></select><select id="nmMonth">
+            <option value="all">Todo el año</option><option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option><option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option><option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
+        </select></div>
+        <div class="nm-hero"><div class="nm-hero-label">Disponible</div><div id="nmAvailable" class="nm-hero-value">$0</div><div class="nm-hero-meta"><span id="nmUserA">—</span><span id="nmUserB">—</span></div></div>
+        <div class="nm-kpis">
+          <div class="nm-card"><div class="nm-kpi-label">Ingresos</div><div id="nmIncome" class="nm-kpi-value nm-accent-green">$0</div></div>
+          <div class="nm-card"><div class="nm-kpi-label">Gastos hogar</div><div id="nmExpense" class="nm-kpi-value nm-accent-orange">$0</div></div>
+          <div class="nm-card"><div class="nm-kpi-label">Ahorros</div><div id="nmSaving" class="nm-kpi-value nm-accent-blue">$0</div></div>
+          <div class="nm-card"><div class="nm-kpi-label">Deuda pendiente</div><div id="nmDebt" class="nm-kpi-value nm-accent-purple">$0</div></div>
+        </div>
+        <div class="nm-section"><h2>Acciones rápidas</h2></div>
+        <div class="nm-actions">
+          <button class="nm-action income" data-action="income"><i class="fa-solid fa-arrow-down"></i>Ingreso</button>
+          <button class="nm-action expense" data-action="expense"><i class="fa-solid fa-arrow-up"></i>Gasto</button>
+          <button class="nm-action save" data-action="saving"><i class="fa-solid fa-piggy-bank"></i>Ahorro</button>
+          <button class="nm-action debt" data-action="debt"><i class="fa-solid fa-credit-card"></i>Deuda</button>
+        </div>
+        <div class="nm-section"><h2>Movimientos recientes</h2><button type="button" data-go="money">Ver todo</button></div>
+        <div id="nmRecent" class="nm-list"></div>
+        <div class="nm-section"><h2>Próximos pagos / recordatorios</h2></div>
+        <div id="nmUpcoming" class="nm-list"></div>
+      </section>
+
+      <section id="nmMoney" class="nm-screen">
+        <div class="nm-greeting"><h1>Mi dinero</h1><p>Movimientos e información personal.</p></div>
+        <div class="nm-section"><h2>Ingresos</h2><button type="button" data-action="income">+ Añadir</button></div>
+        <div id="nmIncomeList" class="nm-list"></div>
+        <div class="nm-section"><h2>Gastos del hogar</h2><button type="button" data-action="expense">+ Añadir</button></div>
+        <div id="nmExpenseList" class="nm-list"></div>
+        <div class="nm-section"><h2>Ahorros</h2><button type="button" data-action="saving">+ Añadir</button></div>
+        <div id="nmSavingList" class="nm-list"></div>
+      </section>
+
+      <section id="nmDebts" class="nm-screen">
+        <div class="nm-greeting"><h1>Deudas</h1><p>Controla saldos, cuotas y vencimientos.</p></div>
+        <div id="nmDebtList" class="nm-list"></div>
+        <div class="nm-section"><h2>Saldo total pendiente</h2></div>
+        <div class="nm-card"><div id="nmDebtTotal" class="nm-hero-value" style="font-size:24px">$0</div></div>
+      </section>
+
+      <section id="nmReports" class="nm-screen">
+        <div class="nm-greeting"><h1>Reportes</h1><p>Una lectura rápida de tu comportamiento financiero.</p></div>
+        <div class="nm-card">
+          <div class="nm-section" style="margin-top:0"><h2>Distribución del periodo</h2></div>
+          <div id="nmReportRows"></div>
+        </div>
+      </section>
+
+      <section id="nmSettings" class="nm-screen">
+        <div class="nm-greeting"><h1>Configuración</h1><p>Preferencias y cuenta.</p></div>
+        <div class="nm-list">
+          <div class="nm-row nm-setting"><div><strong>Mi perfil</strong><div class="nm-row-sub">Nombre utilizado en tus movimientos</div></div><span id="nmSetMe">—</span></div>
+          <div class="nm-row nm-setting"><div><strong>Pareja</strong><div class="nm-row-sub">Perfil asociado al hogar</div></div><span id="nmSetPartner">—</span></div>
+          <div class="nm-row nm-setting"><div><strong>Meta de ahorro</strong><div class="nm-row-sub">Objetivo configurado</div></div><span id="nmSetTarget">—</span></div>
+          <button id="nmLogout" class="nm-action" style="width:100%;color:#fb7185">Cerrar sesión</button>
+        </div>
+      </section>
+    </main>
+
+    <nav class="nm-bottom">
+      <button class="nm-nav active" data-tab="home" type="button"><i class="fa-solid fa-house"></i>Inicio</button>
+      <button class="nm-nav" data-tab="money" type="button"><i class="fa-solid fa-wallet"></i>Dinero</button>
+      <button class="nm-fab" id="nmAdd" type="button" aria-label="Añadir"><i class="fa-solid fa-plus"></i></button>
+      <button class="nm-nav" data-tab="debts" type="button"><i class="fa-solid fa-credit-card"></i>Deudas</button>
+      <button class="nm-nav" data-tab="reports" type="button"><i class="fa-solid fa-chart-column"></i>Reportes</button>
+    </nav>
+  </div>
+
+  <div id="nmSheet" class="nm-sheet">
+    <div class="nm-sheetbox">
+      <div class="nm-sheethead"><h3>Añadir movimiento</h3><button id="nmCloseSheet" class="nm-iconbtn" type="button"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="nm-sheetgrid">
+        <button class="nm-action income" data-action="income" type="button"><i class="fa-solid fa-arrow-down"></i>Ingreso</button>
+        <button class="nm-action expense" data-action="expense" type="button"><i class="fa-solid fa-arrow-up"></i>Gasto</button>
+        <button class="nm-action save" data-action="saving" type="button"><i class="fa-solid fa-piggy-bank"></i>Ahorro</button>
+        <button class="nm-action debt" data-action="debt" type="button"><i class="fa-solid fa-credit-card"></i>Deuda</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script id="nexus-mobile-native-js">
+(function(){
+  if(window.__nexusMobileNativeInitialized)return;
+  window.__nexusMobileNativeInitialized=true;
+
+  const $=id=>document.getElementById(id);
+  const moneySafe=n=>typeof money==="function"?money(n):new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(Math.round(Number(n)||0));
+  const escSafe=s=>typeof esc==="function"?esc(s):String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+  const monthNames=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+
+  function activate(tab){
+    document.querySelectorAll(".nm-screen").forEach(x=>x.classList.remove("active"));
+    const screen=$("nm"+tab.charAt(0).toUpperCase()+tab.slice(1));
+    if(screen)screen.classList.add("active");
+    document.querySelectorAll(".nm-nav").forEach(x=>x.classList.toggle("active",x.dataset.tab===tab));
+    $("nmSheet").classList.remove("show");
+    window.scrollTo({top:0,behavior:"smooth"});
+    if(tab==="home")renderHome();
+    if(tab==="money")renderMoney();
+    if(tab==="debts")renderDebts();
+    if(tab==="reports")renderReports();
   }
-});
+
+  function openAction(type){
+    $("nmSheet").classList.remove("show");
+    try{
+      if(type==="income"){ openIncome("me"); }
+      else if(type==="expense"){ openExpensePicker(); }
+      else if(type==="saving"){ openSavingPicker(); }
+      else if(type==="debt"){ showModule("debts"); activate("debts"); }
+    }catch(e){
+      if(typeof toast==="function")toast("No fue posible abrir esta acción.");
+    }
+  }
+
+  function getPeriod(){
+    const year=Number($("nmYear").value)||new Date().getFullYear();
+    const month=$("nmMonth").value;
+    return {year,month};
+  }
+  function filteredMobile(arr){
+    const {year,month}=getPeriod();
+    return (arr||[]).filter(x=>{
+      if(!x.date)return true;
+      const d=new Date(x.date+"T00:00:00");
+      return d.getFullYear()===year && (month==="all" || d.getMonth()+1===Number(month));
+    });
+  }
+  function sumMobile(arr){return (arr||[]).reduce((a,x)=>a+(Number(x.amount)||0),0)}
+
+  function renderPeriodControls(){
+    if(!$("nmYear")||typeof state==="undefined")return;
+    const years=new Set([new Date().getFullYear()]);
+    [...(state.incomes||[]),...(state.expenses||[]),...(state.savings||[])].forEach(x=>{if(x.date)years.add(new Date(x.date+"T00:00:00").getFullYear())});
+    const current=$("nmYear").value;
+    $("nmYear").innerHTML=[...years].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join("");
+    $("nmYear").value=current&&years.has(Number(current))?current:String(new Date().getFullYear());
+    const month=String((typeof getFilter==="function"?getFilter().month:"all")||"all");
+    $("nmMonth").value=[...$("nmMonth").options].some(o=>o.value===month)?month:"all";
+  }
+
+  function renderHome(){
+    if(typeof state==="undefined")return;
+    renderPeriodControls();
+    const inc=filteredMobile(state.incomes),exp=filteredMobile(state.expenses),sav=filteredMobile(state.savings);
+    const income=sumMobile(inc),expense=sumMobile(exp),saving=sumMobile(sav);
+    let available=0;
+    try{
+      const f=getPeriod();
+      available=["me","partner"].reduce((total,p)=>{
+        const personal=personalStats(p,f.year,f.month);
+        return total+(personalAssigned(p,f.year,f.month)||0)+(personal.extraIncome||0)-(personal.spent||0)-(personal.saved||0);
+      },0);
+    }catch(_){available=income-expense-saving}
+    $("nmIncome").textContent=moneySafe(income);
+    $("nmExpense").textContent=moneySafe(expense);
+    $("nmSaving").textContent=moneySafe(saving);
+    $("nmAvailable").textContent=moneySafe(available);
+    const debt=sumMobile((state.debts||[]).filter(d=>d.status!=="paid"));
+    $("nmDebt").textContent=moneySafe(debt);
+    $("nmDebtTotal").textContent=moneySafe(debt);
+    $("nmUserA").textContent=state.people?.me||"Mi perfil";
+    $("nmUserB").textContent=state.people?.partner||"Pareja";
+    $("nmUser").textContent=state.people?.me||authUser?.username||"Mi espacio financiero";
+    const p=getPeriod();
+    $("nmPeriodText").textContent=p.month==="all"?`Resumen de ${p.year}`:`${monthNames[Number(p.month)-1]} ${p.year}`;
+
+    const recent=[
+      ...inc.map(x=>({type:"Ingreso",date:x.date,amount:x.amount,label:state.people?.[x.person]||x.person,sign:"+"})),
+      ...exp.map(x=>({type:x.category||"Gasto",date:x.date,amount:x.amount,label:"Gasto del hogar",sign:"-"})),
+      ...sav.map(x=>({type:"Ahorro",date:x.date,amount:x.amount,label:x.type||"Ahorro",sign:"-"}))
+    ].sort((a,b)=>String(b.date).localeCompare(String(a.date))).slice(0,5);
+    $("nmRecent").innerHTML=recent.length?recent.map(x=>`<div class="nm-row"><span class="nm-dot"></span><div class="nm-row-main"><div class="nm-row-title">${escSafe(x.type)}</div><div class="nm-row-sub">${escSafe(x.label)} · ${escSafe(x.date)}</div></div><div class="nm-row-value">${x.sign}${moneySafe(x.amount)}</div></div>`).join(""):'<div class="nm-empty">Aún no hay movimientos en este periodo.</div>';
+
+    const tasks=(state.tasks||[]).filter(t=>t.status!=="done"&&t.date).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);
+    $("nmUpcoming").innerHTML=tasks.length?tasks.map(t=>`<div class="nm-row"><span class="nm-dot"></span><div class="nm-row-main"><div class="nm-row-title">${escSafe(t.title)}</div><div class="nm-row-sub">${escSafe(t.date)} · ${escSafe(t.time||"Sin hora")}</div></div></div>`).join(""):'<div class="nm-empty">No tienes recordatorios próximos.</div>';
+  }
+
+  function listRows(items,type){
+    if(!items.length)return '<div class="nm-empty">No hay registros en este periodo.</div>';
+    return items.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))).slice(0,20).map(x=>{
+      const label=type==="income"?(state.people?.[x.person]||x.person):(type==="expense"?(x.category||"Gasto del hogar"):(x.type||"Ahorro"));
+      return `<div class="nm-row"><span class="nm-dot"></span><div class="nm-row-main"><div class="nm-row-title">${escSafe(label)}</div><div class="nm-row-sub">${escSafe(x.date||"Sin fecha")}</div></div><div class="nm-row-value">${moneySafe(x.amount)}</div></div>`;
+    }).join("");
+  }
+
+  function renderMoney(){
+    if(typeof state==="undefined")return;
+    renderPeriodControls();
+    $("nmIncomeList").innerHTML=listRows(filteredMobile(state.incomes),"income");
+    $("nmExpenseList").innerHTML=listRows(filteredMobile(state.expenses),"expense");
+    $("nmSavingList").innerHTML=listRows(filteredMobile(state.savings),"saving");
+  }
+
+  function renderDebts(){
+    if(typeof state==="undefined")return;
+    const debts=(state.debts||[]).filter(d=>d.status!=="paid"&&Number(d.balance)>0);
+    $("nmDebtList").innerHTML=debts.length?debts.map(d=>{
+      const pct=d.original?Math.max(0,Math.min(100,(1-Number(d.balance)/Number(d.original))*100)):0;
+      return `<div class="nm-card"><div class="nm-row" style="padding:0;border:0;background:transparent"><span class="nm-dot"></span><div class="nm-row-main"><div class="nm-row-title">${escSafe(d.name)}</div><div class="nm-row-sub">Vence ${escSafe(d.due||"sin fecha")} · Cuota ${moneySafe(d.installment)}</div></div><strong>${moneySafe(d.balance)}</strong></div><div class="nm-reportbar"><div class="nm-reportfill" style="width:${pct}%"></div></div></div>`;
+    }).join(""):'<div class="nm-empty">No tienes deudas pendientes.</div>';
+    $("nmDebtTotal").textContent=moneySafe(debts.reduce((a,d)=>a+(Number(d.balance)||0),0));
+  }
+
+  function renderReports(){
+    if(typeof state==="undefined")return;
+    const inc=sumMobile(filteredMobile(state.incomes)),exp=sumMobile(filteredMobile(state.expenses)),sav=sumMobile(filteredMobile(state.savings));
+    const total=inc+exp+sav||1;
+    const rows=[["Ingresos",inc,"nm-accent-green"],["Gastos",exp,"nm-accent-orange"],["Ahorros",sav,"nm-accent-blue"]];
+    $("nmReportRows").innerHTML=rows.map(([name,val,cls])=>`<div style="margin:14px 0"><div class="nm-row" style="padding:0;border:0;background:transparent"><strong>${name}</strong><span class="${cls}" style="margin-left:auto;font-weight:800">${moneySafe(val)}</span></div><div class="nm-reportbar"><div class="nm-reportfill" style="width:${Math.min(100,(val/total)*100)}%"></div></div></div>`).join("");
+  }
+
+  function renderSettings(){
+    if(typeof state==="undefined")return;
+    $("nmSetMe").textContent=state.people?.me||"—";
+    $("nmSetPartner").textContent=state.people?.partner||"—";
+    $("nmSetTarget").textContent=moneySafe(state.savingTarget||0);
+  }
+
+  function syncAuthView(){
+    const logged=typeof authToken!=="undefined" && !!authToken && typeof authUser!=="undefined" && !!authUser;
+    $("nmLogin").style.display=logged?"none":"flex";
+    $("nmApp").style.display=logged?"block":"none";
+    if(logged){renderHome();renderSettings();}
+  }
+
+  $("nmLoginForm").addEventListener("submit",async e=>{
+    e.preventDefault();
+    $("nmLoginMsg").textContent="Iniciando sesión…";
+    $("authEmail").value=$("nmEmail").value;
+    $("authPassword").value=$("nmPassword").value;
+    try{
+      await submitAuth(e);
+    }catch(err){}
+    setTimeout(()=>{syncAuthView();if($("nmApp").style.display==="block")activate("home");},800);
+  });
+
+  $("nmRefresh").addEventListener("click",()=>{
+    try{refreshDashboard()}catch(_){}
+    setTimeout(()=>{renderHome();renderMoney();renderDebts();renderReports()},700);
+  });
+
+  $("nmYear").addEventListener("change",()=>{renderHome();renderMoney();renderReports()});
+  $("nmMonth").addEventListener("change",()=>{renderHome();renderMoney();renderReports()});
+
+  document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>activate(b.dataset.tab)));
+  document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>activate(b.dataset.go)));
+  document.querySelectorAll("[data-action]").forEach(b=>b.addEventListener("click",()=>openAction(b.dataset.action)));
+  $("nmAdd").addEventListener("click",()=>$("nmSheet").classList.add("show"));
+  $("nmCloseSheet").addEventListener("click",()=>$("nmSheet").classList.remove("show"));
+  $("nmSheet").addEventListener("click",e=>{if(e.target===$("nmSheet"))$("nmSheet").classList.remove("show")});
+  $("nmLogout").addEventListener("click",()=>{
+    try{logoutNexus(true)}catch(_){}
+    setTimeout(syncAuthView,500);
+  });
+
+  document.querySelectorAll("[data-tab]").forEach(b=>b.setAttribute("aria-label",b.textContent.trim()));
+  document.body.classList.add("nexus-mobile-ready");
+  syncAuthView();
+  setInterval(syncAuthView,1200);
+})();
 </script>
 
 </body>
