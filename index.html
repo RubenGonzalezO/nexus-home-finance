@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Home Finance</title>
+<title>Nexus Finance · App móvil V2</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 :root{
@@ -275,6 +275,37 @@ button,input,select,textarea{-webkit-tap-highlight-color:transparent}button{touc
 @media(max-width:360px){.m-wrap{padding-left:12px;padding-right:12px}.m-page-heading h1{font-size:23px}.m-stat{padding:11px}.m-balance-footer{gap:9px}.m-balance-footer span{font-size:9px}.m-personal-actions{grid-template-columns:repeat(2,minmax(0,1fr))}.m-quick-actions{gap:1px}.m-tools-grid{gap:6px}.m-report-month{grid-template-columns:36px minmax(0,1fr)}.m-debt-card-top{gap:7px}.m-status{font-size:7px;padding:4px 5px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
+
+<style id="nexus-mobile-v2-priority">
+.m-v2-hero{position:relative;overflow:hidden;margin:0 0 21px;padding:19px 17px 15px;border:1px solid var(--m-line);border-radius:22px;background:linear-gradient(145deg,#1e182c,#13101b 72%);box-shadow:0 16px 38px #0003}
+.m-v2-hero:after{content:"";position:absolute;width:150px;height:150px;right:-65px;top:-75px;border:1px solid #ffffff10;border-radius:50%;box-shadow:0 0 0 16px #ffffff04,0 0 0 35px #ffffff03;pointer-events:none}
+.m-v2-hero.income{border-color:#5b4778;background:radial-gradient(circle at 100% 0,rgba(167,139,250,.19),transparent 47%),linear-gradient(145deg,#241b35,#13101b 72%)}
+.m-v2-hero.expense{border-color:#68462e;background:radial-gradient(circle at 100% 0,rgba(251,146,60,.17),transparent 47%),linear-gradient(145deg,#2a1d18,#13101b 72%)}
+.m-v2-hero.available{border-color:#315777;background:radial-gradient(circle at 100% 0,rgba(96,165,250,.2),transparent 47%),linear-gradient(145deg,#17263a,#13101b 72%)}
+.m-v2-hero-top{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.m-v2-hero-total{position:relative;z-index:1;display:block;margin:17px 0 8px;font-size:clamp(30px,8vw,40px);font-weight:900;letter-spacing:-.05em;line-height:1.12;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.m-v2-hero p{position:relative;z-index:1;margin:0;color:#b8aec8;font-size:11px;line-height:1.55;max-width:440px}
+.m-v2-hero-footer{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;padding-top:12px;border-top:1px solid #ffffff12;color:#c0b5d0;font-size:9px}
+.m-v2-hero-footer span{display:flex;gap:6px;align-items:center}.m-v2-hero-footer i{color:#c4b5fd}
+.m-v2-person-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.m-v2-person-card{min-width:0;border:1px solid var(--m-line);border-radius:17px;padding:14px;background:linear-gradient(155deg,#1b1727,#12101a)}
+.m-v2-person-card.me{border-top:2px solid #a78bfa}.m-v2-person-card.partner{border-top:2px solid #fb923c}
+.m-v2-person-icon{display:grid;place-items:center;width:36px;height:36px;border-radius:12px;background:#302342;color:#c4b5fd;margin-bottom:12px}.m-v2-person-card.partner .m-v2-person-icon,.m-v2-available-card.partner .m-v2-person-icon{background:#402719;color:#fdba74}
+.m-v2-person-card>small{display:block;color:#a99fba;font-size:10px}.m-v2-person-card>strong{display:block;font-size:clamp(15px,4vw,20px);margin:6px 0 13px;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.m-v2-split-track{height:6px;overflow:hidden;background:#302a3a;border-radius:99px}.m-v2-split-track i{display:block;height:100%;background:#a78bfa;border-radius:99px}.m-v2-person-card.partner .m-v2-split-track i{background:#fb923c}
+.m-v2-person-foot{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:9px;color:#a59bb5;font-size:9px}
+.m-v2-duo-totals{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px;padding-top:13px;border-top:1px solid #ffffff12}.m-v2-duo-totals span{display:grid;gap:5px}.m-v2-duo-totals small{color:#b4a8bb;font-size:9px}.m-v2-duo-totals b{font-size:12px;overflow-wrap:anywhere}
+.m-v2-category-row{display:flex;align-items:center;gap:9px;padding:12px 0;border-bottom:1px solid #ffffff0a}.m-v2-category-row:last-child{border-bottom:0}.m-v2-category-dot{width:9px;height:9px;flex:0 0 9px;border-radius:50%}.m-v2-category-info{display:grid;gap:7px;flex:1;min-width:0}.m-v2-category-info>b{font-size:11px}.m-v2-category-info small{font-size:9px;color:#a59bb3;line-height:1.5;overflow-wrap:anywhere}.m-v2-category-row>strong{font-size:11px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.m-v2-action-row{display:flex;margin:2px 0 23px}.m-v2-action-row .m-primary-btn{width:100%}.m-v2-count{display:inline-flex;align-items:center;justify-content:center;min-width:26px;padding:5px 8px;border-radius:99px;background:#241d32;color:#d7c5fb;font-size:9px;font-weight:800}
+.m-v2-share-line{display:flex;flex-direction:column;gap:2px!important;margin-top:4px;color:#b7acc7!important;font-size:9px!important}
+.m-v2-available-list{display:grid;gap:11px}.m-v2-available-card{padding:15px;border:1px solid var(--m-line);border-top:2px solid #a78bfa;border-radius:18px;background:linear-gradient(155deg,#1b1727,#12101a)}.m-v2-available-card.partner{border-top-color:#fb923c}
+.m-v2-available-top{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:10px;align-items:center}.m-v2-available-top .m-v2-person-icon{margin:0}.m-v2-available-top>div{display:grid;gap:4px;min-width:0}.m-v2-available-top small{font-size:9px;color:#a69cb6}.m-v2-available-top>div b{font-size:12px;overflow-wrap:anywhere}.m-v2-available-top>strong{font-size:clamp(14px,4vw,18px);white-space:nowrap;font-variant-numeric:tabular-nums}
+.m-v2-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:15px}.m-v2-breakdown>span{display:grid;gap:5px;padding:10px;border:1px solid #ffffff0b;border-radius:11px;background:#0f0c16}.m-v2-breakdown small{color:#a69bb5;font-size:9px;line-height:1.35}.m-v2-breakdown b{font-size:11px;overflow-wrap:anywhere}
+.m-v2-current-balance{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid #ffffff12}.m-v2-current-balance>span{display:grid;gap:4px;min-width:0}.m-v2-current-balance small{color:#a69bb5;font-size:9px;line-height:1.35}.m-v2-current-balance b{font-size:13px;overflow-wrap:anywhere}.m-v2-current-balance .m-secondary-btn{flex:0 0 auto;min-height:36px;padding:0 10px;font-size:9px}
+.m-v2-calculation{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:7px;align-items:center;margin-top:17px;padding-top:13px;border-top:1px solid #ffffff14}.m-v2-calculation span{display:grid;gap:5px;min-width:0}.m-v2-calculation small{font-size:9px;color:#b2a8c0}.m-v2-calculation b{font-size:clamp(9px,2.8vw,12px);overflow-wrap:anywhere}.m-v2-calculation>i{font-style:normal;color:#91caff;font-size:14px}
+.m-v2-note{display:flex;align-items:flex-start;gap:9px;padding:12px;margin-top:15px;border:1px solid #2c4562;border-radius:14px;background:#152237;color:#b9c8df;font-size:10px;line-height:1.55}.m-v2-note>i{color:#93c5fd;margin-top:2px}
+@media(max-width:380px){.m-v2-person-grid{gap:7px}.m-v2-person-card{padding:11px}.m-v2-person-card>strong{font-size:15px}.m-v2-calculation{gap:4px}.m-v2-calculation b{font-size:9px}.m-v2-current-balance{align-items:flex-start;flex-direction:column}.m-v2-current-balance .m-secondary-btn{width:100%}}
+</style>
 </head>
 <body>
 <div id="mobileApp" aria-label="Nexus Finance móvil">
@@ -288,10 +319,10 @@ button,input,select,textarea{-webkit-tap-highlight-color:transparent}button{touc
     <main id="mContent"></main>
   </div>
   <nav class="m-tabbar" aria-label="Navegación principal">
-    <button class="m-tab active" data-screen="home" onclick="mobileSetScreen('home')"><i class="fa-solid fa-house"></i><span>Inicio</span></button>
-    <button class="m-tab" data-screen="movements" onclick="mobileSetScreen('movements')"><i class="fa-solid fa-arrow-right-arrow-left"></i><span>Movimientos</span></button>
-    <button class="m-tab" data-screen="savings" onclick="mobileSetScreen('savings')"><i class="fa-solid fa-piggy-bank"></i><span>Ahorros</span></button>
-    <button class="m-tab" data-screen="goals" onclick="mobileSetScreen('goals')"><i class="fa-solid fa-bullseye"></i><span>Metas</span></button>
+    <button class="m-tab active" data-screen="income" onclick="mobileSetScreen('income')"><i class="fa-solid fa-arrow-trend-up"></i><span>Ingresos</span></button>
+    <button class="m-tab" data-screen="homeExpenses" onclick="mobileSetScreen('homeExpenses')"><i class="fa-solid fa-house-chimney"></i><span>Gastos hogar</span></button>
+    <button class="m-tab" data-screen="savings" onclick="mobileSetScreen('savings')"><i class="fa-solid fa-piggy-bank"></i><span>Ahorros hogar</span></button>
+    <button class="m-tab" data-screen="available" onclick="mobileSetScreen('available')"><i class="fa-solid fa-wallet"></i><span>Disponible</span></button>
     <button class="m-tab" data-screen="more" onclick="mobileSetScreen('more')"><i class="fa-solid fa-grid-2"></i><span>Más</span></button>
   </nav>
 </div>
@@ -1201,7 +1232,7 @@ function saveDebtPayment(e,id,payerPerson){
  saveState();closeModal();renderAll();renderExtendedModules();if(activeModule==="personalMe"||activeModule==="personalPartner")renderPersonalModule();showUndoToast(d.status==="paid"?"Deuda saldada y abono registrado":"Abono registrado en la deuda y en las finanzas personales",undoBefore,"fa-rotate-left");
 }
 function deleteDebt(id){confirmInApp("¿Eliminar esta deuda y todo su historial de abonos?",()=>{state.debts=state.debts.filter(d=>d.id!==id);state.personalSpending=(state.personalSpending||[]).filter(x=>x.debtId!==id);saveState();renderDebts();renderReports();renderDashboardMinis();if(activeModule==="personalMe"||activeModule==="personalPartner")renderPersonalModule();toast("Deuda eliminada")})}
-const ACCOUNT_TYPES=[{id:"home",name:"Cuenta del hogar"},{id:"savings",name:"Cuenta de ahorros"},{id:"me",name:"Cuenta personal · Mía"},{id:"partner",name:"Cuenta personal · Pareja"}];
+const ACCOUNT_TYPES=[{id:"home",name:"Cuenta hogar"},{id:"savings",name:"Cuenta ahorros"},{id:"me",name:"Cuenta personal mía"},{id:"partner",name:"Cuenta personal pareja"}];
 function accountBalance(id){return state.transactions.filter(t=>t.account===id).reduce((s,t)=>s+(t.type==="income"?1:-1)*(Number(t.amount)||0),0)}
 function accountPeriodSummary(id){
  const f=getFilter(),period=arr=>arr.filter(x=>inPeriod(x.date,f.year,f.month)),inc=period(state.incomes),exp=period(state.expenses),sav=period(state.savings);
@@ -1225,29 +1256,33 @@ document.getElementById("authScreen").style.display="flex";
 // La inicialización del módulo móvil se programa al final del documento.
 </script>
 <script id="nexus-mobile-experience">
-let mobileScreen = "home";
+let mobileScreen = "income";
 let mobileMovementFilter = "all";
 const MOBILE_TITLES = {
-  home: ["Resumen", "Tus finanzas, de un vistazo"],
-  movements: ["Movimientos", "Ingresos y gastos del hogar"],
-  savings: ["Ahorros", "Cuida lo que estás construyendo"],
+  income: ["Ingresos", "Base para calcular el mes"],
+  homeExpenses: ["Gastos del hogar", "Las responsabilidades que compartimos"],
+  savings: ["Ahorros del hogar", "Fondos de ahorro en pareja"],
+  available: ["Disponible", "Lo que queda para cada uno después del hogar"],
+  home: ["Ingresos", "Base para calcular el mes"],
+  movements: ["Ingresos", "Consulta y administra los ingresos del periodo"],
   goals: ["Metas", "Objetivos que avanzan contigo"],
-  more: ["Explorar Nexus", "Todos tus módulos en un solo lugar"],
+  more: ["Más secciones", "Tus herramientas personales y del hogar"],
   debts: ["Deudas", "Saldos y próximos vencimientos"],
-  calendar: ["Agenda", "Recordatorios del hogar y personales"],
-  reports: ["Reportes", "Cómo se mueve tu dinero"],
-  personalMe: ["Mis finanzas", "Tu dinero, tus decisiones"],
-  personalPartner: ["Finanzas de pareja", "Seguimiento independiente por perfil"],
+  calendar: ["Calendario", "Fechas importantes y recordatorios"],
+  reports: ["Reportes", "Cómo se mueve el dinero del hogar"],
+  personalMe: ["Finanzas personales", "Tu dinero y el de tu pareja, por separado"],
+  personalPartner: ["Finanzas personales", "Seguimiento del perfil de tu pareja"],
   settings: ["Configuración", "Personaliza tu espacio financiero"],
-  accounts: ["Cuentas", "Saldos por destino"]
+  accounts: ["Reporte por cuentas", "Hogar, ahorros y saldos personales"]
 };
 
 function mobileSetScreen(name) {
-  mobileScreen = name;
+  const aliases = { home: "income", movements: "income", expenses: "homeExpenses", availableFunds: "available" };
+  mobileScreen = aliases[name] || name;
   renderMobileUI();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
-function mobileGoHome() { mobileSetScreen("home"); }
+function mobileGoHome() { mobileSetScreen("income"); }
 function mobileSetMonth(value) {
   const el = document.getElementById("filterMonth"); if (el) el.value = value;
   if (typeof renderAll === "function") renderAll(); renderMobileUI();
@@ -1302,6 +1337,80 @@ function mobileQuickAdd() {
     <button class="m-quick-option blue" onclick="openPersonalMovement('me','expense')"><i class="fa-solid fa-wallet"></i><b>Gasto personal</b><small>Mi perfil</small></button>
   </div><div class="m-modal-footer"><button class="btn" onclick="closeModal()">Cerrar</button></div>`);
 }
+function renderMobileIncomes() {
+  const f=getFilter();
+  const inc=(state.incomes||[]).filter(x=>inPeriod(x.date,f.year,f.month)).slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  const total=sum(inc), mine=sum(inc.filter(x=>x.person==="me")), partner=sum(inc.filter(x=>x.person==="partner"));
+  const minePct=total?mine/total*100:0, partnerPct=total?partner/total*100:0;
+  return `${mobilePeriodControls()}
+    <section class="m-v2-hero income">
+      <div class="m-v2-hero-top"><span class="m-eyebrow">BASE DEL CÁLCULO MENSUAL</span><span class="m-live-dot">${esc(f.month==="all"?String(f.year):MONTHS[Number(f.month)-1].toUpperCase())}</span></div>
+      <strong class="m-v2-hero-total">${money(total)}</strong>
+      <p>Este es el dinero con el que empieza el cálculo del hogar. Luego se descuentan las responsabilidades compartidas y los ahorros del hogar.</p>
+      <div class="m-v2-hero-footer"><span><i class="fa-solid fa-receipt"></i> ${inc.length} registro(s)</span><span><i class="fa-solid fa-people-arrows-left-right"></i> Aportes de los dos perfiles</span></div>
+    </section>
+    <div class="m-section-heading"><div><h3>Aportes por persona</h3><p>Ingresos registrados en el periodo seleccionado</p></div></div>
+    <section class="m-v2-person-grid">
+      <article class="m-v2-person-card me"><span class="m-v2-person-icon"><i class="fa-solid fa-user"></i></span><small>${esc(state.people.me)}</small><strong>${money(mine)}</strong><div class="m-v2-split-track"><i style="width:${minePct}%"></i></div><div class="m-v2-person-foot"><span>${minePct.toFixed(0)}% del total</span><button class="m-icon-btn" onclick="openIncome('me')" aria-label="Registrar ingreso de ${esc(state.people.me)}"><i class="fa-solid fa-plus"></i></button></div></article>
+      <article class="m-v2-person-card partner"><span class="m-v2-person-icon"><i class="fa-solid fa-user-group"></i></span><small>${esc(state.people.partner)}</small><strong>${money(partner)}</strong><div class="m-v2-split-track"><i style="width:${partnerPct}%"></i></div><div class="m-v2-person-foot"><span>${partnerPct.toFixed(0)}% del total</span><button class="m-icon-btn" onclick="openIncome('partner')" aria-label="Registrar ingreso de ${esc(state.people.partner)}"><i class="fa-solid fa-plus"></i></button></div></article>
+    </section>
+    <button class="m-primary-btn full" onclick="openIncome('me')"><i class="fa-solid fa-plus"></i> Registrar ingreso</button>
+    <div class="m-section-heading"><div><h3>Historial de ingresos</h3><p>Revisa, edita o elimina los registros</p></div><span class="m-v2-count">${inc.length}</span></div>
+    <section class="m-panel">${inc.length?`<div class="m-transaction-list">${inc.map(x=>mobileTransactionCard({...x,_kind:"income",_label:`Ingreso · ${state.people[x.person]||"Perfil"}`},true)).join("")}</div>`:`<div class="m-empty"><span><i class="fa-solid fa-arrow-trend-up"></i></span><b>Aún no hay ingresos</b><p>Registra los aportes de cada persona para iniciar el cálculo mensual.</p><button class="m-primary-btn" onclick="openIncome('me')"><i class="fa-solid fa-plus"></i> Registrar primer ingreso</button></div>`}</section>`;
+}
+function mobileHouseholdExpenseCard(x) {
+  const meShare=Number.isFinite(Number(x.meAmount))?Number(x.meAmount):Number(x.amount||0)/2;
+  const partnerShare=Number.isFinite(Number(x.partnerAmount))?Number(x.partnerAmount):Number(x.amount||0)/2;
+  return `<article class="m-transaction m-v2-expense-row">
+    <div class="m-transaction-icon expense"><i class="fa-solid fa-house-chimney"></i></div>
+    <div class="m-transaction-info"><b>${esc(x.category||"Gasto del hogar")}</b><small>${esc(x.date||"Sin fecha")} · ${x.distribution==="manual"?"Distribución manual":"Responsabilidad compartida 50/50"}</small><small class="m-v2-share-line"><span>${esc(state.people.me)}: ${money(meShare)}</span><span>${esc(state.people.partner)}: ${money(partnerShare)}</span></small></div>
+    <div class="m-transaction-side"><strong class="negative">−${money(x.amount)}</strong><div class="m-record-actions"><button class="m-icon-btn" onclick="openExpense('${esc(x.category||"Otros")}','${x.id}')" aria-label="Editar gasto"><i class="fa-solid fa-pen"></i></button><button class="m-icon-btn danger" onclick="deleteRecord('expense','${x.id}')" aria-label="Eliminar gasto"><i class="fa-solid fa-trash"></i></button></div></div>
+  </article>`;
+}
+function renderMobileHomeExpenses() {
+  const f=getFilter();
+  const exp=(state.expenses||[]).filter(x=>inPeriod(x.date,f.year,f.month)).slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  const total=sum(exp), meTotal=sum(exp.map(x=>({amount:Number(x.meAmount)||0}))), partnerTotal=sum(exp.map(x=>({amount:Number(x.partnerAmount)||0})));
+  const categories=CATS.map((name,i)=>({name,total:sum(exp.filter(x=>x.category===name)),me:sum(exp.filter(x=>x.category===name).map(x=>({amount:Number(x.meAmount)||0}))),partner:sum(exp.filter(x=>x.category===name).map(x=>({amount:Number(x.partnerAmount)||0}))),color:CAT_COLORS[i]})).filter(x=>x.total>0).sort((a,b)=>b.total-a.total);
+  return `${mobilePeriodControls()}
+    <section class="m-v2-hero expense">
+      <div class="m-v2-hero-top"><span class="m-eyebrow">RESPONSABILIDADES DEL HOGAR</span><span class="m-live-dot">${exp.length} gasto(s)</span></div>
+      <strong class="m-v2-hero-total">${money(total)}</strong>
+      <p>Pagos y compromisos compartidos que se descuentan de los ingresos antes de calcular el disponible.</p>
+      <div class="m-v2-duo-totals"><span><small>${esc(state.people.me)}</small><b>${money(meTotal)}</b></span><span><small>${esc(state.people.partner)}</small><b>${money(partnerTotal)}</b></span></div>
+    </section>
+    <div class="m-section-heading"><div><h3>Responsabilidades por categoría</h3><p>Distribución del gasto del hogar</p></div></div>
+    <section class="m-panel">${categories.length?categories.map(c=>`<article class="m-v2-category-row"><span class="m-v2-category-dot" style="background:${c.color}"></span><div class="m-v2-category-info"><b>${esc(c.name)}</b><div class="m-v2-split-track"><i style="width:${total?c.total/total*100:0}%;background:${c.color}"></i></div><small>${esc(state.people.me)} ${money(c.me)} · ${esc(state.people.partner)} ${money(c.partner)}</small></div><strong>${money(c.total)}</strong></article>`).join(""):`<div class="m-inline-empty">Aún no hay gastos del hogar en este periodo.</div>`}</section>
+    <div class="m-v2-action-row"><button class="m-primary-btn" onclick="openExpensePicker()"><i class="fa-solid fa-plus"></i> Registrar gasto del hogar</button></div>
+    <div class="m-section-heading"><div><h3>Movimientos del hogar</h3><p>Detalle de cada responsabilidad y su distribución</p></div><span class="m-v2-count">${exp.length}</span></div>
+    <section class="m-panel">${exp.length?`<div class="m-transaction-list">${exp.map(mobileHouseholdExpenseCard).join("")}</div>`:`<div class="m-empty"><span><i class="fa-solid fa-house-chimney"></i></span><b>Todo empieza con un registro</b><p>Añade arriendo, servicios, mercado u otra responsabilidad del hogar.</p><button class="m-primary-btn" onclick="openExpensePicker()"><i class="fa-solid fa-plus"></i> Registrar gasto</button></div>`}</section>`;
+}
+function renderMobileAvailable() {
+  const f=getFilter();
+  const periodRows=arr=>(arr||[]).filter(x=>inPeriod(x.date,f.year,f.month));
+  const inc=periodRows(state.incomes), exp=periodRows(state.expenses), sav=periodRows(state.savings);
+  const incomeTotal=sum(inc), expenseTotal=sum(exp), savingTotal=sum(sav);
+  const afterHome=incomeTotal-expenseTotal-savingTotal;
+  const people=["me","partner"].map(person=>{
+    const assigned=personalAssigned(person,f.year,f.month);
+    const stats=personalStats(person,f.year,f.month);
+    const homeExpenseShare=sum(exp.map(x=>({amount:person==="me"?x.meAmount:x.partnerAmount})));
+    const homeSavingShare=sum(sav.filter(x=>x.person===person));
+    const balance=assigned+stats.extraIncome-stats.spent-stats.saved;
+    return {person,name:state.people[person],assigned,homeExpenseShare,homeSavingShare,extraIncome:stats.extraIncome,personalSpent:stats.spent,personalSaved:stats.saved,balance};
+  });
+  return `${mobilePeriodControls()}
+    <section class="m-v2-hero available">
+      <div class="m-v2-hero-top"><span class="m-eyebrow">DISPONIBLE DESPUÉS DEL HOGAR</span><span class="m-live-dot">CÁLCULO</span></div>
+      <strong class="m-v2-hero-total">${money(afterHome)}</strong>
+      <p>Ingresos del periodo − gastos del hogar − ahorros del hogar. Este es el dinero que queda para repartir entre los dos perfiles.</p>
+      <div class="m-v2-calculation"><span><small>Ingresos</small><b>${money(incomeTotal)}</b></span><i>−</i><span><small>Gastos</small><b>${money(expenseTotal)}</b></span><i>−</i><span><small>Ahorros</small><b>${money(savingTotal)}</b></span></div>
+    </section>
+    <div class="m-section-heading"><div><h3>Disponible por persona</h3><p>Asignación después de las responsabilidades del hogar</p></div></div>
+    <section class="m-v2-available-list">${people.map(p=>`<article class="m-v2-available-card ${p.person}"><div class="m-v2-available-top"><span class="m-v2-person-icon"><i class="fa-solid ${p.person==="me"?"fa-user":"fa-user-group"}"></i></span><div><small>Disponible para</small><b>${esc(p.name)}</b></div><strong>${money(p.assigned)}</strong></div><div class="m-v2-breakdown"><span><small>Responsabilidad del hogar</small><b>−${money(p.homeExpenseShare)}</b></span><span><small>Aporte a ahorros del hogar</small><b>−${money(p.homeSavingShare)}</b></span></div><div class="m-v2-current-balance"><span><small>Saldo actual tras movimientos personales</small><b>${money(p.balance)}</b></span><button class="m-secondary-btn" onclick="mobileSetScreen('${p.person==="me"?"personalMe":"personalPartner"}')">Ver finanzas <i class="fa-solid fa-arrow-right"></i></button></div></article>`).join("")}</section>
+    <div class="m-v2-note"><i class="fa-solid fa-circle-info"></i><span>El total de arriba solo resta las responsabilidades y los ahorros del hogar. El saldo actual de cada persona también refleja los gastos, ahorros e ingresos adicionales registrados en sus finanzas personales.</span></div>`;
+}
+
 function renderMobileHome() {
   const inc=mobileRange(state.incomes), exp=mobileRange(state.expenses), sav=mobileRange(state.savings);
   const income=sum(inc), expense=sum(exp), saving=sum(sav), available=income-expense-saving;
@@ -1333,8 +1442,8 @@ function renderMobileMovements() {
 function renderMobileSavings() {
   const sav=mobileRange(state.savings), total=sum(sav), target=Number(state.savingTarget)||0;
   const types=SAVINGS.map(([key,label],i)=>{const value=sum(sav.filter(x=>x.type===key));return `<article class="m-saving-card"><div class="m-saving-symbol ${key}"><i class="fa-solid fa-piggy-bank"></i></div><div class="m-saving-detail"><b>${esc(label)}</b><small>${sav.filter(x=>x.type===key).length} aporte(s) en el periodo</small><strong>${money(value)}</strong></div><button class="m-icon-btn" onclick="openSaving('${key}')" aria-label="Añadir ${esc(label)}"><i class="fa-solid fa-plus"></i></button></article>`}).join("");
-  return `${mobilePeriodControls()}<section class="m-saving-hero"><div class="m-hero-title"><span class="m-eyebrow">CONSTANCIA SOBRE CANTIDAD</span><i class="fa-solid fa-seedling"></i></div><h2>${money(total)}</h2><p>Ahorrado en el periodo seleccionado</p>${mobileProgress("Meta mensual",total,target,"green")}<button class="m-primary-btn full" onclick="openSavingPicker()"><i class="fa-solid fa-plus"></i> Registrar ahorro</button></section>
-    <div class="m-section-heading"><div><h3>Mis bolsillos</h3><p>Ahorro del hogar por objetivo</p></div></div><section class="m-saving-list">${types}</section>
+  return `${mobilePeriodControls()}<section class="m-saving-hero"><div class="m-hero-title"><span class="m-eyebrow">FONDO COMPARTIDO DE LA PAREJA</span><i class="fa-solid fa-seedling"></i></div><h2>${money(total)}</h2><p>Total aportado al ahorro del hogar en el periodo seleccionado.</p>${mobileProgress("Meta mensual conjunta",total,target,"green")}<button class="m-primary-btn full" onclick="openSavingPicker()"><i class="fa-solid fa-plus"></i> Registrar ahorro</button></section>
+    <div class="m-section-heading"><div><h3>Fondos del hogar</h3><p>Ahorro conjunto por objetivo</p></div></div><section class="m-saving-list">${types}</section>
     <div class="m-section-heading"><div><h3>Últimos aportes</h3><p>Movimientos de ahorro del hogar</p></div></div><section class="m-panel">${sav.length?`<div class="m-transaction-list">${sav.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).map(x=>mobileTransactionCard({...x,_kind:"saving",_label:(SAVINGS.find(s=>s[0]===x.type)||[])[1]||"Ahorro"},true)).join("")}</div>`:`<div class="m-inline-empty">Aún no hay aportes en el periodo.</div>`}</section>
     <button class="m-secondary-btn full" onclick="mobileSetScreen('personalMe')"><i class="fa-solid fa-user"></i> Ver ahorros personales</button>`;
 }
@@ -1345,12 +1454,13 @@ function renderMobileGoals() {
 }
 function renderMobileMore() {
   const items=[
-    ["personalMe","fa-user","Mis finanzas",state.people.me,"blue"],
-    ["personalPartner","fa-user-group","Finanzas de pareja",state.people.partner,"orange"],
-    ["debts","fa-credit-card","Deudas","Control de saldos y abonos","orange"],
-    ["calendar","fa-calendar-days","Agenda y recordatorios","Fechas importantes del hogar","blue"],
-    ["reports","fa-chart-pie","Reportes y cuentas","Evolución, saldos y balances","purple"],
-    ["settings","fa-sliders","Configuración","Perfiles, metas y respaldos","green"]
+    ["personalMe","fa-user-group","Finanzas personales","Consulta tu saldo y el de tu pareja por separado","blue"],
+    ["debts","fa-credit-card","Deudas","Saldos pendientes, cuotas y abonos","orange"],
+    ["goals","fa-bullseye","Metas","Objetivos y progreso de ahorro","green"],
+    ["calendar","fa-calendar-days","Calendario","Pagos, compromisos y recordatorios","blue"],
+    ["accounts","fa-wallet","Reporte por cuentas","Cuenta hogar, ahorros y cuentas personales","purple"],
+    ["reports","fa-chart-pie","Reportes generales","Evolución y comparativos del periodo","purple"],
+    ["settings","fa-sliders","Configuración","Perfiles, meta mensual y respaldos","green"]
   ];
   return `<section class="m-profile-card"><div class="m-profile-avatar">${esc((state.people.me||"N").slice(0,1).toUpperCase())}</div><div><b>${esc(authUser?.username||authUser?.name||authUser?.email||"Tu cuenta Nexus")}</b><small>${esc(authUser?.email||"Finanzas del hogar · cuenta privada")}</small><span class="m-sync-line"><i class="${cloudReady&&!cloudSyncing?'fa-solid fa-circle-check':'fa-solid fa-cloud'}"></i> ${cloudReady&&!cloudSyncing?'Sincronización lista':cloudSyncing?'Sincronizando datos':'Sesión activa'}</span></div><button class="m-icon-btn" onclick="mobileRefresh()" aria-label="Sincronizar"><i class="fa-solid fa-rotate"></i></button></section>
   <div class="m-section-heading"><div><h3>Tu espacio</h3><p>Abre cualquier módulo de Nexus</p></div></div><section class="m-menu-list">${items.map(([key,icon,title,desc,color])=>`<button class="m-menu-item" onclick="mobileSetScreen('${key}')"><span class="m-menu-icon ${color}"><i class="fa-solid ${icon}"></i></span><span><b>${title}</b><small>${esc(desc)}</small></span><i class="fa-solid fa-chevron-right"></i></button>`).join("")}</section>
@@ -1451,9 +1561,9 @@ function renderMobileUI() {
   const entry=MOBILE_TITLES[mobileScreen]||MOBILE_TITLES.home;
   document.getElementById("mTitle").textContent=entry[0];document.getElementById("mSubtitle").textContent=entry[1];
   document.getElementById("mAvatar").textContent=((authUser?.role==="partner"?state.people.partner:state.people.me)||authUser?.username||"N").slice(0,1).toUpperCase();
-  const navMap={home:"home",movements:"movements",savings:"savings",goals:"goals"};
+  const navMap={income:"income",homeExpenses:"homeExpenses",savings:"savings",available:"available"};
   document.querySelectorAll(".m-tab").forEach(btn=>{const key=btn.dataset.screen;btn.classList.toggle("active",key===(navMap[mobileScreen]||"more"));});
-  const renderers={home:renderMobileHome,movements:renderMobileMovements,savings:renderMobileSavings,goals:renderMobileGoals,more:renderMobileMore,debts:renderMobileDebts,calendar:renderMobileCalendar,reports:renderMobileReports,accounts:renderMobileAccounts,personalMe:()=>renderMobilePersonal("me"),personalPartner:()=>renderMobilePersonal("partner"),settings:renderMobileSettings};
+  const renderers={income:renderMobileIncomes,homeExpenses:renderMobileHomeExpenses,savings:renderMobileSavings,available:renderMobileAvailable,home:renderMobileIncomes,movements:renderMobileIncomes,goals:renderMobileGoals,more:renderMobileMore,debts:renderMobileDebts,calendar:renderMobileCalendar,reports:renderMobileReports,accounts:renderMobileAccounts,personalMe:()=>renderMobilePersonal("me"),personalPartner:()=>renderMobilePersonal("partner"),settings:renderMobileSettings};
   content.innerHTML=(renderers[mobileScreen]||renderMobileHome)();
   const sync=document.getElementById("mSync");if(sync){sync.className="m-sync-pill "+(cloudSyncing?"syncing":cloudReady?"synced":"offline");sync.innerHTML=`<i class="fa-solid ${cloudSyncing?'fa-rotate fa-spin':cloudReady?'fa-cloud-check':'fa-cloud'}"></i><span>${cloudSyncing?'Sincronizando':cloudReady?'En línea':'Sesión activa'}</span>`;}
 }
