@@ -614,6 +614,34 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 @media(prefers-reduced-motion:reduce){.mobile-quick-grid button,.btn,.mini-btn,.mobile-icon-button,.mobile-avatar{transition:none!important}}
 </style>
 
+
+<style id="nexus-mobile-layout-refinement">
+@media(max-width:800px){
+ /* The app bar belongs to the page flow: it scrolls away naturally instead of trapping the viewport. */
+ .mobile-appbar{position:relative!important;top:auto!important;z-index:5!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:#100d17!important;box-shadow:0 5px 18px #0002!important}
+ /* Household expenses become a vertical story: chart first, then readable category progress. */
+ .card:has(#expenseDonut) .donut-layout{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:14px!important}
+ .card:has(#expenseDonut) #expenseDonut{width:clamp(126px,38vw,158px)!important;max-width:100%;align-self:center;margin:2px auto 0;box-shadow:0 0 0 9px #ffffff04,0 12px 30px #0004;cursor:pointer}
+ .card:has(#expenseDonut) #expenseDonut .donut-center{font-size:12px!important;font-weight:850!important}
+ .card:has(#expenseDonut) #expenseDonut .donut-center small{font-size:9px!important;margin-top:4px}
+ .card:has(#expenseDonut) #expenseList{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:2px!important;width:100%;min-width:0}
+ .home-category-row{padding:11px 0 10px;border-bottom:1px solid #ffffff0b;min-width:0}
+ .home-category-row:last-child{border-bottom:0}
+ .home-category-top{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0}
+ .home-category-name{display:block;min-width:0;overflow-wrap:anywhere}
+ .home-category-name .identity-tag,.home-category-name .category-tag{max-width:100%;white-space:normal}
+ .home-category-top>strong{font-size:12px;font-weight:800;letter-spacing:-.02em;color:#f7f2ff;white-space:nowrap}
+ .home-category-track{height:6px;margin:8px 0 5px;border-radius:99px;background:#292332;overflow:hidden}
+ .home-category-track i{display:block;height:100%;border-radius:99px;background:var(--cat-color,#a78bfa);box-shadow:0 0 12px color-mix(in srgb,var(--cat-color,#a78bfa) 28%,transparent);min-width:0;transition:width .35s ease}
+ .home-category-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#978ba8;font-size:9px;line-height:1.3}
+ .home-category-bottom .category-btn{display:inline-grid;place-items:center;flex:0 0 29px;width:29px;height:29px;min-height:29px;border:1px solid #413253;border-radius:10px;background:#241b31;color:#d8c5ff;font-size:10px}
+ .home-category-bottom .category-btn:active{transform:scale(.93);background:#38264a}
+ .card:has(#expenseDonut) .card-head{margin-bottom:15px}
+}
+@media(max-width:390px){.card:has(#expenseDonut) .donut-layout{gap:11px!important}.home-category-row{padding:10px 0 9px}.home-category-top>strong{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.home-category-track i{transition:none!important}}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -1069,7 +1097,7 @@ function renderDonut(id,a,b,expense=false,filteredExpenses=null){
 function openDonutDetails(kind){const f=getFilter();let title="Detalle del gráfico",rows=[];if(kind==="income"){title="Distribución de ingresos";const data=filtered(state.incomes);const total=sum(data);rows=[{name:state.people.me,value:sum(data.filter(x=>x.person==="me")),color:"#8b5cf6"},{name:state.people.partner,value:sum(data.filter(x=>x.person==="partner")),color:"#fb923c"}]}else if(kind==="expense"){title="Distribución de gastos del hogar";const data=filtered(state.expenses),total=sum(data);rows=CATS.map((name,i)=>({name,value:sum(data.filter(x=>x.category===name)),color:CAT_COLORS[i]})).filter(x=>x.value>0)}else{title="Saldos disponibles";rows=[{name:state.people.me,value:Math.max(0,personalAssigned("me")+personalStats("me").extraIncome-personalStats("me").spent-personalStats("me").saved),color:"#8b5cf6"},{name:state.people.partner,value:Math.max(0,personalAssigned("partner")+personalStats("partner").extraIncome-personalStats("partner").spent-personalStats("partner").saved),color:"#fb923c"}]}const total=rows.reduce((a,x)=>a+x.value,0);openModal(title,`<div class="small" style="margin-bottom:12px">Toca los gráficos para consultar esta distribución. Total: <b>${money(total)}</b></div>${rows.length?rows.map(r=>`<div class="list-row"><div><b>${kind==="expense"?categoryTag(r.name):personTag(kind==="income"?(r.name===state.people.partner?"partner":"me"):(r.name===state.people.partner?"partner":"me"),r.name)}</b><div class="pct">${total?(r.value/total*100).toFixed(1):"0.0"}% del total</div></div><b>${money(r.value)}</b><div class="report-track"><i style="width:${total?r.value/total*100:0}%;background:${r.color}"></i></div></div>`).join(""):'<div class="empty">No hay datos para mostrar en este periodo.</div>'}`)}
 function renderExpenseList(exp){
  const total=sum(exp), box=document.getElementById("expenseList");
- box.innerHTML=CATS.map(c=>{let n=sum(exp.filter(x=>x.category===c)),p=total?n/total*100:0;return `<div class="list-row"><div><b>${categoryTag(c)}</b><div class="pct">${p.toFixed(1)}% del gasto del hogar</div></div><b>${money(n)}</b><span class="pct">${p.toFixed(0)}%</span><button class="category-btn" onclick="openExpense('${c}')">+</button></div>`}).join("");
+ box.innerHTML=CATS.map((c,i)=>{let n=sum(exp.filter(x=>x.category===c)),p=total?n/total*100:0;return `<div class="home-category-row" style="--cat-color:${categoryColor(c)||CAT_COLORS[i]||'#a78bfa'}"><div class="home-category-top"><span class="home-category-name">${categoryTag(c)}</span><strong>${money(n)}</strong></div><div class="home-category-track" aria-label="${p.toFixed(1)}% del gasto"><i style="width:${p}%"></i></div><div class="home-category-bottom"><span>${p.toFixed(1)}% del gasto del hogar</span><button class="category-btn" aria-label="Registrar gasto: ${esc(c)}" onclick="openExpense('${c}')"><i class="fa-solid fa-plus"></i></button></div></div>`}).join("");
 }
 function renderSavings(sav){
  const box=document.getElementById("savingsGrid"); const target=Number(state.savingTarget)||0;
