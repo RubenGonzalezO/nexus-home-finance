@@ -2,11 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0b0a12">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nexus Home Finance</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
@@ -198,84 +194,6 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 .card:has(#availablePeople) .card-head h2 i{color:#60a5fa}
 .identity-inline .identity-dot{box-shadow:0 0 0 2px color-mix(in srgb,var(--identity-color,#8b5cf6) 18%,transparent)}
 
-
-
-/* NEXUS FINANCE — MOBILE-FIRST EXPERIENCE LAYER
-   Presentational overrides only: existing business logic, data model and API remain untouched. */
-.mobile-bottom-nav{display:none}
-@media(max-width:800px){
- :root{--mobile-gutter:16px;--mobile-nav-height:72px;--radius:20px}
- html{scroll-padding-top:100px;scroll-padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom))}
- body{background:radial-gradient(ellipse at 10% -12%,rgba(139,92,246,.24),transparent 38%),linear-gradient(180deg,#0b0a12 0%,#0b0a12 70%,#100d19 100%);padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));}
- .app{min-height:100dvh;display:block}
- .main{margin:0!important;padding:0 var(--mobile-gutter) calc(var(--mobile-nav-height) + 28px + env(safe-area-inset-bottom))!important;width:100%!important;max-width:none!important;min-height:100dvh}
- .mobile-appbar{position:sticky;top:0;z-index:36;margin:0 calc(-1 * var(--mobile-gutter)) 0;padding:calc(10px + env(safe-area-inset-top)) var(--mobile-gutter) 11px;background:rgba(11,10,18,.91);border-bottom:1px solid rgba(167,139,250,.13);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
- .mobile-brand-mark{width:42px;height:42px;border-radius:15px;box-shadow:0 8px 24px rgba(139,92,246,.18)}
- .mobile-brand-copy strong{font-size:17px}.mobile-brand-copy small{font-size:8px;letter-spacing:.13em}
- .mobile-appbar-actions{gap:7px}.mobile-icon-button,.mobile-avatar{width:39px;height:39px;border-radius:14px}
- .topbar{display:flex;flex-direction:column;align-items:stretch;gap:13px;margin:0 -2px 18px;padding:19px 2px 0}
- .title h1{font-size:25px;line-height:1.15;letter-spacing:-.045em;margin:0 0 6px}
- .title p{font-size:12px;line-height:1.5;max-width:34ch}
- .topbar .actions{width:100%;display:flex;align-items:center;gap:7px;margin:0}
- .topbar .actions .mobile-menu,.topbar .actions .account-strip,.topbar .actions button[onclick="logoutNexus()"]{display:none!important}
- .sync-status{width:auto!important;order:0!important;flex:1;justify-content:flex-start!important;padding:8px 10px;border:1px solid rgba(52,211,153,.17);border-radius:12px;background:rgba(52,211,153,.055);font-size:10px}
- .topbar .actions button{padding:9px 12px;min-height:38px}
- .filterbar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px;padding:12px;margin:0 0 15px;border-radius:17px;background:rgba(18,16,27,.9);box-shadow:0 8px 24px rgba(0,0,0,.12)}
- .filterbar .field{min-width:0!important;width:100%;gap:5px}.filterbar label{font-size:10px;letter-spacing:.035em}.filterbar .select{min-height:43px;font-size:12px;padding:10px 11px}.filterbar #periodLabel{grid-column:1/-1;font-size:10px}.filterbar button{min-height:42px;grid-column:1/-1}
- .kpis{display:flex!important;gap:11px!important;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 calc(-1 * var(--mobile-gutter)) 18px!important;padding:0 var(--mobile-gutter) 4px!important}
- .kpis::-webkit-scrollbar,.mobile-quick-grid::-webkit-scrollbar{display:none}
- .kpis>.kpi{flex:0 0 min(72vw,275px);min-width:0;min-height:154px;padding:17px 16px;border-radius:21px;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;box-shadow:0 12px 30px rgba(0,0,0,.18)}
- .kpi .label{font-size:10px;font-weight:850;letter-spacing:.09em;margin-bottom:8px}.kpi .value{font-size:clamp(25px,7vw,34px);line-height:1.08;letter-spacing:-.045em;overflow-wrap:anywhere}.kpi .sub{font-size:10px;line-height:1.45;margin-top:8px;max-width:29ch}
- .kpi.available{border-color:rgba(52,211,153,.28);background:radial-gradient(circle at 100% 0,rgba(52,211,153,.12),transparent 52%),linear-gradient(150deg,#17231f,#12101b 74%)}
- .mobile-quick-actions{display:block;margin:0 0 22px;padding:15px 14px 13px;border:1px solid rgba(167,139,250,.15);border-radius:21px;background:linear-gradient(145deg,rgba(31,24,45,.94),rgba(18,16,27,.95));box-shadow:0 12px 28px rgba(0,0,0,.12)}
- .mobile-quick-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:13px}.mobile-quick-heading>div{display:grid;gap:4px}.mobile-quick-heading span{font-size:9px;font-weight:850;letter-spacing:.13em;color:var(--purple2)}.mobile-quick-heading strong{font-size:16px;letter-spacing:-.025em}.mobile-quick-heading>i{width:35px;height:35px;display:grid;place-items:center;border-radius:12px;background:rgba(139,92,246,.13);color:var(--purple2)}
- .mobile-quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
- .mobile-quick-grid button{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:12px;min-width:0;min-height:116px;padding:12px 10px;border:1px solid #332a45;border-radius:15px;background:rgba(12,10,19,.64);color:var(--text);text-align:left}
- .mobile-quick-grid button>span:nth-child(2){display:grid;gap:4px}.mobile-quick-grid button b{font-size:11px;line-height:1.3}.mobile-quick-grid button small{font-size:9px;color:var(--muted);line-height:1.35}.mobile-quick-grid button>i{display:none}
- .quick-icon{width:35px;height:35px;border-radius:12px;display:grid;place-items:center}.quick-income{background:rgba(52,211,153,.13);color:var(--green)}.quick-expense{background:rgba(251,146,60,.13);color:var(--orange)}.quick-saving{background:rgba(139,92,246,.16);color:var(--purple2)}
- .section-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:13px!important;margin-bottom:16px}
- .section-grid>.card,.module-section>.card,.module-section .module-grid>.card{min-width:0;margin-bottom:13px;padding:16px;border-radius:20px;background:linear-gradient(155deg,rgba(25,21,37,.98),rgba(16,14,24,.98));box-shadow:0 9px 24px rgba(0,0,0,.13)}
- .card-head{align-items:flex-start;gap:10px;margin-bottom:14px}.card-head h2{font-size:15px;line-height:1.35;letter-spacing:-.02em}.card-head span{display:block;font-size:10px;line-height:1.45;margin-top:3px}.card-head .head-actions{flex-wrap:wrap;justify-content:flex-end}
- .card-head .btn,.card-head .mini-btn{font-size:10px;padding:8px 10px;white-space:nowrap}
- .donut-layout{grid-template-columns:minmax(0,1fr)!important;gap:12px}.donut-layout .donut{margin:0 auto;width:148px;max-width:100%}.people{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.person{min-width:0;padding:12px;border-radius:15px}.person .name{font-size:10px;overflow-wrap:anywhere}.person .amount{font-size:17px;overflow-wrap:anywhere}.person .mini-btn{width:100%;margin-top:8px}
- .list{gap:8px}.list-row{padding:12px;border-radius:14px;gap:10px}.list-row .identity-tag{max-width:100%}
- .module-section{margin-top:8px}.module-section .module-grid{grid-template-columns:minmax(0,1fr)!important;gap:12px}.module-grid .wide{grid-column:auto}
- .module-section .card-head{flex-wrap:wrap}.module-section .card-head>div:last-child{max-width:100%}
- .table-wrap{border-radius:13px;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.data-table{min-width:540px;font-size:11px}.data-table th,.data-table td{padding:10px 8px}
- .calendar-grid,.month-grid{min-width:0}.calendar-day{min-height:60px!important}.calendar-task{overflow-wrap:anywhere}
- .future-grid{grid-template-columns:minmax(0,1fr)!important}.dashboard-mini-grid,.evolution-grid,.comparison-grid{grid-template-columns:minmax(0,1fr)!important}
- .personal-summary,.personal-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px}.personal-summary>*,.personal-summary-grid>*{min-width:0}.personal-summary strong{font-size:16px;overflow-wrap:anywhere}
- .personal-finance-blocks{grid-template-columns:minmax(0,1fr)!important;gap:12px}.personal-saving-boxes{grid-template-columns:minmax(0,1fr)!important}.personal-saving-box .box-history .record{grid-template-columns:minmax(0,1fr) auto}
- .report-filter{grid-template-columns:repeat(2,minmax(0,1fr))}.report-filter .field{min-width:0}.report-row{grid-template-columns:66px minmax(0,1fr) 84px;gap:7px}
- .module-form{grid-template-columns:minmax(0,1fr)!important}.module-form .full{grid-column:auto}.formgrid{grid-template-columns:minmax(0,1fr)!important}.formgrid .full{grid-column:auto}
- .input,.select,.textarea,input,select,textarea{max-width:100%;min-height:45px;font-size:16px!important}.textarea{min-height:100px}.field{min-width:0}.field label{font-size:11px;line-height:1.35}
- .btn,.mini-btn,.category-pick-btn{min-height:42px}.form-actions{display:flex;gap:8px;flex-wrap:wrap}.form-actions .btn{flex:1 1 130px}
- .mobile-bottom-nav{position:fixed;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:end;gap:2px;z-index:80;left:0;right:0;bottom:0;padding:8px 9px calc(8px + env(safe-area-inset-bottom));min-height:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));background:rgba(16,13,24,.94);border-top:1px solid rgba(167,139,250,.16);backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);box-shadow:0 -12px 35px rgba(0,0,0,.22)}
- .mobile-bottom-nav button{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:0;min-height:52px;padding:5px 2px;background:transparent;color:#81798f;border-radius:14px;font-size:9px;font-weight:750;letter-spacing:.005em}
- .mobile-bottom-nav button i{font-size:18px;line-height:1}.mobile-bottom-nav button.active{color:#c4b5fd}.mobile-bottom-nav button.active:before{content:"";position:absolute;top:0;width:24px;height:3px;border-radius:9px;background:var(--purple2)}
- .mobile-bottom-nav .mobile-nav-add{align-self:center;justify-self:center;width:53px;height:53px;min-height:53px;margin-top:-22px;border:4px solid #0b0a12;border-radius:19px;background:linear-gradient(145deg,#a78bfa,#7c3aed 70%,#6841b5);color:white;box-shadow:0 8px 24px rgba(124,58,237,.38);font-size:23px}
- .mobile-bottom-nav .mobile-nav-add i{font-size:21px}.mobile-bottom-nav .mobile-nav-add:before{display:none}
- .app.auth-locked~.mobile-bottom-nav{display:none!important}
- .sidebar{z-index:91;width:min(330px,88vw);padding:20px 15px 30px;overflow-y:auto;background:rgba(15,12,23,.98);box-shadow:25px 0 60px rgba(0,0,0,.38);transform:translateX(-105%);transition:transform .25s ease}.sidebar.open{transform:translateX(0)}
- .mobile-drawer-backdrop{position:fixed;inset:0;z-index:90;background:rgba(4,3,8,.66);backdrop-filter:blur(3px)}.mobile-drawer-backdrop[aria-hidden="false"],.mobile-drawer-backdrop:has(+ .sidebar.open){display:block}
- body.drawer-open{overflow:hidden}.nav button{display:flex;align-items:center;gap:10px;padding:13px 14px;min-height:47px;font-size:13px;border-radius:13px}.nav button i{width:22px;text-align:center}
- .modal{align-items:flex-end!important;justify-content:center;padding:0!important;background:rgba(4,3,8,.68);backdrop-filter:blur(5px)}.modal-box{width:100%!important;max-width:none!important;max-height:91dvh!important;padding:19px 16px calc(20px + env(safe-area-inset-bottom))!important;border-radius:25px 25px 0 0!important;border:1px solid rgba(167,139,250,.2);border-bottom:0;box-shadow:0 -18px 70px rgba(0,0,0,.35);overscroll-behavior:contain}
- .modal-head{position:sticky;top:-19px;z-index:2;margin:-1px -1px 15px;padding:8px 1px 12px;background:#14111e}.modal-head:before{content:"";position:absolute;top:-7px;left:50%;transform:translateX(-50%);width:38px;height:4px;border-radius:5px;background:#51475f}.modal-head h3{font-size:18px;letter-spacing:-.03em}.modal .formgrid,.modal .module-form{grid-template-columns:minmax(0,1fr)!important}.modal .field{margin-bottom:10px}.modal .btn{min-height:46px}.modal .record{grid-template-columns:minmax(0,1fr) auto}
- #authScreen{padding:20px 16px!important;align-items:center}.auth-card{width:100%;max-width:430px;padding:25px 21px;border-radius:25px}.auth-card h1{font-size:26px;line-height:1.15}.auth-card input{min-height:48px}.auth-card .btn{min-height:48px}
- .toast{left:12px;right:12px;bottom:calc(var(--mobile-nav-height) + 12px + env(safe-area-inset-bottom));max-width:none}
- .bar-callout{bottom:calc(var(--mobile-nav-height) + 12px + env(safe-area-inset-bottom))!important}
- .small{line-height:1.5}.hidden{display:none!important}
-}
-@media(max-width:420px){
- :root{--mobile-gutter:13px}
- .topbar{padding-top:16px}.title h1{font-size:23px}
- .kpis>.kpi{flex-basis:78vw;min-height:146px;padding:15px}.mobile-quick-actions{padding:13px 11px}.mobile-quick-grid{gap:6px}.mobile-quick-grid button{padding:10px 8px;min-height:110px}.mobile-quick-grid button b{font-size:10px}.quick-icon{width:32px;height:32px}
- .section-grid>.card,.module-section>.card{padding:14px}.personal-summary,.personal-summary-grid{gap:7px}.mobile-bottom-nav{padding-left:6px;padding-right:6px}.mobile-bottom-nav button{font-size:8px}.mobile-bottom-nav .mobile-nav-add{width:50px;height:50px;min-height:50px}
-}
-@media(min-width:521px) and (max-width:800px){
- .kpis>.kpi{flex-basis:36vw;min-height:145px}.section-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.section-grid>.card.wide,.section-grid>.wide{grid-column:1/-1}.donut-layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}.donut-layout .donut{width:130px}.module-section .module-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.module-section .module-grid .wide{grid-column:1/-1}
-}
-
 </style>
 
 <style id="nexus-chart-contextual-detail-fix">
@@ -326,189 +244,72 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 </style>
 
 
-<style id="nexus-mobile-app-experience">
-.mobile-appbar,.mobile-quick-actions,.mobile-drawer-intro{display:none}.mobile-drawer-backdrop{display:none}
-@media(max-width:800px){
- :root{--mobile-gutter:17px}
- html{scroll-behavior:smooth;scroll-padding-top:100px}
- body{background:radial-gradient(ellipse at 15% -12%,rgba(91,53,150,.34),transparent 42%),#0b0a12;padding-bottom:env(safe-area-inset-bottom);overscroll-behavior-y:contain}
- .app{min-height:100dvh}
- .main{padding:0 var(--mobile-gutter) 32px!important;width:100%;max-width:100%;min-height:100dvh}
- .mobile-appbar{display:flex;position:sticky;top:0;z-index:35;align-items:center;justify-content:space-between;gap:12px;margin:0 calc(-1 * var(--mobile-gutter)) 0;padding:calc(10px + env(safe-area-inset-top)) var(--mobile-gutter) 12px;background:rgba(11,10,18,.88);border-bottom:1px solid rgba(167,139,250,.12);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
- .mobile-brand-button{display:flex;align-items:center;gap:10px;background:none;color:var(--text);padding:0;text-align:left}
- .mobile-brand-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:14px;background:linear-gradient(145deg,#9b70ff,#6940bc 62%,#e38c50);box-shadow:0 7px 22px rgba(139,92,246,.23);font-size:17px}
- .mobile-brand-copy{display:grid;gap:3px}.mobile-brand-copy strong{font-size:16px;letter-spacing:-.035em}.mobile-brand-copy small{font-size:8px;letter-spacing:.12em;color:#a79bb9;font-weight:800}
- .mobile-appbar-actions{display:flex;align-items:center;gap:9px}.mobile-live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(52,211,153,.1)}
- .mobile-icon-button,.mobile-avatar{width:37px;height:37px;display:grid;place-items:center;border-radius:13px;background:#191522;border:1px solid #30263f;color:#ded5f2}.mobile-avatar{background:#2b2040;border-color:#46315f;color:#c4b5fd}
- .topbar{display:flex;align-items:flex-start;flex-direction:column;gap:12px;margin:0 -2px 15px;padding:18px 2px 4px}
- .title h1{font-size:clamp(25px,7vw,31px);letter-spacing:-.045em;line-height:1.12;margin:0 0 7px}.title p{font-size:12px;line-height:1.5;max-width:300px}.topbar>.actions{display:none}.mobile-menu{display:none!important}
- .sidebar{display:block;width:min(340px,88vw);padding:calc(20px + env(safe-area-inset-top)) 17px calc(24px + env(safe-area-inset-bottom));background:linear-gradient(180deg,#171222,#0d0b14 70%);border-right:1px solid #393047;box-shadow:25px 0 70px #0007;z-index:61;overflow-y:auto;overscroll-behavior:contain;transform:translateX(-110%);transition:transform .32s cubic-bezier(.2,.8,.2,1);visibility:hidden}
- .sidebar.open{transform:translateX(0);visibility:visible}
- .mobile-drawer-backdrop{display:block;position:fixed;inset:0;z-index:60;background:rgba(3,2,7,.68);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
- body.drawer-open .mobile-drawer-backdrop{opacity:1;visibility:visible}body.drawer-open{overflow:hidden}
- .sidebar .logo{padding:4px 4px 18px;font-size:18px}
- .mobile-drawer-intro{display:grid;gap:6px;margin:5px 0 22px;padding:17px;border-radius:18px;border:1px solid rgba(167,139,250,.2);background:radial-gradient(circle at 100% 0,rgba(139,92,246,.24),transparent 55%),linear-gradient(135deg,#21172f,#15111e)}
- .mobile-drawer-intro span{font-size:9px;font-weight:800;letter-spacing:.12em;color:#b8a3e5}.mobile-drawer-intro strong{font-size:22px;letter-spacing:-.04em}.mobile-drawer-intro small{font-size:11px;color:var(--muted);line-height:1.5}
- .nav{display:grid;gap:5px}.nav button{display:flex;align-items:center;min-height:49px;padding:12px 13px;border:1px solid transparent;border-radius:14px;font-size:13px;margin:0;transition:background .18s,border-color .18s,transform .18s}
- .nav button:active{transform:scale(.985)}.nav button.active{background:linear-gradient(100deg,rgba(139,92,246,.2),rgba(139,92,246,.06));border-color:rgba(167,139,250,.22);color:#fff}
- .nav button i{width:30px;font-size:15px;color:#b7a1e5}.nav button.active i{color:#c4b5fd}
- .filterbar{display:grid;grid-template-columns:1fr 1.25fr;gap:9px;padding:12px;margin:0 0 14px;border-radius:17px;background:rgba(24,21,35,.8);box-shadow:0 8px 25px #0002}
- .filterbar .field{min-width:0;width:100%}.filterbar .field label{font-size:9px;letter-spacing:.06em;text-transform:uppercase}.filterbar .select{min-height:43px;font-size:12px;border-radius:12px}
- .filterbar .btn{grid-column:1/-1;min-height:39px}.filterbar #periodLabel{grid-column:1/-1;display:block;padding:0 2px}
- .mobile-quick-actions{display:block;margin:0 0 17px;padding:15px;border:1px solid rgba(167,139,250,.17);border-radius:20px;background:linear-gradient(135deg,rgba(29,23,43,.96),rgba(18,15,26,.94));box-shadow:0 12px 30px rgba(0,0,0,.15)}
- .mobile-quick-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.mobile-quick-heading>div{display:grid;gap:4px}
- .mobile-quick-heading span{font-size:9px;letter-spacing:.1em;color:#b6a0e5;font-weight:800}.mobile-quick-heading strong{font-size:15px;letter-spacing:-.025em}.mobile-quick-heading>i{color:#c4b5fd;background:#302342;border-radius:11px;padding:10px}
- .mobile-quick-grid{display:grid;grid-template-columns:1fr;gap:7px}.mobile-quick-grid button{display:flex;align-items:center;gap:11px;text-align:left;padding:10px;border:1px solid #30283e;border-radius:14px;background:rgba(10,9,15,.45);color:var(--text);min-height:61px}
- .mobile-quick-grid button:active{background:#29203a;transform:scale(.99)}.mobile-quick-grid button>span:nth-child(2){display:grid;gap:4px;flex:1}.mobile-quick-grid button b{font-size:12px}.mobile-quick-grid button small{font-size:10px;color:var(--muted)}.mobile-quick-grid button>i{font-size:10px;color:#817594}
- .quick-icon{width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:12px;font-size:14px}.quick-income{color:#c4b5fd;background:rgba(139,92,246,.16)}.quick-expense{color:#fdba74;background:rgba(251,146,60,.13)}.quick-saving{color:#6ee7b7;background:rgba(52,211,153,.12)}
- .kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px;margin-bottom:13px}.kpi{min-height:122px;padding:14px;border-radius:17px;box-shadow:0 8px 22px rgba(0,0,0,.14)}
- .kpi .label{font-size:9px;letter-spacing:.07em;font-weight:800;line-height:1.4}.kpi .value{font-size:clamp(17px,5vw,24px);letter-spacing:-.045em;margin-top:15px;line-height:1.12}.kpi .sub{font-size:9px;line-height:1.4;margin-top:7px}
- .section-grid,.comparison-grid,.dashboard-mini-grid,.module-grid{grid-template-columns:minmax(0,1fr)!important;gap:12px;margin-bottom:12px}.card{padding:15px;border-radius:19px;box-shadow:0 10px 25px rgba(0,0,0,.14)}
- .card-head{align-items:flex-start;gap:9px;margin-bottom:13px}.card-head h2{font-size:14px;line-height:1.35}.card-head span{font-size:10px;line-height:1.45}.head-actions{flex-wrap:wrap}
- .donut-layout{grid-template-columns:minmax(110px,.8fr) minmax(0,1fr);gap:12px}.donut{width:min(130px,100%);height:auto;aspect-ratio:1}.donut:after{inset:24%}.donut-center{font-size:11px}.people{grid-template-columns:1fr;gap:8px}
- .person{padding:11px;border-radius:13px}.person .amount{font-size:17px;margin:5px 0 8px}.person button{font-size:10px;padding:7px}
- .list-row{grid-template-columns:minmax(0,1fr) auto!important;gap:8px;font-size:11px}.list-row>*:nth-child(3){justify-self:end}
- .savings-grid,.future-grid{grid-template-columns:minmax(0,1fr)!important}.saving-card,.goal{padding:14px;border-radius:15px}.evolution-grid{grid-template-columns:minmax(0,1fr)!important;gap:10px}.evolution-panel{padding:12px;border-radius:15px}.evolution-panel .modern-chart{height:160px}.chart-tip{line-height:1.5}
- .upcoming-item{grid-template-columns:48px minmax(0,1fr) auto;gap:9px;padding:10px}.upcoming-item .upcoming-name{font-size:11px}.upcoming-item .upcoming-meta{font-size:9px}.upcoming-badge{font-size:8px}
- .module-section{margin-top:4px}.module-section>.card,.module-section .card{margin-bottom:12px}.module-form{grid-template-columns:minmax(0,1fr)!important;gap:12px}.module-form .full{grid-column:auto}
- .form-grid{grid-template-columns:minmax(0,1fr)!important;gap:12px}.form-grid .full{grid-column:auto}.form-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.form-actions .btn{min-height:43px}
- .btn,.mini-btn{min-height:38px}.actions{gap:7px}.actions .btn{min-height:40px}.table-wrap{border-radius:12px}.data-table{font-size:11px}.data-table th,.data-table td{padding:10px 8px}
- .month-list{grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}.calendar-day{min-height:52px;padding:4px 2px;border-radius:8px;font-size:8px}.calendar-task{font-size:7px;line-height:1.25}
- .account-card{padding:14px;border-radius:15px}.account-card .balance{font-size:20px}.personal-summary,.personal-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px}.personal-summary .summary-box{padding:10px}.personal-summary strong{font-size:13px}
- .personal-finance-blocks{grid-template-columns:1fr!important;gap:11px}.personal-saving-boxes{grid-template-columns:1fr!important}.personal-block-history .record,.personal-saving-box .box-history .record{grid-template-columns:minmax(0,1fr) auto!important}
- .personal-block-history .record>span:nth-child(3),.personal-saving-box .box-history .record>span:nth-child(3){grid-column:1/-1}.record{padding:10px;font-size:10px}.record-actions{grid-column:1/-1;display:flex;flex-wrap:wrap}.record-actions button{flex:1;min-height:34px}
- .report-filter{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.report-filter .field{min-width:0}.report-row{grid-template-columns:1fr;gap:8px}.report-balance{align-items:flex-start}.comparison-card .bar-chart{height:170px}
- .modal{z-index:200;padding:10px;align-items:flex-end}.modal-box{width:100%;max-height:min(88dvh,850px);padding:17px;border-radius:23px 23px 15px 15px;border-bottom:0;animation:nexus-sheet-in .25s cubic-bezier(.2,.8,.2,1)}
- .modal-head{position:sticky;top:-17px;z-index:2;margin:-17px -17px 15px;padding:17px;background:rgba(20,17,30,.96);backdrop-filter:blur(18px);border-radius:23px 23px 0 0;border-bottom:1px solid rgba(255,255,255,.05)}
- .modal-head h3{font-size:16px}.input,.select,.textarea{font-size:16px;min-height:45px;border-radius:12px}.textarea{min-height:90px}
- .toast{z-index:300;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));max-width:none}.saving-goal-feature{border-radius:16px}.chart-detail-popover{z-index:250}
- .module-section .card-head .btn{font-size:11px;padding:9px}.module-section .card-head{flex-wrap:wrap}
- #authScreen{padding:20px 16px;align-items:center;min-height:100dvh}.auth-card{border-radius:26px;padding:24px 20px;box-shadow:0 30px 100px #0009}.auth-card h1{font-size:24px}
-}
-@media(max-width:390px){:root{--mobile-gutter:13px}.kpi{padding:12px;min-height:116px}.kpi .value{font-size:17px}.donut-layout{grid-template-columns:1fr}.donut-layout .donut{width:122px}.people{grid-template-columns:repeat(2,minmax(0,1fr))}.person .amount{font-size:15px}.upcoming-item{grid-template-columns:43px minmax(0,1fr)}.upcoming-badge{grid-column:2;justify-self:start}.personal-summary,.personal-summary-grid{grid-template-columns:1fr 1fr!important}}
-@keyframes nexus-sheet-in{from{opacity:.7;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+<style id="nexus-mobile-app">
+/* NEXUS MOBILE APP SHELL — no desktop layout is used */
+html,body{width:100%;min-height:100%;background:var(--bg)}
+body{overflow-x:hidden;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
+body.mobile-app-mode{font-size:14px}
+body.mobile-app-mode .app{display:block;min-height:100dvh;width:100%;max-width:520px;margin:0 auto;background:var(--bg);position:relative;box-shadow:none}
+body.mobile-app-mode .sidebar{display:none!important}
+body.mobile-app-mode .main{margin:0!important;width:100%!important;max-width:none!important;padding:0 14px 104px!important}
+body.mobile-app-mode .topbar{position:sticky;top:0;z-index:30;margin:0 -14px 14px;padding:12px 14px 10px;background:rgba(11,10,18,.94);backdrop-filter:blur(18px);border-bottom:1px solid rgba(41,36,56,.9);align-items:center}
+body.mobile-app-mode .title h1{font-size:19px;line-height:1.15;margin:0}
+body.mobile-app-mode .title p{font-size:11px;margin-top:4px}
+body.mobile-app-mode .topbar .actions{gap:6px}
+body.mobile-app-mode .topbar .actions .btn:not(.mobile-menu),body.mobile-app-mode .topbar .actions .sync-status,body.mobile-app-mode .topbar .actions .account-strip{display:none!important}
+body.mobile-app-mode .topbar .mobile-menu{display:grid!important;place-items:center;width:38px;height:38px;padding:0;border-radius:12px;font-size:0;background:#211c2d}
+body.mobile-app-mode .topbar .mobile-menu:after{content:'⋮';font-size:25px;line-height:1}
+body.mobile-app-mode .filterbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;padding:10px;border-radius:15px}
+body.mobile-app-mode .filterbar .field{min-width:0}
+body.mobile-app-mode .filterbar .btn{grid-column:1/-1}
+body.mobile-app-mode .filterbar .small{grid-column:1/-1}
+body.mobile-app-mode .select,body.mobile-app-mode .input,body.mobile-app-mode .textarea{min-height:44px;border-radius:12px}
+body.mobile-app-mode .grid,.module-grid,.section-grid,.comparison-grid{display:grid;grid-template-columns:1fr!important;gap:12px}
+body.mobile-app-mode .kpis{grid-template-columns:1fr 1fr!important;gap:10px;margin-bottom:12px}
+body.mobile-app-mode .kpi{min-height:112px;padding:14px;border-radius:17px}
+body.mobile-app-mode .kpi .value{font-size:21px;margin-top:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.mobile-app-mode .kpi .label{font-size:10px}
+body.mobile-app-mode .kpi .sub{font-size:9px;line-height:1.3}
+body.mobile-app-mode .card{padding:14px;border-radius:17px;box-shadow:0 10px 25px rgba(0,0,0,.18)}
+body.mobile-app-mode .card-head{margin-bottom:12px}
+body.mobile-app-mode .card-head h2{font-size:14px}
+body.mobile-app-mode .card-head span{font-size:10px}
+body.mobile-app-mode .donut-layout{grid-template-columns:130px 1fr;gap:12px}
+body.mobile-app-mode .donut{width:116px;height:116px}
+body.mobile-app-mode .donut:after{inset:23px}
+body.mobile-app-mode .people{gap:8px}
+body.mobile-app-mode .person{padding:10px;border-radius:12px}
+body.mobile-app-mode .person .amount{font-size:16px}
+body.mobile-app-mode .person button{font-size:10px;padding:7px}
+body.mobile-app-mode .comparison-card{overflow:hidden}
+body.mobile-app-mode .bar-chart{overflow-x:auto;min-height:155px}
+body.mobile-app-mode .module-section.hidden{display:none!important}
+body.mobile-app-mode .module-section{padding-top:0}
+body.mobile-app-mode table{font-size:11px}
+body.mobile-app-mode .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+body.mobile-app-mode .form-grid{grid-template-columns:1fr!important}
+body.mobile-app-mode .form-actions,.actions{gap:8px}
+body.mobile-app-mode .btn{min-height:42px;border-radius:12px;padding:10px 13px}
+body.mobile-app-mode .mini-btn{min-height:36px;border-radius:10px}
+body.mobile-app-mode #goalsGrid,.future-grid,.savings-grid,.accounts-grid{grid-template-columns:1fr!important}
+body.mobile-app-mode .modal{align-items:flex-end!important;padding:0!important}
+body.mobile-app-mode .modal .modal-box,body.mobile-app-mode .modal-box{width:100%!important;max-width:520px!important;max-height:88dvh!important;border-radius:22px 22px 0 0!important;margin:0 auto!important}
+/* Native-app navigation */
+#nxMobileBottom{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:100%;max-width:520px;height:76px;z-index:100;background:rgba(18,16,27,.97);border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr 1fr;padding:8px 12px calc(8px + env(safe-area-inset-bottom));gap:8px;backdrop-filter:blur(18px)}
+.nx-tab{appearance:none;background:transparent;color:var(--muted);border:0;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:10px;font-weight:800}
+.nx-tab i{font-size:18px}.nx-tab.active{color:#fff;background:#211c2d}.nx-add{position:relative;margin-top:-24px}.nx-add span{width:52px;height:52px;border-radius:18px;background:linear-gradient(135deg,var(--purple),var(--orange));display:grid;place-items:center;color:white;font-size:23px;box-shadow:0 12px 28px rgba(139,92,246,.35)}
+#nxMoreSheet,#nxQuickSheet{position:fixed;inset:0;z-index:110;background:rgba(0,0,0,.56);display:none;align-items:flex-end}
+#nxMoreSheet.show,#nxQuickSheet.show{display:flex}
+.nx-sheet{width:100%;max-width:520px;margin:0 auto;background:#12101b;border:1px solid var(--line);border-bottom:0;border-radius:24px 24px 0 0;padding:12px 14px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -20px 50px rgba(0,0,0,.4);max-height:85dvh;overflow:auto}
+.nx-handle{width:42px;height:4px;background:#3a334b;border-radius:99px;margin:2px auto 15px}.nx-sheet-title{font-size:16px;font-weight:900;margin:0 0 12px}.nx-menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.nx-menu-item,.nx-quick-item{border:1px solid var(--line);background:#181523;color:#fff;border-radius:15px;padding:13px;text-align:left;display:flex;align-items:center;gap:10px;font-weight:800}.nx-menu-item i,.nx-quick-item i{width:22px;text-align:center;color:var(--purple2)}.nx-menu-item small{display:block;color:var(--muted);font-size:9px;font-weight:500;margin-top:2px}.nx-close{width:100%;margin-top:10px}
+.nx-quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.nx-quick-item{min-height:64px}
+@media(min-width:700px){body.mobile-app-mode{background:#07060b}body.mobile-app-mode .app{border-left:1px solid #1e1a29;border-right:1px solid #1e1a29}}
 </style>
-
-
-<style id="nexus-mobile-native-redesign">
-/* Mobile-native information hierarchy: app surfaces, compact actions and balance-first dashboard */
-@media(max-width:800px){
- :root{--mobile-gutter:16px}
- body{background:#090811;background-image:radial-gradient(ellipse at 50% -15%,rgba(111,69,177,.24),transparent 43%);color:#f5f1fb}
- .main{padding-top:0!important}
- .mobile-appbar{margin-bottom:0;border-bottom-color:rgba(255,255,255,.065);background:rgba(9,8,17,.9);padding-bottom:11px}
- .mobile-brand-mark{border-radius:13px;width:38px;height:38px;background:linear-gradient(145deg,#a78bfa,#7447cf);box-shadow:0 7px 20px rgba(139,92,246,.2)}
- .mobile-brand-copy strong{font-size:17px}.mobile-brand-copy small{font-size:8px;letter-spacing:.14em}
- .mobile-icon-button,.mobile-avatar{width:39px;height:39px;border-radius:14px;background:#171420;border-color:#30283d}
- .topbar{padding:22px 1px 16px;margin-bottom:0;gap:6px}
- .title h1{font-size:27px;line-height:1.12;letter-spacing:-.055em;margin-bottom:6px}
- .title p{font-size:12px;color:#a8a0b8;max-width:290px}
- .filterbar{grid-template-columns:1fr 1.35fr;gap:8px;margin:0 0 17px;padding:10px;border-radius:17px;background:#13111c;border:1px solid #282235;box-shadow:none}
- .filterbar .field label{font-size:8px;letter-spacing:.12em;margin:0 0 5px 2px;color:#a69bb9}
- .filterbar .select{background:#1a1725;border-color:#30283d;min-height:41px;padding:0 10px}
- .filterbar .btn{grid-column:auto;min-height:41px;border-radius:12px;font-size:10px;padding:8px}
- .filterbar #periodLabel{grid-column:1/-1;padding:1px 2px 0;font-size:10px;color:#9d94ad}
- .kpis{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px;margin-bottom:15px}
- .kpi{position:relative;overflow:hidden;min-height:112px;padding:14px 13px 13px;border-radius:18px;background:linear-gradient(145deg,#171421,#111019);border:1px solid #2b2537;box-shadow:0 8px 24px rgba(0,0,0,.15)}
- .kpi .label{font-size:9px;letter-spacing:.11em;color:#aaa0bb}
- .kpi .value{font-size:clamp(17px,4.8vw,23px);font-weight:800;letter-spacing:-.055em;margin-top:13px;line-height:1.1;overflow-wrap:anywhere}
- .kpi .sub{font-size:9px;line-height:1.4;color:#8e869f;margin-top:7px}
- .kpi.available{grid-column:1/-1;order:-1;min-height:142px;padding:18px 18px 16px;background:radial-gradient(ellipse at 100% 0,rgba(167,139,250,.24),transparent 52%),linear-gradient(120deg,#2b2040,#1b1728 72%);border-color:#51406c;box-shadow:0 13px 30px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.035)}
- .kpi.available:after{content:"";position:absolute;right:-22px;bottom:-48px;width:150px;height:150px;border:1px solid rgba(196,181,253,.12);border-radius:50%;box-shadow:0 0 0 18px rgba(196,181,253,.025),0 0 0 38px rgba(196,181,253,.02);pointer-events:none}
- .kpi.available .label{color:#c7b6eb;font-size:9px}.kpi.available .value{font-size:clamp(28px,8vw,36px);margin-top:18px;color:#fff;position:relative;z-index:1}.kpi.available .sub{font-size:10px;color:#c1b5d4;margin-top:8px}
- .kpi.income{background:linear-gradient(145deg,rgba(25,55,48,.82),#12151a 85%);border-color:#25443d}
- .kpi.expense{background:linear-gradient(145deg,rgba(67,39,39,.72),#141119 85%);border-color:#493036}
- .kpi.saving{background:linear-gradient(145deg,rgba(49,38,75,.75),#13111b 85%);border-color:#403254}
- .mobile-quick-actions{margin:0 0 18px;padding:14px 12px 12px;border-radius:19px;background:#13111b;border:1px solid #292235;box-shadow:none}
- .mobile-quick-heading{margin:0 2px 13px}.mobile-quick-heading span{font-size:8px;letter-spacing:.15em}.mobile-quick-heading strong{font-size:15px}.mobile-quick-heading>i{padding:9px;border-radius:12px;background:#282039}
- .mobile-quick-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
- .mobile-quick-grid button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;min-width:0;min-height:103px;padding:12px 5px 10px;text-align:center;border-radius:15px;background:#1a1724;border:1px solid #30283c}
- .mobile-quick-grid button>span:nth-child(2){display:grid;gap:5px;flex:none;width:100%;min-width:0}
- .mobile-quick-grid button b{font-size:10px;line-height:1.2;overflow-wrap:anywhere}.mobile-quick-grid button small{display:none}.mobile-quick-grid button>i{display:none}
- .quick-icon{width:39px;height:39px;flex-basis:39px;border-radius:13px;font-size:15px}
- .mobile-quick-grid button:active{transform:scale(.96);background:#282039}
- .section-grid,.comparison-grid,.dashboard-mini-grid,.module-grid{gap:13px;margin-bottom:14px}
- .card{padding:16px;border-radius:20px;background:linear-gradient(145deg,#171420,#121019);border:1px solid #2a2436;box-shadow:0 8px 24px rgba(0,0,0,.12)}
- .card-head{align-items:center;margin-bottom:15px}.card-head h2{font-size:14px;letter-spacing:-.02em}.card-head h2 i{color:#b7a0f0}.card-head span{font-size:10px;color:#958ca6}
- .donut-layout{grid-template-columns:115px minmax(0,1fr);align-items:center;gap:13px}
- .donut{width:115px;max-width:100%;border:5px solid #211c2c;box-shadow:0 8px 20px #0003}
- .donut:after{inset:25%;background:#171420}
- .donut-center{font-size:10px}.donut-center small{font-size:8px}
- .people{grid-template-columns:1fr;gap:7px}.person{padding:10px 11px;border-radius:13px;background:#1c1927;border-color:#30283c}.person .name{font-size:10px;color:#b4a9c7}.person .amount{font-size:15px;margin:5px 0 7px}.person button{width:100%;font-size:9px;min-height:31px}
- .income-breakdown{margin-top:14px}
- .section-grid>.card,.dashboard-mini-grid>.card,.comparison-grid>.card{min-width:0}
- .evolution-panel{background:#1a1724;border-color:#30283c}.evolution-panel .modern-chart{height:175px}
- .chart-legend,.legend{font-size:10px}
- .list-row{padding:10px 0;border-bottom-color:#282333}.list-row:last-child{border-bottom:0}
- .saving-card,.goal,.account-card{background:#1a1724;border-color:#30283c}
- .goal{gap:10px}.goal .goal-actions{gap:7px}.goal .goal-actions .mini-btn{min-width:0}
- .upcoming-item,.debt-preview{background:#1a1724;border-color:#30283c;border-radius:14px}
- .module-section{padding-bottom:22px}
- .module-section>.card{background:linear-gradient(145deg,#171420,#121019)}
- .module-section .card-head .btn{border-radius:12px}
- .btn,.mini-btn{border-radius:12px}
- .btn.primary{box-shadow:0 5px 14px rgba(139,92,246,.15)}
- .actions .btn{flex:1}
- .form-actions{grid-template-columns:1fr 1fr}
- .data-table{min-width:560px}.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
- .report-filter{gap:9px}.report-filter .field{min-width:0}
- .modal{padding:8px 8px env(safe-area-inset-bottom)}.modal-box{border:1px solid #393047;background:#15121e;box-shadow:0 -12px 50px #0008}
-}
-@media(max-width:390px){
- :root{--mobile-gutter:13px}
- .kpi{min-height:108px;padding:12px 11px}.kpi .value{font-size:17px}.kpi.available{min-height:132px;padding:17px}.kpi.available .value{font-size:28px}
- .mobile-quick-actions{padding:12px 9px 10px}.mobile-quick-grid{gap:5px}.mobile-quick-grid button{min-height:96px;padding:10px 3px}.mobile-quick-grid button b{font-size:9px}.quick-icon{width:36px;height:36px;flex-basis:36px}
- .donut-layout{grid-template-columns:100px minmax(0,1fr);gap:9px}.donut{width:100px}.person{padding:9px}.person .amount{font-size:14px}
-}
-@media(min-width:520px) and (max-width:800px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))!important}.kpi.available{grid-column:1/-1}.mobile-quick-grid button{min-height:96px}.section-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.donut-layout{grid-template-columns:1fr}.donut-layout .donut{margin:0 auto 10px}.people{grid-template-columns:repeat(2,minmax(0,1fr))}}
-
-
-/* MOBILE APP SHELL — final precedence layer (fixes duplicated legacy media rules) */
-@media (max-width:800px){
-  :root{--mobile-nav-height:74px}
-  body{padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom))!important}
-  .main{padding-bottom:calc(var(--mobile-nav-height) + 24px + env(safe-area-inset-bottom))!important}
-  /* The drawer is a true modal layer: backdrop below drawer, both above app chrome. */
-  .mobile-drawer-backdrop{z-index:140!important;display:block!important;pointer-events:none;opacity:0;visibility:hidden}
-  .sidebar{z-index:141!important;transform:translateX(-110%);visibility:hidden}
-  .sidebar.open{transform:translateX(0)!important;visibility:visible!important}
-  body.drawer-open .mobile-drawer-backdrop{opacity:1!important;visibility:visible!important;pointer-events:auto!important}
-  body.drawer-open{overflow:hidden!important;touch-action:none}
-  body.drawer-open .mobile-bottom-nav{display:none!important;visibility:hidden!important;pointer-events:none!important}
-  body.drawer-open .mobile-appbar{z-index:30!important}
-  .mobile-bottom-nav{z-index:100!important;isolation:isolate;padding-bottom:calc(9px + env(safe-area-inset-bottom))!important}
-  .mobile-bottom-nav button{touch-action:manipulation}
-  .mobile-bottom-nav .mobile-nav-add{transform:translateY(-2px)}
-  /* Make the most important number the first thing seen on the home screen. */
-  .kpis{display:flex!important;flex-wrap:wrap!important;overflow:visible!important;scroll-snap-type:none!important;gap:8px!important;margin:0 0 17px!important;padding:0!important}
-  .kpis>.kpi{flex:1 1 calc(33.333% - 8px)!important;min-width:0!important;min-height:105px!important;padding:12px 10px!important;border-radius:16px!important;scroll-snap-align:none!important;box-shadow:none!important}
-  .kpis>.kpi.available{order:-1;flex:1 0 100%!important;min-height:164px!important;padding:19px!important;border-radius:23px!important;justify-content:center!important;position:relative;overflow:hidden;border:1px solid rgba(52,211,153,.24)!important;background:radial-gradient(ellipse at 100% 0,rgba(52,211,153,.19),transparent 48%),linear-gradient(135deg,#17251f 0%,#151720 66%,#171225 100%)!important}
-  .kpi.available:after{content:"DISPONIBLE PARA TI";display:block;position:absolute;right:16px;top:17px;font-size:8px;letter-spacing:.13em;font-weight:850;color:rgba(167,243,208,.6)}
-  .kpis>.kpi.available .label{font-size:10px!important;letter-spacing:.12em;color:#a7f3d0!important}
-  .kpis>.kpi.available .value{font-size:clamp(32px,9vw,43px)!important;line-height:1.04!important;margin-top:15px!important;max-width:100%;color:#ecfdf5!important}
-  .kpis>.kpi.available .sub{font-size:11px!important;max-width:28ch;color:#b6cfc2!important}
-  .kpis>.kpi:not(.available){min-height:105px!important;display:flex;flex-direction:column;justify-content:space-between;background:#15121e!important;border:1px solid #2b2438!important}
-  .kpis>.kpi .value{font-size:clamp(13px,3.7vw,19px)!important;line-height:1.18!important;overflow-wrap:anywhere;margin-top:9px!important}
-  .kpis>.kpi .label{font-size:8px!important;letter-spacing:.045em!important;line-height:1.3!important}
-  .kpis>.kpi .sub{font-size:8px!important;line-height:1.3!important;margin-top:5px!important}
-  .mobile-quick-actions{margin-top:0!important}
-}
-@media(max-width:390px){
- .kpis>.kpi:not(.available){flex-basis:calc(50% - 8px)!important}
- .kpis>.kpi.available{min-height:150px!important}
- .kpis>.kpi.available .value{font-size:32px!important}
-}
-
-</style>
-
 </head>
 <body>
 <div class="app">
-<div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" onclick="closeMobileDrawer()" aria-hidden="true"></div>
 <aside class="sidebar" id="sidebar">
   <div class="logo"><div class="logo-mark"><i class="fa-solid fa-wallet" aria-hidden="true"></i></div><div>Nexus Finance<div class="small">Hogar & Personal</div></div></div>
-  <div class="mobile-drawer-intro"><span>ESPACIO FINANCIERO</span><strong>Todo en orden.</strong><small>Tu hogar, tus metas y tu tranquilidad.</small></div>
   <nav class="nav">
     <button class="active" data-route="dashboard" onclick="showModule('dashboard')"><i class="fa-solid fa-house"></i>Dashboard</button>
     <button onclick="openExpensePicker()"><i class="fa-solid fa-house-chimney"></i>Gastos del hogar</button>
@@ -524,17 +325,6 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
 </aside>
 
 <main class="main" id="dashboard">
-<div class="mobile-appbar" id="mobileAppbar">
-  <button class="mobile-brand-button" onclick="toggleSidebar()" aria-label="Abrir navegación">
-    <span class="mobile-brand-mark"><i class="fa-solid fa-wallet"></i></span>
-    <span class="mobile-brand-copy"><strong>Nexus</strong><small>FINANZAS DEL HOGAR</small></span>
-  </button>
-  <div class="mobile-appbar-actions">
-    <span class="mobile-live-dot" title="Aplicación activa"></span>
-    <button class="mobile-icon-button" onclick="refreshDashboard()" aria-label="Actualizar"><i class="fa-solid fa-rotate"></i></button>
-    <button class="mobile-avatar" onclick="showModule('settings')" aria-label="Abrir configuración"><i class="fa-solid fa-user"></i></button>
-  </div>
-</div>
 <header class="topbar">
   <div class="title"><h1>Dashboard General</h1><p>Control de tus finanzas personales y del hogar.</p></div>
   <div class="actions">
@@ -551,20 +341,11 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
   <span class="small" id="periodLabel"></span>
 </div>
 
-
 <section class="grid kpis">
  <div class="card kpi income"><div class="label">INGRESOS</div><div class="value" id="kpiIncome">$0</div><div class="sub">Total del periodo</div></div>
  <div class="card kpi expense"><div class="label">GASTOS · HOGAR</div><div class="value" id="kpiExpense">$0</div><div class="sub">Total del periodo</div></div>
  <div class="card kpi saving"><div class="label">AHORROS</div><div class="value" id="kpiSaving">$0</div><div class="sub">Financiero + imprevistos + emergencias</div></div>
  <div class="card kpi available"><div class="label">DISPONIBLE</div><div class="value" id="kpiAvailable">$0</div><div class="sub">Después de hogar y ahorros</div></div>
-</section>
-<section class="mobile-quick-actions" aria-label="Acciones rápidas">
-  <div class="mobile-quick-heading"><div><span>ACCIONES RÁPIDAS</span><strong>¿Qué quieres registrar?</strong></div><i class="fa-solid fa-bolt"></i></div>
-  <div class="mobile-quick-grid">
-    <button onclick="openIncome('me')"><span class="quick-icon quick-income"><i class="fa-solid fa-arrow-down"></i></span><span><b>Ingreso</b><small>Registrar entrada</small></span><i class="fa-solid fa-chevron-right"></i></button>
-    <button onclick="openExpensePicker()"><span class="quick-icon quick-expense"><i class="fa-solid fa-arrow-up"></i></span><span><b>Gasto del hogar</b><small>Registrar salida</small></span><i class="fa-solid fa-chevron-right"></i></button>
-    <button onclick="openSavingPicker()"><span class="quick-icon quick-saving"><i class="fa-solid fa-piggy-bank"></i></span><span><b>Ahorro</b><small>Sumar a una meta</small></span><i class="fa-solid fa-chevron-right"></i></button>
-  </div>
 </section>
 
 <section class="grid section-grid">
@@ -692,15 +473,6 @@ html{scrollbar-width:thin;scrollbar-color:#514568 transparent;overflow-x:clip}bo
   <p class="small">Utiliza tus credenciales de acceso.</p>
  </div>
 </div>
-
-<nav class="mobile-bottom-nav" aria-label="Navegación principal móvil">
- <button type="button" data-mobile-route="dashboard" class="active" onclick="showModule('dashboard')"><i class="fa-solid fa-house"></i><span>Inicio</span></button>
- <button type="button" data-mobile-route="personalMe" onclick="showModule('personalMe')"><i class="fa-solid fa-user"></i><span>Personal</span></button>
- <button type="button" class="mobile-nav-add" aria-label="Registrar movimiento" onclick="openMobileActionSheet()"><i class="fa-solid fa-plus"></i></button>
- <button type="button" data-mobile-route="debts" onclick="showModule('debts')"><i class="fa-solid fa-credit-card"></i><span>Deudas</span></button>
- <button type="button" data-mobile-more="true" aria-expanded="false" aria-controls="sidebar" onclick="toggleSidebar()"><i class="fa-solid fa-grid-2"></i><span>Más</span></button>
-</nav>
-
 <div class="modal" id="modal"><div class="modal-box" id="modalBox"></div></div>
 <div class="toast" id="toast"></div>
 <div id="loadingOverlay" aria-live="polite" aria-busy="true"><div class="loading-card"><div class="loading-spinner"></div><div class="loading-title" id="loadingTitle">Cargando datos</div><div class="loading-subtitle" id="loadingSubtitle">Sincronizando con la nube…</div></div></div>
@@ -1385,7 +1157,6 @@ function navigateToGoals(){
 function showModule(name,fromHistory=false){
  const allowed=["dashboard","calendar","debts","accounts","reports","settings","personalMe","personalPartner"];if(name==="accounts")name="reports";if(!allowed.includes(name))name="dashboard";
  activeModule=name;
- document.querySelectorAll(".mobile-bottom-nav [data-mobile-route]").forEach(b=>b.classList.toggle("active",b.dataset.mobileRoute===name || (b.dataset.mobileRoute==="personalMe"&&name==="personalPartner")));
  ["dashboard","calendar","debts","accounts","reports","settings","personal"].forEach(m=>{const el=document.getElementById(m+"Module");if(el)el.classList.toggle("hidden",m!==name&&!(m==="personal"&&(name==="personalMe"||name==="personalPartner")))});
  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.route===name));
  const title={dashboard:"Dashboard General",calendar:"Calendario y recordatorios",debts:"Gestión de deudas",accounts:"Cuentas separadas",reports:"Reportes",settings:"Configuración",personalMe:"Finanza · "+(state.people.me||"Mi perfil"),personalPartner:"Finanza · "+(state.people.partner||"Pareja")};
@@ -1394,7 +1165,7 @@ function showModule(name,fromHistory=false){
  if(!fromHistory){const url=location.pathname+location.search+"#"+name;history.pushState({nexusRoute:name},"",url)}
  if(name==="personalMe"||name==="personalPartner")renderPersonalModule();if(name==="settings")populateSettings();
  if(name!=="dashboard")renderExtendedModules();
- closeMobileDrawer();if(!fromHistory)window.scrollTo({top:0,behavior:"auto"});
+ document.getElementById("sidebar").classList.remove("open");if(!fromHistory)window.scrollTo({top:0,behavior:"auto"});
 }
 window.addEventListener("popstate",(event)=>{if(document.getElementById("modal").classList.contains("show")){if(typeof event.state?.scrollY==="number")modalScrollY=event.state.scrollY;closeModal(true);return}showModule(routeFromHash(),true)});
 // Escape closes only an active overlay/callout; it never changes the page scroll or route by itself.
@@ -1458,52 +1229,62 @@ function monthlyReportData(){const year=Number(document.getElementById("reportYe
 function renderReports(){const yearSel=document.getElementById("reportYear"),globalYear=document.getElementById("filterYear");if(!yearSel||!globalYear)return;const years=[...new Set([new Date().getFullYear(),Number(globalYear.value),...state.incomes,...state.expenses,...state.savings].map(x=>typeof x==="number"?x:Number(String(x.date||"").slice(0,4))).filter(y=>y>=2000&&y<=2100))].sort((a,b)=>b-a);const old=yearSel.value;yearSel.innerHTML=years.map(y=>`<option value="${y}">${y}</option>`).join("");yearSel.value=years.includes(Number(old))?old:String(globalYear.value||years[0]);const data=monthlyReportData(),box=document.getElementById("reportChart"),max=Math.max(1,...data.flatMap(x=>[x.income,x.expenses,x.savings]));const fmtPct=(v,base)=>base>0?(v/base*100).toFixed(1)+"%":"—";if(box)box.innerHTML=data.map((d,i)=>{if(!(d.income||d.expenses||d.savings))return "";const prev=data[i-1],delta=(key)=>prev&&prev[key]>0?((d[key]-prev[key])/prev[key]*100):null;return `<div class="report-row"><strong>${d.fullName}</strong><div class="report-metrics"><div class="report-metric"><span>Ingresos</span><div class="report-track"><i class="report-income" style="width:${d.income/max*100}%"></i></div><small>${money(d.income)} · ${fmtPct(d.income,max)}</small>${delta("income")!==null?`<em class="${delta("income")>=0?'positive':'negative'}">${delta("income")>=0?'↑':'↓'} ${Math.abs(delta("income")).toFixed(1)}% vs mes anterior</em>`:""}</div><div class="report-metric"><span>Gastos</span><div class="report-track"><i class="report-expense" style="width:${d.expenses/max*100}%"></i></div><small>${money(d.expenses)} · ${fmtPct(d.expenses,max)}</small>${delta("expenses")!==null?`<em class="${delta("expenses")<=0?'positive':'negative'}">${delta("expenses")>=0?'↑':'↓'} ${Math.abs(delta("expenses")).toFixed(1)}% vs mes anterior</em>`:""}</div><div class="report-metric"><span>Ahorros</span><div class="report-track"><i class="report-savings" style="width:${d.savings/max*100}%"></i></div><small>${money(d.savings)} · ${fmtPct(d.savings,max)}</small>${delta("savings")!==null?`<em class="${delta("savings")>=0?'positive':'negative'}">${delta("savings")>=0?'↑':'↓'} ${Math.abs(delta("savings")).toFixed(1)}% vs mes anterior</em>`:""}</div></div><div class="report-balance"><b>${money(d.balance)}</b><small>Saldo neto</small><span class="report-callout">${d.income?`Gasto/ingreso: ${(d.expenses/d.income*100).toFixed(1)}%`:"Sin ingresos"}</span></div></div>`}).join("")||'<div class="empty">No hay movimientos en el periodo seleccionado.</div>';const sumKey=k=>data.reduce((s,d)=>s+d[k],0);const kpi=document.getElementById("reportKpis");if(kpi)kpi.innerHTML=[["Ingresos",sumKey("income"),"#a78bfa"],["Gastos",sumKey("expenses"),"#fb923c"],["Ahorros",sumKey("savings"),"#34d399"],["Saldo neto",sumKey("balance"),"#60a5fa"]].map(([n,v,c])=>`<div class="card kpi"><div class="label">${n.toUpperCase()}</div><div class="value" style="color:${c}">${money(v)}</div><div class="sub">${sumKey("income")?((v/sumKey("income"))*100).toFixed(1)+"% de los ingresos":"Sin ingresos en el periodo"}</div></div>`).join("");const summary=document.getElementById("reportSummary");if(summary)summary.innerHTML=[["Ingresos",sumKey("income")],["Gastos del hogar",sumKey("expenses")],["Ahorros",sumKey("savings")],["Saldo neto",sumKey("balance")],["Deudas pendientes",state.debts.reduce((s,d)=>s+(d.status==="paid"?0:Number(d.balance)||0),0)]].map(([n,v])=>`<div class="list-row" style="grid-template-columns:1fr auto"><span>${n}</span><strong>${money(v)}</strong></div>`).join("");const alerts=[];const pending=state.tasks.filter(t=>t.status!=="done"&&t.date&&t.date<dateNow());if(pending.length)alerts.push(`${pending.length} recordatorio(s) vencido(s)`);const due=state.debts.filter(d=>d.status!=="paid"&&d.due&&d.due<=dateNow());if(due.length)alerts.push(`${due.length} deuda(s) con vencimiento hoy o anterior`);if(sumKey("expenses")>sumKey("income"))alerts.push("Los gastos del hogar superan los ingresos registrados en el periodo");document.getElementById("financialAlerts").innerHTML=alerts.length?alerts.map(a=>`<div class="list-row" style="grid-template-columns:1fr"><span class="negative">⚠ ${esc(a)}</span></div>`).join(""):'<div class="empty">No hay alertas con los datos actuales.</div>';renderAccounts()}
 function exportReportCsv(){const rows=[["Mes","Ingresos","Gastos hogar","Ahorros","Saldo neto"],...monthlyReportData().map(d=>[d.name,d.income,d.expenses,d.savings,d.balance])];const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")).join("\n");const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`nexus-reporte-${(document.getElementById("reportYear")?.value||document.getElementById("filterYear").value)||new Date().getFullYear()}.csv`;a.click();URL.revokeObjectURL(a.href)}
 
-
-/* Nexus mobile shell: drawer navigation and touch-friendly behavior. */
-function closeMobileDrawer(){
- const sidebar=document.getElementById("sidebar");
- if(sidebar)sidebar.classList.remove("open");
- document.body.classList.remove("drawer-open");
- const backdrop=document.getElementById("mobileDrawerBackdrop");
- if(backdrop)backdrop.setAttribute("aria-hidden","true");
- const more=document.querySelector("[data-mobile-more]");
- if(more)more.setAttribute("aria-expanded","false");
-}
-function toggleSidebar(){
- const sidebar=document.getElementById("sidebar");
- if(!sidebar)return;
- const opening=!sidebar.classList.contains("open");
- sidebar.classList.toggle("open",opening);
- document.body.classList.toggle("drawer-open",opening);
- const backdrop=document.getElementById("mobileDrawerBackdrop");
- if(backdrop)backdrop.setAttribute("aria-hidden",String(!opening));
- const more=document.querySelector("[data-mobile-more]");
- if(more)more.setAttribute("aria-expanded",String(opening));
-}
-document.addEventListener("click",function(event){
- const navButton=event.target.closest(".nav button");
- if(navButton)closeMobileDrawer();
-});
-document.addEventListener("keydown",function(event){
- if(event.key==="Escape"&&document.body.classList.contains("drawer-open"))closeMobileDrawer();
-});
-window.addEventListener("resize",function(){if(window.innerWidth>800)closeMobileDrawer();});
-
 /* Arranque: primero autenticar; luego cargar los datos privados de la cuenta */
 setupYears();
 document.querySelector(".app").classList.add("auth-locked");
 document.getElementById("authScreen").style.display="flex";
 bootstrapAuth();
+</script>
 
-function openMobileActionSheet(){
- const body=`<div class="mobile-action-sheet"><p class="small" style="margin-top:-4px">Elige el movimiento que quieres registrar.</p><div style="display:grid;gap:10px">
- <button class="btn" style="display:flex;align-items:center;gap:12px;text-align:left;padding:14px" onclick="openIncome('me')"><span class="quick-icon quick-income"><i class="fa-solid fa-arrow-down"></i></span><span><b>Registrar ingreso</b><small style="display:block;color:var(--muted);margin-top:3px">Añadir una entrada de dinero</small></span></button>
- <button class="btn" style="display:flex;align-items:center;gap:12px;text-align:left;padding:14px" onclick="openExpensePicker()"><span class="quick-icon quick-expense"><i class="fa-solid fa-arrow-up"></i></span><span><b>Gasto del hogar</b><small style="display:block;color:var(--muted);margin-top:3px">Registrar una salida</small></span></button>
- <button class="btn" style="display:flex;align-items:center;gap:12px;text-align:left;padding:14px" onclick="openSavingPicker()"><span class="quick-icon quick-saving"><i class="fa-solid fa-piggy-bank"></i></span><span><b>Registrar ahorro</b><small style="display:block;color:var(--muted);margin-top:3px">Añadir dinero a una meta</small></span></button>
- </div></div>`;
- openModal('Nuevo movimiento',body);
-}
-
+<script id="nexus-mobile-shell">
+(function(){
+  document.body.classList.add('mobile-app-mode');
+  const nav=document.createElement('nav');nav.id='nxMobileBottom';nav.setAttribute('aria-label','Navegación principal');
+  nav.innerHTML=`
+    <button class="nx-tab active" data-nx="dashboard"><i class="fa-solid fa-house"></i><span>General</span></button>
+    <button class="nx-tab nx-add" data-nx="add"><span><i class="fa-solid fa-plus"></i></span><b>Añadir</b></button>
+    <button class="nx-tab" data-nx="more"><i class="fa-solid fa-grid-2"></i><span>Más</span></button>`;
+  document.body.appendChild(nav);
+  const more=document.createElement('div');more.id='nxMoreSheet';more.innerHTML=`<div class="nx-sheet" role="dialog" aria-label="Más secciones"><div class="nx-handle"></div><h3 class="nx-sheet-title">Más secciones</h3><div class="nx-menu-grid">
+    <button class="nx-menu-item" data-go="personalMe"><i class="fa-solid fa-user"></i><span>Mi finanza<small id="nxMeLabel">Perfil personal</small></span></button>
+    <button class="nx-menu-item" data-go="personalPartner"><i class="fa-solid fa-user-group"></i><span>Finanza pareja<small id="nxPartnerLabel">Perfil pareja</small></span></button>
+    <button class="nx-menu-item" data-go="calendar"><i class="fa-solid fa-calendar-days"></i><span>Calendario<small>Recordatorios y tareas</small></span></button>
+    <button class="nx-menu-item" data-go="debts"><i class="fa-solid fa-credit-card"></i><span>Deudas<small>Control y pagos</small></span></button>
+    <button class="nx-menu-item" data-go="goals"><i class="fa-solid fa-bullseye"></i><span>Metas futuras<small>Objetivos de ahorro</small></span></button>
+    <button class="nx-menu-item" data-go="reports"><i class="fa-solid fa-chart-column"></i><span>Reportes<small>Análisis financiero</small></span></button>
+    <button class="nx-menu-item" data-go="settings"><i class="fa-solid fa-gear"></i><span>Configuración<small>Perfiles y datos</small></span></button>
+  </div><button class="btn nx-close" id="nxLogout"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button></div>`;
+  document.body.appendChild(more);
+  const quick=document.createElement('div');quick.id='nxQuickSheet';quick.innerHTML=`<div class="nx-sheet" role="dialog" aria-label="Añadir movimiento"><div class="nx-handle"></div><h3 class="nx-sheet-title">¿Qué quieres registrar?</h3><div class="nx-quick-grid">
+    <button class="nx-quick-item" data-action="income"><i class="fa-solid fa-arrow-trend-up"></i>Ingreso</button>
+    <button class="nx-quick-item" data-action="expense"><i class="fa-solid fa-house-chimney"></i>Gasto del hogar</button>
+    <button class="nx-quick-item" data-action="saving"><i class="fa-solid fa-piggy-bank"></i>Ahorro</button>
+    <button class="nx-quick-item" data-action="personal"><i class="fa-solid fa-user"></i>Gasto personal</button>
+    <button class="nx-quick-item" data-action="debt"><i class="fa-solid fa-credit-card"></i>Pago de deuda</button>
+    <button class="nx-quick-item" data-action="goal"><i class="fa-solid fa-bullseye"></i>Nueva meta</button>
+  </div><button class="btn nx-close" data-close-quick>Cancelar</button></div>`;
+  document.body.appendChild(quick);
+  function closeSheets(){more.classList.remove('show');quick.classList.remove('show')}
+  function go(name){closeSheets();if(name==='goals'){navigateToGoals();}else{showModule(name)};window.scrollTo({top:0,behavior:'auto'});syncTabs(name)}
+  function syncTabs(name){nav.querySelectorAll('.nx-tab').forEach(x=>x.classList.toggle('active',x.dataset.nx==='dashboard'&&name==='dashboard'));}
+  nav.addEventListener('click',e=>{const b=e.target.closest('.nx-tab');if(!b)return;const a=b.dataset.nx;if(a==='dashboard')go('dashboard');if(a==='more'){closeSheets();more.classList.add('show')}if(a==='add'){closeSheets();quick.classList.add('show')}});
+  more.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(b.dataset.go);if(e.target===more)closeSheets()});
+  quick.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;closeSheets();const a=b.dataset.action;
+    if(a==='income')openIncome('me');
+    else if(a==='expense')openExpensePicker();
+    else if(a==='saving')openSavingPicker();
+    else if(a==='personal')openPersonalSpending();
+    else if(a==='debt')openPersonalDebtPicker('me');
+    else if(a==='goal')openGoal();
+  });
+  quick.addEventListener('click',e=>{if(e.target.matches('[data-close-quick]'))closeSheets()});
+  document.addEventListener('click',e=>{if(e.target===quick||e.target===more)closeSheets()});
+  const oldShow=window.showModule;
+  window.showModule=function(name,fromHistory){oldShow(name,fromHistory);syncTabs(name);document.getElementById('nxMeLabel').textContent='Perfil de '+(state?.people?.me||'usuario');document.getElementById('nxPartnerLabel').textContent='Perfil de '+(state?.people?.partner||'pareja');};
+  document.getElementById('nxLogout').onclick=()=>logoutNexus();
+  // Keep the app on General when the document first initializes.
+  window.addEventListener('load',()=>{setTimeout(()=>{syncTabs(activeModule||'dashboard');},50)});
+})();
 </script>
 </body>
 </html>
