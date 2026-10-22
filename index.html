@@ -5377,5 +5377,113 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
 })();
 </script>
 
+
+<script id="nexus-v20-general-available-invariant">
+(function(){
+  'use strict';
+  /*
+    V20 balance invariant:
+    The general household balance is the sum of the current balances of BOTH
+    household profiles, never the balance of the logged-in person alone.
+    A +$47,500 Ruben balance and -$47,500 Mauren balance therefore produce
+    a shared general available balance of $0 in both sessions.
+    Individual cards stay individual and are not overwritten here.
+  */
+  const finiteNumber = value => {
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+  };
+  function activeFilter(){
+    try {
+      if (typeof getFilter === 'function') {
+        const f = getFilter();
+        if (f && Number.isFinite(Number(f.year))) return {year:Number(f.year),month:f.month === undefined ? 'all' : String(f.month)};
+      }
+    } catch (_) {}
+    const d = new Date();
+    return {year:d.getFullYear(),month:String(d.getMonth()+1)};
+  }
+  function rawSnapshot(filter){
+    const fn = window.__nexusV20BaseSnapshot || window.nexusV16LiveSnapshot;
+    if (typeof fn !== 'function') return null;
+    try { return fn(filter || activeFilter()); } catch (error) {
+      console.warn('Nexus V20: no fue posible calcular el disponible conjunto.', error);
+      return null;
+    }
+  }
+  function generalBalance(snapshot){
+    const me = finiteNumber(snapshot?.profiles?.me?.balance);
+    const partner = finiteNumber(snapshot?.profiles?.partner?.balance);
+    if (me !== null && partner !== null) return me + partner;
+    const fallback = finiteNumber(snapshot?.available);
+    return fallback === null ? 0 : fallback;
+  }
+  function canonicalSnapshot(filter){
+    const snapshot = rawSnapshot(filter);
+    if (!snapshot) return null;
+    const available = generalBalance(snapshot);
+    return {...snapshot, available, sharedAvailable:available};
+  }
+  /* Keep the shared snapshot API consistent for alerts and other modules too. */
+  if (typeof window.nexusV16LiveSnapshot === 'function' && !window.__nexusV20BaseSnapshot) {
+    window.__nexusV20BaseSnapshot = window.nexusV16LiveSnapshot;
+  }
+  if (typeof window.__nexusV20BaseSnapshot === 'function') {
+    window.nexusV16LiveSnapshot = canonicalSnapshot;
+  }
+  function paintGeneralBalance(){
+    if (typeof authToken === 'undefined' || !authToken || typeof authUser === 'undefined' || !authUser) return;
+    const snapshot = canonicalSnapshot(activeFilter());
+    if (!snapshot) return;
+    const text = typeof money === 'function' ? money(snapshot.available) : (typeof window.money === 'function' ? window.money(snapshot.available) : String(snapshot.available));
+    /* These are general/household cards only. Per-person balances are deliberately untouched. */
+    document.querySelectorAll('.m-balance-card .m-balance-value, .m-v2-hero.available .m-v2-hero-total, .m-v3-kpi.available strong').forEach(node => {
+      node.textContent = text;
+      node.setAttribute('data-balance-scope','household');
+    });
+    const legacyKpi = document.getElementById('kpiAvailable');
+    if (legacyKpi) legacyKpi.textContent = text;
+    /* Make the wording explicitly shared, avoiding the impression this is the active person's balance. */
+    document.querySelectorAll('.m-balance-card .m-balance-top span:first-child, .m-v2-hero.available .m-eyebrow').forEach(node => {
+      if (node.classList.contains('m-eyebrow')) node.innerHTML = '<i class="fa-solid fa-wallet" aria-hidden="true"></i> DISPONIBLE GENERAL DEL HOGAR';
+      else node.innerHTML = '<i class="fa-solid fa-wallet" aria-hidden="true"></i> Disponible general del hogar';
+    });
+    return snapshot.available;
+  }
+  window.nexusV20GeneralAvailable = (filter) => {
+    const snapshot = canonicalSnapshot(filter || activeFilter());
+    return snapshot ? snapshot.available : 0;
+  };
+  window.nexusV20PaintGeneralAvailable = paintGeneralBalance;
+  /* The final render wrapper runs after older render patches, so older layers cannot overwrite this value. */
+  const priorMobileRender = window.renderMobileUI || (typeof renderMobileUI === 'function' ? renderMobileUI : null);
+  if (typeof priorMobileRender === 'function' && !priorMobileRender.__nexusV20Wrapped) {
+    const wrappedMobileRender = function renderMobileUIV20(){
+      const result = priorMobileRender.apply(this, arguments);
+      try { paintGeneralBalance(); } catch (error) { console.warn('Nexus V20: no se pudo actualizar el saldo general.', error); }
+      return result;
+    };
+    wrappedMobileRender.__nexusV20Wrapped = true;
+    window.renderMobileUI = wrappedMobileRender;
+    try { renderMobileUI = wrappedMobileRender; } catch (_) {}
+  }
+  /* Keep the legacy summary KPI aligned after register/edit/delete flows that call renderAll(). */
+  const priorRenderAll = window.renderAll || (typeof renderAll === 'function' ? renderAll : null);
+  if (typeof priorRenderAll === 'function' && !priorRenderAll.__nexusV20Wrapped) {
+    const wrappedRenderAll = function renderAllV20(){
+      const result = priorRenderAll.apply(this, arguments);
+      try { paintGeneralBalance(); } catch (error) { console.warn('Nexus V20: no se pudo actualizar el KPI general.', error); }
+      return result;
+    };
+    wrappedRenderAll.__nexusV20Wrapped = true;
+    window.renderAll = wrappedRenderAll;
+    try { renderAll = wrappedRenderAll; } catch (_) {}
+  }
+  /* Retry after startup/bootstrap and successful sync, without timers or background polling. */
+  document.addEventListener('DOMContentLoaded', () => { try { paintGeneralBalance(); } catch (_) {} }, {once:true});
+  window.addEventListener('pageshow', () => { try { paintGeneralBalance(); } catch (_) {} });
+})();
+</script>
+
 </body>
 </html>
