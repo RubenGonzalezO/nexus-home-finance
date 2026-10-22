@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Finance · App móvil V9</title>
+<title>Nexus Finance · App móvil V15</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 :root{
@@ -352,7 +352,7 @@ button,input,select,textarea{-webkit-tap-highlight-color:transparent}button{touc
 .m-v3-box-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.m-v3-box{padding:12px;border:1px solid #ffffff12;border-top:3px solid var(--identity-color,#34d399);border-radius:14px;background:#0f0d16;min-width:0}.m-v3-box h4{margin:0;display:flex;align-items:center;gap:6px;font-size:10px;overflow-wrap:anywhere}.m-v3-box>strong{display:block;margin:9px 0 4px;font-size:18px;overflow-wrap:anywhere}.m-v3-box small{font-size:9px;color:#a79db6;line-height:1.4}.m-v3-box-actions{display:flex;gap:6px;margin-top:10px}.m-v3-box-actions button{flex:1;min-height:32px;padding:0 5px;font-size:9px}
 .m-v3-debt-card{padding:13px;border:1px solid var(--m-line);border-left:3px solid #fb923c;border-radius:15px;background:linear-gradient(150deg,#211a27,#12101a);margin-bottom:9px;min-width:0}.m-v3-debt-card.is-paid{border-left-color:#34d399;opacity:.85}.m-v3-debt-top{display:flex;align-items:flex-start;gap:8px}.m-v3-debt-icon{display:grid;place-items:center;width:35px;height:35px;flex:0 0 35px;border-radius:11px;background:#3b281c;color:#fdba74}.m-v3-debt-title{display:grid;gap:4px;flex:1;min-width:0}.m-v3-debt-title b{font-size:11px;line-height:1.4;overflow-wrap:anywhere}.m-v3-debt-title small{font-size:9px;color:#a89db8;line-height:1.4}.m-v3-debt-balance{font-size:18px;font-weight:900;margin:11px 0 3px;overflow-wrap:anywhere}.m-v3-debt-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;color:#a89db8;font-size:9px}.m-v3-debt-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:11px}.m-v3-debt-actions .m-primary-btn,.m-v3-debt-actions .m-secondary-btn{min-height:35px;padding:0 10px;font-size:9px}.m-v3-status{padding:4px 7px;border-radius:99px;background:#382719;color:#fdba74;font-size:8px;font-weight:800;white-space:nowrap}.m-v3-status.done{background:#17392f;color:#6ee7b7}
 .m-v3-calendar-head{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin:4px 0 12px}.m-v3-calendar-head h2{font-size:18px;text-transform:capitalize;letter-spacing:-.03em;margin:0}.m-v3-calendar-nav{display:flex;align-items:center;gap:5px}.m-v3-calendar-nav button{display:grid;place-items:center;min-width:33px;height:34px;border:1px solid #393047;border-radius:10px;background:#201a2d;color:#e4d8f8;font-size:11px}.m-v3-calendar-nav button.today-btn{padding:0 9px;font-size:9px;font-weight:800}
-.m-v3-calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}.m-v3-calendar-weekday{text-align:center;padding:5px 0;color:#9e94af;font-size:8px;font-weight:800}.m-v3-calendar-day{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;min-width:0;min-height:49px;padding:7px 1px 5px;border:1px solid #2d263a;border-radius:9px;background:#110e19;color:#e9e3f2;font-size:10px}.m-v3-calendar-day.muted{opacity:.25}.m-v3-calendar-day.today{border-color:#a78bfa;box-shadow:inset 0 0 0 1px #a78bfa44}.m-v3-calendar-day.selected{background:#31213f;border-color:#c4b5fd;color:white}.m-v3-calendar-day.has-events{background:#20192d}.m-v3-cal-dots{display:flex;align-items:center;gap:3px;min-height:4px}.m-v3-cal-dots i{display:block;width:4px;height:4px;border-radius:50%;background:#c4b5fd}.m-v3-cal-dots i.debt-dot{background:#fdba74}.m-v3-calendar-legend{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin:11px 0 0;color:#a89db8;font-size:9px}.m-v3-calendar-legend span{display:flex;align-items:center;gap:5px}.m-v3-calendar-legend i{width:7px;height:7px;border-radius:50%;background:#c4b5fd}.m-v3-calendar-legend i.debt-dot{background:#fdba74}
+.m-v3-calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}.m-v3-calendar-weekday{text-align:center;padding:5px 0;color:#9e94af;font-size:8px;font-weight:800}.m-v3-calendar-day{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;min-width:0;min-height:49px;padding:7px 1px 5px;border:1px solid #2d263a;border-radius:9px;background:#110e19;color:#e9e3f2;font-size:10px}.m-v3-calendar-day.muted{opacity:.25}.m-v3-calendar-day.today{border-color:#a78bfa;box-shadow:inset 0 0 0 1px #a78bfa44}.m-v3-calendar-day.selected{background:#31213f;border-color:#c4b5fd;color:white}.m-v3-calendar-day.has-events{background:#20192d}.m-v3-cal-dots{display:flex;align-items:center;gap:3px;min-height:4px}.m-v3-cal-dots i{display:block;width:4px;height:4px;border-radius:50%;background:#c4b5fd}.m-v3-calendar-legend{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin:11px 0 0;color:#a89db8;font-size:9px}.m-v3-calendar-legend span{display:flex;align-items:center;gap:5px}.m-v3-calendar-legend i{width:7px;height:7px;border-radius:50%;background:#c4b5fd}
 .m-v3-selected-date{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 0 10px}.m-v3-selected-date h3{margin:0;font-size:13px}.m-v3-event-card{display:flex;align-items:center;gap:9px;padding:11px 0;border-bottom:1px solid #ffffff0b;min-width:0}.m-v3-event-card:last-child{border-bottom:0}.m-v3-event-main{flex:1;min-width:0;display:grid;gap:4px}.m-v3-event-main b{font-size:10px;line-height:1.4;overflow-wrap:anywhere}.m-v3-event-main small{font-size:9px;color:#a89db8;line-height:1.4}.m-v3-event-actions{display:flex;align-items:center;gap:4px}
 .m-v3-account-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.m-v3-account-select{display:block;text-align:left;width:100%;padding:13px;border:1px solid var(--m-line);border-radius:15px;background:linear-gradient(155deg,#1b1727,#12101a);color:#f6f3ff;min-width:0}.m-v3-account-select.selected{border-color:#9d7bcb;box-shadow:inset 0 0 0 1px #9d7bcb33,0 8px 20px #0002}.m-v3-account-title{display:flex;align-items:center;gap:7px;color:#d8cafa;font-size:9px;line-height:1.4}.m-v3-account-title i{font-size:12px}.m-v3-account-select strong{display:block;margin:12px 0 5px;font-size:17px;letter-spacing:-.035em;overflow-wrap:anywhere}.m-v3-account-select small{display:block;min-height:27px;color:#a79db6;font-size:9px;line-height:1.4;overflow-wrap:anywhere}.m-v3-account-select .m-v3-account-cta{display:block;margin-top:8px;color:#c4b5fd;font-size:8px;font-weight:800}
 .m-v3-info-note{display:flex;align-items:flex-start;gap:8px;padding:11px 12px;border:1px solid #2c4562;border-radius:13px;background:#152237;color:#b9c8df;font-size:9px;line-height:1.55;margin:12px 0}.m-v3-info-note i{color:#93c5fd;margin-top:1px}
@@ -2230,10 +2230,10 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     const today=dateNow(),y=mobileCalendarMonthV3.getFullYear(),m=mobileCalendarMonthV3.getMonth(),first=new Date(y,m,1),last=new Date(y,m+1,0).getDate(),title=first.toLocaleDateString('es-CO',{month:'long',year:'numeric'});
     const allEvents=[...(state.tasks||[]).filter(t=>t.date).map(t=>({kind:'task',id:t.id,date:t.date,title:t.title,detail:`${t.time||'Sin hora'} · ${t.owner==='home'?'Hogar':state.people[t.owner]||t.owner}`,status:t.status==='done'?'done':'pending',source:t})),...(state.debts||[]).filter(d=>d.due&&d.status!=='paid'&&Number(d.balance)>0).map(d=>({kind:'debt',id:d.id,date:d.due,title:d.name,detail:`Vencimiento · ${d.owner==='home'?'Hogar':state.people[d.owner]||d.owner}`,status:'pending',source:d})),...(state.expenses||[]).filter(x=>x.paymentScheduled&&x.paymentDate).map(x=>({kind:'homePayment',id:x.id,date:x.paymentDate,title:x.category||'Pago del hogar',detail:`Hogar · ${money(x.amount)}`,status:x.status==='paid'?'done':'pending',source:x})),...(state.personalSpending||[]).filter(x=>['expense','other-expense'].includes(personalMovementType(x))&&x.paymentScheduled&&x.paymentDate).map(x=>({kind:'personalPayment',id:x.id,date:x.paymentDate,title:x.category||'Pago personal',detail:`${state.people[x.person]||x.person} · ${money(x.amount)}`,status:x.status==='paid'?'done':'pending',source:x}))];
     const offset=(first.getDay()+6)%7,week=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];let grid=week.map(n=>`<div class="m-v3-calendar-weekday">${n}</div>`).join('');for(let i=0;i<offset;i++)grid+='<span class="m-v3-cal-empty"></span>';
-    for(let d=1;d<=last;d++){const date=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,events=allEvents.filter(e=>e.date===date),pending=events.filter(e=>e.status==='pending').length,done=events.filter(e=>e.status==='done').length;grid+=`<button class="m-v3-calendar-day ${date===today?'today':''} ${date===mobileCalendarSelectedDateV3?'selected':''} ${events.length?'has-events':''}" onclick="mobileSelectCalendarDayV3('${date}')" aria-label="${date}, ${events.length} evento(s)"><span>${d}</span><span class="m-v3-cal-dots">${pending?'<i class="pending-dot"></i>':''}${done?'<i class="done-dot"></i>':''}</span></button>`;}
+    for(let d=1;d<=last;d++){const date=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,events=allEvents.filter(e=>e.date===date),statuses=events.map(e=>e.status==='done'?'done':(e.date&&e.date<today?'overdue':'pending')),pending=statuses.includes('pending'),done=statuses.includes('done'),overdue=statuses.includes('overdue');grid+=`<button class="m-v3-calendar-day ${date===today?'today':''} ${date===mobileCalendarSelectedDateV3?'selected':''} ${events.length?'has-events':''} ${pending?'has-pending':''} ${done?'has-done':''} ${overdue?'has-overdue':''}" onclick="mobileSelectCalendarDayV3('${date}')" aria-label="${date}, ${events.length} evento(s)"><span>${d}</span><span class="m-v3-cal-dots">${overdue?'<i class="overdue-dot" title="Vencido"></i>':''}${pending?'<i class="pending-dot" title="Pendiente"></i>':''}${done?'<i class="done-dot" title="Completado"></i>':''}</span></button>`;}
     const selected=mobileCalendarSelectedDateV3||today,dayEvents=allEvents.filter(e=>e.date===selected).sort((a,b)=>(a.status===b.status?String(a.title).localeCompare(String(b.title)):a.status==='pending'?-1:1));
     const rows=dayEvents.length?dayEvents.map(e=>{const s=e.source;let actions='';if(e.kind==='task')actions=`<button class="m-v3-inline-btn" title="Marcar ${e.status==='done'?'pendiente':'completado'}" onclick="toggleTask('${e.id}')"><i class="fa-solid ${e.status==='done'?'fa-rotate-left':'fa-check'}"></i></button><button class="m-v3-inline-btn" title="Editar recordatorio" onclick="openTaskEdit('${e.id}')"><i class="fa-solid fa-pen-to-square"></i></button><button class="m-v3-inline-btn danger" title="Eliminar recordatorio" onclick="deleteTask('${e.id}')"><i class="fa-solid fa-trash-can"></i></button>`;else if(e.kind==='debt')actions=`<button class="m-v3-inline-btn" title="Editar deuda" onclick="editDebt('${e.id}')"><i class="fa-solid fa-pen-to-square"></i></button><button class="m-v3-inline-btn primary" title="Abonar" onclick="payDebt('${e.id}')"><i class="fa-solid fa-hand-holding-dollar"></i></button>`;else if(e.kind==='homePayment')actions=`<button class="m-v5-status-toggle ${e.status==='done'?'paid':'pending'}" title="Tocar para cambiar el estado" onclick="mobileV4TogglePayment('expense','${e.id}')"><i class="fa-solid ${e.status==='done'?'fa-circle-check':'fa-clock'}"></i><span>${e.status==='done'?'Pagado':'Pendiente'}</span></button><button class="m-v3-inline-btn" title="Editar gasto" onclick="openExpense('${esc(s.category||'Otros')}','${e.id}')"><i class="fa-solid fa-pen-to-square"></i></button>`;else actions=`<button class="m-v5-status-toggle ${e.status==='done'?'paid':'pending'}" title="Tocar para cambiar el estado" onclick="mobileV4TogglePayment('personal','${e.id}')"><i class="fa-solid ${e.status==='done'?'fa-circle-check':'fa-clock'}"></i><span>${e.status==='done'?'Pagado':'Pendiente'}</span></button><button class="m-v3-inline-btn" title="Editar gasto personal" onclick="openPersonalMovement('${s.person}','${personalMovementType(s)}','${e.id}')"><i class="fa-solid fa-pen-to-square"></i></button>`;return `<div class="m-v3-event-card ${e.status==='done'?'m-v4-event-done':''}"><span class="m-v3-row-icon ${e.kind==='debt'||e.kind==='homePayment'?'orange':e.kind==='personalPayment'?'pink':'blue'}"><i class="fa-solid ${e.kind==='debt'?'fa-file-invoice-dollar':e.kind==='homePayment'?'fa-house-chimney':e.kind==='personalPayment'?'fa-wallet':'fa-calendar-check'}"></i></span><div class="m-v3-event-main"><b>${esc(e.title)} ${e.status==='done'?`<span class="m-v4-done-label"><i class="fa-solid fa-check"></i> ${e.kind==='homePayment'||e.kind==='personalPayment'?'Pagado':'Completado'}</span>`:''}</b><small>${esc(e.detail)}${e.kind==='debt'?` · Saldo ${money(s.balance)}`:''}${s.notes?` · ${esc(s.notes)}`:''}</small></div><div class="m-v3-event-actions">${actions}</div></div>`;}).join(''):'<div class="m-inline-empty"><i class="fa-regular fa-calendar-check"></i> No hay eventos para este día.</div>';
-    return `<div class="m-v3-calendar-head"><h2><i class="fa-solid fa-calendar-days"></i> ${esc(title)}</h2><div class="m-v3-calendar-nav"><button title="Mes anterior" aria-label="Mes anterior" onclick="mobileShiftCalendarV3(-1)"><i class="fa-solid fa-chevron-left"></i></button><button class="today-btn" onclick="mobileCalendarTodayV3()"><i class="fa-solid fa-calendar-day"></i> Hoy</button><button title="Mes siguiente" aria-label="Mes siguiente" onclick="mobileShiftCalendarV3(1)"><i class="fa-solid fa-chevron-right"></i></button></div></div><section class="m-panel"><div class="m-v3-calendar">${grid}</div><div class="m-v3-calendar-legend"><span><i class="pending-dot"></i> Pendiente / vence</span><span><i class="done-dot"></i> Pagado / completado</span><span><i class="debt-dot"></i> Deuda</span></div></section><div class="m-v3-selected-date"><h3><i class="fa-regular fa-calendar-check"></i> ${mobileV3DateLabel(selected)}</h3><button class="m-primary-btn compact" onclick="mobileOpenTaskForDateV3('${selected}')"><i class="fa-solid fa-plus"></i> Añadir evento</button></div><section class="m-panel">${rows}</section><div class="m-v3-info-note"><i class="fa-solid fa-circle-info"></i><span>Los gastos programados aparecen aquí automáticamente. Al marcarlos pagados, el evento se conserva como completado. Los pagos recurrentes generan la siguiente fecha mensual al finalizar el pago actual.</span></div>`;
+    return `<div class="m-v3-calendar-head"><h2><i class="fa-solid fa-calendar-days"></i> ${esc(title)}</h2><div class="m-v3-calendar-nav"><button title="Mes anterior" aria-label="Mes anterior" onclick="mobileShiftCalendarV3(-1)"><i class="fa-solid fa-chevron-left"></i></button><button class="today-btn" onclick="mobileCalendarTodayV3()"><i class="fa-solid fa-calendar-day"></i> Hoy</button><button title="Mes siguiente" aria-label="Mes siguiente" onclick="mobileShiftCalendarV3(1)"><i class="fa-solid fa-chevron-right"></i></button></div></div><section class="m-panel"><div class="m-v3-calendar">${grid}</div><div class="m-v3-calendar-legend"><span><i class="pending-dot"></i> Pendiente</span><span><i class="done-dot"></i> Completado</span><span><i class="overdue-dot"></i> Vencido</span></div></section><div class="m-v3-selected-date"><h3><i class="fa-regular fa-calendar-check"></i> ${mobileV3DateLabel(selected)}</h3><button class="m-primary-btn compact" onclick="mobileOpenTaskForDateV3('${selected}')"><i class="fa-solid fa-plus"></i> Añadir evento</button></div><section class="m-panel">${rows}</section><div class="m-v3-info-note"><i class="fa-solid fa-circle-info"></i><span>Los gastos programados aparecen aquí automáticamente. Al marcarlos pagados, el evento se conserva como completado. Los pagos recurrentes generan la siguiente fecha mensual al finalizar el pago actual.</span></div>`;
   };
 
   /* Historia de finanzas personales con un bloque de estado/fecha para cada gasto. */
@@ -3782,35 +3782,47 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
 </script>
 
 
-<!-- Nexus V13: reliable alert-detail navigation + semantic calendar colors -->
-<style id="nexus-v13-calendar-semantics">
-  /* Calendar dots communicate state, not generic event presence. */
+<!-- Nexus V13 alert routing retained; V14 calendar uses exactly three visible states -->
+<style id="nexus-v14-calendar-three-states">
+  /* Nexus V14: only three calendar states, with clear contrast on mobile. */
   .m-v3-cal-dots i.pending-dot,
-  .m-v3-cal-dots i.debt-dot,
-  .m-v3-calendar-legend i.pending-dot,
-  .m-v3-calendar-legend i.debt-dot { background:#facc15 !important; box-shadow:0 0 0 2px #facc151c; }
+  .m-v3-calendar-legend i.pending-dot { background:#facc15 !important; box-shadow:0 0 0 3px #facc1528 !important; }
   .m-v3-cal-dots i.done-dot,
-  .m-v3-calendar-legend i.done-dot { background:#34d399 !important; box-shadow:0 0 0 2px #34d3991c; }
+  .m-v3-calendar-legend i.done-dot { background:#34d399 !important; box-shadow:0 0 0 3px #34d39928 !important; }
   .m-v3-cal-dots i.overdue-dot,
-  .m-v3-calendar-legend i.overdue-dot { background:#fb7185 !important; box-shadow:0 0 0 2px #fb71851c; }
-  .m-v3-calendar-day.has-overdue { border-color:#8c3448; background:linear-gradient(145deg,#321722,#151019); }
-  .m-v3-calendar-day.has-done { border-color:#28634d; }
-  .m-v3-calendar-day.has-pending,.m-v3-calendar-day.has-debt { border-color:#77642c; }
-  .m-v3-calendar-legend { row-gap:9px; }
-  .m-v3-event-card.m-v13-calendar-row { border-radius:12px; padding:12px 9px !important; margin:5px 0; border:1px solid transparent; }
-  .m-v3-event-card.m-v13-calendar-row.is-pending,
-  .m-v3-event-card.m-v13-calendar-row.is-debt { background:linear-gradient(100deg,#facc150d,transparent 80%); border-color:#facc152d; }
-  .m-v3-event-card.m-v13-calendar-row.is-done { background:linear-gradient(100deg,#34d39910,transparent 80%); border-color:#34d39935; }
-  .m-v3-event-card.m-v13-calendar-row.is-overdue { background:linear-gradient(100deg,#fb718512,transparent 80%); border-color:#fb71854a; }
-  .m-v3-event-card.m-v13-calendar-row.is-pending .m-v3-row-icon,
-  .m-v3-event-card.m-v13-calendar-row.is-debt .m-v3-row-icon { background:#3b321d !important; color:#facc15 !important; border:1px solid #8a7334 !important; }
-  .m-v3-event-card.m-v13-calendar-row.is-done .m-v3-row-icon { background:#17392f !important; color:#34d399 !important; border:1px solid #28634d !important; }
-  .m-v3-event-card.m-v13-calendar-row.is-overdue .m-v3-row-icon { background:#451c2a !important; color:#fb7185 !important; border:1px solid #8e3a50 !important; }
-  .m-v13-event-state { display:inline-flex; align-items:center; gap:5px; width:max-content; max-width:100%; padding:3px 7px; margin:0 0 2px; border-radius:99px; font-size:8px; line-height:1.35; font-weight:900; letter-spacing:.035em; text-transform:uppercase; }
-  .m-v13-event-state.pending,.m-v13-event-state.debt { background:#3b321d; color:#facc15; border:1px solid #8a7334; }
-  .m-v13-event-state.done { background:#17392f; color:#6ee7b7; border:1px solid #28634d; }
-  .m-v13-event-state.overdue { background:#451c2a; color:#fda4af; border:1px solid #8e3a50; }
-  .m-v13-event-state i { font-size:9px; }
+  .m-v3-calendar-legend i.overdue-dot { background:#fb7185 !important; box-shadow:0 0 0 3px #fb718528 !important; }
+
+  .m-v3-cal-dots { gap:5px !important; min-height:8px !important; }
+  .m-v3-cal-dots i { width:6px !important; height:6px !important; border-radius:50% !important; }
+  .m-v3-calendar-day.has-pending { border-color:#a88a24 !important; background:linear-gradient(145deg,#44370f,#1b170e) !important; box-shadow:inset 0 0 0 1px #facc1528 !important; }
+  .m-v3-calendar-day.has-done { border-color:#27835e !important; background:linear-gradient(145deg,#143c2d,#111b18) !important; box-shadow:inset 0 0 0 1px #34d39925 !important; }
+  .m-v3-calendar-day.has-overdue { border-color:#a83e56 !important; background:linear-gradient(145deg,#471c2a,#211219) !important; box-shadow:inset 0 0 0 1px #fb718535 !important; }
+  .m-v3-calendar-day.selected.has-pending { border-color:#facc15 !important; box-shadow:0 0 0 2px #facc1540,inset 0 0 0 1px #facc1535 !important; }
+  .m-v3-calendar-day.selected.has-done { border-color:#34d399 !important; box-shadow:0 0 0 2px #34d39940,inset 0 0 0 1px #34d39935 !important; }
+  .m-v3-calendar-day.selected.has-overdue { border-color:#fb7185 !important; box-shadow:0 0 0 2px #fb718540,inset 0 0 0 1px #fb718535 !important; }
+  .m-v3-calendar-day.today.has-pending { border-color:#facc15 !important; }
+  .m-v3-calendar-day.today.has-done { border-color:#34d399 !important; }
+  .m-v3-calendar-day.today.has-overdue { border-color:#fb7185 !important; }
+
+  .m-v3-calendar-legend { gap:9px 12px !important; margin-top:13px !important; }
+  .m-v3-calendar-legend span { display:inline-flex !important; align-items:center !important; gap:7px !important; padding:6px 9px !important; border:1px solid #ffffff12 !important; border-radius:999px !important; background:#ffffff05 !important; font-size:10px !important; font-weight:750 !important; }
+  .m-v3-calendar-legend i { width:8px !important; height:8px !important; flex:0 0 8px !important; }
+  .m-v3-calendar-legend span:has(i.pending-dot) { color:#fde68a !important; border-color:#facc1538 !important; background:#facc150c !important; }
+  .m-v3-calendar-legend span:has(i.done-dot) { color:#a7f3d0 !important; border-color:#34d39938 !important; background:#34d3990c !important; }
+  .m-v3-calendar-legend span:has(i.overdue-dot) { color:#fda4af !important; border-color:#fb718538 !important; background:#fb71850c !important; }
+
+  .m-v3-event-card.m-v14-calendar-row { border-radius:13px !important; padding:13px 10px !important; margin:7px 0 !important; border:1px solid transparent !important; border-left-width:4px !important; gap:11px !important; }
+  .m-v3-event-card.m-v14-calendar-row.is-pending { background:linear-gradient(100deg,#facc151b,#facc1506 88%) !important; border-color:#facc155c !important; border-left-color:#facc15 !important; }
+  .m-v3-event-card.m-v14-calendar-row.is-done { background:linear-gradient(100deg,#34d3991c,#34d39906 88%) !important; border-color:#34d39958 !important; border-left-color:#34d399 !important; }
+  .m-v3-event-card.m-v14-calendar-row.is-overdue { background:linear-gradient(100deg,#fb71851e,#fb718506 88%) !important; border-color:#fb718568 !important; border-left-color:#fb7185 !important; }
+  .m-v3-event-card.m-v14-calendar-row.is-pending .m-v3-row-icon { background:#3b321d !important; color:#facc15 !important; border:1px solid #c2a53f !important; }
+  .m-v3-event-card.m-v14-calendar-row.is-done .m-v3-row-icon { background:#17392f !important; color:#34d399 !important; border:1px solid #34d399 !important; }
+  .m-v3-event-card.m-v14-calendar-row.is-overdue .m-v3-row-icon { background:#451c2a !important; color:#fb7185 !important; border:1px solid #fb7185 !important; }
+  .m-v14-event-state { display:inline-flex !important; align-items:center !important; gap:5px !important; width:max-content !important; max-width:100% !important; padding:5px 8px !important; margin:0 0 3px !important; border-radius:999px !important; font-size:9px !important; line-height:1.35 !important; font-weight:900 !important; letter-spacing:.035em !important; text-transform:uppercase !important; }
+  .m-v14-event-state.pending { background:#3b321d !important; color:#fde047 !important; border:1px solid #c2a53f !important; }
+  .m-v14-event-state.done { background:#17392f !important; color:#6ee7b7 !important; border:1px solid #34d399 !important; }
+  .m-v14-event-state.overdue { background:#451c2a !important; color:#fda4af !important; border:1px solid #fb7185 !important; }
+  .m-v14-event-state i { font-size:10px !important; }
   @media(prefers-reduced-motion:reduce){.m-v3-calendar-day,.m-v3-event-card{transition:none!important}}
 </style>
 <script id="nexus-v13-alert-details-and-calendar">
@@ -3867,18 +3879,18 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     return items;
   }
   function semanticStatusV13(item,today){
+    /* Exactly three calendar states: completed, pending, overdue. Debt type
+       describes the item, not a fourth state; its due date determines color. */
     if(item.status==='done')return 'done';
     if(item.date&&item.date<today)return 'overdue';
-    if(item.kind==='debt')return 'debt';
     return 'pending';
   }
   function rowStatusIconV13(status){
-    return status==='overdue'?'fa-triangle-exclamation':status==='done'?'fa-circle-check':status==='debt'?'fa-file-invoice-dollar':'fa-clock';
+    return status==='overdue'?'fa-triangle-exclamation':status==='done'?'fa-circle-check':'fa-clock';
   }
-  function rowStatusLabelV13(status,kind){
+  function rowStatusLabelV13(status){
     if(status==='overdue')return 'Vencido';
-    if(status==='done')return kind==='homePayment'||kind==='personalPayment'?'Pagado':'Completado';
-    if(status==='debt')return 'Deuda';
+    if(status==='done')return 'Completado';
     return 'Pendiente';
   }
   function decorateCalendarHtmlV13(markup){
@@ -3892,18 +3904,18 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
       const date=match?match[1]:(dayButton.getAttribute('aria-label')||'').match(/\d{4}-\d{2}-\d{2}/)?.[0];
       if(!date)return;
       const forDate=events.filter(e=>e.date===date);
-      const overdue=forDate.some(e=>semanticStatusV13(e,today)==='overdue');
-      const done=forDate.some(e=>semanticStatusV13(e,today)==='done');
-      const debt=forDate.some(e=>semanticStatusV13(e,today)==='debt');
-      const pending=forDate.some(e=>semanticStatusV13(e,today)==='pending');
+      const statuses=forDate.map(e=>semanticStatusV13(e,today));
+      const overdue=statuses.includes('overdue');
+      const done=statuses.includes('done');
+      const pending=statuses.includes('pending');
       dayButton.classList.toggle('has-overdue',overdue);
       dayButton.classList.toggle('has-done',done);
-      dayButton.classList.toggle('has-debt',debt);
       dayButton.classList.toggle('has-pending',pending);
+      dayButton.classList.remove('has-debt');
       const dots=$('.m-v3-cal-dots',dayButton);if(!dots)return;
       const dot=(cls,label)=>`<i class="${cls}" title="${label}" aria-label="${label}"></i>`;
-      dots.innerHTML=(overdue?dot('overdue-dot','Vencido'):'')+(pending?dot('pending-dot','Pendiente o vence'):'')+(debt?dot('debt-dot','Deuda'):'')+(done?dot('done-dot','Pagado o completado'):'');
-      dayButton.setAttribute('aria-label',`${date}: ${forDate.length} evento(s)${overdue?', incluye vencido':''}${done?', incluye completado':''}${debt?', incluye deuda':''}${pending?', incluye pendiente':''}`);
+      dots.innerHTML=(overdue?dot('overdue-dot','Vencido'):'')+(pending?dot('pending-dot','Pendiente'):'')+(done?dot('done-dot','Completado'):'');
+      dayButton.setAttribute('aria-label',`${date}: ${forDate.length} evento(s)${overdue?', incluye vencido':''}${done?', incluye completado':''}${pending?', incluye pendiente':''}`);
     });
     /* Selected-day rows are emitted in the same order as the renderer. */
     const selected=(typeof mobileCalendarSelectedDateV3==='string'&&mobileCalendarSelectedDateV3)||today;
@@ -3912,27 +3924,22 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
       const item=dayEvents[index];if(!item)return;
       const status=semanticStatusV13(item,today);
       ['pending','done','debt','overdue'].forEach(s=>row.classList.remove('is-'+s));
-      row.classList.add('m-v13-calendar-row','is-'+status);
+      row.classList.remove('m-v13-calendar-row');
+      row.classList.add('m-v14-calendar-row','is-'+status);
       row.dataset.calendarStatus=status;
       const main=$('.m-v3-event-main',row),title=$('.m-v3-event-main>b',row);
       if(!main||!title)return;
-      /* Existing completed tag is already visible; add a semantic pill to all open items. */
-      if(status!=='done'){
-        const existing=$('.m-v13-event-state',main);if(existing)existing.remove();
-        const badge=document.createElement('span');badge.className='m-v13-event-state '+status;
-        badge.innerHTML=`<i class="fa-solid ${rowStatusIconV13(status)}" aria-hidden="true"></i>${rowStatusLabelV13(status,item.kind)}`;
-        main.insertBefore(badge,title);
-      }
+      /* Normalize all visible state labels to the same three-state vocabulary. */
+      const legacyDone=$('.m-v4-done-label',title);if(legacyDone)legacyDone.remove();
+      $$('.m-v13-event-state, .m-v14-event-state',main).forEach(existing=>existing.remove());
+      const badge=document.createElement('span');badge.className='m-v14-event-state '+status;
+      badge.innerHTML=`<i class="fa-solid ${rowStatusIconV13(status)}" aria-hidden="true"></i>${rowStatusLabelV13(status)}`;
+      main.insertBefore(badge,title);
       const iconHolder=$('.m-v3-row-icon',row),icon=$('i',iconHolder);
-      if(icon){
-        if(status==='overdue')icon.className='fa-solid fa-triangle-exclamation';
-        else if(status==='done')icon.className='fa-solid fa-circle-check';
-        else if(status==='debt')icon.className='fa-solid fa-file-invoice-dollar';
-        else if(item.kind==='task')icon.className='fa-solid fa-calendar-check';
-      }
+      if(icon)icon.className=`fa-solid ${rowStatusIconV13(status)}`;
     });
     const legend=$('.m-v3-calendar-legend',template.content);
-    if(legend)legend.innerHTML='<span><i class="pending-dot"></i> Pendiente / vence</span><span><i class="done-dot"></i> Pagado / completado</span><span><i class="debt-dot"></i> Deuda</span><span><i class="overdue-dot"></i> Vencido</span>';
+    if(legend)legend.innerHTML='<span><i class="pending-dot"></i> Pendiente</span><span><i class="done-dot"></i> Completado</span><span><i class="overdue-dot"></i> Vencido</span>';
     return template.innerHTML;
   }
   const previousCalendarRenderer=window.renderMobileCalendar;
@@ -3943,6 +3950,168 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     };
   }
   window.nexusV13CalendarStatus=semanticStatusV13;
+})();
+</script>
+
+
+<script id="nexus-mobile-v15-picker-hit-target-fix">
+/* V15: make Gas/Internet and the first savings funds reliably tappable on mobile.
+   The existing screen keeps the same forms and save logic; only the routing of these picker actions is normalized. */
+(function(){
+  'use strict';
+  if (window.__nexusV15PickerFixInstalled) return;
+  window.__nexusV15PickerFixInstalled = true;
+
+  const modalBox = document.getElementById('modalBox');
+  const safeText = value => typeof window.esc === 'function'
+    ? window.esc(String(value ?? ''))
+    : String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const categoryName = key => typeof window.mobileV9CategoryLabel === 'function'
+    ? window.mobileV9CategoryLabel(key)
+    : String(key || 'Otros');
+  const categoryColor = key => typeof window.mobileV9CategoryColor === 'function'
+    ? window.mobileV9CategoryColor(key)
+    : (typeof window.categoryColor === 'function' ? window.categoryColor(key) : '#fb923c');
+  const categoryIcon = key => typeof window.mobileV9CategoryIcon === 'function'
+    ? window.mobileV9CategoryIcon(key)
+    : (typeof window.mobileV4CatIcon === 'function' ? window.mobileV4CatIcon(key) : 'fa-receipt');
+  const savingLabel = key => {
+    const meta = typeof window.mobileV9SavingMeta === 'function' ? window.mobileV9SavingMeta(key) : null;
+    return meta?.label || (Array.isArray(window.SAVINGS) ? (window.SAVINGS.find(x => x[0] === key) || [key,key])[1] : key);
+  };
+  const savingColor = key => {
+    const meta = typeof window.mobileV9SavingMeta === 'function' ? window.mobileV9SavingMeta(key) : null;
+    return meta?.color || '#34d399';
+  };
+  const savingIcon = key => {
+    const meta = typeof window.mobileV9SavingMeta === 'function' ? window.mobileV9SavingMeta(key) : null;
+    return meta?.icon || 'fa-piggy-bank';
+  };
+
+  /* Use button data attributes rather than inline handlers in these two pickers.
+     This avoids intermittent mobile taps being swallowed by nested icon/label hit areas. */
+  window.openExpensePicker = function openExpensePickerV15(){
+    const cats = Array.isArray(window.CATS) ? window.CATS : ['Arriendo','Mercado','Luz','Agua','Gas','Internet','Transporte','Otros'];
+    const markup = `<div class="small" style="margin-bottom:12px">Selecciona la categoría que deseas administrar.</div><div class="future-grid m-v15-action-grid">${cats.map(cat=>{
+      const color=categoryColor(cat), icon=categoryIcon(cat), label=categoryName(cat);
+      return `<button type="button" class="btn category-pick-btn m-v9-picker-cat m-v15-picker-button" data-nx-launch="expense" data-nx-value="${safeText(cat)}" style="--identity-color:${color}" aria-label="Registrar gasto: ${safeText(label)}"><span class="identity-inline"><i class="fa-solid ${safeText(icon)}" aria-hidden="true" style="color:${color}"></i><span>${safeText(label)}</span></span><i class="fa-solid fa-chevron-right m-v15-picker-chevron" aria-hidden="true"></i></button>`;
+    }).join('')}</div>`;
+    if (typeof window.openModal === 'function') {
+      window.openModal('Registrar gasto del hogar', markup);
+      if (modalBox) modalBox.scrollTop = 0;
+      return;
+    }
+  };
+
+  window.openSavingPicker = function openSavingPickerV15(){
+    const funds = Array.isArray(window.SAVINGS) ? window.SAVINGS : [['financial','Ahorro Financiero'],['unexpected','Imprevistos'],['emergency','Emergencias']];
+    const markup = `<div class="small" style="margin-bottom:12px">Selecciona el fondo al que deseas realizar el aporte.</div><div class="future-grid m-v15-action-grid">${funds.map(([key,label])=>{
+      const color=savingColor(key), icon=savingIcon(key), name=savingLabel(key)||label;
+      return `<button type="button" class="btn category-pick-btn m-v15-picker-button" data-nx-launch="saving" data-nx-value="${safeText(key)}" style="--identity-color:${color}" aria-label="Registrar aporte: ${safeText(name)}"><span class="identity-inline"><i class="fa-solid ${safeText(icon)}" aria-hidden="true" style="color:${color}"></i><span>${safeText(name)}</span></span><i class="fa-solid fa-chevron-right m-v15-picker-chevron" aria-hidden="true"></i></button>`;
+    }).join('')}</div>`;
+    if (typeof window.openModal === 'function') {
+      window.openModal('Registrar ahorro', markup);
+      if (modalBox) modalBox.scrollTop = 0;
+      return;
+    }
+  };
+
+  function dispatchAction(button, event){
+    if (!button || !button.dataset.nxLaunch) return false;
+    const action=button.dataset.nxLaunch;
+    const value=button.dataset.nxValue || '';
+    event?.preventDefault();
+    event?.stopPropagation();
+    if (typeof event?.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+    try {
+      if (action === 'expense' && typeof window.openExpense === 'function') {
+        const id=button.dataset.nxId || null;
+        window.openExpense(value, id);
+        return true;
+      }
+      if (action === 'saving' && typeof window.openSaving === 'function') {
+        const id=button.dataset.nxId || null;
+        const person=button.dataset.nxPerson || 'me';
+        window.openSaving(value, id, person);
+        return true;
+      }
+    } catch(error) {
+      console.error('Nexus V15: no se pudo abrir el formulario seleccionado.', error);
+      if (typeof window.toast === 'function') window.toast('No se pudo abrir el formulario. Intenta de nuevo.');
+    }
+    return false;
+  }
+
+  /* Capture phase ensures only one route runs, even if an older inline handler was left by a cached render. */
+  document.addEventListener('click', function(event){
+    const target = event.target instanceof Element ? event.target.closest('button[data-nx-launch]') : null;
+    if (target) dispatchAction(target, event);
+  }, true);
+
+  /* Normalize legacy buttons rendered in savings cards/history and the two affected home categories. */
+  function patchLegacyButtons(root){
+    if (!root || !root.querySelectorAll) return;
+    const buttons = [];
+    if (root.matches?.('button[onclick]')) buttons.push(root);
+    buttons.push(...root.querySelectorAll('button[onclick]'));
+    for (const button of buttons) {
+      if (button.dataset.nxLaunch) continue;
+      const source = (button.getAttribute('onclick') || '').trim();
+      let m = source.match(/^openExpense\(\s*(['"])(Gas|Internet)\1\s*(?:,\s*(['"])([^'"]*)\3\s*)?\)\s*;?$/);
+      if (m) {
+        button.dataset.nxLaunch='expense';
+        button.dataset.nxValue=m[2];
+        if (m[4]) button.dataset.nxId=m[4];
+        button.removeAttribute('onclick');
+        button.classList.add('m-v15-routed-action');
+        continue;
+      }
+      m = source.match(/^openSaving\(\s*(['"])(financial|unexpected|emergency)\1\s*(?:,\s*(['"])([^'"]*)\3\s*)?(?:,\s*(['"])([^'"]*)\5\s*)?\)\s*;?$/);
+      if (m) {
+        button.dataset.nxLaunch='saving';
+        button.dataset.nxValue=m[2];
+        if (m[4]) button.dataset.nxId=m[4];
+        if (m[6]) button.dataset.nxPerson=m[6];
+        button.removeAttribute('onclick');
+        button.classList.add('m-v15-routed-action');
+      }
+    }
+  }
+  window.mobileV15PatchPickerButtons = patchLegacyButtons;
+
+  /* Patch the current DOM and each redraw; the observer is intentionally limited to click routing. */
+  patchLegacyButtons(document);
+  if (typeof MutationObserver === 'function') {
+    const observer = new MutationObserver(records => {
+      for (const record of records) {
+        for (const node of record.addedNodes) if (node.nodeType === 1) patchLegacyButtons(node);
+      }
+    });
+    observer.observe(document.body, {childList:true, subtree:true});
+  }
+  const previousRender = window.renderMobileUI;
+  if (typeof previousRender === 'function') {
+    window.renderMobileUI = function renderMobileUIV15(){
+      const result = previousRender.apply(this, arguments);
+      try { patchLegacyButtons(document.getElementById('mContent') || document); } catch(error) { console.warn('Nexus V15: no se pudieron normalizar algunos botones.', error); }
+      return result;
+    };
+  }
+
+  const style = document.createElement('style');
+  style.id='nexus-mobile-v15-picker-hit-target-style';
+  style.textContent=`
+    #modalBox .m-v15-action-grid{position:relative;isolation:isolate;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;align-items:stretch!important}
+    #modalBox .m-v15-picker-button{position:relative!important;z-index:3!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;width:100%!important;min-width:0!important;min-height:52px!important;margin:0!important;padding:12px 11px!important;pointer-events:auto!important;touch-action:manipulation!important;-webkit-tap-highlight-color:transparent!important;transform:translateZ(0)}
+    #modalBox .m-v15-picker-button .identity-inline{display:flex!important;align-items:center!important;gap:8px!important;min-width:0!important;pointer-events:none!important}
+    #modalBox .m-v15-picker-button .identity-inline>span{min-width:0!important;overflow-wrap:anywhere!important;text-align:left!important;pointer-events:none!important}
+    #modalBox .m-v15-picker-button .identity-inline>i,#modalBox .m-v15-picker-chevron{flex:0 0 auto!important;pointer-events:none!important}
+    #modalBox .m-v15-picker-chevron{font-size:10px!important;opacity:.65!important;margin-left:2px!important}
+    .m-v15-routed-action{position:relative!important;z-index:2!important;pointer-events:auto!important;touch-action:manipulation!important;-webkit-tap-highlight-color:transparent!important}
+    .m-saving-card .m-icon-btn{position:relative!important;z-index:3!important;pointer-events:auto!important;touch-action:manipulation!important}
+    @media(max-width:360px){#modalBox .m-v15-action-grid{gap:7px!important}#modalBox .m-v15-picker-button{padding:11px 8px!important;font-size:11px!important}}
+  `;
+  document.head.appendChild(style);
 })();
 </script>
 
