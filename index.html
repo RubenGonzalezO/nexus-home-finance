@@ -5846,6 +5846,13 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     if(end.getUTCDate()<start.getUTCDate() && end.getUTCDate()!==endLastDay) months--;
     return Math.max(0,months);
   };
+  function elapsedDays(startValue,endValue){
+    if(!startValue||!endValue)return 0;
+    const start=new Date(`${String(startValue).slice(0,10)}T00:00:00Z`);
+    const end=new Date(`${String(endValue).slice(0,10)}T00:00:00Z`);
+    if(Number.isNaN(start.getTime())||Number.isNaN(end.getTime())||end<start)return 0;
+    return Math.max(0,Math.floor((end.getTime()-start.getTime())/86400000));
+  }
   function currentDebtBalance(debt,asOf=today()){
     if(!debt || debt.status==='paid')return 0;
     const base=Math.max(0,Number(debt.balance)||0);
@@ -5853,12 +5860,20 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     const rate=debtType(debt)==='credit'?Math.max(0,Number(debt.interestRateMonthly)||0):0;
     if(!rate)return roundCOP(base);
     const anchor=debt.interestUpdatedAt||debt.createdAt||debt.date||asOf;
-    const months=monthSpan(anchor,asOf);
-    if(!months)return roundCOP(base);
-    const accrued=base*Math.pow(1+rate/100,months);
+    // Pro-rate monthly compound interest by elapsed days instead of waiting for a whole month boundary.
+    const periods=elapsedDays(anchor,asOf)/(365.2425/12);
+    if(periods<=0)return roundCOP(base);
+    const accrued=base*Math.pow(1+rate/100,periods);
     return Number.isFinite(accrued)?roundCOP(accrued):Number.MAX_SAFE_INTEGER;
   }
+  function debtInterestDetails(debt,asOf=today()){
+    const base=Math.max(0,Number(debt?.balance)||0);
+    const current=currentDebtBalance(debt,asOf);
+    const rate=debtType(debt)==='credit'?Math.max(0,Number(debt?.interestRateMonthly)||0):0;
+    return {base,current,accrued:Math.max(0,current-base),nextMonth:roundCOP(current*(1+rate/100)),rate,days:elapsedDays(debt?.interestUpdatedAt||debt?.createdAt||debt?.date||asOf,asOf)};
+  }
   window.nxDebtCurrentBalance=currentDebtBalance;
+  window.nxDebtInterestDetails=debtInterestDetails;
   window.nxDebtType=debtType;
 
   const homeSavingsMeta = () => (Array.isArray(window.SAVINGS)?window.SAVINGS:[['financial','Ahorro Financiero'],['unexpected','Imprevistos'],['emergency','Emergencias']]).map(([key,name])=>({kind:'home',savingType:key,name}));
@@ -5941,8 +5956,8 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
       <div class="field"><label><i class="fa-solid fa-list-check"></i> Tipo de obligación</label><select class="select" id="mDebtType" onchange="nxDebtToggleType()"><option value="credit">Crédito externo</option><option value="loan">Préstamo interno de ahorros</option></select></div>
       <div class="nx-debt-section nx-credit-fields">
         <div class="field"><label><i class="fa-solid fa-file-signature"></i> Nombre del crédito</label><input class="input" id="mDebtCreditName" required maxlength="120" placeholder="Ej. Crédito bancario"></div>
-        <div class="field"><label><i class="fa-solid fa-coins"></i> Monto inicial (COP)</label><input class="input money-input" id="mDebtOriginal" inputmode="numeric" required placeholder="5.000.000" oninput="formatMoneyField(this)"></div>
-        <div class="field"><label><i class="fa-solid fa-percent"></i> Tasa de interés mensual (%) · opcional</label><input class="input" id="mDebtRate" type="number" min="0" max="100" step="0.01" value="0" placeholder="Ej. 1.5"><small class="small">Se calcula por meses completos transcurridos. La estimación no sustituye el saldo oficial del prestamista.</small></div>
+        <div class="field"><label><i class="fa-solid fa-coins"></i> Monto inicial (COP)</label><input class="input money-input" id="mDebtOriginal" inputmode="numeric" required placeholder="5.000.000" oninput="formatMoneyField(this);nxDebtPreviewInterest()"></div>
+        <div class="field"><label><i class="fa-solid fa-percent"></i> Tasa de interés mensual (%) · opcional</label><input class="input" id="mDebtRate" type="number" min="0" max="100" step="0.01" value="0" placeholder="Ej. 1.5" oninput="nxDebtPreviewInterest()"><small class="small">El interés se estima de forma compuesta y proporcional al tiempo transcurrido. Es orientativo; no sustituye el saldo oficial del prestamista.</small><div class="nx-interest-preview" id="mDebtInterestPreview" aria-live="polite">Ingresa monto y tasa para ver la proyección mensual.</div></div>
         <div class="field"><label><i class="fa-solid fa-list-ol"></i> Número de cuotas · opcional</label><input class="input" id="mDebtInstallments" type="number" min="1" max="600" step="1" placeholder="Ej. 24"></div>
         <div class="field"><label><i class="fa-solid fa-calendar-check"></i> Cuota mensual (COP) · opcional</label><input class="input money-input" id="mDebtInstallment" inputmode="numeric" placeholder="Ej. 250.000" oninput="formatMoneyField(this)"></div>
       </div>
@@ -5956,7 +5971,7 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
       <div class="field nx-debt-owner-field"><label><i class="fa-solid fa-user-check"></i> Responsable</label><select class="select" id="mDebtOwner" onchange="nxDebtRefreshSourceOptions()"><option value="home" ${owner==='home'?'selected':''}>Hogar</option><option value="me" ${owner==='me'?'selected':''}>${escHtml(state.people?.me||'Ruben')}</option><option value="partner" ${owner==='partner'?'selected':''}>${escHtml(state.people?.partner||'Mauren')}</option></select><small class="small" id="mDebtOwnerHint">Persona responsable de la obligación.</small></div>
       <div class="field"><label><i class="fa-regular fa-calendar"></i> Fecha de pago · opcional</label><input class="input" id="mDebtDue" type="date"><label class="nx-debt-schedule"><input type="checkbox" id="mDebtSchedule"> <span>¿Programar este vencimiento en el calendario?</span></label><small class="small">Solo se creará un evento si hay fecha y marcas esta casilla.</small></div>
       <div class="field"><label><i class="fa-regular fa-note-sticky"></i> Notas · opcional</label><textarea class="textarea" id="mDebtNotes" rows="2" placeholder="Detalles adicionales"></textarea></div>
-      <div class="form-actions"><button type="button" class="btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i> Cancelar</button><button class="btn primary"><i class="fa-solid fa-floppy-disk"></i> Registrar obligación</button></div>
+      <div class="form-actions"><button type="button" class="btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i> Cancelar</button><button type="submit" class="btn primary"><i class="fa-solid fa-floppy-disk"></i> Registrar obligación</button></div>
     </form>`;
   }
   function isReadOnlyPersonalView(){
@@ -5977,6 +5992,13 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     const type=form.querySelector('#mDebtType')?.value==='loan'?'loan':'credit';
     form.querySelectorAll('.nx-credit-fields').forEach(el=>el.classList.toggle('hidden',type!=='credit'));
     form.querySelectorAll('.nx-loan-fields').forEach(el=>el.classList.toggle('hidden',type!=='loan'));
+    // Hidden required credit inputs still block native form submission in mobile browsers.
+    // Disable inactive controls and toggle required only for credit-specific fields.
+    form.querySelectorAll('.nx-credit-fields input, .nx-credit-fields select, .nx-credit-fields textarea').forEach(control=>{
+      control.disabled=type!=='credit';
+      if(control.id==='mDebtCreditName'||control.id==='mDebtOriginal')control.required=type==='credit';
+    });
+    form.querySelectorAll('.nx-loan-fields input, .nx-loan-fields select, .nx-loan-fields textarea').forEach(control=>{control.disabled=type!=='loan';});
     const ownerSel=form.querySelector('#mDebtOwner');if(!ownerSel)return;
     const previous=ownerSel.value;
     const current=activePerson();
@@ -5991,6 +6013,16 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
       form.querySelector('#mDebtOwnerHint').textContent='Hogar, Ruben o Mauren, según quién deba responder por el crédito.';
     }
     window.nxDebtRefreshSourceOptions?.();
+    window.nxDebtPreviewInterest?.();
+  };
+  window.nxDebtPreviewInterest=function nxDebtPreviewInterest(){
+    const form=document.querySelector('.nx-debt-form');if(!form)return;
+    const amount=roundCOP(toNum(form.querySelector('#mDebtOriginal')?.value));
+    const rate=Math.max(0,Number(form.querySelector('#mDebtRate')?.value)||0);
+    const box=form.querySelector('#mDebtInterestPreview');if(!box)return;
+    if(!(amount>0)||!(rate>0)){box.textContent=rate>0?'Ingresa el monto inicial para calcular los intereses.':'Sin intereses: la tasa mensual está en 0 %.';return;}
+    const interest=roundCOP(amount*rate/100),projected=amount+interest;
+    box.innerHTML=`<div><span>Interés estimado en un mes</span><strong>${escHtml(fmtMoney(interest))}</strong></div><div><span>Saldo estimado después de un mes</span><strong>${escHtml(fmtMoney(projected))}</strong></div><small>Es una proyección referencial; el saldo base acumula interés conforme transcurre el tiempo.</small>`;
   };
   window.nxDebtRefreshSourceOptions=function nxDebtRefreshSourceOptions(){
     const form=document.querySelector('.nx-debt-form');const select=form?.querySelector('#mDebtLoanSource');if(!select)return;
@@ -6130,9 +6162,11 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     const type=debtType(debt),balance=currentDebtBalance(debt);const original=Math.max(0,Number(debt.original)||balance);const pct=original>0?Math.max(0,Math.min(100,(original-balance)/original*100)):0;
     const owner=debt.owner||'home';const isPaid=balance<=0||debt.status==='paid';const mayEdit=canManageDebt(debt);const isLoan=type==='loan';
     const typeLabel=isLoan?'Préstamo interno':'Crédito externo';const typeIcon=isLoan?'fa-piggy-bank':'fa-building-columns';
-    const interest=(type==='credit'&&Number(debt.interestRateMonthly)>0)?`<small><i class="fa-solid fa-percent"></i> ${Number(debt.interestRateMonthly)} % mensual${monthSpan(debt.interestUpdatedAt||debt.createdAt||today(),today())?` · ${monthSpan(debt.interestUpdatedAt||debt.createdAt||today(),today())} mes(es) acumulados`:''}</small>`:'';
+    const interestDetails=type==='credit'&&Number(debt.interestRateMonthly)>0?debtInterestDetails(debt):null;
+    const interest=interestDetails?`<small><i class="fa-solid fa-percent"></i> Tasa: ${Number(debt.interestRateMonthly)} % mensual · ${interestDetails.days} día(s) desde la última actualización</small>`:'';
     const source=isLoan&&debt.loanSource?`<small><i class="fa-solid fa-box"></i> Origen: ${escHtml(debt.loanSource.name||'Caja seleccionada')}</small>`:'';
-    return `<article class="m-v3-debt-card nx-debt-card ${isLoan?'is-loan':'is-credit'}" data-debt-id="${escHtml(debt.id)}"><div class="m-v3-debt-top nx-debt-top"><span class="nx-debt-icon ${isLoan?'loan':'credit'}"><i class="fa-solid ${typeIcon}"></i></span><div class="nx-debt-name"><b>${escHtml(debt.name||typeLabel)}</b><small>${escHtml(ownerName(owner))}${debt.due?` · vence ${escHtml(debt.due)}`:' · sin fecha de pago'}</small><small class="nx-debt-type">${typeLabel}</small>${interest}${source}</div><span class="m-status ${isPaid?'done':'pending'}">${isPaid?'Saldada':'Pendiente'}</span></div><div class="nx-debt-balance">${fmtMoney(balance)}</div><small class="nx-debt-balance-label">Saldo pendiente ${type==='credit'&&Number(debt.interestRateMonthly)>0?'estimado con intereses':'registrado'}</small><div class="m-track"><i class="${isPaid?'green':'orange'}" style="width:${pct}%"></i></div><div class="nx-debt-meta"><span>${pct.toFixed(0)}% del capital amortizado</span><span>Inicial ${fmtMoney(original)}</span>${Number(debt.installment)>0?`<span>Cuota ${fmtMoney(debt.installment)}</span>`:''}${debt.installmentsCount?`<span>${Number(debt.installmentsCount)} cuotas</span>`:''}</div>${debt.notes?`<p class="m-debt-notes">${escHtml(debt.notes)}</p>`:''}<div class="m-goal-actions nx-debt-actions">${!isPaid?`<button type="button" class="m-primary-btn" onclick="payDebt('${escHtml(debt.id)}')"><i class="fa-solid fa-hand-holding-dollar"></i> Abonar</button>`:`<span class="m-paid-label"><i class="fa-solid fa-circle-check"></i> Deuda saldada</span>`}${mayEdit?`<button type="button" class="m-secondary-btn" onclick="editDebt('${escHtml(debt.id)}')"><i class="fa-solid fa-pen-to-square"></i> Editar</button><button type="button" class="m-secondary-btn danger" onclick="deleteDebt('${escHtml(debt.id)}')"><i class="fa-solid fa-trash-can"></i> Eliminar</button>`:''}</div></article>`;
+    const interestBreakdown=interestDetails?`<div class="nx-debt-interest-detail"><div><span>Interés acumulado estimado</span><b>${fmtMoney(interestDetails.accrued)}</b></div><div><span>Proyección con un mes adicional</span><b>${fmtMoney(interestDetails.nextMonth)}</b></div><small>Estimación compuesta proporcional al tiempo; no sustituye el estado de cuenta del acreedor.</small></div>`:'';
+    return `<article class="m-v3-debt-card nx-debt-card ${isLoan?'is-loan':'is-credit'}" data-debt-id="${escHtml(debt.id)}"><div class="m-v3-debt-top nx-debt-top"><span class="nx-debt-icon ${isLoan?'loan':'credit'}"><i class="fa-solid ${typeIcon}"></i></span><div class="nx-debt-name"><b>${escHtml(debt.name||typeLabel)}</b><small>${escHtml(ownerName(owner))}${debt.due?` · vence ${escHtml(debt.due)}`:' · sin fecha de pago'}</small><small class="nx-debt-type">${typeLabel}</small>${interest}${source}</div><span class="m-status ${isPaid?'done':'pending'}">${isPaid?'Saldada':'Pendiente'}</span></div><div class="nx-debt-balance">${fmtMoney(balance)}</div><small class="nx-debt-balance-label">Saldo pendiente ${interestDetails?'estimado con intereses':'registrado'}</small>${interestBreakdown}<div class="m-track"><i class="${isPaid?'green':'orange'}" style="width:${pct}%"></i></div><div class="nx-debt-meta"><span>${pct.toFixed(0)}% del capital amortizado</span><span>Inicial ${fmtMoney(original)}</span>${Number(debt.installment)>0?`<span>Cuota ${fmtMoney(debt.installment)}</span>`:''}${debt.installmentsCount?`<span>${Number(debt.installmentsCount)} cuotas</span>`:''}</div>${debt.notes?`<p class="m-debt-notes">${escHtml(debt.notes)}</p>`:''}<div class="m-goal-actions nx-debt-actions">${!isPaid?`<button type="button" class="m-primary-btn" onclick="payDebt('${escHtml(debt.id)}')"><i class="fa-solid fa-hand-holding-dollar"></i> Abonar</button>`:`<span class="m-paid-label"><i class="fa-solid fa-circle-check"></i> Deuda saldada</span>`}${mayEdit?`<button type="button" class="m-secondary-btn" onclick="editDebt('${escHtml(debt.id)}')"><i class="fa-solid fa-pen-to-square"></i> Editar</button><button type="button" class="m-secondary-btn danger" onclick="deleteDebt('${escHtml(debt.id)}')"><i class="fa-solid fa-trash-can"></i> Eliminar</button>`:''}</div></article>`;
   };
   mobileV3DebtCard=window.mobileV3DebtCard;
 
@@ -6256,7 +6290,7 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
       .nx-debt-readonly{display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid #3a3049;border-radius:12px;background:#171321}.nx-debt-readonly>span{display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:#17392f;color:#6ee7b7;flex:0 0 auto}.nx-debt-readonly b,.nx-debt-readonly small{display:block}.nx-debt-readonly small{color:#aaa1ba;font-size:10px;line-height:1.5;margin-top:4px}
       .nx-debt-group{margin:15px 0 20px}.nx-debt-list{display:grid;gap:11px}.nx-debt-empty{display:flex;align-items:center;gap:9px;padding:15px;color:#aaa1ba;font-size:11px}.nx-debt-empty>i{color:#a78bfa;font-size:18px}
       .nx-debt-card{padding:14px!important;border-color:#3a3049!important;background:linear-gradient(150deg,#171321,#100e17)!important}.nx-debt-top{display:flex;align-items:flex-start;gap:10px;min-width:0}.nx-debt-icon{display:grid;place-items:center;width:39px;height:39px;border-radius:12px;flex:0 0 39px}.nx-debt-icon.credit{background:#35254b;color:#c4b5fd}.nx-debt-icon.loan{background:#17392f;color:#6ee7b7}.nx-debt-name{display:grid;gap:4px;flex:1;min-width:0}.nx-debt-name>b,.nx-debt-name small{overflow-wrap:anywhere}.nx-debt-name>b{font-size:13px}.nx-debt-name small{font-size:10px;color:#a69db8;line-height:1.45}.nx-debt-type{color:#d8ccff!important;font-weight:800}.nx-debt-balance{margin-top:12px;font-size:24px;font-weight:900;letter-spacing:-.03em;font-variant-numeric:tabular-nums}.nx-debt-balance-label{font-size:10px;color:#a9a0b8}.nx-debt-meta{display:flex;flex-wrap:wrap;gap:6px 11px;font-size:9px;color:#a9a0b8;margin-top:8px}.nx-debt-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}.nx-debt-actions button{flex:1 1 auto;min-width:0;white-space:normal}.nx-debt-payment-owner{display:grid;gap:6px;margin:8px 0;font-size:11px}.nx-debt-payment-owner span{display:flex;align-items:center;gap:7px;flex-wrap:wrap;color:#bcb3ca}.nx-debt-payment-owner i{color:#a78bfa}
-      @media(max-width:420px){.nx-debt-section{padding:9px}.nx-debt-balance{font-size:22px}.nx-debt-actions button{font-size:10px;padding:9px 8px}}
+      .nx-interest-preview,.nx-debt-interest-detail{display:grid;gap:7px;margin-top:8px;padding:10px 11px;border:1px solid rgba(167,139,250,.25);border-radius:11px;background:rgba(139,92,246,.07);font-size:11px;line-height:1.45;color:#d9d0eb}.nx-interest-preview>div,.nx-debt-interest-detail>div{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.nx-interest-preview span,.nx-debt-interest-detail span{color:#aaa0bd}.nx-interest-preview strong,.nx-debt-interest-detail b{font-variant-numeric:tabular-nums;color:#ddd0ff;text-align:right}.nx-interest-preview small,.nx-debt-interest-detail small{color:#a39bb5;font-size:10px;line-height:1.5}@media(max-width:420px){.nx-debt-section{padding:9px}.nx-debt-balance{font-size:22px}.nx-debt-actions button{font-size:10px;padding:9px 8px}}
     `;document.head.appendChild(style);
   }catch(_){}
 })();
