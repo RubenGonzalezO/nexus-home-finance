@@ -3358,5 +3358,179 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
 })();
 </script>
 
+
+<script id="nexus-mobile-v10-account-icons-box-cancel-personal-income">
+/* V10: calendar fallback icon, account palette, reliable saving-box cancel, separate additional-income history. */
+(function(){
+  'use strict';
+  const $=(selector,root=document)=>root.querySelector(selector);
+  const escText=value=>typeof window.esc==='function'?window.esc(String(value??'')):String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const personColor=person=>person==='partner'?'#fb7185':'#38bdf8';
+  const personIcon=person=>{
+    const setting=state?.uiSettings||{};
+    const icon=person==='partner'?(setting.partnerIcon||'fa-person-dress'):(setting.meIcon||'fa-person');
+    return /^fa-[a-z0-9-]+$/.test(icon)?icon:(person==='partner'?'fa-person-dress':'fa-person');
+  };
+  const savingInfo=type=>{
+    const fallback={financial:{label:'Ahorro Financiero',color:'#34d399',icon:'fa-chart-line'},unexpected:{label:'Imprevistos',color:'#60a5fa',icon:'fa-shield-halved'},emergency:{label:'Emergencias',color:'#f472b6',icon:'fa-briefcase-medical'}};
+    try{const from=window.mobileV9SavingMeta?.(type);if(from)return from;}catch(_){}
+    return fallback[type]||fallback.financial;
+  };
+  const accountInfo={
+    home:{icon:'fa-house-chimney',color:'#facc15',background:'#3b321d',short:'Responsabilidades compartidas'},
+    savings:{icon:'fa-piggy-bank',color:'#34d399',background:'#17392f',short:'Fondos conjuntos de ahorro'},
+    me:{icon:'fa-person',color:'#38bdf8',background:'#102c3a',short:'Finanzas personales'},
+    partner:{icon:'fa-person-dress',color:'#fb7185',background:'#3b1e2a',short:'Finanzas personales'}
+  };
+
+  /* A calm calendar always has a visible calendar glyph; alert states keep their warning/bell icon. */
+  const previousRender=window.renderMobileUI;
+  if(typeof previousRender==='function'){
+    window.renderMobileUI=function renderMobileUIV10(){
+      const result=previousRender.apply(this,arguments);
+      try{
+        if((typeof mobileScreen!=='undefined'&&(mobileScreen==='summary'||mobileScreen==='home'))&&$('#mContent')){
+          const calmSymbol=$('#mContent .m-v5-calendar-card.calm .m-v5-calendar-symbol');
+          if(calmSymbol)calmSymbol.innerHTML='<span class="m-v10-calendar-glyph" role="img" aria-label="Calendario">▦</span>';
+          const emptySymbol=$('#mContent .m-v5-cal-empty > span');
+          if(emptySymbol)emptySymbol.innerHTML='<span class="m-v10-calendar-glyph" role="img" aria-label="Calendario">▦</span>';
+        }
+      }catch(error){console.warn('Nexus V10: no se pudo reforzar el icono de calendario',error);}
+      return result;
+    };
+  }
+
+  /* Reporte por cuentas: read-only cards and activity rows with the established account/person/category palette. */
+  window.renderMobileAccounts=function renderMobileAccountsV10(){
+    const f=typeof getFilter==='function'?getFilter():{year:new Date().getFullYear(),month:String(new Date().getMonth()+1)};
+    const accounts=Array.isArray(window.ACCOUNT_TYPES)?window.ACCOUNT_TYPES:(typeof ACCOUNT_TYPES!=='undefined'?ACCOUNT_TYPES:[]);
+    const currentSelection=typeof mobileSelectedAccountV3!=='undefined'?mobileSelectedAccountV3:window.mobileSelectedAccountV3;
+    const selected=accounts.some(a=>a.id===currentSelection)?currentSelection:'home';
+    try{mobileSelectedAccountV3=selected;}catch(_){}
+    window.mobileSelectedAccountV3=selected;
+    const cards=accounts.map(a=>{
+      const meta=accountInfo[a.id]||accountInfo.home;
+      const icon=a.id==='me'?personIcon('me'):a.id==='partner'?personIcon('partner'):meta.icon;
+      const color=a.id==='me'?personColor('me'):a.id==='partner'?personColor('partner'):meta.color;
+      const background=a.id==='me'?'#102c3a':a.id==='partner'?'#3b1e2a':meta.background;
+      const data=accountPeriodSummary(a.id);
+      return `<button type="button" class="m-v3-account-select m-v10-account-select ${selected===a.id?'selected':''}" data-account-id="${escText(a.id)}" style="--account-color:${color};--account-bg:${background}" onclick="mobileSelectedAccountV3='${escText(a.id)}';window.mobileSelectedAccountV3='${escText(a.id)}';renderMobileUI()" aria-pressed="${selected===a.id?'true':'false'}"><span class="m-v10-account-card-head"><span class="m-v10-account-icon"><i class="fa-solid ${icon}" aria-hidden="true"></i></span><span class="m-v10-account-card-label"><b>${escText(a.name)}</b><small>${escText(meta.short)}</small></span></span><strong class="m-v10-account-value">${money(data.value)}</strong><small class="m-v10-account-detail">${escText(data.detail)}</small><span class="m-v3-account-cta">${selected===a.id?'Cuenta seleccionada':'Ver detalle'} <i class="fa-solid ${selected===a.id?'fa-circle-check':'fa-chevron-down'}" aria-hidden="true"></i></span></button>`;
+    }).join('');
+    const type=accounts.find(a=>a.id===selected)||accounts[0]||{id:'home',name:'Cuenta hogar'};
+    const d=accountPeriodSummary(selected);
+    const rawRows=typeof mobileV3AccountRows==='function'?mobileV3AccountRows(selected,f):[];
+    let intro='Actividad de la cuenta seleccionada, calculada desde los registros de origen.';
+    let baseline='';
+    if(selected==='home')intro='Responsabilidades y gastos del hogar ya pagados en el periodo seleccionado.';
+    else if(selected==='savings')intro='Aportes registrados en los fondos de ahorro conjuntos.';
+    else{
+      const p=selected==='partner'?'partner':'me';
+      const stats=personalStats(p,f.year,f.month),assigned=personalAssigned(p,f.year,f.month);
+      intro=`Actividad personal de ${state.people[p]|| (p==='partner'?'Mi pareja':'Mi perfil')}. Esta vista es informativa: edita los datos desde Finanzas personales.`;
+      baseline=`<div class="m-v3-person-split m-v10-account-person-summary"><div class="m-v3-person-tile" style="--account-color:${personColor(p)}"><span><i class="fa-solid fa-house-user"></i> Asignado tras el hogar</span><strong>${money(assigned)}</strong></div><div class="m-v3-person-tile" style="--account-color:${personColor(p)}"><span><i class="fa-solid fa-wallet"></i> Saldo personal calculado</span><strong>${money(assigned+stats.extraIncome-stats.spent-stats.saved)}</strong></div></div>`;
+    }
+    const rowsHtml=rawRows.length?rawRows.map(row=>{
+      let icon='fa-wallet',color='#60a5fa',bg='#1e2e49',title=row.title||'Movimiento';
+      const kind=row.kind;
+      if(kind==='income'){
+        const p=selected==='partner'?'partner':'me';icon=personIcon(p);color=personColor(p);bg=p==='partner'?'#3b1e2a':'#102c3a';
+      }else if(kind==='saving'){
+        const fund=(Array.isArray(SAVINGS)?SAVINGS:[]).find(s=>s[1]===row.title);
+        const meta=savingInfo(fund?.[0]||'financial');icon=meta.icon;color=meta.color;bg='#111b19';
+      }else if(kind==='debt') {icon='fa-file-invoice-dollar';color='#f472b6';bg='#351b2a';}
+      else if(kind==='expense'&&Array.isArray(CATS)&&CATS.includes(row.title)){
+        icon=window.mobileV9CategoryIcon?.(row.title)||'fa-receipt';color=window.mobileV9CategoryColor?.(row.title)||'#fb923c';bg='#171420';title=window.mobileV9CategoryLabel?.(row.title)||row.title;
+      }else if(kind==='expense'||kind==='other-expense') {icon='fa-wallet';color='#fb923c';bg='#382319';}
+      return `<article class="m-v3-readonly-row m-v10-account-row" style="--row-color:${color};--row-bg:${bg}"><span class="m-v3-row-icon m-v10-account-row-icon"><i class="fa-solid ${icon}" aria-hidden="true"></i></span><div class="detail"><b>${escText(title)}</b><small>${escText(mobileV3DateLabel(row.date))} · ${escText(row.detail||'')}</small></div><strong class="${kind==='income'?'positive':kind==='expense'||kind==='other-expense'||kind==='debt'?'negative':'saving-text'}">${kind==='income'?'+':kind==='expense'||kind==='other-expense'||kind==='debt'?'−':'↗'}${money(Math.abs(Number(row.amount)||0))}</strong></article>`;
+    }).join(''):'<div class="m-inline-empty"><i class="fa-solid fa-inbox" aria-hidden="true"></i> No hay movimientos para esta cuenta en el periodo.</div>';
+    return `${mobilePeriodControls()}<div class="m-v3-info-note m-v10-account-note"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span>Estas cuentas son informativas. Los valores se calculan automáticamente y los movimientos se modifican en Ingresos, Hogar, Ahorros o Finanzas personales.</span></div><section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-wallet" aria-hidden="true"></i> Cuentas del hogar y personales</h3><p>Toca una cuenta para ver los movimientos calculados.</p></div></div><div class="m-v3-account-grid m-v10-account-grid">${cards}</div></section><section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-circle-info" aria-hidden="true"></i> ${escText(type.name)}</h3><p>${escText(intro)}</p></div><span class="m-v3-status done"><i class="fa-solid fa-lock" aria-hidden="true"></i> Solo lectura</span></div><article class="m-v3-card m-v10-account-detail-card"><div class="m-v3-muted">Total del periodo</div><div class="m-v3-highlight" style="color:${accountInfo[selected]?.color||'#c4b5fd'}">${money(d.value)}</div>${baseline}<div class="m-section-heading"><div><h3><i class="fa-solid fa-list-check" aria-hidden="true"></i> Detalle automático</h3><p>${rawRows.length} registro(s) del periodo.</p></div></div>${rowsHtml}</article></section>`;
+  };
+
+  /* Dedicated additional-income ledger for each profile, separate from the mixed history and the expense section. */
+  const previousPersonalRenderer=window.renderMobilePersonal;
+  if(typeof previousPersonalRenderer==='function'){
+    window.renderMobilePersonal=function renderMobilePersonalV10(person){
+      let html=previousPersonalRenderer.apply(this,arguments);
+      try{
+        const filter=typeof getFilter==='function'?getFilter():{year:new Date().getFullYear(),month:String(new Date().getMonth()+1)};
+        const incomeRows=(state.personalSpending||[]).filter(x=>x.person===person&&personalMovementType(x)==='income'&&inPeriod(x.date,filter.year,filter.month)).slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))||String(b.id||'').localeCompare(String(a.id||'')));
+        const total=incomeRows.reduce((sum,row)=>sum+Math.abs(Number(row.amount)||0),0);
+        const color=personColor(person),ownerIconClass=personIcon(person),ownerName=state.people?.[person]||(person==='partner'?'Mi pareja':'Mi perfil');
+        const rowsHtml=incomeRows.length?incomeRows.map(row=>{
+          const id=String(row.id||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+          return `<article class="m-v10-income-row" style="--owner-color:${color}"><span class="m-v10-income-owner-icon"><i class="fa-solid ${ownerIconClass}" aria-hidden="true"></i><i class="fa-solid fa-arrow-trend-up m-v10-income-badge" aria-hidden="true"></i></span><div class="m-v10-income-copy"><b>${escText(row.category||'Ingreso adicional')}</b><small><i class="fa-regular fa-calendar" aria-hidden="true"></i> ${escText(mobileV3DateLabel(row.date))}</small><small>${escText(row.desc||'Ingreso adicional')} · ${escText(ownerName)}</small></div><div class="m-v10-income-actions"><strong>+${money(Math.abs(Number(row.amount)||0))}</strong><div><button type="button" class="m-icon-btn" title="Editar ingreso adicional" aria-label="Editar ingreso adicional" onclick="editPersonalMovement('${id}')"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></button><button type="button" class="m-icon-btn danger" title="Eliminar ingreso adicional" aria-label="Eliminar ingreso adicional" onclick="deleteRecord('personal','${id}')"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></button></div></div></article>`;
+        }).join(''):`<div class="m-inline-empty"><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i> No hay ingresos adicionales registrados para este perfil en el periodo.</div>`;
+        const section=`<section class="m-v3-section m-v10-personal-income"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i> Ingresos adicionales</h3><p>${incomeRows.length} ingreso(s) de ${escText(ownerName)} en el periodo seleccionado.</p></div><button type="button" class="m-v3-link" onclick="openPersonalMovement('${person}','income')"><i class="fa-solid fa-plus" aria-hidden="true"></i> Añadir</button></div><article class="m-v3-card m-v10-income-card"><div class="m-v10-income-total"><span>Total de ingresos adicionales</span><strong>+${money(total)}</strong></div><div class="m-v10-income-list">${rowsHtml}</div></article></section>`;
+        const marker='<section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-boxes-stacked"></i> Cajas de ahorro personales';
+        if(html.includes(marker))html=html.replace(marker,section+marker);
+        else if(html.includes('Historial personal'))html=html.replace(/<section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-clock-rotate-left"><\/i> Historial personal/,section+'<section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-clock-rotate-left"></i> Historial personal');
+        else html+=section;
+      }catch(error){console.warn('Nexus V10: no se pudo preparar el historial de ingresos adicionales',error);}
+      return html;
+    };
+  }
+
+  /* Close the savings-box editor without depending on an asynchronous browser-back event. */
+  window.mobileV10SafeCloseBoxEditor=function(){
+    try{if(typeof window.closeModal==='function')window.closeModal(true);}catch(_){}
+    const modal=$('#modal');if(modal)modal.classList.remove('show');
+    document.body.classList.remove('modal-open');
+    try{if(typeof activeModal!=='undefined')activeModal={type:null,key:null};}catch(_){}
+    try{if(typeof modalHistoryOpen!=='undefined')modalHistoryOpen=false;}catch(_){}
+    try{history.replaceState({...((history.state&&typeof history.state==='object')?history.state:{}),nexusModal:false,nexusMobileScreen:(typeof mobileScreen!=='undefined'?mobileScreen:'summary')},'',location.pathname+location.search);}catch(_){}
+    try{if(typeof renderMobileUI==='function')renderMobileUI();}catch(_){}
+  };
+  const originalManageBoxes=window.managePersonalSavingBoxes;
+  if(typeof originalManageBoxes==='function'){
+    window.managePersonalSavingBoxes=function managePersonalSavingBoxesV10(person){
+      const result=originalManageBoxes.apply(this,arguments);
+      const box=$('#modalBox');
+      if(box&&$('#personalSavingBoxInputs',box)){
+        const cancel=[...box.querySelectorAll('button')].find(button=>/cancelar/i.test(button.textContent||''));
+        if(cancel){cancel.type='button';cancel.onclick=null;cancel.setAttribute('onclick','mobileV10SafeCloseBoxEditor()');}
+        const close=box.querySelector('.modal-head .close');if(close){close.onclick=null;close.setAttribute('onclick','mobileV10SafeCloseBoxEditor()');}
+      }
+      return result;
+    };
+  }
+  const originalSaveBoxes=window.savePersonalSavingBoxes;
+  if(typeof originalSaveBoxes==='function'){
+    window.savePersonalSavingBoxes=function savePersonalSavingBoxesV10(event,person){
+      const originalClose=window.closeModal;
+      window.closeModal=function(fromPop=false){return originalClose.call(this,true);};
+      try{return originalSaveBoxes.apply(this,arguments);}
+      finally{
+        window.closeModal=originalClose;
+        setTimeout(()=>{
+          if(!$('#modal')?.classList.contains('show')){
+            try{history.replaceState({...((history.state&&typeof history.state==='object')?history.state:{}),nexusModal:false,nexusMobileScreen:(typeof mobileScreen!=='undefined'?mobileScreen:'summary')},'',location.pathname+location.search);}catch(_){}
+            try{if(typeof renderMobileUI==='function')renderMobileUI();}catch(_){}
+          }
+        },0);
+      }
+    };
+  }
+
+  const styles=document.createElement('style');styles.id='nexus-mobile-v10-fixes-style';styles.textContent=`
+    .m-v10-calendar-glyph{display:grid;place-items:center;width:100%;height:100%;font-family:system-ui,sans-serif;font-size:25px;font-weight:900;line-height:1;color:inherit;text-shadow:0 1px 4px #0003}
+    .m-v5-cal-empty>.m-v10-calendar-glyph{width:100%;height:100%;font-size:23px}
+    .m-v10-account-grid{gap:12px!important}
+    .m-v10-account-select{display:grid!important;align-content:start!important;gap:11px!important;text-align:left!important;padding:14px!important;border:1px solid color-mix(in srgb,var(--account-color,#c4b5fd) 30%,#30283d)!important;background:linear-gradient(155deg,color-mix(in srgb,var(--account-color,#c4b5fd) 8%,#191523),#12101a)!important;border-radius:17px!important;min-width:0!important;color:#f6f3ff!important;box-shadow:0 7px 20px #0002}
+    .m-v10-account-select.selected{border-color:color-mix(in srgb,var(--account-color,#c4b5fd) 72%,#30283d)!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--account-color,#c4b5fd) 19%,transparent),0 10px 23px #0003!important}
+    .m-v10-account-card-head{display:flex;align-items:center;gap:10px;min-width:0}
+    .m-v10-account-icon{display:grid;place-items:center;flex:0 0 40px;width:40px;height:40px;border:1px solid color-mix(in srgb,var(--account-color) 45%,transparent);background:color-mix(in srgb,var(--account-color) 17%,var(--account-bg));border-radius:13px;color:var(--account-color);font-size:16px}
+    .m-v10-account-card-label{display:grid;gap:4px;min-width:0}.m-v10-account-card-label b{font-size:11px;line-height:1.35;overflow-wrap:anywhere}.m-v10-account-card-label small{font-size:9px;line-height:1.35;color:#b0a6bf}
+    .m-v10-account-value{display:block;color:var(--account-color)!important;font-size:18px!important;letter-spacing:-.03em;overflow-wrap:anywhere}
+    .m-v10-account-detail{font-size:9px!important;line-height:1.5!important;color:#a79db5!important;overflow-wrap:anywhere}
+    .m-v10-account-select .m-v3-account-cta{display:flex;align-items:center;justify-content:space-between;gap:7px;border-top:1px solid color-mix(in srgb,var(--account-color) 20%,transparent);padding-top:10px;color:var(--account-color)!important;font-size:9px}
+    .m-v10-account-detail-card{display:grid;gap:12px}.m-v10-account-person-summary{gap:10px!important}.m-v10-account-person-summary .m-v3-person-tile{border-color:color-mix(in srgb,var(--account-color) 28%,#30283d)!important}.m-v10-account-person-summary .m-v3-person-tile>span i{color:var(--account-color)}
+    .m-v10-account-row{display:grid!important;grid-template-columns:38px minmax(0,1fr) auto!important;align-items:center!important;gap:10px!important;padding:12px 0!important;border-bottom:1px solid #ffffff0c!important}.m-v10-account-row-icon{color:var(--row-color)!important;background:color-mix(in srgb,var(--row-color) 17%,var(--row-bg))!important;border:1px solid color-mix(in srgb,var(--row-color) 38%,transparent)!important}.m-v10-account-row .detail{min-width:0;display:grid;gap:4px}.m-v10-account-row .detail b{font-size:11px;line-height:1.4;overflow-wrap:anywhere}.m-v10-account-row .detail small{font-size:9px;line-height:1.45;color:#a99fb8;overflow-wrap:anywhere}.m-v10-account-row>strong{font-size:10px;white-space:nowrap;text-align:right}
+    .m-v10-personal-income .m-v3-section-head{align-items:center}.m-v10-income-card{display:grid;gap:10px}.m-v10-income-total{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border:1px solid #433258;border-radius:13px;background:linear-gradient(120deg,#21172e,#15111e)}.m-v10-income-total span{font-size:10px;color:#b8adc8}.m-v10-income-total strong{font-size:16px;color:#c4b5fd;white-space:nowrap}
+    .m-v10-income-list{display:grid;gap:0}.m-v10-income-row{display:grid;grid-template-columns:39px minmax(0,1fr) minmax(96px,auto);align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid #ffffff0d;min-width:0}.m-v10-income-row:last-child{border-bottom:0}.m-v10-income-owner-icon{position:relative;display:grid;place-items:center;width:38px;height:38px;border-radius:12px;color:var(--owner-color);background:color-mix(in srgb,var(--owner-color) 18%,#12101a);border:1px solid color-mix(in srgb,var(--owner-color) 44%,transparent);font-size:16px}.m-v10-income-badge{position:absolute;right:-4px;bottom:-4px;width:17px;height:17px;display:grid;place-items:center;border-radius:7px;color:#d8cafa;background:#302342;border:1px solid #8b5cf6;font-size:8px}.m-v10-income-copy{display:grid;gap:4px;min-width:0}.m-v10-income-copy b{font-size:11px;line-height:1.35;overflow-wrap:anywhere}.m-v10-income-copy small{font-size:9px;line-height:1.4;color:#a79db6;overflow-wrap:anywhere}.m-v10-income-actions{display:grid;justify-items:end;gap:7px;min-width:0}.m-v10-income-actions strong{font-size:11px;color:#c4b5fd;white-space:nowrap}.m-v10-income-actions>div{display:flex;gap:4px}.m-v10-income-actions .m-icon-btn{width:29px;height:29px;min-width:29px;min-height:29px;border-radius:9px}
+    @media(max-width:360px){.m-v10-account-select{padding:11px!important}.m-v10-account-icon{width:35px;height:35px;flex-basis:35px}.m-v10-account-row{grid-template-columns:34px minmax(0,1fr)!important}.m-v10-account-row>strong{grid-column:2;justify-self:start}.m-v10-income-row{grid-template-columns:35px minmax(0,1fr)!important}.m-v10-income-actions{grid-column:2;display:flex;justify-content:space-between;align-items:center;width:100%}}
+  `;document.head.appendChild(styles);
+})();
+</script>
+
 </body>
 </html>
