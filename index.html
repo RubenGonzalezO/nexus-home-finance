@@ -2333,7 +2333,7 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
       const ico=e.kind==='debt'?'fa-file-invoice-dollar':e.kind==='homePayment'?'fa-house-chimney':e.kind==='personalPayment'?'fa-wallet':'fa-calendar-check';
       return `<article class="m-v5-cal-item ${lev}"><span class="m-v5-cal-date"><b>${e.day}</b><small>${e.month}</small></span><button class="m-v5-cal-copy" type="button" onclick="mobileV5OpenEvent('${e.kind}','${String(e.id).replace(/'/g,'\\\'')}','${e.date}')"><span class="m-v5-cal-status"><i class="fa-solid ${ico}"></i>${status}</span><strong>${esc(e.title)}</strong><small>${mobileV3DateLabel(e.date)} · ${esc(e.detail)}</small></button><button class="m-v5-cal-go" type="button" aria-label="Abrir ${esc(e.title)}" onclick="mobileV5OpenEvent('${e.kind}','${String(e.id).replace(/'/g,'\\\'')}','${e.date}')"><i class="fa-solid fa-chevron-right"></i></button></article>`;
     }).join(''):`<div class="m-v5-cal-empty"><span><i class="fa-solid fa-calendar-check"></i></span><div><b>No hay eventos próximos</b><small>Tus pagos pendientes y recordatorios aparecerán aquí.</small></div><button class="m-secondary-btn" type="button" onclick="openTaskForm()"><i class="fa-solid fa-plus"></i> Añadir</button></div>`;
-    return `<section class="m-v3-section m-v5-calendar-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-calendar-days"></i> Calendario y próximos eventos</h3><p>Vencimientos con prioridad visual según su fecha.</p></div><button class="m-v3-link" onclick="mobileSetScreen('calendar')">Ver calendario <i class="fa-solid fa-arrow-right"></i></button></div><article class="m-v5-calendar-card ${level}"><div class="m-v5-calendar-banner"><span class="m-v5-calendar-symbol"><i class="fa-solid ${level==='overdue'?'fa-triangle-exclamation':level==='urgent'?'fa-bell':level==='soon'?'fa-calendar-clock':'fa-calendar-check'}"></i></span><div><b>${caption}</b><small>${events.length?`${events.length} evento(s) próximo(s) · ordenados por fecha`:'No hay pagos o recordatorios pendientes'}</small></div><button type="button" onclick="mobileSetScreen('calendar')" aria-label="Abrir calendario"><i class="fa-solid fa-arrow-up-right-from-square"></i></button></div><div class="m-v5-calendar-events">${content}</div></article><button class="m-secondary-btn full m-v5-add-event" onclick="openTaskForm()"><i class="fa-solid fa-calendar-plus"></i> Crear recordatorio</button></section>`;
+    return `<section class="m-v3-section m-v5-calendar-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-calendar-days"></i> Calendario y próximos eventos</h3><p>Vencimientos con prioridad visual según su fecha.</p></div><button class="m-v3-link" onclick="mobileSetScreen('calendar')">Ver calendario <i class="fa-solid fa-arrow-right"></i></button></div><article class="m-v5-calendar-card ${level}"><div class="m-v5-calendar-banner"><span class="m-v5-calendar-symbol"><i class="fa-solid ${level==='overdue'?'fa-triangle-exclamation':level==='urgent'?'fa-bell':level==='soon'?'fa-clock':'fa-calendar-check'}"></i></span><div><b>${caption}</b><small>${events.length?`${events.length} evento(s) próximo(s) · ordenados por fecha`:'No hay pagos o recordatorios pendientes'}</small></div><button type="button" onclick="mobileSetScreen('calendar')" aria-label="Abrir calendario"><i class="fa-solid fa-arrow-up-right-from-square"></i></button></div><div class="m-v5-calendar-events">${content}</div></article><button class="m-secondary-btn full m-v5-add-event" onclick="openTaskForm()"><i class="fa-solid fa-calendar-plus"></i> Crear recordatorio</button></section>`;
   }
   const originalHome=renderMobileHome;
   renderMobileHome=function(){
@@ -2366,7 +2366,7 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
 
   function applyIconFallback(){
     const glyph={
-      'fa-wallet':'▣','fa-gauge-high':'◴','fa-house':'🏠','fa-house-chimney':'⌂','fa-house-user':'⌂','fa-arrow-trend-up':'↗','fa-arrow-trend-down':'↘','fa-arrow-down-left':'↙','fa-piggy-bank':'🐷','fa-grid-2':'▦','fa-ellipsis':'⋯','fa-calendar-day':'▦','fa-calendar-days':'▦','fa-calendar-clock':'◷','fa-calendar-check':'✓','fa-calendar-plus':'+','fa-triangle-exclamation':'⚠','fa-bell':'♢','fa-bell-ring':'♢','fa-person':'👨','fa-person-dress':'👩','fa-users':'👫','fa-user':'👤','fa-chart-line':'↗','fa-shield-halved':'⬟','fa-briefcase-medical':'✚','fa-hand-holding-dollar':'$','fa-file-invoice-dollar':'▤','fa-bullseye':'◎','fa-sliders':'☷','fa-plus':'+','fa-receipt':'▤','fa-tags':'◇','fa-arrow-right':'→','fa-chevron-right':'›','fa-chevron-left':'‹','fa-arrow-up-right-from-square':'↗','fa-file-arrow-down':'↓','fa-file-arrow-up':'↑','fa-rotate':'↻','fa-rotate-left':'↶','fa-pen-to-square':'✎','fa-pen':'✎','fa-trash-can':'⌫','fa-trash':'⌫','fa-check':'✓','fa-circle-check':'✓','fa-clock':'◷','fa-cloud':'☁','fa-cloud-check':'✓','fa-sparkles':'✦','fa-seedling':'❧','fa-shield-heart':'♡','fa-repeat':'↻','fa-circle-info':'ⓘ','fa-xmark':'×','fa-floppy-disk':'▣','fa-file-csv':'▤','fa-right-from-bracket':'↪','fa-box-archive':'▣','fa-gear':'⚙','fa-scale-balanced':'⚖','fa-user-check':'✓','fa-coins':'◉','fa-clock-rotate-left':'↶','fa-people-arrows-left-right':'👫','fa-user-group':'👫','fa-list-check':'☷','fa-inbox':'▣','fa-mobile-screen-button':'▯','fa-wifi':'⌁','fa-droplet':'●','fa-bolt':'ϟ','fa-fire-flame-simple':'♨','fa-car-side':'▰','fa-cart-shopping':'▤','fa-utensils':'≋','fa-bag-shopping':'▢','fa-heart-pulse':'♡','fa-film':'▣','fa-credit-card':'▤','fa-circle-dot':'●','fa-calendar':'▦','fa-calendar-alt':'▦','fa-money-bill-trend-up':'↗','fa-circle-plus':'+','fa-arrow-up':'↑','fa-circle-exclamation':'⚠','fa-cloud-arrow-up':'↑','fa-check-double':'✓','fa-circle-user':'👤','fa-sack-dollar':'$','fa-chart-pie':'◔','fa-file-signature':'✎','fa-landmark':'▥','fa-palette':'◉','fa-clock-four':'◷','fa-house-lock':'⌂','fa-circle-dollar-to-slot':'$','fa-chart-simple':'▥','fa-comments':'☏','fa-moon':'☾','fa-sun':'☼','fa-expand':'↗','fa-compress':'↙'
+      'fa-wallet':'▣','fa-gauge-high':'◴','fa-house':'🏠','fa-house-chimney':'⌂','fa-house-user':'⌂','fa-arrow-trend-up':'↗','fa-arrow-trend-down':'↘','fa-arrow-down-left':'↙','fa-piggy-bank':'🐷','fa-grid-2':'▦','fa-ellipsis':'⋯','fa-calendar-day':'▦','fa-calendar-days':'▦','fa-clock':'◷','fa-calendar-check':'✓','fa-calendar-plus':'+','fa-triangle-exclamation':'⚠','fa-bell':'♢','fa-bell-ring':'♢','fa-person':'👨','fa-person-dress':'👩','fa-users':'👫','fa-user':'👤','fa-chart-line':'↗','fa-shield-halved':'⬟','fa-briefcase-medical':'✚','fa-hand-holding-dollar':'$','fa-file-invoice-dollar':'▤','fa-bullseye':'◎','fa-sliders':'☷','fa-plus':'+','fa-receipt':'▤','fa-tags':'◇','fa-arrow-right':'→','fa-chevron-right':'›','fa-chevron-left':'‹','fa-arrow-up-right-from-square':'↗','fa-file-arrow-down':'↓','fa-file-arrow-up':'↑','fa-rotate':'↻','fa-rotate-left':'↶','fa-pen-to-square':'✎','fa-pen':'✎','fa-trash-can':'⌫','fa-trash':'⌫','fa-check':'✓','fa-circle-check':'✓','fa-clock':'◷','fa-cloud':'☁','fa-cloud-check':'✓','fa-sparkles':'✦','fa-seedling':'❧','fa-shield-heart':'♡','fa-repeat':'↻','fa-circle-info':'ⓘ','fa-xmark':'×','fa-floppy-disk':'▣','fa-file-csv':'▤','fa-right-from-bracket':'↪','fa-box-archive':'▣','fa-gear':'⚙','fa-scale-balanced':'⚖','fa-user-check':'✓','fa-coins':'◉','fa-clock-rotate-left':'↶','fa-people-arrows-left-right':'👫','fa-user-group':'👫','fa-list-check':'☷','fa-inbox':'▣','fa-mobile-screen-button':'▯','fa-wifi':'⌁','fa-droplet':'●','fa-bolt':'ϟ','fa-fire-flame-simple':'♨','fa-car-side':'▰','fa-cart-shopping':'▤','fa-utensils':'≋','fa-bag-shopping':'▢','fa-heart-pulse':'♡','fa-film':'▣','fa-credit-card':'▤','fa-circle-dot':'●','fa-calendar':'▦','fa-calendar-alt':'▦','fa-money-bill-trend-up':'↗','fa-circle-plus':'+','fa-arrow-up':'↑','fa-circle-exclamation':'⚠','fa-cloud-arrow-up':'↑','fa-check-double':'✓','fa-circle-user':'👤','fa-sack-dollar':'$','fa-chart-pie':'◔','fa-file-signature':'✎','fa-landmark':'▥','fa-palette':'◉','fa-clock-four':'◷','fa-house-lock':'⌂','fa-circle-dollar-to-slot':'$','fa-chart-simple':'▥','fa-comments':'☏','fa-moon':'☾','fa-sun':'☼','fa-expand':'↗','fa-compress':'↙'
     };
     const test=document.createElement('i');test.className='fa-solid fa-house';test.style.cssText='position:fixed;opacity:0;pointer-events:none';document.body.appendChild(test);
     let content='none',fontOk=false;try{content=getComputedStyle(test,'::before').content;fontOk=document.fonts?.check('900 16px "Font Awesome 6 Free"')||document.fonts?.check('900 16px "Font Awesome 6 Pro"')||false;}catch(_){}test.remove();
@@ -3556,9 +3556,9 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
         let icon='fa-calendar-days';
         if(card.classList.contains('overdue'))icon='fa-triangle-exclamation';
         else if(card.classList.contains('urgent'))icon='fa-bell';
-        else if(card.classList.contains('soon'))icon='fa-calendar-clock';
+        else if(card.classList.contains('soon'))icon='fa-clock';
         symbol.innerHTML=`<i class="fa-solid ${icon}" aria-hidden="true"></i>`;
-        symbol.setAttribute('aria-label',icon==='fa-calendar-days'?'Calendario':icon==='fa-calendar-clock'?'Vencimiento próximo':icon==='fa-bell'?'Alerta de hoy':'Evento vencido');
+        symbol.setAttribute('aria-label',icon==='fa-calendar-days'?'Calendario':icon==='fa-clock'?'Vencimiento próximo':icon==='fa-bell'?'Alerta de hoy':'Evento vencido');
       }
     }
     $$('.m-v5-cal-empty>span',root).forEach(symbol=>{
@@ -3778,6 +3778,171 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     window.renderMobileUI=wrappedUI;
     try{renderMobileUI=wrappedUI;}catch(_){}
   }
+})();
+</script>
+
+
+<!-- Nexus V13: reliable alert-detail navigation + semantic calendar colors -->
+<style id="nexus-v13-calendar-semantics">
+  /* Calendar dots communicate state, not generic event presence. */
+  .m-v3-cal-dots i.pending-dot,
+  .m-v3-cal-dots i.debt-dot,
+  .m-v3-calendar-legend i.pending-dot,
+  .m-v3-calendar-legend i.debt-dot { background:#facc15 !important; box-shadow:0 0 0 2px #facc151c; }
+  .m-v3-cal-dots i.done-dot,
+  .m-v3-calendar-legend i.done-dot { background:#34d399 !important; box-shadow:0 0 0 2px #34d3991c; }
+  .m-v3-cal-dots i.overdue-dot,
+  .m-v3-calendar-legend i.overdue-dot { background:#fb7185 !important; box-shadow:0 0 0 2px #fb71851c; }
+  .m-v3-calendar-day.has-overdue { border-color:#8c3448; background:linear-gradient(145deg,#321722,#151019); }
+  .m-v3-calendar-day.has-done { border-color:#28634d; }
+  .m-v3-calendar-day.has-pending,.m-v3-calendar-day.has-debt { border-color:#77642c; }
+  .m-v3-calendar-legend { row-gap:9px; }
+  .m-v3-event-card.m-v13-calendar-row { border-radius:12px; padding:12px 9px !important; margin:5px 0; border:1px solid transparent; }
+  .m-v3-event-card.m-v13-calendar-row.is-pending,
+  .m-v3-event-card.m-v13-calendar-row.is-debt { background:linear-gradient(100deg,#facc150d,transparent 80%); border-color:#facc152d; }
+  .m-v3-event-card.m-v13-calendar-row.is-done { background:linear-gradient(100deg,#34d39910,transparent 80%); border-color:#34d39935; }
+  .m-v3-event-card.m-v13-calendar-row.is-overdue { background:linear-gradient(100deg,#fb718512,transparent 80%); border-color:#fb71854a; }
+  .m-v3-event-card.m-v13-calendar-row.is-pending .m-v3-row-icon,
+  .m-v3-event-card.m-v13-calendar-row.is-debt .m-v3-row-icon { background:#3b321d !important; color:#facc15 !important; border:1px solid #8a7334 !important; }
+  .m-v3-event-card.m-v13-calendar-row.is-done .m-v3-row-icon { background:#17392f !important; color:#34d399 !important; border:1px solid #28634d !important; }
+  .m-v3-event-card.m-v13-calendar-row.is-overdue .m-v3-row-icon { background:#451c2a !important; color:#fb7185 !important; border:1px solid #8e3a50 !important; }
+  .m-v13-event-state { display:inline-flex; align-items:center; gap:5px; width:max-content; max-width:100%; padding:3px 7px; margin:0 0 2px; border-radius:99px; font-size:8px; line-height:1.35; font-weight:900; letter-spacing:.035em; text-transform:uppercase; }
+  .m-v13-event-state.pending,.m-v13-event-state.debt { background:#3b321d; color:#facc15; border:1px solid #8a7334; }
+  .m-v13-event-state.done { background:#17392f; color:#6ee7b7; border:1px solid #28634d; }
+  .m-v13-event-state.overdue { background:#451c2a; color:#fda4af; border:1px solid #8e3a50; }
+  .m-v13-event-state i { font-size:9px; }
+  @media(prefers-reduced-motion:reduce){.m-v3-calendar-day,.m-v3-event-card{transition:none!important}}
+</style>
+<script id="nexus-v13-alert-details-and-calendar">
+(function(){
+  'use strict';
+  const $=(selector,root=document)=>root.querySelector(selector);
+  const todayISO=()=>typeof dateNow==='function'?dateNow():new Date().toISOString().slice(0,10);
+  const safeId=value=>String(value==null?'':value);
+
+  /*
+   * The alert's previous action was invoked immediately after closeModal().
+   * On mobile, closeModal() can unwind a history entry asynchronously, so the
+   * next editor could be overwritten by that navigation. Close synchronously,
+   * normalize the modal URL, then run the specific action.
+   */
+  window.mobileV4RunAlert=function(index){
+    const entry=(window.mobileV4ActiveAlerts||[])[Number(index)];
+    if(!entry)return;
+    const action=entry.action;
+    const modal=$('#modal');
+    try{
+      if(modal&&modal.classList.contains('show')){
+        if(typeof closeModal==='function')closeModal(true);
+        else {modal.classList.remove('show');document.body.classList.remove('modal-open');}
+      }
+    }catch(error){
+      console.warn('Nexus V13: no se pudo cerrar el centro de alertas de forma normal.',error);
+      if(modal){modal.classList.remove('show');document.body.classList.remove('modal-open');}
+    }
+    try{
+      const cleanHash=(location.hash||'').replace(/\/modal$/,'');
+      const currentScreen=(typeof mobileScreen==='string'&&mobileScreen)||'summary';
+      history.replaceState({...((history.state&&typeof history.state==='object')?history.state:{}),nexusModal:false,nexusMobileScreen:currentScreen},'',location.pathname+location.search+cleanHash);
+    }catch(_){}
+    window.setTimeout(function(){
+      try{
+        if(typeof action==='function')action();
+        else if(typeof mobileSetScreen==='function')mobileSetScreen('calendar');
+      }catch(error){
+        console.error('Nexus V13: error al abrir el detalle de una alerta.',error);
+        if(typeof toast==='function')toast('No se pudo abrir el detalle. Intenta entrar desde su sección correspondiente.');
+      }
+    },90);
+  };
+
+  /* Use exactly the event collections rendered by the calendar, so the colors
+     align with the displayed rows and with the saved completion/payment state. */
+  function calendarEventsV13(){
+    const items=[];
+    (state.tasks||[]).filter(t=>t.date).forEach(t=>items.push({kind:'task',id:t.id,date:t.date,title:t.title||'Recordatorio',status:t.status==='done'?'done':'pending',source:t}));
+    (state.debts||[]).filter(d=>d.due&&d.status!=='paid'&&Number(d.balance)>0).forEach(d=>items.push({kind:'debt',id:d.id,date:d.due,title:d.name||'Deuda u obligación',status:'pending',source:d}));
+    (state.expenses||[]).filter(x=>x.paymentScheduled&&x.paymentDate).forEach(x=>items.push({kind:'homePayment',id:x.id,date:x.paymentDate,title:x.category||'Pago del hogar',status:x.status==='paid'?'done':'pending',source:x}));
+    (state.personalSpending||[]).filter(x=>['expense','other-expense'].includes(typeof personalMovementType==='function'?personalMovementType(x):(x.type||x.kind))&&x.paymentScheduled&&x.paymentDate).forEach(x=>items.push({kind:'personalPayment',id:x.id,date:x.paymentDate,title:x.category||'Pago personal',status:x.status==='paid'?'done':'pending',source:x}));
+    return items;
+  }
+  function semanticStatusV13(item,today){
+    if(item.status==='done')return 'done';
+    if(item.date&&item.date<today)return 'overdue';
+    if(item.kind==='debt')return 'debt';
+    return 'pending';
+  }
+  function rowStatusIconV13(status){
+    return status==='overdue'?'fa-triangle-exclamation':status==='done'?'fa-circle-check':status==='debt'?'fa-file-invoice-dollar':'fa-clock';
+  }
+  function rowStatusLabelV13(status,kind){
+    if(status==='overdue')return 'Vencido';
+    if(status==='done')return kind==='homePayment'||kind==='personalPayment'?'Pagado':'Completado';
+    if(status==='debt')return 'Deuda';
+    return 'Pendiente';
+  }
+  function decorateCalendarHtmlV13(markup){
+    if(typeof markup!=='string'||!markup)return markup;
+    const template=document.createElement('template');template.innerHTML=markup;
+    const today=todayISO(),events=calendarEventsV13();
+    /* Calendar month cells: red overdue, green completed, yellow pending/debt. */
+    $$('.m-v3-calendar-day',template.content).forEach(dayButton=>{
+      const onclick=dayButton.getAttribute('onclick')||'';
+      const match=onclick.match(/mobileSelectCalendarDayV3\(['"]([^'"]+)/);
+      const date=match?match[1]:(dayButton.getAttribute('aria-label')||'').match(/\d{4}-\d{2}-\d{2}/)?.[0];
+      if(!date)return;
+      const forDate=events.filter(e=>e.date===date);
+      const overdue=forDate.some(e=>semanticStatusV13(e,today)==='overdue');
+      const done=forDate.some(e=>semanticStatusV13(e,today)==='done');
+      const debt=forDate.some(e=>semanticStatusV13(e,today)==='debt');
+      const pending=forDate.some(e=>semanticStatusV13(e,today)==='pending');
+      dayButton.classList.toggle('has-overdue',overdue);
+      dayButton.classList.toggle('has-done',done);
+      dayButton.classList.toggle('has-debt',debt);
+      dayButton.classList.toggle('has-pending',pending);
+      const dots=$('.m-v3-cal-dots',dayButton);if(!dots)return;
+      const dot=(cls,label)=>`<i class="${cls}" title="${label}" aria-label="${label}"></i>`;
+      dots.innerHTML=(overdue?dot('overdue-dot','Vencido'):'')+(pending?dot('pending-dot','Pendiente o vence'):'')+(debt?dot('debt-dot','Deuda'):'')+(done?dot('done-dot','Pagado o completado'):'');
+      dayButton.setAttribute('aria-label',`${date}: ${forDate.length} evento(s)${overdue?', incluye vencido':''}${done?', incluye completado':''}${debt?', incluye deuda':''}${pending?', incluye pendiente':''}`);
+    });
+    /* Selected-day rows are emitted in the same order as the renderer. */
+    const selected=(typeof mobileCalendarSelectedDateV3==='string'&&mobileCalendarSelectedDateV3)||today;
+    const dayEvents=events.filter(e=>e.date===selected).sort((a,b)=>(a.status===b.status?String(a.title).localeCompare(String(b.title)):a.status==='pending'?-1:1));
+    $$('.m-v3-event-card',template.content).forEach((row,index)=>{
+      const item=dayEvents[index];if(!item)return;
+      const status=semanticStatusV13(item,today);
+      ['pending','done','debt','overdue'].forEach(s=>row.classList.remove('is-'+s));
+      row.classList.add('m-v13-calendar-row','is-'+status);
+      row.dataset.calendarStatus=status;
+      const main=$('.m-v3-event-main',row),title=$('.m-v3-event-main>b',row);
+      if(!main||!title)return;
+      /* Existing completed tag is already visible; add a semantic pill to all open items. */
+      if(status!=='done'){
+        const existing=$('.m-v13-event-state',main);if(existing)existing.remove();
+        const badge=document.createElement('span');badge.className='m-v13-event-state '+status;
+        badge.innerHTML=`<i class="fa-solid ${rowStatusIconV13(status)}" aria-hidden="true"></i>${rowStatusLabelV13(status,item.kind)}`;
+        main.insertBefore(badge,title);
+      }
+      const iconHolder=$('.m-v3-row-icon',row),icon=$('i',iconHolder);
+      if(icon){
+        if(status==='overdue')icon.className='fa-solid fa-triangle-exclamation';
+        else if(status==='done')icon.className='fa-solid fa-circle-check';
+        else if(status==='debt')icon.className='fa-solid fa-file-invoice-dollar';
+        else if(item.kind==='task')icon.className='fa-solid fa-calendar-check';
+      }
+    });
+    const legend=$('.m-v3-calendar-legend',template.content);
+    if(legend)legend.innerHTML='<span><i class="pending-dot"></i> Pendiente / vence</span><span><i class="done-dot"></i> Pagado / completado</span><span><i class="debt-dot"></i> Deuda</span><span><i class="overdue-dot"></i> Vencido</span>';
+    return template.innerHTML;
+  }
+  const previousCalendarRenderer=window.renderMobileCalendar;
+  if(typeof previousCalendarRenderer==='function'){
+    window.renderMobileCalendar=function renderMobileCalendarV13(){
+      const markup=previousCalendarRenderer.apply(this,arguments);
+      try{return decorateCalendarHtmlV13(markup);}catch(error){console.warn('Nexus V13: colores de calendario; se conserva la vista anterior.',error);return markup;}
+    };
+  }
+  window.nexusV13CalendarStatus=semanticStatusV13;
 })();
 </script>
 
