@@ -1683,7 +1683,7 @@ const nexusOriginalToast=toast;
 toast=function(){const result=nexusOriginalToast.apply(this,arguments);if(typeof renderMobileUI==="function")Promise.resolve().then(()=>{const root=document.getElementById("mobileApp");if(root&&root.style.display!=="none")renderMobileUI();});return result;};
 
 /* Si ya existe una sesión guardada, se restaura usando la misma API de Nexus. */
-setTimeout(()=>bootstrapAuth(),0);
+/* Nexus V18: el arranque se ejecuta al final del documento, tras instalar la restauración de ruta. */
 </script>
 
 <script id="nexus-mobile-v3-patch">
@@ -1963,7 +1963,12 @@ renderMobileUI = function renderMobileUIV3() {
 const mobileV3WrappedSubmitAuth = submitAuth;
 submitAuth = async function(event){ await mobileV3WrappedSubmitAuth(event); if(authToken&&authUser){mobileScreen="summary";renderMobileUI();} };
 const mobileV3WrappedBootstrapAuth = bootstrapAuth;
-bootstrapAuth = async function(){ await mobileV3WrappedBootstrapAuth(); if(authToken&&authUser){mobileScreen="summary";renderMobileUI();} };
+bootstrapAuth = async function(){
+  const hadSessionBeforeBootstrap = !!(authToken && authUser);
+  await mobileV3WrappedBootstrapAuth();
+  /* A refresh restores the previous route. Only a genuinely new authenticated session starts at Summary. */
+  if(authToken && authUser && !hadSessionBeforeBootstrap){ mobileScreen="summary"; renderMobileUI(); }
+};
 
 /* En finanzas personales, el formulario de una deuda abre con ese perfil como responsable por defecto. */
 mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
@@ -4836,5 +4841,261 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
 })();
 </script>
 
+<script id="nexus-mobile-v18-route-and-profile-polish">
+(function(){
+  'use strict';
+  const VALID = new Set(['summary','income','homeExpenses','savings','available','goals','more','debts','calendar','accounts','personalMe','personalPartner','settings']);
+  const q=(selector,root=document)=>root.querySelector(selector);
+  const qa=(selector,root=document)=>Array.from(root.querySelectorAll(selector));
+  const textNorm=value=>String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();
+  const escV18=value=>typeof esc==='function'?esc(String(value??'')):String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const aliases={home:'summary',dashboard:'summary',reports:'summary',movements:'summary',expenses:'homeExpenses',availableFunds:'available'};
+  function normalizedRoute(value){const route=aliases[value]||value;return VALID.has(route)?route:'summary';}
+  function identityKey(){
+    const who=String(authUser?.id||authUser?.username||authUser?.email||window.nexusV17CurrentProfile?.()||'default').trim().toLowerCase();
+    return encodeURIComponent(who||'default');
+  }
+  function routeKey(){return 'nexus_mobile_last_screen_v18_'+identityKey();}
+  function legacyRouteKeys(){
+    const identity=String(authUser?.id||authUser?.username||authUser?.email||window.nexusV17CurrentProfile?.()||'default').trim().toLowerCase();
+    const encoded=encodeURIComponent(identity||'default');
+    return ['nexus_mobile_last_screen_v17_'+encoded,'nexus_mobile_last_screen_v1_'+encoded];
+  }
+  function readSavedRoute(){
+    try{
+      const candidates=[localStorage.getItem(routeKey()),sessionStorage.getItem(routeKey()),...legacyRouteKeys().flatMap(k=>[localStorage.getItem(k),sessionStorage.getItem(k)]),history.state?.nexusMobileScreen];
+      for(const candidate of candidates){if(candidate){const route=normalizedRoute(candidate);if(VALID.has(route))return route;}}
+    }catch(_){}
+    return 'summary';
+  }
+  function persistRoute(route=mobileScreen){
+    if(window.__nexusV18Restoring || !authToken || !authUser)return;
+    const normalized=normalizedRoute(route);
+    try{
+      localStorage.setItem(routeKey(),normalized);
+      sessionStorage.setItem(routeKey(),normalized);
+      // Keep previous app versions compatible while this installation is being updated.
+      for(const key of legacyRouteKeys())localStorage.setItem(key,normalized);
+      const old=(history.state&&typeof history.state==='object')?history.state:{};
+      history.replaceState({...old,nexusMobileScreen:normalized},'',location.href);
+    }catch(_){}
+  }
+  window.nexusV18ReadLastScreen=readSavedRoute;
+  window.nexusV18SaveLastScreen=persistRoute;
+
+  /* Generic language shared by both logged-in profiles. */
+  try{
+    if(typeof MOBILE_TITLES==='object'&&MOBILE_TITLES){
+      MOBILE_TITLES.personalMe=['Finanzas personales','Gastos, ahorros y obligaciones por perfil'];
+      MOBILE_TITLES.personalPartner=['Finanzas personales','Gastos, ahorros y obligaciones por perfil'];
+    }
+  }catch(_){}
+  if(typeof renderMobileMore==='function'){
+    const previousMore=renderMobileMore;
+    renderMobileMore=function renderMobileMoreV18(){
+      return String(previousMore.apply(this,arguments)||'')
+        .replace(/Consulta tu saldo y el de tu pareja por separado/gi,'Consulta saldos y movimientos de ambos perfiles por separado')
+        .replace(/Consulta tu saldo y el de tu pareja/gi,'Consulta saldos y movimientos de ambos perfiles');
+    };
+    window.renderMobileMore=renderMobileMore;
+  }
+
+  function profileOfNode(node){
+    if(!node)return null;
+    if(node.classList?.contains('partner'))return 'partner';
+    if(node.classList?.contains('me'))return 'me';
+    const owner=node.querySelector?.('.m-v8-box-owner.partner,.m-v8-user-icon-preview.partner');
+    if(owner)return 'partner';
+    const own=node.querySelector?.('.m-v8-box-owner.me,.m-v8-user-icon-preview.me');
+    if(own)return 'me';
+    const input=node.querySelector?.('#mSetMe,#mSetPartner');
+    if(input?.id==='mSetMe')return 'me';
+    if(input?.id==='mSetPartner')return 'partner';
+    const names=state?.people||{me:'Ruben',partner:'Mauren'};
+    const content=textNorm(node.textContent||'');
+    const me=textNorm(names.me),partner=textNorm(names.partner);
+    const hasMe=!!me&&content.includes(me),hasPartner=!!partner&&content.includes(partner);
+    if(hasMe&&!hasPartner)return 'me';
+    if(hasPartner&&!hasMe)return 'partner';
+    const icon=node.querySelector?.('.m-v3-profile-title i,.m-v3-person-tile i,.m-v2-person-icon i,.m-v8-user-icon-preview i');
+    if(icon?.classList.contains('fa-person-dress'))return 'partner';
+    if(icon?.classList.contains('fa-person')||icon?.classList.contains('fa-person-simple'))return 'me';
+    return null;
+  }
+  function reorderAdjacentPair(own,other){
+    if(!own||!other||own===other||own.parentElement!==other.parentElement)return;
+    const parent=own.parentElement,children=Array.from(parent.children),oi=children.indexOf(own),ti=children.indexOf(other);
+    if(oi<0||ti<0||Math.abs(oi-ti)!==1)return; // Never move records or unrelated cards across the layout.
+    if(oi>ti)parent.insertBefore(own,other);
+  }
+  function reorderCardPairs(root){
+    const current=typeof window.nexusV17CurrentProfile==='function'?window.nexusV17CurrentProfile():'me';
+    const selectors=[
+      '.m-v2-person-card',
+      '.m-v2-available-card',
+      '.m-v3-profile-card',
+      '.m-v3-person-tile',
+      '.m-v8-box-manager',
+      '.m-v8-user-icon-card',
+      '.m-v3-account-select'
+    ];
+    for(const selector of selectors){
+      const nodes=qa(selector,root);const parents=new Map();
+      nodes.forEach(node=>{if(!node.parentElement)return;const arr=parents.get(node.parentElement)||[];arr.push(node);parents.set(node.parentElement,arr);});
+      for(const arr of parents.values()){
+        let meNode=arr.find(node=>profileOfNode(node)==='me')||null;
+        let partnerNode=arr.find(node=>profileOfNode(node)==='partner')||null;
+        // In the available screen the first card historically had no `.me` class.
+        if(selector==='.m-v2-available-card'&&arr.length===2){
+          partnerNode=arr.find(node=>node.classList.contains('partner'))||partnerNode;
+          meNode=arr.find(node=>node!==partnerNode)||meNode;
+        }
+        if(current==='partner')reorderAdjacentPair(partnerNode,meNode);
+        else reorderAdjacentPair(meNode,partnerNode);
+      }
+    }
+    const switcher=q('.m-profile-switch',root);
+    if(switcher){
+      const buttons=qa('button[onclick]',switcher);
+      const currentKey=current==='partner'?'personalPartner':'personalMe';
+      const otherKey=current==='partner'?'personalMe':'personalPartner';
+      const own=buttons.find(button=>(button.getAttribute('onclick')||'').includes(currentKey));
+      const other=buttons.find(button=>(button.getAttribute('onclick')||'').includes(otherKey));
+      reorderAdjacentPair(own,other);
+      buttons.forEach(button=>{
+        const isOwn=(button.getAttribute('onclick')||'').includes(currentKey);
+        button.classList.toggle('m-v18-current-profile',isOwn);
+      });
+    }
+    // The profile editor is named neutrally and puts the signed-in user's profile first.
+    const meInput=q('#mSetMe',root),partnerInput=q('#mSetPartner',root);
+    if(meInput&&partnerInput){
+      const meField=meInput.closest('.field'),partnerField=partnerInput.closest('.field');
+      const meLabel=meField?.querySelector('label'),partnerLabel=partnerField?.querySelector('label');
+      if(meLabel)meLabel.textContent='Nombre del perfil '+(state.people?.me||'Ruben');
+      if(partnerLabel)partnerLabel.textContent='Nombre del perfil '+(state.people?.partner||'Mauren');
+      const otherFirst=current==='partner';
+      reorderAdjacentPair(otherFirst?partnerField:meField,otherFirst?meField:partnerField);
+    }
+    // Keep the Home + Savings accounts fixed; only order the two personal accounts by current profile.
+    const accountParents=new Set(qa('.m-v3-account-select',root).map(node=>node.parentElement).filter(Boolean));
+    for(const parent of accountParents){
+      const cards=Array.from(parent.children).filter(node=>node.matches?.('.m-v3-account-select'));
+      const meCard=cards.find(node=>profileOfNode(node)==='me');
+      const partnerCard=cards.find(node=>profileOfNode(node)==='partner');
+      if(current==='partner')reorderAdjacentPair(partnerCard,meCard);else reorderAdjacentPair(meCard,partnerCard);
+    }
+    // Keep the account card in Más aligned with the authenticated profile.
+    if(mobileScreen==='more'){
+      const avatar=q('.m-profile-avatar',root);if(avatar)avatar.textContent=String(state.people?.[current]||'N').trim().slice(0,1).toUpperCase();
+      const menuButton=qa('.m-menu-list button[onclick]',root).find(button=>/personalMe|personalPartner/.test(button.getAttribute('onclick')||''));
+      if(menuButton)menuButton.setAttribute('onclick',`mobileSetScreen('${current==='partner'?'personalPartner':'personalMe'}')`);
+    }
+    // Make the welcome name correspond to the signed-in profile, independent of how the API labels its role.
+    if(mobileScreen==='summary'||mobileScreen==='home'){
+      const heading=q('.m-welcome h2',root);
+      if(heading){
+        const name=String(state.people?.[current]||'').trim();
+        if(name)heading.textContent=`Hola, ${name} 👋`;
+      }
+    }
+    // Explicit order for debt responsibility groups: household first, current user's group second.
+    if(mobileScreen==='debts'){
+      const container=q('.m-v17-debt-groups',root);
+      if(container){
+        const groups=qa(':scope > .m-v17-debt-group',container);
+        const groupFor=key=>groups.find(group=>{
+          const heading=textNorm(group.querySelector('.m-section-heading h3')?.textContent||'');
+          const ownerName=textNorm(key==='me'?(state.people?.me||'Ruben'):(state.people?.partner||'Mauren'));
+          return key==='home'?heading.includes('hogar'):heading===ownerName||heading.endsWith(ownerName);
+        });
+        const home=groupFor('home'),own=groupFor(current),other=groupFor(current==='partner'?'me':'partner');
+        [home,own,other].filter(Boolean).forEach(group=>container.appendChild(group));
+      }
+    }
+  }
+
+  if(typeof mobileSetScreen==='function'){
+    const previousSetScreen=mobileSetScreen;
+    mobileSetScreen=function mobileSetScreenV18(name){
+      const result=previousSetScreen.apply(this,arguments);
+      persistRoute(mobileScreen);
+      return result;
+    };
+    window.mobileSetScreen=mobileSetScreen;
+  }
+  if(typeof renderMobileUI==='function'){
+    const previousRender=renderMobileUI;
+    renderMobileUI=function renderMobileUIV18(){
+      const result=previousRender.apply(this,arguments);
+      try{reorderCardPairs(q('#mContent')||document);}catch(error){console.warn('Nexus V18: no se pudo ordenar la vista por perfil.',error);}
+      persistRoute(mobileScreen);
+      return result;
+    };
+    window.renderMobileUI=renderMobileUI;
+  }
+
+  /* Refresh restoration: snapshot the stored route BEFORE older wrappers render their default Summary. */
+  if(typeof bootstrapAuth==='function'){
+    const previousBootstrap=bootstrapAuth;
+    bootstrapAuth=async function bootstrapAuthV18(){
+      const hadSession=!!(authToken&&authUser);
+      const routeBeforeBootstrap=hadSession?readSavedRoute():'summary';
+      window.__nexusV18Restoring=true;
+      let result;
+      try{result=await previousBootstrap.apply(this,arguments);}
+      finally{window.__nexusV18Restoring=false;}
+      if(authToken&&authUser){
+        const target=hadSession?routeBeforeBootstrap:'summary';
+        mobileScreen=normalizedRoute(target);
+        try{renderMobileUI();}catch(error){console.warn('Nexus V18: no se pudo restaurar la sección guardada.',error);}
+        persistRoute(mobileScreen);
+        try{
+          const old=(history.state&&typeof history.state==='object')?history.state:{};
+          history.replaceState({...old,nexusMobileScreen:mobileScreen},'',location.href);
+        }catch(_){}
+      }
+      return result;
+    };
+    window.bootstrapAuth=bootstrapAuth;
+  }
+  if(typeof submitAuth==='function'){
+    const previousSubmit=submitAuth;
+    submitAuth=async function submitAuthV18(){
+      const hadSession=!!(authToken&&authUser);
+      const before=String(authUser?.id||authUser?.username||authUser?.email||'');
+      const result=await previousSubmit.apply(this,arguments);
+      const after=String(authUser?.id||authUser?.username||authUser?.email||'');
+      if(authToken&&authUser&&(!hadSession||before!==after)){
+        mobileScreen='summary';
+        try{renderMobileUI();}catch(_){}
+        persistRoute('summary');
+      }
+      return result;
+    };
+    window.submitAuth=submitAuth;
+  }
+  window.addEventListener('pagehide',()=>persistRoute());
+  window.addEventListener('beforeunload',()=>persistRoute());
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')persistRoute();});
+
+  // Give the shared profile pages the same neutral explanatory copy regardless of who is signed in.
+  if(typeof renderMobileMore==='function'){
+    const prev=renderMobileMore;
+    renderMobileMore=function renderMobileMoreV18(){
+      return String(prev.apply(this,arguments)||'').replace(/Consulta tu saldo y el de tu pareja por separado/gi,'Consulta saldos y movimientos de ambos perfiles por separado');
+    };
+    window.renderMobileMore=renderMobileMore;
+  }
+
+  const style=document.createElement('style');style.id='nexus-mobile-v18-consistent-profile-order';style.textContent=`
+    .m-profile-switch .m-v18-current-profile{border-color:var(--owner-color,#38bdf8)!important;box-shadow:inset 0 -2px var(--owner-color,#38bdf8)!important;color:#fff!important}
+    .m-v3-person-tile,.m-v2-person-card,.m-v2-available-card,.m-v3-profile-card,.m-v8-box-manager,.m-v8-user-icon-card,.m-v3-account-select{scroll-margin-top:12px}
+  `;document.head.appendChild(style);
+
+  // Delay initial startup until this patch is fully attached; this is important on mobile WebViews.
+  if(!window.__NEXUS_TEST_DISABLE_BOOTSTRAP__)setTimeout(()=>{try{bootstrapAuth();}catch(error){console.error('Nexus: error al iniciar',error);}},0);
+})();
+</script>
 </body>
 </html>
