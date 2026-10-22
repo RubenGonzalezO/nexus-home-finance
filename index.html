@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Finance · App móvil V15</title>
+<title>Nexus Finance · App móvil V17</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 :root{
@@ -830,7 +830,7 @@ function renderAll(){
  if(activeModule==="personalMe"||activeModule==="personalPartner")renderPersonalModule();
  renderDashboardMinis();renderAccounts();
 }
-const CAT_COLORS=["#8b5cf6","#fb923c","#34d399","#60a5fa","#f472b6","#facc15","#22d3ee","#a3e635"];
+const CAT_COLORS=["#8b5cf6","#fb923c","#34d399","#60a5fa","#f472b6","#facc15","#22d3ee","#94a3b8"];
 const PERSON_COLORS={me:"#8b5cf6",partner:"#fb923c"};
 const SAVING_COLORS={financial:"#34d399",unexpected:"#60a5fa",emergency:"#f472b6"};
 const MODULE_COLORS={income:"#a78bfa",expense:"#fb923c",saving:"#34d399",personal:"#60a5fa",debt:"#f472b6",home:"#facc15"};
@@ -2040,17 +2040,31 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
   }
   function mobileV4ScheduleStatus(x){return x?.status==='pending'?'pending':'paid';}
   function mobileV4FormatPercent(r){return Number.isFinite(r)?`${Math.round(r*100)}%`:'Sin ingresos';}
-  function mobileV4Preflight({kind,amount,date,id='',oldAmount=null},commit){
+  function mobileV4Preflight({kind,amount,date,id='',oldAmount=null,person=null},commit){
     const outflow=['expense','saving','personalExpense','personalSaving','debtPayment'].includes(kind);
     if(!outflow){commit();return;}
     const monthKey=String(date||dateNow()).slice(0,7)||dateNow().slice(0,7);
-    const base=mobileV4BuildBudget(monthKey,kind==='expense'?'expense':kind==='saving'?'saving':kind==='personalExpense'||kind==='personalSaving'||kind==='debtPayment'?'personal':'',id);
-    const projected=base.committed+(Number(amount)||0),ratio=base.income>0?projected/base.income:(projected>0?Infinity:0);
-    const before=(base.committed+(oldAmount===null?0:Number(oldAmount)||0)),beforeRatio=base.income>0?before/base.income:(before>0?Infinity:0);
+    let base=mobileV4BuildBudget(monthKey,kind==='expense'?'expense':kind==='saving'?'saving':kind==='personalExpense'||kind==='personalSaving'||kind==='debtPayment'?'personal':'',id);
+    let projected=base.committed+(Number(amount)||0),ratio=base.income>0?projected/base.income:(projected>0?Infinity:0);
+    let before=(base.committed+(oldAmount===null?0:Number(oldAmount)||0)),beforeRatio=base.income>0?before/base.income:(before>0?Infinity:0);
     const increases=oldAmount===null||(Number(amount)||0)>(Number(oldAmount)||0)+0.01;
-    const doCommit=()=>{commit();if(increases&&ratio>=0.8&&ratio<1&&beforeRatio<0.8){setTimeout(()=>toast(`⚠️ Presupuesto al ${mobileV4FormatPercent(ratio)}. Ya superaste el 80 % del dinero disponible.`),130);}else if(increases&&ratio>=1){setTimeout(()=>toast(`⚠️ Movimiento confirmado. El presupuesto quedará al ${mobileV4FormatPercent(ratio)}${base.income>0?`, saldo proyectado: ${money(base.income-projected)}`:' porque aún no hay ingresos registrados'}.`),130);}};
+    const personalGuard=['personalExpense','personalSaving','debtPayment'].includes(kind)&&['me','partner'].includes(person);
+    if(personalGuard&&typeof window.nexusV16LiveSnapshot==='function'){
+      try{
+        const parts=monthKey.split('-').map(Number),snapshot=window.nexusV16LiveSnapshot({year:parts[0],month:String(parts[1])}),profile=snapshot?.profiles?.[person];
+        if(profile){
+          const personalIncome=Number(profile.assigned||0)+Number(profile.extraIncome||0);
+          const currentCommitted=Number(profile.personalSpent||0)+Number(profile.personalSaved||0);
+          const committedBefore=Math.max(0,currentCommitted-(oldAmount===null?0:Number(oldAmount)||0));
+          before=committedBefore;projected=committedBefore+(Number(amount)||0);base={income:personalIncome,committed:committedBefore,available:personalIncome-committedBefore};
+          ratio=base.income>0?projected/base.income:(projected>0?Infinity:0);
+          beforeRatio=base.income>0?before/base.income:(before>0?Infinity:0);
+        }
+      }catch(error){console.warn('Nexus V17: no se pudo calcular el tope personal; se mantiene la validación general.',error);}
+    }
+    const doCommit=()=>{commit();if(increases&&ratio>=0.8&&ratio<1&&beforeRatio<0.8){setTimeout(()=>toast(`⚠️ ${personalGuard?'Tu presupuesto personal':'Presupuesto del hogar'} al ${mobileV4FormatPercent(ratio)}. Ya superaste el 80 % del dinero disponible.`),130);}else if(increases&&ratio>=1){setTimeout(()=>toast(`⚠️ Movimiento confirmado. ${personalGuard?'Tu presupuesto personal':'El presupuesto del hogar'} quedará al ${mobileV4FormatPercent(ratio)}${base.income>0?`, saldo proyectado: ${money(base.income-projected)}`:' porque aún no hay ingresos registrados'}.`),130);}};
     if(increases&&ratio>=1){
-      confirmInApp(`Este movimiento llevaría tus compromisos del periodo al ${mobileV4FormatPercent(ratio)}${base.income>0?` y dejaría el saldo en ${money(base.income-projected)}`:' sin ingresos registrados'}. ¿Deseas registrarlo de todas formas, aunque el disponible quede en cero o en negativo?`,doCommit,{confirmLabel:'Sí, registrar movimiento',danger:true});return;
+      confirmInApp(`Este movimiento llevaría ${personalGuard?'tu presupuesto personal':'los compromisos del hogar'} al ${mobileV4FormatPercent(ratio)}${base.income>0?` y dejaría el saldo en ${money(base.income-projected)}`:' sin ingresos registrados'}. ¿Deseas registrarlo de todas formas, aunque el disponible quede en cero o en negativo?`,doCommit,{confirmLabel:'Sí, registrar movimiento',danger:true});return;
     }
     doCommit();
   }
@@ -2081,7 +2095,7 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
         saveState();renderMobileUI();toast('Pendiente. Se retiró de los cálculos y sigue visible en el calendario.');
       }
     };
-    if(markPaid)mobileV4Preflight({kind:kind==='expense'?'expense':'personalExpense',amount:Number(rec.amount)||0,date:rec.paymentDate||rec.date||dateNow(),id:rec.id,oldAmount:null},commit);else commit();
+    if(markPaid)mobileV4Preflight({kind:kind==='expense'?'expense':'personalExpense',amount:Number(rec.amount)||0,date:rec.paymentDate||rec.date||dateNow(),id:rec.id,oldAmount:null,person:kind==='expense'?null:rec.person},commit);else commit();
   }
   function mobileV4StatusHtml(rec,kind){
     const status=mobileV4ScheduleStatus(rec),isHome=kind==='expense',label=status==='pending'?'Pendiente':'Pagado',cls=status==='pending'?'pending':'paid';
@@ -2097,7 +2111,21 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
       (state.expenses||[]).filter(x=>x.status==='pending'&&x.paymentScheduled&&x.paymentDate).forEach(x=>{const delta=dateDiff(x.paymentDate);if(delta<0)add('critical','Pago del hogar vencido',`${x.category} · ${money(x.amount)} · ${mobileV3DateLabel(x.paymentDate)}`,()=>{openExpense(x.category,x.id)});else if(delta<=3)add(delta===0?'warning':'info',delta===0?'Pago del hogar vence hoy':'Pago del hogar próximo',`${x.category} · ${money(x.amount)} · ${delta===0?'hoy':delta===1?'mañana':`en ${delta} días`}`,()=>{openExpense(x.category,x.id)});});
       (state.personalSpending||[]).filter(x=>['expense','other-expense'].includes(personalMovementType(x))&&x.status==='pending'&&x.paymentScheduled&&x.paymentDate).forEach(x=>{const delta=dateDiff(x.paymentDate);if(delta<0)add('critical','Pago personal vencido',`${state.people[x.person]} · ${x.category||'Gasto'} · ${money(x.amount)}`,()=>{openPersonalMovement(x.person,personalMovementType(x),x.id)});else if(delta<=3)add(delta===0?'warning':'info',delta===0?'Pago personal vence hoy':'Pago personal próximo',`${state.people[x.person]} · ${x.category||'Gasto'} · ${money(x.amount)}`,()=>{openPersonalMovement(x.person,personalMovementType(x),x.id)});});
     }
-    if(p.budgetAlerts){const b=mobileV4BudgetSnapshot(today);if(b.ratio>=1)add('critical','Presupuesto superado',`Compromisos ${money(b.committed)} frente a ingresos ${money(b.income)} (${mobileV4FormatPercent(b.ratio)}). Disponible proyectado: ${money(b.available)}.`,()=>mobileSetScreen('available'));else if(b.ratio>=.8)add('warning','Presupuesto por encima del 80 %',`Has comprometido ${money(b.committed)} de ${money(b.income)} (${mobileV4FormatPercent(b.ratio)}). Disponible proyectado: ${money(b.available)}.`,()=>mobileSetScreen('available'));}
+    if(p.budgetAlerts){const b=mobileV4BudgetSnapshot(today);if(b.ratio>=1)add('critical','Presupuesto general superado',`Compromisos ${money(b.committed)} frente a ingresos ${money(b.income)} (${mobileV4FormatPercent(b.ratio)}). Disponible proyectado: ${money(b.available)}.`,()=>mobileSetScreen('available'));else if(b.ratio>=.8)add('warning','Presupuesto general por encima del 80 %',`Has comprometido ${money(b.committed)} de ${money(b.income)} (${mobileV4FormatPercent(b.ratio)}). Disponible proyectado: ${money(b.available)}.`,()=>mobileSetScreen('available'));}
+    /* La alerta personal se calcula para la cuenta que inició sesión, no solo para el total compartido. */
+    try{
+      const currentPerson=typeof window.nexusV17CurrentProfile==='function'?window.nexusV17CurrentProfile():(authUser?.role==='partner'?'partner':'me');
+      const personalEnabled=typeof window.nexusV17PersonalBudgetAlertsEnabled==='function'?window.nexusV17PersonalBudgetAlertsEnabled():true;
+      if(personalEnabled&&typeof window.nexusV16LiveSnapshot==='function'){
+        const nowParts=today.split('-').map(Number),snap=window.nexusV16LiveSnapshot({year:nowParts[0],month:String(nowParts[1])}),profile=snap?.profiles?.[currentPerson];
+        if(profile){
+          const personalIncome=Number(profile.assigned||0)+Number(profile.extraIncome||0),personalCommitted=Number(profile.personalSpent||0)+Number(profile.personalSaved||0);
+          const personalRatio=personalIncome>0?personalCommitted/personalIncome:(personalCommitted>0||personalIncome<0?Infinity:0),personalAvailable=personalIncome-personalCommitted;
+          if(personalRatio>=1)add('critical','Tu presupuesto personal está superado',`Tus gastos, pagos y ahorros personales suman ${money(personalCommitted)} sobre ${money(personalIncome)} disponibles (${mobileV4FormatPercent(personalRatio)}). Tu saldo personal es ${money(personalAvailable)}.`,()=>mobileSetScreen(currentPerson==='partner'?'personalPartner':'personalMe'),'Ver mis finanzas personales');
+          else if(personalRatio>=.8)add('warning','Tu presupuesto personal supera el 80 %',`Has comprometido ${money(personalCommitted)} de ${money(personalIncome)} disponibles (${mobileV4FormatPercent(personalRatio)}). Te quedan ${money(personalAvailable)}.`,()=>mobileSetScreen(currentPerson==='partner'?'personalPartner':'personalMe'),'Ver mis finanzas personales');
+        }
+      }
+    }catch(error){console.warn('Nexus V17: no se pudo calcular la alerta personal.',error);}
     return alerts.sort((a,b)=>({critical:0,warning:1,info:2}[a.severity])-({critical:0,warning:1,info:2}[b.severity]));
   }
   function mobileV4ShowAlerts(){
@@ -2201,7 +2229,7 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     const guarded=['expense','other-expense'].includes(actualType)?'personalExpense':actualType==='saving'?'personalSaving':actualType==='debt'?'debtPayment':'';
     const dateBudget=status==='pending'?paymentDate:(rec.paidDate||rec.date);
     const commit=()=>{state.personalSpending=state.personalSpending||[];if(existing)state.personalSpending=state.personalSpending.map(x=>x.id===id?rec:x);else state.personalSpending.push(rec);if(existing&&existing.status==='pending'&&status==='paid'&&rec.repeatMonthly)mobileV4MaybeCreateNext(rec,'personal');saveState();closeModal();renderMobileUI();setTimeout(()=>toast(existing?'Movimiento personal actualizado':`${personalTypeLabel(actualType)} registrado`),30);};
-    if(isExpense&&status==='pending')commit();else mobileV4Preflight({kind:guarded,amount,date:dateBudget||rec.date,id:existing?.id||'',oldAmount},commit);
+    if(isExpense&&status==='pending')commit();else mobileV4Preflight({kind:guarded,amount,date:dateBudget||rec.date,id:existing?.id||'',oldAmount,person},commit);
   };
 
   /* Guardado de ahorros: protección preventiva si consumen demasiado disponible. */
@@ -2215,7 +2243,7 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     e.preventDefault();const d=state.debts.find(x=>x.id===id);if(!d)return;const payer=payerPerson||(d.owner==='partner'?'partner':'me');
     if(d.owner!=='home'&&d.owner!==payer)return toast('No puedes registrar pagos en la deuda personal de la otra persona.');
     const amount=num(document.getElementById('debtPaymentAmount').value);if(!amount||amount<=0)return toast('Ingresa un monto válido.');if(amount>Number(d.balance))return toast('El abono no puede superar el saldo pendiente.');
-    mobileV4Preflight({kind:'debtPayment',amount,date:dateNow(),oldAmount:null},()=>{const undoBefore=snapshotNexusState(),paymentId=nexusUUID(),paymentDate=dateNow();d.balance=Math.max(0,Number(d.balance)-amount);d.status=d.balance===0?'paid':'pending';d.payments=Array.isArray(d.payments)?d.payments:[];d.payments.push({id:paymentId,date:paymentDate,amount,person:payer});state.personalSpending=Array.isArray(state.personalSpending)?state.personalSpending:[];state.personalSpending.push({id:paymentId,person:payer,date:paymentDate,amount,type:'debt',category:'Deudas y obligaciones',desc:`Abono a deuda: ${d.name}`,debtId:d.id,paymentId});saveState();closeModal();renderMobileUI();setTimeout(()=>showUndoToast(d.status==='paid'?'Deuda saldada y abono registrado':'Abono registrado en la deuda y en las finanzas personales',undoBefore,'fa-rotate-left'),120);});
+    mobileV4Preflight({kind:'debtPayment',amount,date:dateNow(),oldAmount:null,person:payer},()=>{const undoBefore=snapshotNexusState(),paymentId=nexusUUID(),paymentDate=dateNow();d.balance=Math.max(0,Number(d.balance)-amount);d.status=d.balance===0?'paid':'pending';d.payments=Array.isArray(d.payments)?d.payments:[];d.payments.push({id:paymentId,date:paymentDate,amount,person:payer});state.personalSpending=Array.isArray(state.personalSpending)?state.personalSpending:[];state.personalSpending.push({id:paymentId,person:payer,date:paymentDate,amount,type:'debt',category:'Deudas y obligaciones',desc:`Abono a deuda: ${d.name}`,debtId:d.id,paymentId});saveState();closeModal();renderMobileUI();setTimeout(()=>showUndoToast(d.status==='paid'?'Deuda saldada y abono registrado':'Abono registrado en la deuda y en las finanzas personales',undoBefore,'fa-rotate-left'),120);});
   };
 
   /* Ajuste de cuentas calculadas para incluir fechas de pago y lectura solamente. */
@@ -2264,7 +2292,7 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     catch(err){try{localStorage.setItem(KEY+'_'+authUser.id,JSON.stringify(state));}catch(_){}saveState();renderMobileUI();toast('Personalización guardada localmente; no se pudo confirmar el cambio de usuario en la nube: '+err.message);}
     finally{hideLoader(true);}
   };
-  window.mobileV4ResetAppearance=function(){const p=mobileV4EnsurePrefs();p.theme='purple';p.spacing='comfortable';p.meColor='#38bdf8';p.partnerColor='#fb7185';p.categoryColors={};p.categoryIcons={};p.budgetAlerts=true;p.dueAlerts=true;const defaults=['#8b5cf6','#fb923c','#34d399','#60a5fa','#f472b6','#facc15','#22d3ee','#a3e635'];CATS.forEach((c,i)=>{if(typeof CAT_COLORS!=='undefined')CAT_COLORS[c]=defaults[i%defaults.length];p.categoryColors[c]=defaults[i%defaults.length];p.categoryIcons[c]=mobileV4CatIcon(c);});mobileV4ApplyPrefs();saveState();renderMobileUI();toast('Apariencia predeterminada restaurada. Los datos financieros no se modificaron.');};
+  window.mobileV4ResetAppearance=function(){const p=mobileV4EnsurePrefs();p.theme='purple';p.spacing='comfortable';p.meColor='#38bdf8';p.partnerColor='#fb7185';p.categoryColors={};p.categoryIcons={};p.budgetAlerts=true;p.dueAlerts=true;const defaults=['#8b5cf6','#fb923c','#34d399','#60a5fa','#f472b6','#facc15','#22d3ee','#94a3b8'];CATS.forEach((c,i)=>{if(typeof CAT_COLORS!=='undefined')CAT_COLORS[c]=defaults[i%defaults.length];p.categoryColors[c]=defaults[i%defaults.length];p.categoryIcons[c]=mobileV4CatIcon(c);});mobileV4ApplyPrefs();saveState();renderMobileUI();toast('Apariencia predeterminada restaurada. Los datos financieros no se modificaron.');};
 
   /* Renderer superior: estado de sincronización en semáforo y cuadro contextual junto al título. */
   const mobileV4OriginalRenderer=renderMobileUI;
@@ -2762,7 +2790,7 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     'Arriendo':'Arriendo y vivienda','Mercado':'Mercado y alimentos','Luz':'Energía eléctrica','Agua':'Agua','Gas':'Gas domiciliario','Internet':'Internet','Transporte':'Transporte','Otros':'Otros gastos'
   };
   const categoryColorDefaults = {
-    'Arriendo':'#a78bfa','Mercado':'#fb923c','Luz':'#facc15','Agua':'#60a5fa','Gas':'#f97316','Internet':'#22d3ee','Transporte':'#34d399','Otros':'#c084fc'
+    'Arriendo':'#a78bfa','Mercado':'#fb923c','Luz':'#facc15','Agua':'#60a5fa','Gas':'#f97316','Internet':'#22d3ee','Transporte':'#34d399','Otros':'#94a3b8'
   };
   const defaultCategoryIcons = {
     'Arriendo':'fa-house','Mercado':'fa-cart-shopping','Luz':'fa-bolt','Agua':'fa-droplet','Gas':'fa-fire-flame-simple','Internet':'fa-wifi','Transporte':'fa-car-side','Otros':'fa-receipt'
@@ -3051,7 +3079,7 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     'Gas':{label:'Gas',color:'#f97316',icon:'fa-fire-flame-simple'},
     'Internet':{label:'Internet',color:'#22d3ee',icon:'fa-wifi'},
     'Transporte':{label:'Transporte',color:'#34d399',icon:'fa-car-side'},
-    'Otros':{label:'Otros',color:'#c084fc',icon:'fa-receipt'}
+    'Otros':{label:'Otros',color:'#94a3b8',icon:'fa-receipt'}
   };
   const savingPalette={
     financial:{label:'Ahorro Financiero',color:'#34d399',icon:'fa-chart-line'},
@@ -3303,7 +3331,7 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
 <script id="nexus-mobile-v9-cross-screen-consistency">
 /* V9 final cross-screen consistency: category names, icons and fixed palette in modal histories. */
 (()=>{
-  document.title='Nexus Finance · App móvil V9';
+  document.title='Nexus Finance · App móvil V17';
   try{
     // Keep the legacy expense dialog bound to the same fixed palette and editable icon map.
     if(typeof window.mobileV9CategoryIcon==='function')window.mobileV4CatIcon=window.mobileV9CategoryIcon;
@@ -4112,6 +4140,699 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     @media(max-width:360px){#modalBox .m-v15-action-grid{gap:7px!important}#modalBox .m-v15-picker-button{padding:11px 8px!important;font-size:11px!important}}
   `;
   document.head.appendChild(style);
+})();
+</script>
+
+<script id="nexus-mobile-v16-patch">
+(function(){
+  'use strict';
+
+  /* Persist the last mobile section per account. Login starts at Summary;
+     a page refresh restores the last visited section instead of forcing Summary. */
+  const allowedScreens = new Set(['summary','income','homeExpenses','savings','available','goals','more','debts','calendar','accounts','reports','personalMe','personalPartner','settings']);
+  function screenKey(user=authUser){
+    const identity=String(user?.id||user?.username||user?.email||'default');
+    return 'nexus_mobile_last_screen_v1_'+encodeURIComponent(identity.toLowerCase());
+  }
+  function normalizeScreen(name){
+    const aliases={home:'summary',reports:'summary',movements:'summary',expenses:'homeExpenses',availableFunds:'available'};
+    const normalized=aliases[name]||name;
+    return allowedScreens.has(normalized)?normalized:'summary';
+  }
+  function saveCurrentScreen(){
+    if(!authToken||!authUser)return;
+    try{localStorage.setItem(screenKey(),normalizeScreen(mobileScreen));}catch(_){/* Storage may be blocked; navigation still works. */}
+  }
+  function storedScreen(){
+    try{const value=localStorage.getItem(screenKey());return value&&allowedScreens.has(value)?value:'summary';}catch(_){return 'summary';}
+  }
+  if(typeof mobileSetScreen==='function'){
+    const priorSetScreenV16=mobileSetScreen;
+    mobileSetScreen=function mobileSetScreenV16(name){
+      const result=priorSetScreenV16.apply(this,arguments);
+      saveCurrentScreen();
+      return result;
+    };
+    window.mobileSetScreen=mobileSetScreen;
+  }
+  if(typeof submitAuth==='function'){
+    const priorSubmitAuthV16=submitAuth;
+    submitAuth=async function submitAuthV16(){
+      const result=await priorSubmitAuthV16.apply(this,arguments);
+      /* An explicit sign-in always starts at the principal summary. */
+      if(authToken&&authUser){mobileScreen='summary';try{renderMobileUI();}catch(_){}saveCurrentScreen();}
+      return result;
+    };
+    window.submitAuth=submitAuth;
+  }
+  if(typeof bootstrapAuth==='function'){
+    const priorBootstrapAuthV16=bootstrapAuth;
+    bootstrapAuth=async function bootstrapAuthV16(){
+      const restoringExistingSession=!!(authToken&&authUser);
+      const result=await priorBootstrapAuthV16.apply(this,arguments);
+      if(authToken&&authUser){
+        mobileScreen=restoringExistingSession?storedScreen():'summary';
+        try{renderMobileUI();}catch(error){console.warn('Nexus V16: no se pudo restaurar la última sección.',error);}
+        saveCurrentScreen();
+      }
+      return result;
+    };
+    window.bootstrapAuth=bootstrapAuth;
+  }
+  /* Back/edge-swipe handlers change mobileScreen directly, so persist after all popstate listeners. */
+  window.addEventListener('popstate',()=>setTimeout(saveCurrentScreen,0));
+  window.addEventListener('hashchange',()=>setTimeout(saveCurrentScreen,0));
+
+  /* One consistent live balance for the dashboard and the Available section.
+     Only paid/realized outflows count. Pending scheduled payments remain visible
+     in history/calendar, but do not reduce the money currently available. */
+  function amountOf(value){
+    if(typeof value==='number'&&Number.isFinite(value))return Math.abs(value);
+    const direct=Number(value);
+    if(Number.isFinite(direct))return Math.abs(direct);
+    return Math.abs(typeof num==='function'?num(value):0);
+  }
+  function currentFilter(){
+    try{return getFilter();}catch(_){const now=new Date();return {year:now.getFullYear(),month:String(now.getMonth()+1)};}
+  }
+  function effectiveDate(row,kind){
+    if(!row)return '';
+    if(kind==='homeExpense'&&row.status==='pending'&&row.paymentScheduled&&row.paymentDate)return row.paymentDate;
+    if(kind==='personal'&&row.status==='pending'&&row.paymentScheduled&&row.paymentDate)return row.paymentDate;
+    return row.paidDate||row.date||'';
+  }
+  function inSelectedPeriod(date,filter){
+    if(!date)return false;
+    try{return typeof inPeriod==='function'?inPeriod(date,Number(filter.year),filter.month===undefined?'all':filter.month):String(date).slice(0,4)===String(filter.year);}
+    catch(_){return false;}
+  }
+  function typeOfPersonal(row){
+    return typeof personalMovementType==='function'?personalMovementType(row):(row?.type||'expense');
+  }
+  function personalRowsFor(person,filter){
+    return (state.personalSpending||[]).filter(row=>row.person===person&&inSelectedPeriod(effectiveDate(row,'personal'),filter));
+  }
+  function profileSnapshot(person,filter,paidHomeExpenses,homeSavings){
+    const homeIncomeRows=(state.incomes||[]).filter(row=>row.person===person&&row.status!=='pending'&&inSelectedPeriod(row.date,filter));
+    const homeIncome=homeIncomeRows.reduce((total,row)=>total+amountOf(row.amount),0);
+    const shareKey=person==='me'?'meAmount':'partnerAmount';
+    const homeExpenseShare=paidHomeExpenses.reduce((total,row)=>{
+      const hasShare=row[shareKey]!==undefined&&row[shareKey]!==null&&row[shareKey]!=='';
+      const split=hasShare?amountOf(row[shareKey]):amountOf(row.amount)/2;
+      return total+split;
+    },0);
+    const homeSavingShare=homeSavings.reduce((total,row)=>{
+      if(row.person===person)return total+amountOf(row.amount);
+      if(!row.person||!['me','partner'].includes(row.person))return total+amountOf(row.amount)/2;
+      return total;
+    },0);
+    const personal=personalRowsFor(person,filter);
+    const extraIncome=personal.filter(row=>typeOfPersonal(row)==='income'&&row.status!=='pending').reduce((total,row)=>total+amountOf(row.amount),0);
+    const personalSpent=personal.filter(row=>{
+      const type=typeOfPersonal(row);
+      return ['expense','other-expense','debt'].includes(type)&&row.status!=='pending';
+    }).reduce((total,row)=>total+amountOf(row.amount),0);
+    const personalSaved=personal.filter(row=>typeOfPersonal(row)==='saving'&&row.status!=='pending').reduce((total,row)=>total+amountOf(row.amount),0);
+    const assigned=homeIncome-homeExpenseShare-homeSavingShare;
+    return {person,homeIncome,homeExpenseShare,homeSavingShare,assigned,extraIncome,personalSpent,personalSaved,balance:assigned+extraIncome-personalSpent-personalSaved};
+  }
+  function liveSnapshot(filter=currentFilter()){
+    const incomes=(state.incomes||[]).filter(row=>row.status!=='pending'&&inSelectedPeriod(row.date,filter));
+    const personal=(state.personalSpending||[]).filter(row=>inSelectedPeriod(effectiveDate(row,'personal'),filter));
+    const paidHomeExpenses=(state.expenses||[]).filter(row=>row.status!=='pending'&&inSelectedPeriod(effectiveDate(row,'homeExpense'),filter));
+    const homeSavings=(state.savings||[]).filter(row=>row.status!=='pending'&&inSelectedPeriod(row.date,filter));
+    const homeIncome=incomes.reduce((total,row)=>total+amountOf(row.amount),0);
+    const extraIncome=personal.filter(row=>typeOfPersonal(row)==='income'&&row.status!=='pending').reduce((total,row)=>total+amountOf(row.amount),0);
+    const homeExpenses=paidHomeExpenses.reduce((total,row)=>total+amountOf(row.amount),0);
+    const householdSavings=homeSavings.reduce((total,row)=>total+amountOf(row.amount),0);
+    const personalExpenses=personal.filter(row=>['expense','other-expense','debt'].includes(typeOfPersonal(row))&&row.status!=='pending').reduce((total,row)=>total+amountOf(row.amount),0);
+    const personalSavings=personal.filter(row=>typeOfPersonal(row)==='saving'&&row.status!=='pending').reduce((total,row)=>total+amountOf(row.amount),0);
+    const totalIncome=homeIncome+extraIncome;
+    const householdOutflow=homeExpenses+householdSavings;
+    const personalOutflow=personalExpenses+personalSavings;
+    const committed=householdOutflow+personalOutflow;
+    const profiles={me:profileSnapshot('me',filter,paidHomeExpenses,homeSavings),partner:profileSnapshot('partner',filter,paidHomeExpenses,homeSavings)};
+    return {filter,homeIncome,extraIncome,totalIncome,homeExpenses,householdSavings,personalExpenses,personalSavings,householdOutflow,personalOutflow,committed,available:totalIncome-committed,profiles};
+  }
+  window.nexusV16LiveSnapshot=liveSnapshot;
+
+  function updateProfileCards(root,snapshot,selector){
+    const cards=root.querySelectorAll(selector);
+    cards.forEach((card,index)=>{
+      const person=index===0?'me':'partner';
+      const profile=snapshot.profiles[person];
+      if(!profile)return;
+      const directStrong=Array.from(card.children||[]).find(child=>child.tagName==='STRONG');
+      if(directStrong)directStrong.textContent=money(profile.assigned);
+      const meta=card.querySelector('.m-v3-profile-meta');
+      if(meta){
+        const spans=meta.querySelectorAll(':scope > span');
+        if(spans[0])spans[0].textContent=`Gastos y obligaciones personales: ${money(profile.personalSpent)}`;
+        if(spans[1])spans[1].textContent=`Ahorro personal: ${money(profile.personalSaved)}`;
+        if(spans[2])spans[2].textContent=`Ingresos extra: ${money(profile.extraIncome)}`;
+        if(spans[4]){
+          let b=spans[4].querySelector('b');
+          if(!b){spans[4].textContent='Saldo actual: ';b=document.createElement('b');spans[4].appendChild(b);}
+          b.textContent=money(profile.balance);b.classList.toggle('negative',profile.balance<0);b.classList.toggle('positive',profile.balance>=0);
+        }
+      }
+    });
+  }
+
+  /* Dashboard summary: replace the household-only value with the live, all-in balance. */
+  if(typeof renderMobileHome==='function'){
+    const priorHomeV16=renderMobileHome;
+    renderMobileHome=function renderMobileHomeV16(){
+      const source=priorHomeV16.apply(this,arguments);
+      if(typeof source!=='string')return source;
+      const snapshot=liveSnapshot();
+      const template=document.createElement('template');template.innerHTML=source;
+      const card=template.content.querySelector('.m-balance-card');
+      if(card){
+        const label=card.querySelector('.m-balance-top span:first-child');
+        if(label)label.innerHTML='<i class="fa-solid fa-wallet" aria-hidden="true"></i> Disponible real actual';
+        const value=card.querySelector('.m-balance-value');if(value)value.textContent=money(snapshot.available);
+        const copy=card.querySelector('p');if(copy)copy.textContent='En este momento tienes este saldo tras gastos y ahorros del hogar y movimientos personales realizados. Los pagos pendientes no se descuentan.';
+        const footer=card.querySelector('.m-balance-footer');
+        if(footer)footer.innerHTML=`<span><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i> Ingresos totales <b>${money(snapshot.totalIncome)}</b></span><span><i class="fa-solid fa-house-chimney" aria-hidden="true"></i> Salidas del hogar <b>${money(snapshot.householdOutflow)}</b></span><span><i class="fa-solid fa-user-group" aria-hidden="true"></i> Movimientos personales <b>${money(snapshot.personalOutflow)}</b></span>`;
+      }
+      const availableKpi=template.content.querySelector('.m-v3-kpi.available');
+      if(availableKpi){const strong=availableKpi.querySelector('strong');if(strong)strong.textContent=money(snapshot.available);const small=availableKpi.querySelector('small');if(small)small.textContent='Saldo real tras todos los movimientos pagados';}
+      updateProfileCards(template.content,snapshot,'.m-v3-profile-card');
+      return template.innerHTML;
+    };
+    window.renderMobileHome=renderMobileHome;
+  }
+
+  /* Available page: show the exact same total as the dashboard and a transparent breakdown. */
+  if(typeof renderMobileAvailable==='function'){
+    const priorAvailableV16=renderMobileAvailable;
+    renderMobileAvailable=function renderMobileAvailableV16(){
+      const source=priorAvailableV16.apply(this,arguments);
+      if(typeof source!=='string')return source;
+      const snapshot=liveSnapshot();
+      const template=document.createElement('template');template.innerHTML=source;
+      const hero=template.content.querySelector('.m-v2-hero.available');
+      if(hero){
+        const eyebrow=hero.querySelector('.m-v2-hero-top .m-eyebrow');
+        if(eyebrow)eyebrow.innerHTML='<i class="fa-solid fa-wallet" aria-hidden="true"></i> DISPONIBLE REAL ACTUAL';
+        const value=hero.querySelector('.m-v2-hero-total');if(value)value.textContent=money(snapshot.available);
+        const copy=hero.querySelector('p');if(copy)copy.textContent='Saldo del periodo después de gastos y ahorros del hogar, gastos y ahorros personales. Los pagos pendientes se mantienen fuera del cálculo hasta que se marquen pagados.';
+        const breakdown=hero.querySelector('.m-v2-duo-totals');
+        if(breakdown){breakdown.className='m-v16-live-breakdown';breakdown.innerHTML=`<div><small>Ingresos totales</small><b>${money(snapshot.totalIncome)}</b></div><div><small>Gastos del hogar</small><b>${money(snapshot.homeExpenses)}</b></div><div><small>Ahorros del hogar</small><b>${money(snapshot.householdSavings)}</b></div><div><small>Movimientos personales</small><b>${money(snapshot.personalOutflow)}</b></div>`;}
+      }
+      const cards=template.content.querySelectorAll('.m-v2-available-card');
+      cards.forEach((card,index)=>{
+        const person=index===0?'me':'partner';const profile=snapshot.profiles[person];if(!profile)return;
+        const topStrong=card.querySelector('.m-v2-available-top > strong');if(topStrong)topStrong.textContent=money(profile.assigned);
+        const topSmall=card.querySelector('.m-v2-available-top small');if(topSmall)topSmall.textContent='Asignado tras gastos y ahorros del hogar';
+        const breakdown=card.querySelector('.m-v2-breakdown');
+        if(breakdown){breakdown.classList.add('m-v16-person-breakdown');breakdown.innerHTML=`<span><small>Responsabilidad de gastos del hogar</small><b>${money(profile.homeExpenseShare)}</b></span><span><small>Aporte a ahorros del hogar</small><b>${money(profile.homeSavingShare)}</b></span><span><small>Gastos personales y deudas pagados</small><b>${money(profile.personalSpent)}</b></span><span><small>Ahorro personal</small><b>${money(profile.personalSaved)}</b></span><span><small>Ingresos adicionales</small><b>${money(profile.extraIncome)}</b></span>`;}
+        const current=card.querySelector('.m-v2-current-balance b');if(current){current.textContent=money(profile.balance);current.classList.toggle('negative',profile.balance<0);current.classList.toggle('positive',profile.balance>=0);}
+      });
+      const meter=template.content.querySelector('.m-v4-budget-meter');
+      if(meter){
+        const ratio=snapshot.totalIncome>0?snapshot.committed/snapshot.totalIncome:(snapshot.committed>0?Infinity:0);
+        const ratioLabel=Number.isFinite(ratio)?`${Math.round(ratio*100)}%`:'Sin ingresos';
+        const title=meter.querySelector('.m-v4-budget-head span');if(title)title.innerHTML='<i class="fa-solid fa-gauge-high" aria-hidden="true"></i> Compromisos del periodo';
+        const percent=meter.querySelector('.m-v4-budget-head b');if(percent){percent.textContent=ratioLabel;percent.classList.toggle('negative',ratio>=1);percent.classList.toggle('warn',ratio>=.8&&ratio<1);}
+        const fill=meter.querySelector('.m-v4-budget-track i');if(fill)fill.style.width=`${Math.min(100,Math.max(0,Number.isFinite(ratio)?ratio*100:100))}%`;
+        const note=meter.querySelector('small');if(note)note.textContent=`${money(snapshot.committed)} comprometidos de ${money(snapshot.totalIncome)} de ingresos · disponible real ${money(snapshot.available)}.`;
+      }
+      return template.innerHTML;
+    };
+    window.renderMobileAvailable=renderMobileAvailable;
+  }
+
+  const style=document.createElement('style');style.id='nexus-mobile-v16-live-available-style';style.textContent=`
+    .m-balance-card .m-balance-footer{gap:10px 14px!important;flex-wrap:wrap!important}
+    .m-balance-card .m-balance-footer>span{min-width:0;line-height:1.5;overflow-wrap:anywhere}
+    .m-v16-live-breakdown{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:15px}
+    .m-v16-live-breakdown>div{display:grid;gap:5px;min-width:0;padding:11px;border:1px solid var(--m-line,#30283d);border-radius:12px;background:#ffffff05}
+    .m-v16-live-breakdown small{font-size:10px;line-height:1.4;color:#aaa1bc}
+    .m-v16-live-breakdown b{font-size:13px;line-height:1.35;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+    .m-v16-person-breakdown{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px!important}
+    .m-v16-person-breakdown>span{display:grid;gap:4px;min-width:0;padding:9px;border:1px solid var(--m-line,#30283d);border-radius:11px;background:#ffffff04}
+    .m-v16-person-breakdown small{font-size:10px;line-height:1.4;color:#a79db8}
+    .m-v16-person-breakdown b{font-size:12px;line-height:1.4;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+    @media(max-width:350px){.m-v16-live-breakdown,.m-v16-person-breakdown{grid-template-columns:1fr}}
+  `;document.head.appendChild(style);
+})();
+</script>
+<script id="nexus-mobile-v17-personal-permissions-and-identity">
+(function(){
+  'use strict';
+  const $=(selector,root=document)=>root.querySelector(selector);
+  const $$=(selector,root=document)=>Array.from(root.querySelectorAll(selector));
+  const safeEsc=value=>typeof esc==='function'?esc(String(value??'')):String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const normalizeText=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();
+  const validScreens=new Set(['summary','income','homeExpenses','savings','available','goals','more','debts','calendar','accounts','reports','personalMe','personalPartner','settings']);
+  function currentProfile(){
+    const role=normalizeText(authUser?.role||authUser?.profile||authUser?.type||'');
+    if(role==='partner'||role==='mauren'||role.includes('partner'))return 'partner';
+    const userCandidates=[authUser?.username,authUser?.name,authUser?.email?.split('@')?.[0],authUser?.displayName].map(normalizeText).filter(Boolean);
+    const partnerName=normalizeText(state?.people?.partner||'Mauren'),meName=normalizeText(state?.people?.me||'Ruben');
+    if(userCandidates.some(v=>v===partnerName||v.includes(partnerName)||partnerName.includes(v)&&v.length>2))return 'partner';
+    if(userCandidates.some(v=>v===meName||v.includes(meName)||meName.includes(v)&&v.length>2))return 'me';
+    return 'me';
+  }
+  function currentScreenKey(){
+    const identity=String(authUser?.id||authUser?.username||authUser?.email||currentProfile()).toLowerCase();
+    return 'nexus_mobile_last_screen_v17_'+encodeURIComponent(identity);
+  }
+  function saveLastScreen(){
+    if(!authToken||!authUser||window.__nexusV17Restoring)return;
+    const active=validScreens.has(mobileScreen)?mobileScreen:'summary';
+    try{localStorage.setItem(currentScreenKey(),active);sessionStorage.setItem(currentScreenKey(),active);}catch(_){}
+  }
+  function readLastScreen(){
+    let value='';
+    try{value=localStorage.getItem(currentScreenKey())||sessionStorage.getItem(currentScreenKey())||'';}catch(_){}
+    return validScreens.has(value)?value:'summary';
+  }
+  function personalPrefs(){
+    if(!state.uiSettings||typeof state.uiSettings!=='object')state.uiSettings={};
+    if(!state.uiSettings.userProfiles||typeof state.uiSettings.userProfiles!=='object')state.uiSettings.userProfiles={};
+    const key=currentProfile();
+    const saved=state.uiSettings.userProfiles[key];
+    if(saved&&typeof saved==='object')return {avatarEmoji:/^[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u.test(saved.avatarEmoji||'')?saved.avatarEmoji:'😊',personalBudgetAlerts:saved.personalBudgetAlerts!==false};
+    // Migrate the existing shared emoji to Ruben's profile; give Mauren an independent default.
+    const migratedEmoji=key==='me'?(state.uiSettings.avatarEmoji||'😊'):'😊';
+    return {avatarEmoji:migratedEmoji,personalBudgetAlerts:true};
+  }
+  function storePersonalPrefs(values){
+    if(!state.uiSettings||typeof state.uiSettings!=='object')state.uiSettings={};
+    if(!state.uiSettings.userProfiles||typeof state.uiSettings.userProfiles!=='object')state.uiSettings.userProfiles={};
+    const key=currentProfile(),old=personalPrefs();
+    state.uiSettings.userProfiles[key]={...old,...values,updatedAt:new Date().toISOString()};
+  }
+  window.nexusV17CurrentProfile=currentProfile;
+  window.nexusV17PersonalBudgetAlertsEnabled=()=>personalPrefs().personalBudgetAlerts!==false;
+  window.nexusV17GetPersonalPrefs=personalPrefs;
+
+  /* Persist the visible mobile route on navigation and across a hard refresh. */
+  if(typeof mobileSetScreen==='function'){
+    const previousSetScreen=mobileSetScreen;
+    mobileSetScreen=function mobileSetScreenV17(name){
+      const result=previousSetScreen.apply(this,arguments);
+      saveLastScreen();
+      return result;
+    };
+    window.mobileSetScreen=mobileSetScreen;
+  }
+  if(typeof bootstrapAuth==='function'){
+    const previousBootstrap=bootstrapAuth;
+    bootstrapAuth=async function bootstrapAuthV17(){
+      const hadStoredSession=!!(authToken&&authUser);
+      const savedScreen=hadStoredSession?readLastScreen():'summary';
+      window.__nexusV17Restoring=true;
+      let result;
+      try{result=await previousBootstrap.apply(this,arguments);}
+      finally{window.__nexusV17Restoring=false;}
+      if(authToken&&authUser){
+        mobileScreen=hadStoredSession?savedScreen:'summary';
+        try{renderMobileUI();}catch(error){console.warn('Nexus V17: no se pudo restaurar la última sección.',error);}
+        saveLastScreen();
+        try{history.replaceState({...((history.state&&typeof history.state==='object')?history.state:{}),nexusMobileScreen:mobileScreen},'',location.href);}catch(_){}
+      }
+      return result;
+    };
+    window.bootstrapAuth=bootstrapAuth;
+  }
+  if(typeof submitAuth==='function'){
+    const previousSubmit=submitAuth;
+    submitAuth=async function submitAuthV17(){
+      const wasAuthenticated=!!(authToken&&authUser);
+      const previousIdentity=String(authUser?.id||authUser?.username||authUser?.email||'');
+      const result=await previousSubmit.apply(this,arguments);
+      const nextIdentity=String(authUser?.id||authUser?.username||authUser?.email||'');
+      if(authToken&&authUser&&(!wasAuthenticated||nextIdentity!==previousIdentity)){
+        mobileScreen='summary';
+        try{renderMobileUI();}catch(_){}
+        saveLastScreen();
+      }
+      return result;
+    };
+    window.submitAuth=submitAuth;
+  }
+  window.addEventListener('pagehide',saveLastScreen);
+  window.addEventListener('beforeunload',saveLastScreen);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')saveLastScreen();});
+  window.addEventListener('popstate',()=>setTimeout(saveLastScreen,0));
+
+  /* Re-apply a single neutral slate identity for household category "Otros". */
+  try{
+    if(Array.isArray(CAT_COLORS)&&CAT_COLORS.length>=8)CAT_COLORS[7]='#94a3b8';
+    if(state.uiSettings&&typeof state.uiSettings==='object'){
+      state.uiSettings.categoryColors={...(state.uiSettings.categoryColors||{}),Otros:'#94a3b8'};
+    }
+  }catch(_){}
+
+  /* The generic income arrow is replaced with the actual person's icon and profile color. */
+  if(typeof mobileTransactionCard==='function'){
+    const previousTransactionCard=mobileTransactionCard;
+    mobileTransactionCard=function mobileTransactionCardV17(record,actions=true){
+      let html=previousTransactionCard.apply(this,arguments);
+      if((record?._kind||record?.kind)==='income'){
+        const person=record.person==='partner'?'partner':'me';
+        const prefs=state.uiSettings||{},color=person==='partner'?(prefs.partnerColor||'#fb7185'):(prefs.meColor||'#38bdf8');
+        const glyph=person==='partner'?(prefs.partnerIcon||'fa-person-dress'):(prefs.meIcon||'fa-person');
+        html=html.replace(/<div class="m-transaction-icon income"><i class="fa-solid [^"]+"><\/i><\/div>/,
+          `<div class="m-transaction-icon income m-v17-income-owner" style="--owner-color:${color}" aria-label="Ingreso de ${safeEsc(state.people?.[person]||person)}"><i class="fa-solid ${safeEsc(glyph)}" aria-hidden="true"></i><span class="m-v17-income-mark"><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i></span></div>`);
+      }
+      return html;
+    };
+    window.mobileTransactionCard=mobileTransactionCard;
+  }
+
+  /* Render debts in responsibility groups and put the current user's personal group first. */
+  if(typeof mobileV3DebtCard==='function'){
+    const previousDebtCard=mobileV3DebtCard;
+    mobileV3DebtCard=function mobileV3DebtCardV17(debt,opts={}){
+      let html=previousDebtCard.apply(this,arguments);
+      const owner=['home','me','partner'].includes(debt?.owner)?debt.owner:'home';
+      const id=String(debt?.id||'');
+      return html.replace(/^<article class="m-v3-debt-card([^\"]*)"/,`<article class="m-v3-debt-card$1" data-debt-owner="${owner}" data-debt-id="${safeEsc(id)}"`);
+    };
+    window.mobileV3DebtCard=mobileV3DebtCard;
+  }
+  if(typeof renderMobileDebts==='function'){
+    renderMobileDebts=function renderMobileDebtsV17(){
+      const current=currentProfile(),order=current==='partner'?['home','partner','me']:['home','me','partner'];
+      const labels={home:'Hogar',me:state.people?.me||'Ruben',partner:state.people?.partner||'Mauren'};
+      const all=(state.debts||[]).slice();
+      const pending=all.filter(d=>d.status!=='paid'&&Number(d.balance)>0);
+      const total=pending.reduce((n,d)=>n+(Number(d.balance)||0),0);
+      const overdue=pending.filter(d=>d.due&&d.due<dateNow()).length;
+      const groups=order.map(owner=>{
+        const rows=all.filter(d=>(['home','me','partner'].includes(d.owner)?d.owner:'home')===owner).sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999'));
+        const cardRows=rows.length?rows.map(d=>mobileV3DebtCard(d)).join(''):`<div class="m-v17-owner-empty"><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>No hay obligaciones registradas para ${safeEsc(labels[owner])}.</span></div>`;
+        return `<section class="m-v17-debt-group"><div class="m-section-heading"><div><h3><i class="fa-solid ${owner==='home'?'fa-house-chimney':owner==='me'?(state.uiSettings?.meIcon||'fa-person'):(state.uiSettings?.partnerIcon||'fa-person-dress')}" aria-hidden="true"></i> ${safeEsc(labels[owner])}</h3><p>${rows.length} obligación(es) · responsable ${safeEsc(labels[owner])}</p></div><button type="button" class="m-v3-link" onclick="mobileOpenDebtForm('${owner}')"><i class="fa-solid fa-plus" aria-hidden="true"></i> Añadir</button></div><div class="m-v3-debts">${cardRows}</div></section>`;
+      }).join('');
+      return `<section class="m-debt-hero"><span><i class="fa-solid fa-file-invoice-dollar" aria-hidden="true"></i> Deudas y obligaciones</span><strong>${money(total)}</strong><div><span><i class="fa-solid fa-clock" aria-hidden="true"></i> ${pending.length} activa(s) · ${overdue} vencida(s)</span><button type="button" onclick="mobileOpenDebtForm('home')"><i class="fa-solid fa-plus" aria-hidden="true"></i> Nueva deuda</button></div></section><div class="m-v17-debt-groups">${groups}</div>`;
+    };
+    window.renderMobileDebts=renderMobileDebts;
+  }
+
+  /* Guard all personal mutations at the function layer too; hiding buttons alone is not permission control. */
+  function denyReadOnly(message='Este perfil es de solo lectura para tu cuenta.'){
+    if(typeof toast==='function')toast(message);
+    return undefined;
+  }
+  function viewProfileOnPersonalScreen(){
+    if(mobileScreen==='personalMe')return 'me';
+    if(mobileScreen==='personalPartner')return 'partner';
+    return null;
+  }
+  function isReadOnlyPersonalScreen(){const view=viewProfileOnPersonalScreen();return !!view&&view!==currentProfile();}
+  if(typeof openPersonalMovement==='function'){
+    const previousOpenMovement=openPersonalMovement;
+    openPersonalMovement=function openPersonalMovementV17(person,type,editId=null,boxId=null){
+      const target=person==='partner'?'partner':'me';
+      if(editId){const existing=(state.personalSpending||[]).find(x=>x.id===editId);if(existing&&existing.person!==currentProfile())return denyReadOnly('No puedes editar movimientos personales de la otra persona.');}
+      if(isReadOnlyPersonalScreen())return denyReadOnly();
+      if(editId&&target!==currentProfile())return denyReadOnly('No puedes editar movimientos personales de la otra persona.');
+      // Quick-add shortcuts used a hard-coded "me" profile; new movements always follow the signed-in profile.
+      const resolved=!editId&&target!==currentProfile()?currentProfile():target;
+      const validBox=boxId&&typeof personalSavingBoxes==='function'&&personalSavingBoxes(resolved).some(b=>b.id===boxId)?boxId:null;
+      return previousOpenMovement.call(this,resolved,type,editId,validBox);
+    };
+    window.openPersonalMovement=openPersonalMovement;
+  }
+  if(typeof editPersonalMovement==='function'){
+    const previousEditPersonal=editPersonalMovement;
+    editPersonalMovement=function editPersonalMovementV17(id){
+      const row=(state.personalSpending||[]).find(x=>x.id===id);
+      if(isReadOnlyPersonalScreen()||(row&&row.person!==currentProfile()))return denyReadOnly('Solo puedes editar tus propios movimientos personales.');
+      return previousEditPersonal.apply(this,arguments);
+    };
+    window.editPersonalMovement=editPersonalMovement;
+  }
+  if(typeof deleteRecord==='function'){
+    const previousDeleteRecord=deleteRecord;
+    deleteRecord=function deleteRecordV17(kind,id){
+      if(kind==='personal'){
+        const row=(state.personalSpending||[]).find(x=>x.id===id);
+        if(isReadOnlyPersonalScreen()||(row&&row.person!==currentProfile()))return denyReadOnly('Solo puedes eliminar tus propios movimientos personales.');
+      }
+      return previousDeleteRecord.apply(this,arguments);
+    };
+    window.deleteRecord=deleteRecord;
+  }
+  if(typeof managePersonalSavingBoxes==='function'){
+    const previousManageBoxes=managePersonalSavingBoxes;
+    managePersonalSavingBoxes=function managePersonalSavingBoxesV17(person){
+      if((person==='partner'?'partner':'me')!==currentProfile()||isReadOnlyPersonalScreen())return denyReadOnly('Solo puedes administrar tus propias cajas de ahorro personales.');
+      return previousManageBoxes.apply(this,arguments);
+    };
+    window.managePersonalSavingBoxes=managePersonalSavingBoxes;
+  }
+  if(typeof addPersonalSavingBox==='function'){
+    const previousAddBox=addPersonalSavingBox;
+    addPersonalSavingBox=function addPersonalSavingBoxV17(person){
+      if((person==='partner'?'partner':'me')!==currentProfile()||isReadOnlyPersonalScreen())return denyReadOnly('Solo puedes añadir cajas a tu perfil personal.');
+      return previousAddBox.apply(this,arguments);
+    };
+    window.addPersonalSavingBox=addPersonalSavingBox;
+  }
+  if(typeof payDebt==='function'){
+    const previousPayDebt=payDebt;
+    payDebt=function payDebtV17(id,payer){
+      if(isReadOnlyPersonalScreen())return denyReadOnly();
+      const debt=(state.debts||[]).find(x=>x.id===id);
+      if(debt&&debt.owner!=='home'&&debt.owner!==currentProfile())return denyReadOnly('No puedes modificar la deuda personal de la otra persona.');
+      const resolved=debt?.owner==='home'?currentProfile():payer;
+      return previousPayDebt.call(this,id,resolved);
+    };
+    window.payDebt=payDebt;
+  }
+  if(typeof editDebt==='function'){
+    const previousEditDebt=editDebt;
+    editDebt=function editDebtV17(id){
+      if(isReadOnlyPersonalScreen())return denyReadOnly();
+      const debt=(state.debts||[]).find(x=>x.id===id);
+      if(debt&&debt.owner!=='home'&&debt.owner!==currentProfile())return denyReadOnly('No puedes editar la deuda personal de la otra persona.');
+      return previousEditDebt.apply(this,arguments);
+    };
+    window.editDebt=editDebt;
+  }
+  if(typeof deleteDebt==='function'){
+    const previousDeleteDebt=deleteDebt;
+    deleteDebt=function deleteDebtV17(id){
+      if(isReadOnlyPersonalScreen())return denyReadOnly();
+      const debt=(state.debts||[]).find(x=>x.id===id);
+      if(debt&&debt.owner!=='home'&&debt.owner!==currentProfile())return denyReadOnly('No puedes eliminar la deuda personal de la otra persona.');
+      return previousDeleteDebt.apply(this,arguments);
+    };
+    window.deleteDebt=deleteDebt;
+  }
+  if(typeof mobileOpenDebtForm==='function'){
+    const previousDebtForm=mobileOpenDebtForm;
+    mobileOpenDebtForm=function mobileOpenDebtFormV17(ownerDefault=null){
+      if(isReadOnlyPersonalScreen())return denyReadOnly();
+      if(['me','partner'].includes(ownerDefault)&&ownerDefault!==currentProfile())return denyReadOnly('Solo puedes crear obligaciones personales para tu propio perfil.');
+      return previousDebtForm.apply(this,arguments);
+    };
+    window.mobileOpenDebtForm=mobileOpenDebtForm;
+  }
+
+  /* Guard mutations at submit/delete handlers too, not only at the visible buttons. */
+  if(typeof savePersonalMovement==='function'){
+    const previousSavePersonalMovement=savePersonalMovement;
+    savePersonalMovement=function savePersonalMovementV17PermissionGuard(event,person,type,id=''){
+      const target=person==='partner'?'partner':'me';
+      if(target!==currentProfile()||isReadOnlyPersonalScreen())return denyReadOnly('Solo puedes registrar o editar movimientos de tu propio perfil personal.');
+      return previousSavePersonalMovement.apply(this,arguments);
+    };
+    window.savePersonalMovement=savePersonalMovement;
+  }
+  if(typeof savePersonalSavingBoxes==='function'){
+    const previousSavePersonalBoxes=savePersonalSavingBoxes;
+    savePersonalSavingBoxes=function savePersonalSavingBoxesV17PermissionGuard(event,person){
+      if((person==='partner'?'partner':'me')!==currentProfile()||isReadOnlyPersonalScreen())return denyReadOnly('Solo puedes cambiar los nombres de tus propias cajas de ahorro.');
+      return previousSavePersonalBoxes.apply(this,arguments);
+    };
+    window.savePersonalSavingBoxes=savePersonalSavingBoxes;
+  }
+  if(typeof renamePersonalSavingBox==='function'){
+    const previousRenameSavingBox=renamePersonalSavingBox;
+    renamePersonalSavingBox=function renamePersonalSavingBoxV17PermissionGuard(person,id){
+      if((person==='partner'?'partner':'me')!==currentProfile()||isReadOnlyPersonalScreen())return denyReadOnly('Solo puedes modificar tus propias cajas de ahorro.');
+      return previousRenameSavingBox.apply(this,arguments);
+    };
+    window.renamePersonalSavingBox=renamePersonalSavingBox;
+  }
+  if(typeof deletePersonalSavingBox==='function'){
+    const previousDeleteSavingBox=deletePersonalSavingBox;
+    deletePersonalSavingBox=function deletePersonalSavingBoxV17PermissionGuard(person,id){
+      if((person==='partner'?'partner':'me')!==currentProfile()||isReadOnlyPersonalScreen())return denyReadOnly('Solo puedes eliminar tus propias cajas de ahorro.');
+      return previousDeleteSavingBox.apply(this,arguments);
+    };
+    window.deletePersonalSavingBox=deletePersonalSavingBox;
+  }
+  if(typeof saveDebtPayment==='function'){
+    const previousSaveDebtPayment=saveDebtPayment;
+    saveDebtPayment=function saveDebtPaymentV17PermissionGuard(event,id,payer){
+      if(isReadOnlyPersonalScreen())return denyReadOnly();
+      const debt=(state.debts||[]).find(x=>x.id===id);
+      if(debt&&debt.owner!=='home'&&debt.owner!==currentProfile())return denyReadOnly('No puedes registrar abonos a la deuda personal de la otra persona.');
+      const resolved=debt?.owner==='home'?currentProfile():(payer||currentProfile());
+      if(resolved!==currentProfile())return denyReadOnly('Solo puedes registrar abonos con tu propio perfil.');
+      return previousSaveDebtPayment.call(this,event,id,resolved);
+    };
+    window.saveDebtPayment=saveDebtPayment;
+  }
+
+  function profileIconClass(person){
+    const prefs=state.uiSettings||{};
+    return person==='partner'?(prefs.partnerIcon||'fa-person-dress'):(prefs.meIcon||'fa-person');
+  }
+  function decorateContent(){
+    const content=$('#mContent');if(!content)return;
+    // Per-account emoji and its motion are placed in the exact greeting orb of Summary General.
+    if(mobileScreen==='summary'||mobileScreen==='home'){
+      const orb=$('.m-welcome-orb',content);
+      if(orb){const emoji=personalPrefs().avatarEmoji||'😊';orb.classList.add('m-v17-welcome-emoji');orb.setAttribute('role','img');orb.setAttribute('aria-label','Emoji personal del Resumen General');orb.title='Tu emoji personal';orb.innerHTML=`<span aria-hidden="true">${safeEsc(emoji)}</span>`;}
+    }
+    // The Income history must reuse the user's profile icon and palette, rather than a generic arrow.
+    $$('.m-transaction-icon.income',content).forEach(iconBox=>{
+      const row=iconBox.closest('.m-transaction');if(!row)return;
+      const copy=row.querySelector('.m-transaction-info');
+      let person=null;
+      if(mobileScreen==='personalMe')person='me';
+      else if(mobileScreen==='personalPartner')person='partner';
+      else {
+        const detail=(copy?.textContent||'').toLowerCase();
+        const partnerName=String(state.people?.partner||'mauren').toLowerCase(),meName=String(state.people?.me||'ruben').toLowerCase();
+        if(detail.includes(partnerName))person='partner';else if(detail.includes(meName))person='me';
+      }
+      if(!person)return;
+      const color=person==='partner'?(state.uiSettings?.partnerColor||'#fb7185'):(state.uiSettings?.meColor||'#38bdf8');
+      iconBox.style.setProperty('--owner-color',color);
+      iconBox.innerHTML=`<i class="fa-solid ${safeEsc(profileIconClass(person))}" aria-hidden="true"></i><span class="m-v17-income-mark"><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i></span>`;
+      iconBox.classList.add('m-v17-income-owner');
+      iconBox.setAttribute('aria-label',`Ingreso de ${state.people?.[person]||person}`);
+    });
+    // Make the top-level shortcut enter the current user's profile first.
+    if(mobileScreen==='more'){
+      const profileButton=$$('.m-menu-list button',content).find(btn=>(btn.getAttribute('onclick')||'').includes("mobileSetScreen('personalMe')")||(btn.getAttribute('onclick')||'').includes("mobileSetScreen('personalPartner')"));
+      if(profileButton)profileButton.setAttribute('onclick',`mobileSetScreen('${currentProfile()==='partner'?'personalPartner':'personalMe'}')`);
+    }
+    const viewProfile=viewProfileOnPersonalScreen();
+    const isReadOnly=!!viewProfile&&viewProfile!==currentProfile();
+    const switcher=$('.m-profile-switch',content);
+    if(switcher){
+      const buttons=$$('button',switcher);
+      const ownKey=currentProfile();
+      const ownButton=buttons.find(btn=>(btn.getAttribute('onclick')||'').includes(ownKey==='partner'?'personalPartner':'personalMe'));
+      if(ownButton&&switcher.firstElementChild!==ownButton)switcher.insertBefore(ownButton,switcher.firstElementChild);
+      buttons.forEach(btn=>{
+        const target=(btn.getAttribute('onclick')||'').includes('personalPartner')?'partner':'me';
+        btn.classList.toggle('m-v17-current-profile',target===ownKey);
+      });
+    }
+    if(isReadOnly){
+      let notice=$('.m-v17-readonly-notice',content);
+      if(!notice){notice=document.createElement('div');notice.className='m-v17-readonly-notice';notice.innerHTML='<i class="fa-solid fa-eye" aria-hidden="true"></i><span><b>Vista de solo lectura</b><small>Puedes consultar estos datos, pero las modificaciones pertenecen al perfil de su titular.</small></span>';if(switcher&&switcher.parentNode)switcher.insertAdjacentElement('afterend',notice);else content.insertBefore(notice,content.firstChild);}
+      const actionTokens=['openPersonalMovement(','editPersonalMovement(','managePersonalSavingBoxes(','addPersonalSavingBox(','mobileOpenDebtForm(','payDebt(','editDebt(','deleteDebt('];
+      $$('button[onclick]',content).forEach(button=>{
+        const action=button.getAttribute('onclick')||'';
+        const personalDelete=action.includes("deleteRecord('personal'")||action.includes('deleteRecord("personal"');
+        if(personalDelete||actionTokens.some(token=>action.includes(token))){button.disabled=true;button.classList.add('m-v17-readonly-hidden');button.setAttribute('aria-hidden','true');button.title='Vista de solo lectura';}
+      });
+      const quickActions=$('.m-personal-actions',content);if(quickActions)quickActions.classList.add('m-v17-readonly-hidden');
+      $$('.m-v8-box-manager',content).forEach(box=>{const owner=box.querySelector('.m-v8-box-owner')?.classList.contains('partner')?'partner':'me';if(owner!==currentProfile()){const admin=$('button',box);if(admin){admin.disabled=true;admin.classList.add('m-v17-readonly-hidden');}}});
+    }else{
+      $$('.m-v17-readonly-notice',content).forEach(node=>node.remove());
+      $$('.m-v17-readonly-hidden',content).forEach(button=>{button.disabled=false;button.classList.remove('m-v17-readonly-hidden');button.removeAttribute('aria-hidden');button.removeAttribute('title');});
+    }
+    // Profile labels in the income page use the chosen user icon and the agreed user color.
+    $$('.m-v2-person-card.me, .m-v2-person-card.partner, .m-v2-available-card.me, .m-v2-available-card.partner',content).forEach(card=>{
+      const person=card.classList.contains('partner')?'partner':'me';
+      const color=person==='partner'?(state.uiSettings?.partnerColor||'#fb7185'):(state.uiSettings?.meColor||'#38bdf8');
+      card.style.setProperty('--owner-color',color);
+      const glyph=$('.m-v2-person-icon i',card);if(glyph)glyph.className=`fa-solid ${safeEsc(profileIconClass(person))}`;
+    });
+  }
+  window.nexusV17ApplyPersonalView=decorateContent;
+
+  /* Keep the saved emoji and personal alert switch in this profile's own settings only. */
+  if(typeof renderMobileSettings==='function'){
+    const previousSettings=renderMobileSettings;
+    renderMobileSettings=function renderMobileSettingsV17(){
+      let markup=previousSettings.apply(this,arguments);
+      const temp=document.createElement('template');temp.innerHTML=markup;
+      const pf=personalPrefs(),emojiField=$('#mSetAvatarEmoji',temp.content),preview=$('#mV7EmojiPreview',temp.content);
+      if(emojiField)emojiField.value=pf.avatarEmoji;
+      if(preview)preview.textContent=pf.avatarEmoji;
+      $$('.m-v7-emoji-option',temp.content).forEach(btn=>btn.classList.toggle('selected',btn.dataset.emoji===pf.avatarEmoji));
+      const budgetLabel=$('#mSetBudgetAlerts',temp.content)?.closest('label');
+      if(budgetLabel&&!$('#mSetPersonalBudgetAlerts',temp.content)){
+        budgetLabel.insertAdjacentHTML('afterend',`<label class="m-v4-check-row m-v17-personal-budget-setting"><input type="checkbox" id="mSetPersonalBudgetAlerts" ${pf.personalBudgetAlerts?'checked':''}><span><b>Avisos de mi disponible personal</b><small>Avísame si mis gastos, obligaciones y ahorros personales superan el 80 % o el 100 % de mi saldo asignado.</small></span></label>`);
+      }
+      // The shared box summary remains visible, but only the owner can open the personal box manager.
+      $$('.m-v8-box-manager',temp.content).forEach(box=>{
+        const owner=box.querySelector('.m-v8-box-owner')?.classList.contains('partner')?'partner':'me';
+        if(owner!==currentProfile()){
+          const admin=$('button',box);
+          if(admin){const chip=document.createElement('span');chip.className='m-v17-readonly-chip';chip.innerHTML='<i class="fa-solid fa-eye" aria-hidden="true"></i> Solo lectura';admin.replaceWith(chip);}
+        }
+      });
+      return temp.innerHTML;
+    };
+    window.renderMobileSettings=renderMobileSettings;
+  }
+  if(typeof window.mobileV8SaveSettings==='function'){
+    const previousSaveSettings=window.mobileV8SaveSettings;
+    window.mobileV8SaveSettings=async function mobileV8SaveSettingsV17(event){
+      const field=$('#mSetAvatarEmoji'),checkbox=$('#mSetPersonalBudgetAlerts');
+      const selectedEmoji=field?.value||personalPrefs().avatarEmoji;
+      const personalAlertValue=checkbox?!!checkbox.checked:personalPrefs().personalBudgetAlerts;
+      storePersonalPrefs({avatarEmoji:selectedEmoji,personalBudgetAlerts:personalAlertValue});
+      const sharedEmoji=state.uiSettings?.avatarEmoji||'😊';
+      if(field)field.value=sharedEmoji; // Prevent overwriting the other profile's emoji in the shared preferences.
+      try{
+        const result=await previousSaveSettings.apply(this,arguments);
+        await Promise.resolve(saveState());
+        return result;
+      }finally{
+        try{renderMobileUI();}catch(_){}
+      }
+    };
+  }
+
+  /* Wrap the last UI renderer so identity decoration and route persistence run after every draw. */
+  if(typeof renderMobileUI==='function'){
+    const previousRenderUI=renderMobileUI;
+    renderMobileUI=function renderMobileUIV17(){
+      const result=previousRenderUI.apply(this,arguments);
+      try{decorateContent();}catch(error){console.warn('Nexus V17: no se pudo aplicar la personalización por perfil.',error);}
+      saveLastScreen();
+      return result;
+    };
+    window.renderMobileUI=renderMobileUI;
+  }
+
+  const style=document.createElement('style');style.id='nexus-mobile-v17-profile-experience';style.textContent=`
+    .m-v17-income-owner{position:relative!important;overflow:visible!important;color:var(--owner-color,#38bdf8)!important;background:color-mix(in srgb,var(--owner-color,#38bdf8) 18%,#12101a)!important;border:1px solid color-mix(in srgb,var(--owner-color,#38bdf8) 42%,transparent)!important;box-shadow:0 5px 16px color-mix(in srgb,var(--owner-color,#38bdf8) 10%,transparent)!important}
+    .m-v17-income-owner>i{font-size:18px}
+    .m-v17-income-mark{position:absolute;right:-4px;bottom:-4px;display:grid;place-items:center;width:17px;height:17px;border:2px solid #14111e;border-radius:50%;background:var(--owner-color,#38bdf8);color:#0c1118;font-size:8px}
+    .m-v2-person-card.me,.m-v2-available-card.me{border-top-color:var(--owner-color,#38bdf8)!important;border-left-color:var(--owner-color,#38bdf8)!important}
+    .m-v2-person-card.partner,.m-v2-available-card.partner{border-top-color:var(--owner-color,#fb7185)!important;border-left-color:var(--owner-color,#fb7185)!important}
+    .m-v2-person-card.me .m-v2-person-icon,.m-v2-available-card.me .m-v2-person-icon{color:#38bdf8!important;background:#102c3a!important}
+    .m-v2-person-card.partner .m-v2-person-icon,.m-v2-available-card.partner .m-v2-person-icon{color:#fb7185!important;background:#3b1e2a!important}
+    .m-v17-welcome-emoji{font-family:"Segoe UI Emoji","Apple Color Emoji",sans-serif;animation:nexus-v17-emoji-float 2.5s ease-in-out infinite;isolation:isolate}
+    .m-v17-welcome-emoji>span{display:inline-block;line-height:1;filter:drop-shadow(0 3px 6px #0005)}
+    @keyframes nexus-v17-emoji-float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
+    .m-profile-switch .m-v17-current-profile{border-color:var(--owner-color,#38bdf8)!important;box-shadow:inset 0 -2px var(--owner-color,#38bdf8)}
+    .m-profile-switch button.m-v17-current-profile{color:#fff!important}
+    .m-v17-readonly-notice{display:flex;align-items:flex-start;gap:10px;margin:12px 0 15px;padding:12px;border:1px solid #4b4260;border-radius:13px;background:#171421;color:#c4b5fd}
+    .m-v17-readonly-notice>i{font-size:16px;margin-top:2px}.m-v17-readonly-notice span{display:grid;gap:3px}.m-v17-readonly-notice b{font-size:12px}.m-v17-readonly-notice small{font-size:10px;color:#afa5c2;line-height:1.5}
+    .m-v17-readonly-hidden{display:none!important}
+    .m-v17-readonly-chip{display:inline-flex;align-items:center;gap:5px;padding:8px 10px;border:1px solid #393047;border-radius:10px;color:#b5abc7;font-size:10px}
+    .m-v17-debt-groups{display:grid;gap:10px}.m-v17-debt-group{margin:8px 0 13px}.m-v17-owner-empty{display:flex;align-items:center;gap:9px;padding:15px;border:1px dashed #393047;border-radius:13px;color:#a99fba;font-size:11px}.m-v17-debt-group .m-section-heading{margin-top:24px!important}
+    @media(prefers-reduced-motion:reduce){.m-v17-welcome-emoji,.m-v17-welcome-emoji>span{animation:none!important}}
+  `;document.head.appendChild(style);
 })();
 </script>
 
