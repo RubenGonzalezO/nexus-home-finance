@@ -3532,5 +3532,254 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
 })();
 </script>
 
+
+<script id="nexus-mobile-v11-final-polish">
+/* Nexus Finance Mobile V11: calendar icon clarity, account-summary identity, scoped undo, and personal expense ledger. */
+(function(){
+  'use strict';
+  const $=(selector,root=document)=>root.querySelector(selector);
+  const $$=(selector,root=document)=>Array.from(root.querySelectorAll(selector));
+  const escText=value=>typeof window.esc==='function'?window.esc(String(value??'')):String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const accountTheme={
+    home:{icon:'fa-house-chimney',color:'#facc15',bg:'#3b321d',label:'Responsabilidades del hogar'},
+    savings:{icon:'fa-piggy-bank',color:'#34d399',bg:'#17392f',label:'Ahorros compartidos'},
+    me:{icon:'fa-person',color:'#38bdf8',bg:'#102c3a',label:'Finanzas personales'},
+    partner:{icon:'fa-person-dress',color:'#fb7185',bg:'#3b1e2a',label:'Finanzas personales'}
+  };
+
+  function applyCalendarMeaning(root){
+    if(!root)return;
+    const card=$('.m-v5-calendar-card',root);
+    if(card){
+      const symbol=$('.m-v5-calendar-symbol',card);
+      if(symbol){
+        let icon='fa-calendar-days';
+        if(card.classList.contains('overdue'))icon='fa-triangle-exclamation';
+        else if(card.classList.contains('urgent'))icon='fa-bell';
+        else if(card.classList.contains('soon'))icon='fa-calendar-clock';
+        symbol.innerHTML=`<i class="fa-solid ${icon}" aria-hidden="true"></i>`;
+        symbol.setAttribute('aria-label',icon==='fa-calendar-days'?'Calendario':icon==='fa-calendar-clock'?'Vencimiento próximo':icon==='fa-bell'?'Alerta de hoy':'Evento vencido');
+      }
+    }
+    $$('.m-v5-cal-empty>span',root).forEach(symbol=>{
+      symbol.innerHTML='<i class="fa-solid fa-calendar-days" aria-hidden="true"></i>';
+      symbol.setAttribute('aria-label','Calendario');
+    });
+  }
+
+  /* Ensure the summary-level account cards use the same fixed account colors and icons as the accounts report. */
+  const oldHome=window.renderMobileHome;
+  if(typeof oldHome==='function'&&!oldHome.__nexusV11Wrapped){
+    const wrappedHome=function renderMobileHomeV11(){
+      const source=oldHome.apply(this,arguments);
+      if(typeof source!=='string')return source;
+      const template=document.createElement('template');
+      template.innerHTML=source;
+      const sections=$$('.m-v3-section',template.content);
+      sections.forEach(section=>{
+        const heading=$('.m-v3-section-head h3',section)?.textContent?.trim()||'';
+        if(!/reporte por cuentas|resumen por cuentas|cuentas del hogar y personales/i.test(heading))return;
+        $$('.m-v3-account-select',section).forEach(card=>{
+          const click=card.getAttribute('onclick')||'';
+          const hit=click.match(/mobileSelectedAccountV3\s*=\s*['"]([^'"]+)['"]/);
+          const title=$('.m-v3-account-title',card)?.textContent?.trim()||'';
+          let id=hit?.[1];
+          if(!id){
+            if(/ahorros/i.test(title))id='savings';
+            else if(/pareja/i.test(title))id='partner';
+            else if(/personal.*m[ií]a|mi cuenta/i.test(title))id='me';
+            else id='home';
+          }
+          const meta=accountTheme[id]||accountTheme.home;
+          card.classList.add('m-v11-dashboard-account');
+          card.style.setProperty('--v11-account-color',meta.color);
+          card.style.setProperty('--v11-account-bg',meta.bg);
+          const titleIcon=$('.m-v3-account-title i',card);
+          if(titleIcon){titleIcon.className=`fa-solid ${meta.icon}`;titleIcon.setAttribute('aria-hidden','true');}
+          const titleNode=$('.m-v3-account-title',card);
+          if(titleNode){titleNode.style.color=meta.color;titleNode.setAttribute('aria-label',`${title} · ${meta.label}`);}
+          const amount= $('strong',card); if(amount)amount.style.color=meta.color;
+          const cta=$('.m-v3-account-cta',card);if(cta)cta.style.color=meta.color;
+        });
+      });
+      applyCalendarMeaning(template.content);
+      return template.innerHTML;
+    };
+    wrappedHome.__nexusV11Wrapped=true;
+    window.renderMobileHome=wrappedHome;
+    try{renderMobileHome=wrappedHome;}catch(_){}
+  }
+
+  /* Personal finance: put extra income first, then show each personal expense as an editable/deletable ledger row. */
+  const oldPersonal=window.renderMobilePersonal;
+  if(typeof oldPersonal==='function'&&!oldPersonal.__nexusV11Wrapped){
+    const wrappedPersonal=function renderMobilePersonalV11(person){
+      const source=oldPersonal.apply(this,arguments);
+      if(typeof source!=='string')return source;
+      const template=document.createElement('template');
+      template.innerHTML=source;
+      const incomeSection=$('section.m-v10-personal-income',template.content);
+      const expenseSection=$$('section.m-v3-section',template.content).find(section=>/gastos personales/i.test($('.m-v3-section-head h3',section)?.textContent||''));
+      if(expenseSection){
+        const f=typeof getFilter==='function'?getFilter():{year:new Date().getFullYear(),month:String(new Date().getMonth()+1)};
+        const all=(state.personalSpending||[]).filter(row=>row.person===person&&['expense','other-expense'].includes(typeof personalMovementType==='function'?personalMovementType(row):(row.type||'expense'))&&typeof inPeriod==='function'&&inPeriod(row.date,f.year,f.month)).slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))||String(b.id||'').localeCompare(String(a.id||'')));
+        const ownerName=state.people?.[person]||(person==='partner'?'Mi pareja':'Mi perfil');
+        const total=all.filter(row=>row.status!=='pending').reduce((sum,row)=>sum+Math.abs(Number(row.amount)||0),0);
+        const color=person==='partner'?'#fb7185':'#38bdf8';
+        const rows=all.length?all.map(row=>{
+          const id=String(row.id||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+          const category=String(row.category||'Gasto personal');
+          const pending=row.status==='pending';
+          let glyph='fa-wallet',catColor='#fb923c';
+          try{
+            if(typeof window.mobileV9CategoryIcon==='function')glyph=window.mobileV9CategoryIcon(category)||glyph;
+            if(typeof window.mobileV9CategoryColor==='function')catColor=window.mobileV9CategoryColor(category)||catColor;
+          }catch(_){}
+          const date=typeof window.mobileV3DateLabel==='function'?window.mobileV3DateLabel(row.date):String(row.date||'Sin fecha');
+          const linked=row.debtId&&(state.debts||[]).some(debt=>debt.id===row.debtId);
+          const actions=linked
+            ?`<button type="button" class="m-icon-btn" title="Editar obligación vinculada" aria-label="Editar obligación vinculada" onclick="editDebt('${String(row.debtId).replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')"><i class="fa-solid fa-file-pen" aria-hidden="true"></i></button>`
+            :`<button type="button" class="m-icon-btn" title="Editar gasto personal" aria-label="Editar gasto personal" onclick="editPersonalMovement('${id}')"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></button><button type="button" class="m-icon-btn danger" title="Eliminar gasto personal" aria-label="Eliminar gasto personal" onclick="deleteRecord('personal','${id}')"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></button>`;
+          return `<article class="m-v11-personal-expense-row" style="--expense-color:${catColor};--owner-color:${color}"><span class="m-v11-personal-expense-icon"><i class="fa-solid ${escText(glyph)}" aria-hidden="true"></i></span><div class="m-v11-personal-expense-copy"><b>${escText(category)}</b><small><i class="fa-regular fa-calendar" aria-hidden="true"></i> ${escText(date)} · ${escText(ownerName)}</small><small>${escText(row.desc||'Gasto personal')}${linked?' · Abono vinculado a deuda':''}</small><span class="m-v11-expense-status ${pending?'pending':'paid'}"><i class="fa-solid ${pending?'fa-clock':'fa-circle-check'}" aria-hidden="true"></i> ${pending?'Pendiente':'Pagado'}</span></div><div class="m-v11-personal-expense-side"><strong class="${pending?'pending-text':'negative'}">${money(Math.abs(Number(row.amount)||0))}</strong><div class="m-v11-personal-expense-actions">${actions}</div></div></article>`;
+        }).join(''):`<div class="m-inline-empty"><i class="fa-solid fa-receipt" aria-hidden="true"></i> No hay gastos personales registrados en este periodo.</div>`;
+        const ledger=`<article class="m-v3-card m-v11-personal-expense-ledger"><div class="m-v11-personal-expense-ledger-head"><div><h4><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Historial de gastos personales</h4><small>${all.length} movimiento(s) · total pagado ${money(total)}</small></div><button type="button" class="m-v3-link" onclick="openPersonalMovement('${person}','expense')"><i class="fa-solid fa-plus" aria-hidden="true"></i> Añadir</button></div><div class="m-v11-personal-expense-list">${rows}</div></article>`;
+        $$('.m-v11-personal-expense-ledger',expenseSection).forEach(x=>x.remove());
+        expenseSection.insertAdjacentHTML('beforeend',ledger);
+      }
+      /* Put the additional-income section immediately before the expenses section. */
+      if(incomeSection&&expenseSection&&incomeSection.parentNode===expenseSection.parentNode){
+        expenseSection.parentNode.insertBefore(incomeSection,expenseSection);
+      }
+      return template.innerHTML;
+    };
+    wrappedPersonal.__nexusV11Wrapped=true;
+    window.renderMobilePersonal=wrappedPersonal;
+    try{renderMobilePersonal=wrappedPersonal;}catch(_){}
+  }
+
+  /* Countdown undo is only offered after a deletion or an edit/update. Creations get a normal toast. */
+  function stopUndoClock(){
+    clearTimeout(window.__toast);clearTimeout(window.__nexusV11UndoExpiry);clearInterval(window.__nexusV11UndoInterval);
+    try{clearTimeout(nexusUndoTimer);}catch(_){}
+    try{nexusUndoSnapshot=null;window.__undoLabel='';}catch(_){}
+  }
+  function plainToastV11(message){
+    const toastNode=$('#toast');if(!toastNode)return;
+    stopUndoClock();toastNode.classList.remove('undoable');
+    const icon=typeof window.nexusToastIcon==='function'?window.nexusToastIcon(message):'fa-circle-info';
+    toastNode.innerHTML=`<span class="toast-icon"><i class="fa-solid ${escText(icon)}" aria-hidden="true"></i></span><span class="toast-message">${escText(String(message||''))}</span>`;
+    toastNode.classList.add('show');
+    window.__toast=setTimeout(()=>toastNode.classList.remove('show'),3200);
+  }
+  function shouldOfferUndo(message){
+    return /(elimin|borr|edit|actualiz|modific|renombr|nombre.{0,20}caj|caj.{0,20}nombre|cambio.{0,15}nombre)/i.test(String(message||''));
+  }
+  function dismissUndoV11(){
+    stopUndoClock();
+    const node=$('#toast');if(node)node.classList.remove('show','undoable');
+  }
+  window.dismissNexusUndoToast=dismissUndoV11;
+  window.showUndoToast=function showUndoToastV11(message,snapshot,icon='fa-rotate-left'){
+    if(!shouldOfferUndo(message)){plainToastV11(message);return;}
+    const node=$('#toast');if(!node||!snapshot){plainToastV11(message);return;}
+    stopUndoClock();
+    try{nexusUndoSnapshot=snapshot;window.__undoLabel=String(message||'la última acción');}catch(_){}
+    const iconClass=String(icon||'fa-rotate-left').replace(/[^a-z0-9- ]/gi,'');
+    node.classList.add('undoable','show');
+    node.innerHTML=`<span class="toast-icon"><i class="fa-solid ${iconClass}" aria-hidden="true"></i></span><span class="toast-message"><strong>${escText(String(message||'Cambios realizados'))}</strong><span class="m-v11-undo-meta"><span class="m-v11-undo-dial" id="mV11UndoDial" style="--undo-progress:100%"><i class="fa-regular fa-clock" aria-hidden="true"></i></span><b id="mV11UndoCountdown">15 s</b></span></span><button type="button" class="toast-undo" onclick="undoLastNexusAction()"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Deshacer</button><button type="button" class="m-v11-toast-close" onclick="dismissNexusUndoToast()" aria-label="Cerrar aviso" title="Cerrar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>`;
+    let remaining=15;
+    window.__nexusV11UndoInterval=setInterval(()=>{
+      remaining=Math.max(0,remaining-1);
+      const count=$('#mV11UndoCountdown'),dial=$('#mV11UndoDial');
+      if(count)count.textContent=`${remaining} s`;
+      if(dial)dial.style.setProperty('--undo-progress',`${remaining/15*100}%`);
+      if(remaining<=0)dismissUndoV11();
+    },1000);
+    window.__nexusV11UndoExpiry=setTimeout(dismissUndoV11,15000);
+  };
+  window.toastUndo=window.showUndoToast;
+  try{showUndoToast=window.showUndoToast;toastUndo=window.showUndoToast;}catch(_){}
+
+  /* A few mobile edit forms report success through toast() rather than showUndoToast(). Capture their pre-edit state here. */
+  const oldSaveExpense=window.saveExpense;
+  if(typeof oldSaveExpense==='function'){
+    const wrappedSaveExpense=function saveExpenseV11(event,category,id){
+      if(id&&typeof window.snapshotNexusState==='function')window.__v11PendingRecordEdit={snapshot:window.snapshotNexusState(),kind:'home-expense',id:String(id)};
+      else window.__v11PendingRecordEdit=null;
+      return oldSaveExpense.apply(this,arguments);
+    };
+    window.saveExpense=wrappedSaveExpense;try{saveExpense=wrappedSaveExpense;}catch(_){}
+  }
+  const oldSavePersonal=window.savePersonalMovement;
+  if(typeof oldSavePersonal==='function'){
+    const wrappedSavePersonal=function savePersonalMovementV11(event,person,type,id){
+      if(id&&typeof window.snapshotNexusState==='function')window.__v11PendingRecordEdit={snapshot:window.snapshotNexusState(),kind:'personal-expense',id:String(id)};
+      else window.__v11PendingRecordEdit=null;
+      return oldSavePersonal.apply(this,arguments);
+    };
+    window.savePersonalMovement=wrappedSavePersonal;try{savePersonalMovement=wrappedSavePersonal;}catch(_){}
+  }
+  const toastV11=function toastV11(message){
+    const text=String(message||'');
+    const pending=window.__v11PendingRecordEdit;
+    if(pending&&/actualiz|modific|editad/i.test(text)&&typeof window.snapshotNexusState==='function'){
+      const current=window.snapshotNexusState();window.__v11PendingRecordEdit=null;
+      if(current!==pending.snapshot){window.showUndoToast(text,pending.snapshot,'fa-pen-to-square');return;}
+    }
+    if(!/actualiz|modific|editad/i.test(text))window.__v11PendingRecordEdit=null;
+    plainToastV11(text);
+  };
+  window.toast=toastV11;try{toast=toastV11;}catch(_){}
+
+  const oldUndo=window.undoLastNexusAction;
+  if(typeof oldUndo==='function')window.undoLastNexusAction=function undoLastNexusActionV11(){clearInterval(window.__nexusV11UndoInterval);clearTimeout(window.__nexusV11UndoExpiry);return oldUndo.apply(this,arguments);};
+
+  const style=document.createElement('style');style.id='nexus-mobile-v11-polish-style';style.textContent=`
+    .m-v11-dashboard-account{--account-color:var(--v11-account-color,#c4b5fd);border:1px solid color-mix(in srgb,var(--v11-account-color,#c4b5fd) 42%,#30283d)!important;background:linear-gradient(155deg,color-mix(in srgb,var(--v11-account-bg,#1d1930) 72%,#191523),#12101a)!important;box-shadow:0 8px 20px #0002}
+    .m-v11-dashboard-account .m-v3-account-title{display:flex;align-items:center;gap:7px;color:var(--v11-account-color)!important;font-weight:800}
+    .m-v11-dashboard-account .m-v3-account-title i{display:inline-grid;place-items:center;width:30px;height:30px;flex:0 0 30px;border-radius:10px;background:color-mix(in srgb,var(--v11-account-color) 17%,#12101a);border:1px solid color-mix(in srgb,var(--v11-account-color) 45%,transparent);color:var(--v11-account-color)!important}
+    .m-v11-dashboard-account>strong{color:var(--v11-account-color)!important;font-size:19px}
+    .m-v11-dashboard-account .m-v3-account-cta{color:var(--v11-account-color)!important;border-top:1px solid color-mix(in srgb,var(--v11-account-color) 20%,transparent);padding-top:8px;margin-top:5px}
+    .m-v5-calendar-symbol{display:grid!important;place-items:center!important;min-width:41px!important;min-height:41px!important}
+    .m-v5-calendar-symbol>i{display:block!important;font-size:18px!important;line-height:1!important;opacity:1!important;visibility:visible!important}
+    .m-v5-cal-empty>span{display:grid!important;place-items:center!important;color:#7ee8bb!important}.m-v5-cal-empty>span>i{display:block!important;font-size:19px!important;line-height:1!important}
+    .m-v11-personal-expense-ledger{margin-top:12px!important;display:grid;gap:10px}
+    .m-v11-personal-expense-ledger-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:9px;border-bottom:1px solid #ffffff10}
+    .m-v11-personal-expense-ledger-head>div{display:grid;gap:4px;min-width:0}.m-v11-personal-expense-ledger-head h4{margin:0;font-size:12px}.m-v11-personal-expense-ledger-head h4 i{color:#fb923c;margin-right:5px}.m-v11-personal-expense-ledger-head small{color:#a99fb8;font-size:9px;line-height:1.4}
+    .m-v11-personal-expense-list{display:grid;gap:0}
+    .m-v11-personal-expense-row{display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #ffffff0d;min-width:0}
+    .m-v11-personal-expense-row:last-child{border-bottom:0}
+    .m-v11-personal-expense-icon{display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:color-mix(in srgb,var(--expense-color,#fb923c) 18%,#12101a);border:1px solid color-mix(in srgb,var(--expense-color,#fb923c) 42%,transparent);color:var(--expense-color,#fb923c);font-size:14px}
+    .m-v11-personal-expense-copy{display:grid;gap:4px;min-width:0}.m-v11-personal-expense-copy>b{font-size:11px;line-height:1.35;overflow-wrap:anywhere}.m-v11-personal-expense-copy>small{font-size:9px;color:#a99fb8;line-height:1.4;overflow-wrap:anywhere}
+    .m-v11-expense-status{display:inline-flex;align-items:center;gap:4px;width:max-content;max-width:100%;font-size:8px;font-weight:850;padding:4px 7px;border-radius:99px}.m-v11-expense-status.pending{background:#4a2c14;color:#fdba74}.m-v11-expense-status.paid{background:#19392e;color:#6ee7b7}
+    .m-v11-personal-expense-side{display:grid;justify-items:end;gap:7px;min-width:0}.m-v11-personal-expense-side>strong{font-size:11px;white-space:nowrap}.m-v11-personal-expense-actions{display:flex;align-items:center;gap:4px}.m-v11-personal-expense-actions .m-icon-btn{width:29px;height:29px;min-width:29px;min-height:29px;border-radius:9px}
+    .toast.undoable{gap:8px;padding:11px 10px;align-items:center}.toast.undoable .toast-message{display:grid;gap:7px;flex:1;min-width:0}.toast.undoable .toast-message>strong{font-size:11px;line-height:1.3;overflow-wrap:anywhere}.m-v11-undo-meta{display:inline-flex;align-items:center;gap:6px;font-size:10px;color:#c4b5fd;font-variant-numeric:tabular-nums}.m-v11-undo-dial{position:relative;width:23px;height:23px;flex:0 0 23px;display:grid;place-items:center;border-radius:50%;background:conic-gradient(#a78bfa var(--undo-progress,100%),#342a45 0)}.m-v11-undo-dial:before{content:"";position:absolute;inset:3px;border-radius:50%;background:#1d1829}.m-v11-undo-dial i{z-index:1;font-size:10px}.m-v11-toast-close{display:grid;place-items:center;align-self:flex-start;flex:0 0 27px;width:27px;height:27px;border:1px solid #514064;border-radius:9px;background:#282034;color:#c4b5fd;padding:0;font-size:12px}.m-v11-toast-close:hover{background:#382b4b}
+    @media(max-width:380px){.m-v11-personal-expense-row{grid-template-columns:33px minmax(0,1fr)}.m-v11-personal-expense-side{grid-column:2;display:flex;justify-content:space-between;align-items:center;width:100%}.toast.undoable{left:8px;right:8px;padding:9px;gap:6px}.toast.undoable .toast-undo{font-size:10px;padding:6px 8px}}
+  `;
+  document.head.appendChild(style);
+
+  /* Re-apply icon state after every screen render; the calm state always has a normal calendar glyph. */
+  const oldRenderUI=window.renderMobileUI;
+  if(typeof oldRenderUI==='function'&&!oldRenderUI.__nexusV11Wrapped){
+    const wrappedUI=function renderMobileUIV11(){
+      const result=oldRenderUI.apply(this,arguments);
+      try{
+        const root=$('#mContent')||document;
+        applyCalendarMeaning(root);
+        $$('.mini-account',document).forEach(card=>{
+          const text=$('.small',card)?.textContent||'';
+          let id=/ahorros/i.test(text)?'savings':/pareja/i.test(text)?'partner':/personal m[ií]a/i.test(text)?'me':'home';
+          const meta=accountTheme[id];card.style.setProperty('--v11-account-color',meta.color);card.style.borderColor=`color-mix(in srgb, ${meta.color} 35%, #30283d)`;
+        });
+      }catch(error){console.warn('Nexus V11: iconografia/calendario',error);}
+      return result;
+    };
+    wrappedUI.__nexusV11Wrapped=true;
+    window.renderMobileUI=wrappedUI;
+    try{renderMobileUI=wrappedUI;}catch(_){}
+  }
+})();
+</script>
+
 </body>
 </html>
