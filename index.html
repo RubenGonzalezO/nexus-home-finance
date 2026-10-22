@@ -2197,6 +2197,9 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     const paymentDate=status==='pending'?(document.getElementById('ePaymentDate')?.value||''):(existing?.paymentDate||'');if(status==='pending'&&!paymentDate)return toast('Selecciona la fecha límite del pago.');
     const repeat=status==='pending'?!!document.getElementById('eRepeatMonthly')?.checked:!!existing?.repeatMonthly;
     const rec={...(existing||{}),id:id||nexusUUID(),date:document.getElementById('eDate').value,amount,category,distribution:dist,meAmount:me,partnerAmount:pa,status,paymentScheduled:status==='pending'||!!(existing?.paymentScheduled&&paymentDate),paymentDate,paidDate:status==='paid'?(existing?.status==='pending'?(existing.paidDate||dateNow()):(existing?.paidDate||'')):'',repeatMonthly:repeat,recurrenceId:repeat?(existing?.recurrenceId||nexusUUID()):''};
+    /* Rebuild stable named shares from the newly edited form values; do not reuse an old split map. */
+    if(typeof window.nexusV22MakeShareMap==='function') rec.shareByIdentity=window.nexusV22MakeShareMap(me,pa,dist,amount,state.people);
+    else delete rec.shareByIdentity;
     const dateForBudget=status==='pending'?paymentDate:(rec.paidDate||rec.date);const oldAmount=existing&&!(existing.status==='pending'&&status==='paid')?Number(existing.amount)||0:null;
     const commit=()=>{if(existing)state.expenses=state.expenses.map(x=>x.id===id?rec:x);else state.expenses.push(rec);if(existing?.status==='pending'&&status==='paid'&&rec.repeatMonthly)mobileV4MaybeCreateNext(rec,'expense');saveState();closeModal();renderMobileUI();setTimeout(()=>toast(existing?'Gasto del hogar actualizado':status==='pending'?'Pago pendiente programado':'Gasto del hogar registrado'),30);};if(status==='pending')commit();else mobileV4Preflight({kind:'expense',amount,date:dateForBudget,id:existing?.id||'',oldAmount},commit);
   };
@@ -5412,11 +5415,18 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     }
   }
   function generalBalance(snapshot){
+    /*
+      V22: the shared balance is an aggregate cash-flow figure, not the sum of
+      role-labelled cards. "me/partner" can be reversed between the two logins;
+      summing those role cards can make the general amount differ by session.
+      The base snapshot.available already totals household and personal flows.
+    */
+    const aggregate = finiteNumber(snapshot?.available);
+    if (aggregate !== null) return aggregate;
     const me = finiteNumber(snapshot?.profiles?.me?.balance);
     const partner = finiteNumber(snapshot?.profiles?.partner?.balance);
     if (me !== null && partner !== null) return me + partner;
-    const fallback = finiteNumber(snapshot?.available);
-    return fallback === null ? 0 : fallback;
+    return 0;
   }
   function canonicalSnapshot(filter){
     const snapshot = rawSnapshot(filter);
@@ -5537,14 +5547,24 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
       return obj;
     } catch (_) { return null; }
   }
+  function backupSnapshotOnce(label,snapshot){
+    if(!snapshot || typeof snapshot!=='object')return;
+    const safeLabel=String(label||'active').replace(/[^a-zA-Z0-9_-]/g,'_');
+    const key='nexus_v22_safety_backup_'+safeLabel;
+    try{if(!localStorage.getItem(key))localStorage.setItem(key,JSON.stringify({savedAt:new Date().toISOString(),state:snapshot}));}catch(error){console.warn('Nexus V22: no fue posible guardar respaldo preventivo local.',error);}
+  }
   function readCachedSnapshots(){
     const result=[];
     try {
       for(let i=0;i<localStorage.length;i++){
         const key=localStorage.key(i);
-        if(!key || !key.startsWith(PREFIX+'_') || key===TOMBSTONE_KEY || key.endsWith('_calendar_task_tombstones')) continue;
+        if(!key || !key.startsWith(PREFIX+'_') || key===TOMBSTONE_KEY || key===PREFIX+'_shared' || key.endsWith('_calendar_task_tombstones')) continue;
         const snapshot=parseStateCache(key);
-        if(snapshot) result.push({key,state:snapshot});
+        if(snapshot){
+          const cacheIdentity=key.slice((PREFIX+'_').length);
+          backupSnapshotOnce(cacheIdentity,snapshot);
+          result.push({key,state:snapshot});
+        }
       }
     } catch (_) {}
     return result;
@@ -5591,33 +5611,94 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     }
     return 0;
   }
-  function addExpenseCandidate(map,row,sourcePriority){
+  function stablePersonKey(name){
+    const n=norm(name);
+    if(n.includes('ruben')) return 'ruben';
+    if(n.includes('mauren')) return 'mauren';
+    return n ? 'name:'+n : '';
+  }
+  function numericShare(value, fallback){
+    const n=Number(value);
+    return value!==null && value!==undefined && value!=='' && Number.isFinite(n) ? Math.max(0,n) : fallback;
+  }
+  function namedSharesFor(row, people){
+    const existing=row?.shareByIdentity;
+    if(existing && typeof existing==='object'){
+      const valid=Object.entries(existing).filter(([key,value])=>key && value!=='' && Number.isFinite(Number(value)));
+      if(valid.length>=2) return Object.fromEntries(valid.map(([key,value])=>[key,Math.max(0,Number(value))]));
+    }
+    const amount=Math.max(0,Number(row?.amount)||0);
+    const half=amount/2;
+    const sourcePeople=people||state?.people||{};
+    const meKey=stablePersonKey(sourcePeople.me), partnerKey=stablePersonKey(sourcePeople.partner);
+    let meShare=numericShare(row?.meAmount,half), partnerShare=numericShare(row?.partnerAmount,half);
+    if(row?.distribution==='auto') meShare=partnerShare=half;
+    if(!meKey || !partnerKey || meKey===partnerKey) return null;
+    return {[meKey]:meShare,[partnerKey]:partnerShare};
+  }
+  function expenseBusinessSignature(row){
+    if(!row || typeof row!=='object') return '';
+    const copy={...row};
+    delete copy.meAmount;delete copy.partnerAmount;delete copy.shareByIdentity;
+    delete copy.updatedAt;delete copy.modifiedAt;delete copy.lastUpdated;
+    return JSON.stringify(copy);
+  }
+  function hasCanonicalShares(row){
+    const obj=row?.shareByIdentity;
+    if(!obj||typeof obj!=='object')return false;
+    return Object.entries(obj).filter(([key,value])=>key&&value!==''&&Number.isFinite(Number(value))).length>=2;
+  }
+  function addExpenseCandidate(map,row,sourcePriority,sourcePeople){
     if(!row || row.id==null || String(row.id)==='') return;
     const id=String(row.id), previous=map.get(id);
-    if(!previous){ map.set(id,{row:{...row},priority:sourcePriority}); return; }
-    const a=timeOfRecord(previous.row), b=timeOfRecord(row);
-    if(b>a || (b===a && sourcePriority>previous.priority)) map.set(id,{row:{...row},priority:sourcePriority});
-  }
-  function writeTombstones(list){
-    const unique=new Map();
-    for(const t of list) unique.set(String(t.id),{collection:'expenses',id:String(t.id),deletedAt:String(t.deletedAt||new Date().toISOString())});
-    const final=[...unique.values()];
-    try{localStorage.setItem(TOMBSTONE_KEY,JSON.stringify(final));}catch(_){}
-    if(state && typeof state==='object') state.sharedRecordTombstones=final;
-    return final;
+    const cloned={...row};
+    const shares=namedSharesFor(cloned,sourcePeople);
+    const candidate={row:cloned,priority:sourcePriority,sourcePeople:sourcePeople?{...sourcePeople}:{...(state?.people||{})},shares};
+    if(!previous){map.set(id,candidate);return;}
+    const oldStamp=timeOfRecord(previous.row), newStamp=timeOfRecord(cloned);
+    const sameBusiness=expenseBusinessSignature(previous.row)===expenseBusinessSignature(cloned);
+    const stable=hasCanonicalShares(cloned),previousStable=hasCanonicalShares(previous.row);
+    /* If the actual expense fields are identical, explicit name-keyed shares always
+       beat inferred role-relative shares, even if V21 stamped a misleading newer date. */
+    if(sameBusiness && stable!==previousStable){if(stable)map.set(id,candidate);return;}
+    if(newStamp>oldStamp || (newStamp===oldStamp && sourcePriority>previous.priority)) map.set(id,candidate);
   }
   function mergeCachedExpenses(snapshots){
     if(!state || typeof state!=='object') return false;
     const before=JSON.stringify(state.expenses||[]);
     const applicable=(snapshots||[]).filter(entry=>householdMatch(entry.state));
     const tombstones=allExpenseTombstones(applicable);
-    const deleted=new Set(tombstones.map(t=>String(t.id)));
+    const tombstoneById=new Map(tombstones.map(t=>[String(t.id),t]));
     const candidates=new Map();
-    (state.expenses||[]).forEach(row=>addExpenseCandidate(candidates,row,1000));
+    (state.expenses||[]).forEach(row=>addExpenseCandidate(candidates,row,10000,state.people));
     applicable.forEach((entry,index)=>{
-      (Array.isArray(entry.state?.expenses)?entry.state.expenses:[]).forEach(row=>addExpenseCandidate(candidates,row,index+1));
+      const priority=String(entry.key||'')===PREFIX+'_'+String(authUser?.id||'')?5000:index+1;
+      (Array.isArray(entry.state?.expenses)?entry.state.expenses:[]).forEach(row=>addExpenseCandidate(candidates,row,priority,entry.state?.people));
     });
-    state.expenses=[...candidates.entries()].filter(([id])=>!deleted.has(id)).map(([,v])=>v.row);
+    const currentMe=stablePersonKey(state.people?.me), currentPartner=stablePersonKey(state.people?.partner);
+    const resolved=[];
+    for(const [id,candidate] of candidates){
+      const row=candidate.row, tombstone=tombstoneById.get(String(id));
+      if(tombstone){
+        const deletedAt=Date.parse(tombstone.deletedAt||'')||0;
+        const changedAt=timeOfRecord(row);
+        /* Legacy expenses without updatedAt are ambiguous; preserve their financial data
+           rather than silently dropping them because of a stale tombstone. */
+        if(changedAt>0 && deletedAt>=changedAt) continue;
+      }
+      const next={...row};
+      const shares=candidate.shares||namedSharesFor(row,candidate.sourcePeople);
+      if(shares && currentMe && currentPartner && Number.isFinite(Number(shares[currentMe])) && Number.isFinite(Number(shares[currentPartner]))){
+        next.shareByIdentity={...shares};
+        next.meAmount=Number(shares[currentMe]);
+        next.partnerAmount=Number(shares[currentPartner]);
+      } else if(next.distribution==='auto') {
+        const half=Math.max(0,Number(next.amount)||0)/2;
+        next.meAmount=half;next.partnerAmount=half;
+      }
+      resolved.push(next);
+    }
+    state.expenses=resolved;
     state.sharedRecordTombstones=tombstones;
     writeTombstones(tombstones);
     return before!==JSON.stringify(state.expenses);
@@ -5662,6 +5743,8 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
       const ok=await previousLoadState.apply(this,arguments);
       if(ok && authUser){
         try {
+          /* Preserve a one-time copy of the freshly loaded state before any reconciliation. */
+          backupSnapshotOnce('cloud_'+String(authUser.id||authUser.username||'active'),state);
           const changed=mergeCachedExpenses([...snapshotsBefore,...readCachedSnapshots()]);
           if(changed){
             insideReconcile=true;
@@ -6049,3 +6132,63 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
 </script>
 </body>
 </html>
+
+<style id="nexus-v22-financial-consistency-style">
+/* V22 only changes presentation where the previous layer used an out-of-date total. */
+.m-v16-live-breakdown,.m-v16-person-breakdown{gap:10px!important}
+</style>
+<script id="nexus-v22-financial-consistency">
+(function(){
+  'use strict';
+  const asNumber=value=>{const n=Number(value);return Number.isFinite(n)?n:null;};
+  const normalizeName=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+  function stableKey(value){const n=normalizeName(value);if(n.includes('ruben'))return 'ruben';if(n.includes('mauren'))return 'mauren';return n?'name:'+n:'';}
+  window.nexusV22MakeShareMap=function(meAmount,partnerAmount,distribution,total,people){
+    const amount=Math.max(0,Number(total)||0),half=amount/2;
+    const left=distribution==='auto'?half:Math.max(0,Number(meAmount)||0);
+    const right=distribution==='auto'?half:Math.max(0,Number(partnerAmount)||0);
+    const me=stableKey(people?.me),partner=stableKey(people?.partner);
+    if(!me||!partner||me===partner)return null;
+    return {[me]:left,[partner]:right};
+  };
+  function activeFilter(){
+    try{const f=typeof getFilter==='function'?getFilter():null;if(f&&Number.isFinite(Number(f.year)))return {year:Number(f.year),month:f.month===undefined?'all':String(f.month)};}catch(_){}
+    const d=new Date();return {year:d.getFullYear(),month:String(d.getMonth()+1)};
+  }
+  function baseSnapshot(filter){
+    const fn=window.__nexusV20BaseSnapshot||window.nexusV16LiveSnapshot;
+    if(typeof fn!=='function')return null;
+    try{return fn(filter||activeFilter());}catch(error){console.warn('Nexus V22: snapshot financiero no disponible',error);return null;}
+  }
+  function sharedBalance(snapshot){
+    const aggregate=asNumber(snapshot?.available);
+    if(aggregate!==null)return aggregate;
+    const me=asNumber(snapshot?.profiles?.me?.balance),partner=asNumber(snapshot?.profiles?.partner?.balance);
+    if(me!==null&&partner!==null)return me+partner;
+    return null;
+  }
+  function repaint(){
+    if(!window.authToken||!window.authUser)return;
+    const snap=baseSnapshot(activeFilter());if(!snap)return;
+    const balance=sharedBalance(snap);if(balance===null)return;
+    const format=typeof window.money==='function'?window.money:((n)=>'$ '+Math.round(n).toLocaleString('es-CO'));
+    document.querySelectorAll('.m-balance-card .m-balance-value,.m-v2-hero.available .m-v2-hero-total,.m-v3-kpi.available strong,[data-balance-scope="household"]').forEach(node=>{
+      node.textContent=format(balance);node.setAttribute('data-balance-scope','household');
+    });
+  }
+  window.nexusV22SharedAvailable=filter=>{const snap=baseSnapshot(filter||activeFilter());return snap?sharedBalance(snap):null;};
+  window.nexusV22RefreshFinancialCards=repaint;
+  const oldRender=window.renderMobileUI||(typeof renderMobileUI==='function'?renderMobileUI:null);
+  if(oldRender&&!oldRender.__nexusV22BalanceWrapped){
+    const wrapped=function(){const result=oldRender.apply(this,arguments);try{repaint();}catch(_){}return result;};
+    wrapped.__nexusV22BalanceWrapped=true;window.renderMobileUI=wrapped;try{renderMobileUI=wrapped;}catch(_){}
+  }
+  const oldRenderAll=window.renderAll||(typeof renderAll==='function'?renderAll:null);
+  if(oldRenderAll&&!oldRenderAll.__nexusV22BalanceWrapped){
+    const wrapped=function(){const result=oldRenderAll.apply(this,arguments);try{repaint();}catch(_){}return result;};
+    wrapped.__nexusV22BalanceWrapped=true;window.renderAll=wrapped;try{renderAll=wrapped;}catch(_){}
+  }
+  document.addEventListener('DOMContentLoaded',()=>{try{repaint();}catch(_){}},{once:true});
+  window.addEventListener('pageshow',()=>{try{repaint();}catch(_){}});
+})();
+</script>
