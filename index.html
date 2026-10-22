@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Finance · App móvil V17</title>
+<title>Nexus Finance · App móvil V19</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 :root{
@@ -1127,7 +1127,7 @@ function renderPersonalModule(){
   const max=Math.max(...values,1);
   return `<div class="personal-mini-chart" style="--identity-color:${color}" role="img" aria-label="Evolución mensual de ${esc(type==='expense'?'gastos personales':type==='saving'?'ahorros personales':type==='income'?'ingresos adicionales':'pagos de deudas')} durante ${f.year}">${values.map((v,i)=>`<div class="personal-mini-month" title="${MONTHS[i]}: ${money(v)}"><div class="track"><i class="bar" style="height:${v?Math.max(3,v/max*70):2}px"></i></div><small>${MONTHS[i].slice(0,3)}</small></div>`).join("")}</div>`;
  };
- const eligibleDebts=(state.debts||[]).filter(d=>d.status!=="paid"&&Number(d.balance)>0&&(d.owner===person||d.owner==="home")).sort((a,b)=>(a.due||"9999").localeCompare(b.due||"9999"));
+ const eligibleDebts=(state.debts||[]).filter(d=>d.status!=="paid"&&Number(d.balance)>0&&(d.owner==="home"||d.owner==="me"||d.owner==="partner")).sort((a,b)=>(a.due||"9999").localeCompare(b.due||"9999"));
  const debtRows=eligibleDebts.length?`<div class="personal-debt-list">${eligibleDebts.map(d=>`<div class="personal-debt-row"><div class="debt-info"><strong><i class="fa-solid fa-file-invoice-dollar" style="color:${d.owner==='home'?MODULE_COLORS.home:MODULE_COLORS.debt}"></i> ${esc(d.name)}</strong><small>${ownerTag(d.owner)} · Saldo: <b>${money(d.balance)}</b>${Number(d.installment)>0?` · Cuota: ${money(d.installment)}`:""}</small></div><div class="debt-actions"><button class="btn primary" onclick="payDebt('${d.id}','${person}')"><i class="fa-solid fa-hand-holding-dollar"></i> Abonar</button></div></div>`).join("")}</div>`:`<div class="empty">No tienes deudas personales ni del hogar pendientes que puedas abonar desde este perfil.</div>`;
  document.getElementById("personalPageContent").innerHTML=`
  <section class="grid kpis personal-summary-grid">
@@ -1184,8 +1184,8 @@ function renamePersonalSavingBox(person,id){managePersonalSavingBoxes(person)}
 function deletePersonalSavingBox(person,id){const boxes=personalSavingBoxes(person);if(boxes.length<=1){toast("Cada perfil debe conservar al menos una caja de ahorro.");return}const used=(state.personalSpending||[]).some(x=>x.person===person&&personalMovementType(x)==="saving"&&(x.savingBoxId||boxes[0].id)===id);if(used){toast("Esta caja tiene movimientos. No se puede eliminar mientras tenga aportes asociados.");return}confirmInApp("¿Eliminar esta caja de ahorro vacía?",()=>{state.personalSavingBoxes[person]=boxes.filter(b=>b.id!==id);saveState();closeModal();renderPersonalModule();toast("Caja de ahorro eliminada")},{confirmLabel:"Eliminar caja"})}
 
 function openPersonalDebtPicker(person){
- const eligible=(state.debts||[]).filter(d=>d.status!=="paid"&&Number(d.balance)>0&&(d.owner===person||d.owner==="home"));
- openModal(`<i class="fa-solid fa-file-invoice-dollar"></i> Deudas disponibles para ${esc(state.people[person])}`,eligible.length?`<p class="small">Este perfil solo puede abonar a sus propias deudas y a las del hogar. Las obligaciones personales de la otra persona no aparecen aquí.</p><div class="personal-debt-list">${eligible.map(d=>`<div class="personal-debt-row"><div class="debt-info"><strong>${esc(d.name)}</strong><small>${ownerTag(d.owner)} · Pendiente: <b>${money(d.balance)}</b></small></div><button class="btn primary" onclick="payDebt('${d.id}','${person}')">Abonar</button></div>`).join("")}</div>`:`<div class="empty">No hay deudas personales o del hogar pendientes para este perfil.</div>`);
+ const eligible=(state.debts||[]).filter(d=>d.status!=="paid"&&Number(d.balance)>0&&(d.owner==="home"||d.owner==="me"||d.owner==="partner"));
+ openModal(`<i class="fa-solid fa-file-invoice-dollar"></i> Deudas disponibles para ${esc(state.people[person])}`,eligible.length?`<p class="small">Puedes abonar a cualquier deuda pendiente. El responsable original de la obligación no cambia.</p><div class="personal-debt-list">${eligible.map(d=>`<div class="personal-debt-row"><div class="debt-info"><strong>${esc(d.name)}</strong><small>${ownerTag(d.owner)} · Pendiente: <b>${money(d.balance)}</b></small></div><button class="btn primary" onclick="payDebt('${d.id}','${person}')">Abonar</button></div>`).join("")}</div>`:`<div class="empty">No hay deudas personales o del hogar pendientes para este perfil.</div>`);
 }
 
 function openPersonalSpending(person){showModule(person==="partner"?"personalPartner":"personalMe")}
@@ -1628,7 +1628,7 @@ function renderMobilePersonal(person) {
   return `<div class="m-profile-switch"><button class="${person==='me'?'active':''}" onclick="mobileSetScreen('personalMe')"><i class="fa-solid fa-person"></i> ${esc(state.people.me)}</button><button class="${person==='partner'?'active':''}" onclick="mobileSetScreen('personalPartner')"><i class="fa-solid fa-person-dress"></i> ${esc(state.people.partner)}</button></div>
   <section class="m-personal-hero"><span>Disponible real · ${esc(state.people[person])}</span><strong>${money(balance)}</strong><div class="m-personal-breakdown"><span>Asignado <b>${money(assigned)}</b></span><span>Ingresos extra <b>${money(stats.extraIncome)}</b></span><span>Gastos y pagos <b>${money(stats.spent)}</b></span><span>Ahorro personal <b>${money(stats.saved)}</b></span></div></section>
   <div class="m-section-heading"><div><h3>Registrar movimiento</h3><p>Se mantiene separado del dinero del hogar.</p></div></div><section class="m-personal-actions"><button onclick="openPersonalMovement('${person}','income')"><i class="fa-solid fa-arrow-trend-up"></i><span>Ingreso extra</span></button><button onclick="openPersonalMovement('${person}','expense')"><i class="fa-solid fa-wallet"></i><span>Gasto</span></button><button onclick="openPersonalMovement('${person}','saving')"><i class="fa-solid fa-piggy-bank"></i><span>Ahorro</span></button><button onclick="managePersonalSavingBoxes('${person}')"><i class="fa-solid fa-boxes-stacked"></i><span>Cajas ahorro</span></button></section>
-  <div class="m-section-heading"><div><h3>Deudas que puedes abonar</h3><p>Obligaciones personales y del hogar</p></div></div>${(()=>{const ds=(state.debts||[]).filter(d=>d.status!=='paid'&&Number(d.balance)>0&&(d.owner===person||d.owner==='home'));return ds.length?`<section class="m-debt-list">${ds.map(d=>`<article class="m-debt-card mini"><div class="m-debt-card-top"><div class="m-debt-name"><b>${esc(d.name)}</b><small>${d.owner==='home'?'Hogar':esc(state.people[d.owner]||d.owner)}</small></div><strong>${money(d.balance)}</strong></div><button class="m-primary-btn full" onclick="payDebt('${d.id}','${person}')">Abonar</button></article>`).join("")}</section>`:`<div class="m-inline-empty">No hay deudas disponibles para este perfil.</div>`})()}
+  <div class="m-section-heading"><div><h3>Deudas pendientes que puedes abonar</h3><p>Obligaciones personales y del hogar</p></div></div>${(()=>{const ds=(state.debts||[]).filter(d=>d.status!=='paid'&&Number(d.balance)>0&&(d.owner==='home'||d.owner==='me'||d.owner==='partner'));return ds.length?`<section class="m-debt-list">${ds.map(d=>`<article class="m-debt-card mini"><div class="m-debt-card-top"><div class="m-debt-name"><b>${esc(d.name)}</b><small>${d.owner==='home'?'Hogar':esc(state.people[d.owner]||d.owner)}</small></div><strong>${money(d.balance)}</strong></div><button class="m-primary-btn full" onclick="payDebt('${d.id}','${person}')">Abonar</button></article>`).join("")}</section>`:`<div class="m-inline-empty">No hay deudas disponibles para este perfil.</div>`})()}
   <div class="m-section-heading"><div><h3>Historial personal</h3><p>${rows.length} movimiento(s) registrados</p></div></div><section class="m-panel">${recent.length?`<div class="m-transaction-list">${recent.map(x=>{const type=personalMovementType(x),amount=Math.abs(Number(x.amount)||0),isSpent=personalTypeCountsAsSpent(type),sign=type==='income'?'+':isSpent?'−':'+';return `<article class="m-transaction"><div class="m-transaction-icon ${type==='income'?'income':type==='saving'?'saving':type==='debt'?'debt':'expense'}"><i class="fa-solid ${mobileIcon(type)}"></i></div><div class="m-transaction-info"><b>${esc(x.category||labels[type]||type)}</b><small>${esc(x.date||'Sin fecha')} · ${esc(x.desc||labels[type]||'Movimiento personal')}</small></div><div class="m-transaction-side"><strong class="${type==='income'?'positive':isSpent?'negative':'saving-text'}">${sign}${money(amount)}</strong>${x.debtId?'<span class="m-tiny-label">Vinculado</span>':`<div class="m-record-actions"><button class="m-icon-btn" onclick="editPersonalMovement('${x.id}')"><i class="fa-solid fa-pen"></i></button><button class="m-icon-btn danger" onclick="deleteRecord('personal','${x.id}')"><i class="fa-solid fa-trash"></i></button></div>`}</div></article>`}).join("")}</div>`:`<div class="m-inline-empty">No hay movimientos personales aún.</div>`}</section>`;
 }
 function renderMobileSettings() {
@@ -1857,7 +1857,7 @@ renderMobilePersonal = function renderMobilePersonalV3(person) {
   const expenseRows=rows.filter(x=>["expense","other-expense"].includes(personalMovementType(x))&&x.status!=="pending");
   const savingsRows=rows.filter(x=>personalMovementType(x)==="saving");
   const boxes=personalSavingBoxes(person);
-  const personalDebts=(state.debts||[]).filter(d=>d.status!=="paid"&&Number(d.balance)>0&&(d.owner===person||d.owner==="home")).sort((a,b)=>(a.due||"9999").localeCompare(b.due||"9999"));
+  const personalDebts=(state.debts||[]).filter(d=>d.status!=="paid"&&Number(d.balance)>0&&(d.owner==="home"||d.owner==="me"||d.owner==="partner")).sort((a,b)=>(a.due||"9999").localeCompare(b.due||"9999"));
   const byCategory={}; for(const x of expenseRows){const cat=x.category||"Otros";byCategory[cat]=(byCategory[cat]||0)+(Number(x.amount)||0);}
   const categories=Object.entries(byCategory).map(([name,value])=>({name,value})).sort((a,b)=>b.value-a.value);
   const personLabel=state.people[person]|| (person==="me"?"Mi perfil":"Mi pareja");
@@ -1867,7 +1867,7 @@ renderMobilePersonal = function renderMobilePersonalV3(person) {
     <div class="m-section-heading"><div><h3><i class="fa-solid fa-bolt"></i> Registrar movimiento</h3><p>Se mantiene separado del dinero del hogar.</p></div></div><section class="m-personal-actions"><button onclick="openPersonalMovement('${person}','income')"><i class="fa-solid fa-arrow-trend-up"></i><span>Ingreso extra</span></button><button onclick="openPersonalMovement('${person}','expense')"><i class="fa-solid fa-wallet"></i><span>Gasto personal</span></button><button onclick="openPersonalMovement('${person}','saving')"><i class="fa-solid fa-piggy-bank"></i><span>Ahorro personal</span></button><button onclick="mobileOpenDebtForm('${person}')"><i class="fa-solid fa-file-invoice-dollar"></i><span>Nueva deuda</span></button></section>
     <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-basket-shopping"></i> Gastos personales</h3><p>${expenseRows.length} movimiento(s) del periodo, agrupados por categoría.</p></div><button class="m-v3-link" onclick="openPersonalMovement('${person}','expense')"><i class="fa-solid fa-plus"></i> Añadir</button></div><article class="m-v3-card"><div class="m-v3-highlight" style="color:#fdba74">${money(sum(expenseRows))}</div>${categories.length?`<div class="m-v3-categories" style="margin-top:13px">${categories.map(c=>`<div class="m-v3-category"><span class="m-v3-category-name"><i class="fa-solid fa-circle-dot"></i>${esc(c.name)}</span><span class="m-v3-category-track"><i style="width:${sum(expenseRows)?c.value/sum(expenseRows)*100:0}%"></i></span><strong>${money(c.value)}</strong></div>`).join("")}</div>`:`<div class="m-inline-empty"><i class="fa-solid fa-receipt"></i> No hay gastos personales registrados para este periodo.</div>`}</article></section>
     <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-boxes-stacked"></i> Cajas de ahorro personales</h3><p>${boxes.length} de 4 cajas utilizadas. Cada aporte queda asociado a su caja.</p></div><button class="m-v3-link" onclick="managePersonalSavingBoxes('${person}')"><i class="fa-solid fa-sliders"></i> Administrar</button></div><div class="m-v3-box-grid">${boxes.map((box,i)=>{const boxRows=savingsRows.filter(x=>(x.savingBoxId||boxes[0].id)===box.id);return `<article class="m-v3-box" style="--identity-color:${box.color||personalSavingColor(i)}"><h4><i class="fa-solid fa-piggy-bank"></i> ${esc(box.name)}</h4><strong>${money(sum(boxRows))}</strong><small>${boxRows.length} aporte(s) en el periodo</small><div class="m-v3-box-actions"><button class="m-secondary-btn" onclick="openPersonalMovement('${person}','saving',null,'${box.id}')"><i class="fa-solid fa-plus"></i> Aportar</button><button class="m-v3-inline-btn" aria-label="Editar cajas de ahorro" title="Cambiar nombre" onclick="managePersonalSavingBoxes('${person}')"><i class="fa-solid fa-pen-to-square"></i></button></div></article>`}).join("")}</div><div class="m-v3-box-actions"><button class="m-secondary-btn" style="flex:1" onclick="managePersonalSavingBoxes('${person}')"><i class="fa-solid fa-sliders"></i> Administrar nombres</button>${boxes.length<4?`<button class="m-primary-btn" style="flex:1" onclick="addPersonalSavingBox('${person}')"><i class="fa-solid fa-plus"></i> Añadir caja (${boxes.length}/4)</button>`:`<span class="m-v3-muted"><i class="fa-solid fa-circle-check"></i> Máximo de 4 cajas</span>`}</div>${savingsRows.length?`<div class="m-section-heading"><div><h3><i class="fa-solid fa-clock-rotate-left"></i> Últimos aportes</h3><p>Entradas en las cajas personales.</p></div></div>${savingsRows.slice(0,3).map(x=>`<div class="m-v3-row"><span class="m-v3-row-icon" style="color:${x.person==='partner'?(state.uiSettings?.partnerColor||'#fb7185'):(state.uiSettings?.meColor||'#38bdf8')};background:color-mix(in srgb,${x.person==='partner'?(state.uiSettings?.partnerColor||'#fb7185'):(state.uiSettings?.meColor||'#38bdf8')} 18%,#12101a)"><i class="fa-solid ${x.person==='partner'?'fa-person-dress':'fa-person'}"></i></span><div class="m-v3-row-main"><b>${esc(personalSavingBoxName(person,x.savingBoxId,x.category))}</b><small>${mobileV3DateLabel(x.date)} · ${esc(x.desc||"Aporte personal")}</small></div><div class="m-v3-row-side"><strong class="saving-text">+${money(x.amount)}</strong><button class="m-v3-inline-btn" aria-label="Editar aporte" onclick="editPersonalMovement('${x.id}')"><i class="fa-solid fa-pen-to-square"></i></button></div></div>`).join("")}`:""}</section>
-    <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-file-invoice-dollar"></i> Deudas y obligaciones</h3><p>Las personales de ${esc(personLabel)} y las compartidas del hogar; edita los datos desde aquí.</p></div><button class="m-v3-link" onclick="mobileSetScreen('debts')">Ver todas <i class="fa-solid fa-arrow-right"></i></button></div>${personalDebts.length?personalDebts.map(d=>mobileV3DebtCard(d,{payer:person,compact:true})).join(""):`<article class="m-v3-card"><div class="m-inline-empty"><i class="fa-solid fa-circle-check"></i> No hay deudas pendientes disponibles para este perfil.</div><button class="m-primary-btn full" onclick="mobileOpenDebtForm('${person}')"><i class="fa-solid fa-plus"></i> Crear obligación</button></article>`}</section>
+    <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-file-invoice-dollar"></i> Deudas y obligaciones</h3><p>Todas las obligaciones pendientes del hogar y de ambos perfiles. Puedes abonar a cualquiera; la edición de datos depende de su responsable.</p></div><button class="m-v3-link" onclick="mobileSetScreen('debts')">Ver todas <i class="fa-solid fa-arrow-right"></i></button></div>${personalDebts.length?personalDebts.map(d=>mobileV3DebtCard(d,{payer:person,compact:true})).join(""):`<article class="m-v3-card"><div class="m-inline-empty"><i class="fa-solid fa-circle-check"></i> No hay deudas pendientes disponibles para este perfil.</div><button class="m-primary-btn full" onclick="mobileOpenDebtForm('${person}')"><i class="fa-solid fa-plus"></i> Crear obligación</button></article>`}</section>
     <section class="m-v3-section"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-clock-rotate-left"></i> Historial personal</h3><p>${rows.length} movimiento(s). Los abonos vinculados se ajustan desde su obligación.</p></div><button class="m-v3-link" onclick="openPersonalMovement('${person}','expense')"><i class="fa-solid fa-plus"></i> Nuevo</button></div><section class="m-panel">${rows.length?`<div class="m-transaction-list">${rows.slice(0,30).map(x=>{const type=personalMovementType(x),amount=Math.abs(Number(x.amount)||0),spent=personalTypeCountsAsSpent(type),sign=type==='income'?'+':spent?'−':'+';const linkedDebt=(state.debts||[]).find(d=>d.id===x.debtId);const category=type==='saving'?personalSavingBoxName(person,x.savingBoxId,x.category):(x.category||personalTypeLabel(type));return `<article class="m-transaction"><div class="m-transaction-icon ${type==='income'?'income':type==='saving'?'saving':type==='debt'?'debt':'expense'}" style="${['income','saving'].includes(type)?`color:${x.person==='partner'?(state.uiSettings?.partnerColor||'#fb7185'):(state.uiSettings?.meColor||'#38bdf8')};background:color-mix(in srgb,${x.person==='partner'?(state.uiSettings?.partnerColor||'#fb7185'):(state.uiSettings?.meColor||'#38bdf8')} 18%,#12101a)`:''}"><i class="fa-solid ${['income','saving'].includes(type)?(x.person==='partner'?'fa-person-dress':'fa-person'):mobileIcon(type)}"></i></div><div class="m-transaction-info"><b>${esc(category)}</b><small>${mobileV3DateLabel(x.date)} · ${esc(x.desc||personalTypeLabel(type))}</small>${['expense','other-expense'].includes(type)?window.mobileV4StatusHtml(x,'personal'):''}</div><div class="m-transaction-side"><strong class="${x.status==='pending'&&['expense','other-expense'].includes(type)?'pending-text':type==='income'?'positive':spent?'negative':'saving-text'}">${x.status==='pending'&&['expense','other-expense'].includes(type)?`Pendiente · ${money(amount)}`:`${sign}${money(amount)}`}</strong><div class="m-record-actions">${x.debtId?`<button class="m-icon-btn" title="Editar obligación vinculada" aria-label="Editar obligación vinculada" onclick="editDebt('${x.debtId}')"><i class="fa-solid fa-file-pen"></i></button>`:`<button class="m-icon-btn" title="Editar movimiento" aria-label="Editar movimiento" onclick="editPersonalMovement('${x.id}')"><i class="fa-solid fa-pen-to-square"></i></button><button class="m-icon-btn danger" title="Eliminar movimiento" aria-label="Eliminar movimiento" onclick="deleteRecord('personal','${x.id}')"><i class="fa-solid fa-trash-can"></i></button>`}</div></div></article>`}).join("")}</div>`:`<div class="m-inline-empty"><i class="fa-solid fa-receipt"></i> No hay movimientos personales aún.</div>`}</section></section>`;
 };
 
@@ -5096,6 +5096,510 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
   // Delay initial startup until this patch is fully attached; this is important on mobile WebViews.
   if(!window.__NEXUS_TEST_DISABLE_BOOTSTRAP__)setTimeout(()=>{try{bootstrapAuth();}catch(error){console.error('Nexus: error al iniciar',error);}},0);
 })();
+</script>
+
+<script id="nexus-mobile-v19-recovered-work-patch">
+(function(){
+  'use strict';
+  if (window.__NEXUS_V19_RECOVERED_PATCH__) return;
+  window.__NEXUS_V19_RECOVERED_PATCH__ = true;
+
+  const PERSON_COLORS = Object.freeze({me:'#38bdf8', partner:'#fb7185'});
+  const $ = (selector, root=document) => root.querySelector(selector);
+  const $$ = (selector, root=document) => Array.from(root.querySelectorAll(selector));
+  const textNorm = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();
+  const html = value => typeof window.esc === 'function' ? window.esc(String(value ?? '')) : String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const activeProfile = () => {
+    try { const p = window.nexusV17CurrentProfile?.(); if (p === 'me' || p === 'partner') return p; } catch (_) {}
+    const role = textNorm(authUser?.role || authUser?.profile || authUser?.type || '');
+    const user = textNorm(authUser?.username || authUser?.name || authUser?.email?.split('@')?.[0] || '');
+    if (role.includes('partner') || role.includes('mauren') || user.includes(textNorm(state?.people?.partner || 'Mauren'))) return 'partner';
+    return 'me';
+  };
+  const personName = key => String(state?.people?.[key === 'partner' ? 'partner' : 'me'] || (key === 'partner' ? 'Mauren' : 'Ruben'));
+  const colorForPerson = key => PERSON_COLORS[key === 'partner' ? 'partner' : 'me'];
+  const displayMoney = amount => typeof window.money === 'function' ? window.money(Number(amount) || 0) : '$ ' + (Number(amount)||0).toLocaleString('es-CO');
+  const dayToday = () => typeof window.dateNow === 'function' ? window.dateNow() : new Date().toISOString().slice(0,10);
+  const arrays = key => Array.isArray(state?.[key]) ? state[key] : [];
+  const savingLabels = {financial:'Ahorro Financiero',unexpected:'Imprevistos',emergency:'Emergencias'};
+  const savingColors = {financial:'#34d399',unexpected:'#60a5fa',emergency:'#f472b6'};
+  const savingIcons = {financial:'fa-chart-line',unexpected:'fa-shield-halved',emergency:'fa-briefcase-medical'};
+  const accountLabels = {home:'Cuenta hogar',savings:'Cuenta ahorros',me:'Cuenta personal',partner:'Cuenta personal'};
+  const accountLabel = key => key==='me'||key==='partner' ? `Cuenta personal de ${personName(key)}` : (accountLabels[key] || String(key || 'Cuenta'));
+
+  function categoryColorSafe(category){
+    try { if (typeof window.categoryColor === 'function') { const c=window.categoryColor(category); if(c) return c; } } catch (_) {}
+    const map={Arriendo:'#a78bfa',Mercado:'#fb923c',Luz:'#facc15',Agua:'#38bdf8',Gas:'#f97316',Internet:'#818cf8',Transporte:'#60a5fa',Otros:'#94a3b8'};
+    return map[category] || '#94a3b8';
+  }
+  function categoryIconSafe(category){
+    try { if (typeof window.categoryIcon === 'function') { const v=window.categoryIcon(category); if(v) return v; } } catch (_) {}
+    const map={Arriendo:'fa-house',Mercado:'fa-cart-shopping',Luz:'fa-bolt',Agua:'fa-droplet',Gas:'fa-fire-flame-simple',Internet:'fa-wifi',Transporte:'fa-bus',Otros:'fa-ellipsis'};
+    return map[category] || 'fa-receipt';
+  }
+  function savingName(type, fallback){
+    try { if(typeof window.savingMeta==='function'){ const v=window.savingMeta(type); if(v?.label) return v.label; } } catch (_) {}
+    return savingLabels[type] || fallback || 'Ahorro';
+  }
+  function getOwnerLabel(owner){
+    if(owner==='home')return 'Hogar';
+    if(owner==='partner'||owner==='me')return personName(owner);
+    return String(owner||'Sin responsable');
+  }
+  function getCurrentPeriod(){
+    try { if(typeof window.getFilter==='function')return window.getFilter(); } catch (_) {}
+    return {year:new Date().getFullYear(),month:String(new Date().getMonth()+1)};
+  }
+  function isInSelectedPeriod(date){
+    const f=getCurrentPeriod();
+    if(!date)return false;
+    try { if(typeof window.inPeriod==='function')return window.inPeriod(date,f.year,f.month); } catch (_) {}
+    const d=String(date).slice(0,10), year=Number(d.slice(0,4)), month=Number(d.slice(5,7));
+    return year===Number(f.year) && (String(f.month)==='all' || month===Number(f.month));
+  }
+  function kindOfPersonal(item){
+    try { if(typeof window.personalMovementType==='function') return window.personalMovementType(item); } catch (_) {}
+    return item?.type || 'expense';
+  }
+  function stateForActivity(row){
+    const today=dayToday();
+    if(row.kind==='task'){
+      if(row.source?.status==='done')return {label:'Completado',key:'done'};
+      if(row.date && row.date<today)return {label:'Vencido',key:'overdue'};
+      return {label:'Pendiente',key:'pending'};
+    }
+    if(row.kind==='expense'){
+      if(row.source?.status==='pending'){
+        if(row.date && row.date<today)return {label:'Vencido',key:'overdue'};
+        return {label:'Pendiente',key:'pending'};
+      }
+      return {label:'Pagado',key:'done'};
+    }
+    if(row.kind==='debt'){
+      if(Number(row.source?.balance||0)<=0 || row.source?.status==='paid')return {label:'Pagada',key:'done'};
+      if(row.source?.due && row.source.due<today)return {label:'Vencido',key:'overdue'};
+      return {label:'Pendiente',key:'pending'};
+    }
+    if(row.kind==='debtPayment')return {label:'Abono registrado',key:'done'};
+    if(row.kind==='task')return {label:'Pendiente',key:'pending'};
+    return {label:'Registrado',key:'registered'};
+  }
+  function buildActivities(){
+    const rows=[]; const seen=new Set();
+    const add = row => {
+      if(!row || !row.kind) return;
+      row.id=String(row.id??'');
+      const unique=`${row.kind}:${row.id || `${row.date||''}:${row.title||''}:${row.amount??''}`}`;
+      if(seen.has(unique))return; seen.add(unique);
+      row.date=String(row.date||'').slice(0,10);
+      row.amount=Number.isFinite(Number(row.amount))?Number(row.amount):null;
+      row.person=row.person==='partner'?'partner':row.person==='me'?'me':null;
+      row.statusInfo=stateForActivity(row);
+      rows.push(row);
+    };
+
+    arrays('incomes').forEach(x=>{
+      const p=x.person==='partner'?'partner':'me';
+      add({kind:'income',group:'income',id:x.id,date:x.date,title:`Ingreso · ${personName(p)}`,detail:x.desc||'Ingreso base del hogar',amount:x.amount,person:p,source:x,sign:'+',color:colorForPerson(p),icon:'fa-person',account:accountLabel(p),status:x.status||'registered'});
+    });
+    arrays('expenses').forEach(x=>{
+      const category=String(x.category||'Otros');
+      add({kind:'expense',group:'home',id:x.id,date:x.paidDate||x.date,title:category,detail:`Gasto del hogar · distribución ${x.distribution==='manual'?'manual':'automática'}`,amount:x.amount,source:x,category,sign:x.status==='pending'?'':'−',color:categoryColorSafe(category),icon:categoryIconSafe(category),account:'Cuenta hogar',status:x.status||'paid'});
+    });
+    arrays('savings').forEach(x=>{
+      add({kind:'saving',group:'savings',id:x.id,date:x.date,title:savingName(x.type),detail:`Ahorro del hogar${x.person?` · ${personName(x.person)}`:''}`,amount:x.amount,person:x.person,source:x,sign:'+',color:savingColors[x.type]||'#34d399',icon:savingIcons[x.type]||'fa-piggy-bank',account:'Cuenta ahorros'});
+    });
+    const personal=arrays('personalSpending');
+    personal.forEach(x=>{
+      const type=kindOfPersonal(x), p=x.person==='partner'?'partner':'me';
+      if(type==='debt'){
+        const debt=arrays('debts').find(d=>String(d.id)===String(x.debtId));
+        add({kind:'debtPayment',group:'debts',id:x.id,date:x.date,title:'Abono a deuda',detail:`${x.desc||debt?.name||'Obligación'} · paga ${personName(p)}`,amount:x.amount,person:p,source:x,sign:'−',color:'#f9a8d4',icon:'fa-file-invoice-dollar',account:accountLabel(p),debtId:x.debtId,paymentId:x.paymentId,status:'done'});
+      } else if(type==='income'){
+        add({kind:'personal',group:'income',id:x.id,date:x.date,title:`Ingreso adicional · ${personName(p)}`,detail:x.desc||x.category||'Ingreso personal',amount:x.amount,person:p,source:x,personalType:type,sign:'+',color:colorForPerson(p),icon:'fa-person',account:accountLabel(p)});
+      } else if(type==='saving'){
+        const boxName=x.savingBoxName||x.category||'Ahorro personal';
+        add({kind:'personal',group:'savings',id:x.id,date:x.date,title:boxName,detail:`Ahorro personal · ${personName(p)}`,amount:x.amount,person:p,source:x,personalType:type,sign:'+',color:savingColors.financial,icon:'fa-piggy-bank',account:accountLabel(p)});
+      } else {
+        add({kind:'personal',group:'personal',id:x.id,date:x.date,title:x.category||'Gasto personal',detail:`${personName(p)}${x.desc?` · ${x.desc}`:''}`,amount:x.amount,person:p,source:x,personalType:type,sign:'−',color:'#fb923c',icon:'fa-wallet',account:accountLabel(p)});
+      }
+    });
+    arrays('debts').forEach(d=>{
+      add({kind:'debt',group:'debts',id:d.id,date:d.createdAt||d.due,title:d.name||'Deuda u obligación',detail:`Responsable: ${getOwnerLabel(d.owner)} · saldo ${displayMoney(d.balance)}`,amount:d.balance,source:d,owner:d.owner,sign:'',color:'#f9a8d4',icon:'fa-file-invoice-dollar',account:'Deudas'});
+      const known=new Set(personal.filter(x=>String(x.debtId||'')===String(d.id)).flatMap(x=>[String(x.id||''),String(x.paymentId||'')]).filter(Boolean));
+      (Array.isArray(d.payments)?d.payments:[]).forEach(p=>{
+        const pid=String(p.id||p.paymentId||'');
+        if(pid&&known.has(pid))return;
+        add({kind:'debtPayment',group:'debts',id:pid||`${d.id}-${p.date||''}-${p.amount||''}`,date:p.date||d.createdAt,title:`Abono · ${d.name||'Deuda'}`,detail:`${getOwnerLabel(d.owner)} · pagó ${personName(p.person==='partner'?'partner':'me')}`,amount:p.amount,person:p.person==='partner'?'partner':'me',source:{...p,debtId:d.id},debtId:d.id,paymentId:pid,sign:'−',color:'#f9a8d4',icon:'fa-file-invoice-dollar',account:'Deudas',status:'done'});
+      });
+    });
+    arrays('tasks').forEach(x=>{
+      add({kind:'task',group:'calendar',id:x.id,date:x.date,title:x.title||'Recordatorio',detail:`Responsable: ${getOwnerLabel(x.owner)}`,amount:null,source:x,owner:x.owner,sign:'',color:x.status==='done'?'#34d399':(x.date&&x.date<dayToday()?'#fb7185':'#facc15'),icon:'fa-calendar-check',account:'Calendario'});
+    });
+    arrays('goals').forEach(x=>{
+      add({kind:'goal',group:'goals',id:x.id,date:x.createdAt||x.date,title:x.name||'Meta',detail:`Progreso ${displayMoney(x.current)} de ${displayMoney(x.target)}`,amount:x.current,source:x,sign:'',color:'#a78bfa',icon:'fa-bullseye',account:'Metas'});
+    });
+    arrays('transactions').forEach(x=>{
+      const account=String(x.account||'home');
+      add({kind:'transaction',group:'accounts',id:x.id,date:x.date,title:x.description||'Movimiento de cuenta',detail:`${accountLabel(account)} · ${x.type==='income'?'Ingreso manual':'Egreso manual'}`,amount:x.amount,source:x,account:accountLabel(account),sign:x.type==='income'?'+':'−',color:account==='me'?PERSON_COLORS.me:account==='partner'?PERSON_COLORS.partner:account==='savings'?'#34d399':'#facc15',icon:account==='home'?'fa-house':account==='savings'?'fa-piggy-bank':account==='partner'?'fa-person-dress':'fa-person'});
+    });
+    return rows.sort((a,b)=>(b.date||'').localeCompare(a.date||'') || String(b.id).localeCompare(String(a.id)));
+  }
+
+  const FILTERS=[['all','Todos'],['income','Ingresos'],['home','Hogar'],['savings','Ahorros'],['personal','Personales'],['debts','Deudas'],['calendar','Calendario'],['accounts','Cuentas'],['goals','Metas']];
+  window.__nexusV19ActivityFilter=window.__nexusV19ActivityFilter||'all';
+  window.__nexusV19ActivityRange=window.__nexusV19ActivityRange||'all';
+  window.__nexusV19ActivitySearch=window.__nexusV19ActivitySearch||'';
+
+  function canEditRow(row){
+    if(!row)return false;
+    if(row.kind==='personal')return row.person===activeProfile();
+    if(row.kind==='debt')return row.owner==='home'||row.owner===activeProfile();
+    if(row.kind==='debtPayment')return false;
+    if(row.kind==='transaction')return false; // Account ledger remains informational.
+    return ['income','expense','saving','task','goal'].includes(row.kind);
+  }
+  function actionButton(action,label,icon,row,extra=''){
+    const idAttr=html(row.id||'');
+    return `<button type="button" class="m-icon-btn ${action==='delete'?'danger':''} nx-v19-action" data-nx-action="${action}" data-nx-kind="${html(row.kind)}" data-nx-id="${idAttr}" ${extra} aria-label="${html(label)}" title="${html(label)}"><i class="fa-solid ${icon}" aria-hidden="true"></i>${label==='Abonar'||label==='Ver deuda'?` <span>${html(label)}</span>`:''}</button>`;
+  }
+  function rowActions(row){
+    const out=[];
+    if(row.kind==='debtPayment'){
+      out.push(actionButton('details-debt','Ver deuda','fa-arrow-up-right-from-square',{kind:'debt',id:row.debtId||row.source?.debtId}));
+      if(row.debtId)out.push(actionButton('pay-debt','Abonar','fa-hand-holding-dollar',{kind:'debt',id:row.debtId}));
+      return out.join('');
+    }
+    if(row.kind==='debt'){
+      if(canEditRow(row))out.push(actionButton('edit','Editar','fa-pen-to-square',row));
+      out.push(actionButton('pay-debt','Abonar','fa-hand-holding-dollar',row));
+      if(canEditRow(row))out.push(actionButton('delete','Eliminar','fa-trash',row));
+      return out.join('');
+    }
+    if(row.kind==='transaction')return `<span class="nx-v19-readonly-tag"><i class="fa-solid fa-eye"></i> Informativo</span>`;
+    if(canEditRow(row))out.push(actionButton('edit','Editar','fa-pen-to-square',row));
+    if(canEditRow(row) && !(row.kind==='personal'&&row.source?.debtId))out.push(actionButton('delete','Eliminar','fa-trash',row));
+    return out.join('');
+  }
+  function rowStatus(row){
+    const s=row.statusInfo||stateForActivity(row);
+    return `<span class="nx-v19-status ${s.key}">${html(s.label)}</span>`;
+  }
+  function amountMarkup(row){
+    if(row.amount===null || row.amount===undefined || !Number.isFinite(Number(row.amount)))return '';
+    const status=row.statusInfo||stateForActivity(row);
+    let text='';
+    if(row.kind==='expense'&&status.key==='pending')text=`Pendiente · ${displayMoney(row.amount)}`;
+    else if(row.kind==='expense'&&status.key==='overdue')text=`Vencido · ${displayMoney(row.amount)}`;
+    else text=`${row.sign||''}${displayMoney(row.amount)}`;
+    const cls=row.sign==='−'?'negative':row.sign==='+'?'positive':'';
+    return `<strong class="nx-v19-act-amount ${cls}">${html(text)}</strong>`;
+  }
+  function renderActivityRow(row, summary=false){
+    const p=row.person;
+    const hasPersonIcon=row.kind==='income' || (row.kind==='personal' && row.personalType==='income');
+    /* The primary glyph represents the movement/category; a separate dot identifies the responsible person. */
+    const color=hasPersonIcon&&p?colorForPerson(p):(row.color||'#a78bfa');
+    const icon=hasPersonIcon&&p ? (p==='partner'?'fa-person-dress':'fa-person') : (row.icon||'fa-list-check');
+    const detail=[row.date||'Sin fecha',row.account||'',row.person?personName(row.person):'',row.detail||''].filter(Boolean).join(' · ');
+    const actions=rowActions(row);
+    return `<article class="nx-v19-activity-row ${summary?'summary':''}" style="--nx-row-color:${html(color)};--nx-owner-color:${p?colorForPerson(p):color}" data-nx-row-kind="${html(row.group)}" data-nx-record-kind="${html(row.kind)}" data-nx-record-id="${html(row.id)}"><span class="nx-v19-act-icon"><i class="fa-solid ${html(icon)}" aria-hidden="true"></i>${p?`<span class="nx-v19-owner-dot"></span>`:''}</span><div class="nx-v19-act-main"><b>${html(row.title)}</b><small>${html(detail)}</small>${row.statusInfo?rowStatus(row):''}</div><div class="nx-v19-act-side">${amountMarkup(row)}<div class="nx-v19-act-buttons">${actions}</div></div></article>`;
+  }
+  function getFilteredActivities(){
+    let rows=buildActivities();
+    const f=window.__nexusV19ActivityFilter||'all';
+    if(f!=='all')rows=rows.filter(r=>r.group===f);
+    if(window.__nexusV19ActivityRange==='selected')rows=rows.filter(r=>isInSelectedPeriod(r.date));
+    const q=textNorm(window.__nexusV19ActivitySearch||'');
+    if(q)rows=rows.filter(r=>textNorm([r.title,r.detail,r.date,r.account,r.person?personName(r.person):'',r.statusInfo?.label].join(' ')).includes(q));
+    return rows;
+  }
+  function renderActivitiesContents(){
+    const filter=window.__nexusV19ActivityFilter||'all';
+    const rows=getFilteredActivities();
+    const chips=FILTERS.map(([key,label])=>`<button type="button" class="nx-v19-filter-chip ${filter===key?'active':''}" data-nx-filter="${key}" aria-pressed="${filter===key?'true':'false'}">${label}</button>`).join('');
+    return `<div class="m-wrap nx-v19-activities-page"><div class="m-page-heading"><div><h1><i class="fa-solid fa-list-check" style="color:#c4b5fd"></i> Actividades</h1><p>Historial de movimientos de todas las cuentas y perfiles.</p></div><button type="button" class="m-avatar nx-v19-back" data-nx-action="back-summary" aria-label="Volver al resumen" title="Volver al resumen"><i class="fa-solid fa-arrow-left"></i></button></div><section class="m-v3-card nx-v19-activity-tools"><div class="m-section-heading inside"><div><h3><i class="fa-solid fa-filter"></i> Filtrar actividades</h3><p>Selecciona una categoría o busca un movimiento.</p></div><span class="pill" id="nxV19ActivityCount">${rows.length}</span></div><div class="nx-v19-filter-row">${chips}</div><div class="nx-v19-activity-toolbar"><label class="field"><span>Buscar</span><input class="input" id="nxV19ActivitySearch" type="search" placeholder="Nombre, categoría, persona…" value="${html(window.__nexusV19ActivitySearch||'')}"></label><label class="field"><span>Periodo</span><select class="select" id="nxV19ActivityRange"><option value="all" ${window.__nexusV19ActivityRange==='all'?'selected':''}>Todo el historial</option><option value="selected" ${window.__nexusV19ActivityRange==='selected'?'selected':''}>Periodo seleccionado</option></select></label></div><p class="nx-v19-activity-explain">Se incluyen registros pendientes y completados. Un registro pendiente se muestra en el historial, pero no se trata como dinero ya pagado.</p></section><section class="m-v3-card"><div id="nxV19ActivityRows">${rows.length?rows.map(r=>renderActivityRow(r)).join(''):'<div class="m-inline-empty"><i class="fa-solid fa-inbox"></i> No hay actividades para este filtro.</div>'}</div></section></div>`;
+  }
+  function renderActivitiesView(){
+    const root=$('#mobileApp'),content=$('#mContent'); if(!root||!content)return;
+    if(!authToken || !authUser){return;}
+    root.style.display='block';
+    const title=$('#mTitle');if(title)title.textContent='Actividades';
+    const subtitle=$('#mSubtitle');if(subtitle)subtitle.textContent='Historial completo de todas las cuentas';
+    const avatar=$('#mAvatar');if(avatar)avatar.textContent=personName(activeProfile()).trim().slice(0,1).toUpperCase();
+    content.innerHTML=renderActivitiesContents();
+    $$('.m-tab').forEach(button=>button.classList.remove('active'));
+    applyIdentityColors(content);
+  }
+  function refreshActivitiesRows(){
+    if(mobileScreen!=='activities')return;
+    const list=$('#nxV19ActivityRows'),count=$('#nxV19ActivityCount'); if(!list)return;
+    const rows=getFilteredActivities();
+    if(count)count.textContent=String(rows.length);
+    list.innerHTML=rows.length?rows.map(r=>renderActivityRow(r)).join(''):'<div class="m-inline-empty"><i class="fa-solid fa-inbox"></i> No hay actividades para este filtro.</div>';
+    applyIdentityColors(list);
+  }
+  function patchSummaryActivity(root=document){
+    if(!['summary','home'].includes(mobileScreen))return;
+    const sections=$$('.m-v3-section',root);
+    const section=sections.find(s=>textNorm($('.m-v3-section-head h3',s)?.textContent||'').includes('actividad reciente'));
+    const card=section?.querySelector('.m-v3-card');if(!card)return;
+    const rows=buildActivities().slice(0,5);
+    card.innerHTML=`${rows.length?rows.map(r=>renderActivityRow(r,true)).join(''):'<div class="m-inline-empty"><i class="fa-solid fa-chart-line"></i> Tus movimientos aparecerán aquí.</div>'}<button type="button" class="m-secondary-btn full nx-v19-open-activities" data-nx-action="open-activities"><i class="fa-solid fa-list-check"></i> Ver Actividades</button>`;
+  }
+  function identifyPersonTile(tile){
+    if(!tile)return null;
+    const icon=tile.querySelector('span i, .m-v3-profile-title i, .m-v2-person-icon i');
+    if(icon?.classList.contains('fa-person-dress'))return 'partner';
+    if(icon?.classList.contains('fa-person') && !icon?.classList.contains('fa-person-dress'))return 'me';
+    const txt=textNorm(tile.textContent||'');
+    const partner=textNorm(personName('partner')),me=textNorm(personName('me'));
+    const hasP=partner.length>1&&txt.includes(partner),hasM=me.length>1&&txt.includes(me);
+    if(hasP&&!hasM)return 'partner';
+    if(hasM&&!hasP)return 'me';
+    return null;
+  }
+  function applyIdentityColors(root=document){
+    $$('.m-v3-person-split .m-v3-person-tile, .m-v3-profile-card, .m-v2-person-card.me, .m-v2-person-card.partner, .m-v2-available-card.me, .m-v2-available-card.partner',root).forEach(node=>{
+      let owner=null;
+      if(node.classList.contains('me'))owner='me';
+      else if(node.classList.contains('partner'))owner='partner';
+      else owner=identifyPersonTile(node);
+      if(!owner)return;
+      node.dataset.nxOwner=owner;
+      node.style.setProperty('--owner-color',colorForPerson(owner));
+      node.style.setProperty('--m-person-color',colorForPerson(owner));
+      const icon=node.querySelector('.m-v2-person-icon i, .m-v3-profile-title i, .m-v3-person-tile span i');
+      if(icon){icon.style.color=colorForPerson(owner);}
+    });
+    $$('.m-v3-person-tile[data-nx-owner]',root).forEach(node=>{
+      node.classList.add('nx-v19-profile-tile');
+      const c=colorForPerson(node.dataset.nxOwner);
+      node.style.borderColor=c;
+      node.style.boxShadow=`inset 0 0 0 1px ${c}22`;
+      const icon=node.querySelector('span i');if(icon)icon.style.color=c;
+    });
+    $$('.m-v17-income-owner',root).forEach(icon=>{
+      const row=icon.closest('.m-transaction');
+      const label=textNorm(row?.textContent||'');
+      let owner=null;
+      if(label.includes(textNorm(personName('partner'))))owner='partner';
+      else if(label.includes(textNorm(personName('me'))))owner='me';
+      if(owner){icon.style.setProperty('--owner-color',colorForPerson(owner));icon.style.color=colorForPerson(owner);}
+    });
+  }
+
+  function openDebtDetailsV19(id){
+    const d=arrays('debts').find(x=>String(x.id)===String(id));if(!d)return;
+    const payments=Array.isArray(d.payments)?d.payments.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')):[];
+    const paymentHistory=payments.length?`<div class="nx-v19-payment-history">${payments.slice(0,12).map(p=>`<div><span>${html(p.date||'Sin fecha')} · ${html(personName(p.person==='partner'?'partner':'me'))}</span><b>${displayMoney(p.amount)}</b></div>`).join('')}</div>`:'<p class="small">Todavía no hay abonos registrados.</p>';
+    const ownerText=getOwnerLabel(d.owner);
+    const editAllowed=d.owner==='home'||d.owner===activeProfile();
+    openModal(`<i class="fa-solid fa-file-invoice-dollar"></i> Detalle de deuda`,`<div class="nx-v19-debt-detail"><h3>${html(d.name||'Deuda')}</h3><p>Responsable: <b>${html(ownerText)}</b></p><div class="nx-v19-debt-balance">Saldo pendiente <strong>${displayMoney(d.balance)}</strong></div>${d.due?`<p>Próximo vencimiento: ${html(d.due)}</p>`:''}${paymentHistory}<div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cerrar</button>${editAllowed?`<button type="button" class="btn" onclick="editDebt('${html(d.id)}')"><i class="fa-solid fa-pen"></i> Editar</button>`:''}<button type="button" class="btn primary" onclick="payDebt('${html(d.id)}')"><i class="fa-solid fa-hand-holding-dollar"></i> Abonar</button></div></div>`);
+  }
+
+  /* Any signed-in profile may PAY any debt. Debt owner stays unchanged; the payer is the active profile. */
+  window.payDebt = function payDebtV19(id){
+    const debt=arrays('debts').find(x=>String(x.id)===String(id));if(!debt)return;
+    if(Number(debt.balance)<=0||debt.status==='paid'){if(typeof window.toast==='function')window.toast('Esta deuda ya está saldada.');return;}
+    const payer=activeProfile();
+    const installment=Number(debt.installment)>0?Math.min(Number(debt.balance)||0,Number(debt.installment)):0;
+    const payerLabel=personName(payer);
+    window.openModal(`<i class="fa-solid fa-file-invoice-dollar"></i> Abonar a deuda`,`<div class="dialog-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div><p class="dialog-copy">${html(debt.name||'Deuda u obligación')}</p><div style="margin:8px 0"><span class="identity-tag" style="--identity-color:${colorForPerson(debt.owner==='partner'?'partner':'me')}"><i class="fa-solid fa-file-invoice-dollar"></i> Responsable: ${html(getOwnerLabel(debt.owner))}</span></div><p class="dialog-balance">Saldo pendiente<strong>${displayMoney(debt.balance)}</strong></p><p class="small">El abono se registrará a nombre de <b>${html(payerLabel)}</b>. El responsable original de la deuda no cambia.</p><form id="nxV19DebtPaymentForm" onsubmit="saveDebtPayment(event,'${html(debt.id)}','${payer}')"><div class="field"><label>¿Cuánto vas a abonar? (COP)</label><input class="input money-input" id="debtPaymentAmount" type="text" inputmode="numeric" oninput="formatMoneyField(this)" value="${installment?html(typeof window.fmtInput==='function'?window.fmtInput(installment):String(installment)):'0'}" required autofocus></div><div class="small" style="margin-top:8px">${Number(debt.installment)>0?`Cuota registrada: ${displayMoney(debt.installment)}.`:'Ingresa el valor del abono.'} Se descontará del perfil que realiza el pago.</div><div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary"><i class="fa-solid fa-check"></i> Registrar abono</button></div></form>`);
+  };
+  window.saveDebtPayment = function saveDebtPaymentV19(event,id,payerIgnored){
+    event?.preventDefault?.();
+    const form=$('#nxV19DebtPaymentForm');if(form?.dataset.saving==='1')return;
+    const debt=arrays('debts').find(x=>String(x.id)===String(id));if(!debt)return;
+    const input=$('#debtPaymentAmount');
+    const amount=typeof window.num==='function'?window.num(input?.value):Number(String(input?.value||'').replace(/[^0-9.-]/g,''));
+    if(!Number.isFinite(amount)||amount<=0){if(typeof window.toast==='function')window.toast('Ingresa un monto válido.');return;}
+    const balance=Number(debt.balance)||0;
+    if(amount>balance){if(typeof window.toast==='function')window.toast('El abono no puede superar el saldo pendiente.');return;}
+    if(form)form.dataset.saving='1';
+    const before=typeof window.snapshotNexusState==='function'?window.snapshotNexusState():null;
+    const payer=activeProfile(), paymentId=typeof window.nexusUUID==='function'?window.nexusUUID():`pay-${Date.now()}-${Math.random().toString(36).slice(2,8)}`, paymentDate=dayToday();
+    debt.balance=Math.max(0,balance-amount);
+    debt.status=debt.balance===0?'paid':'pending';
+    debt.payments=Array.isArray(debt.payments)?debt.payments:[];
+    debt.payments.push({id:paymentId,paymentId,date:paymentDate,amount,person:payer,payerProfile:payer,owner:debt.owner});
+    state.personalSpending=Array.isArray(state.personalSpending)?state.personalSpending:[];
+    state.personalSpending.push({id:paymentId,paymentId,debtId:debt.id,person:payer,date:paymentDate,amount,type:'debt',category:'Deudas y obligaciones',desc:`Abono a deuda: ${debt.name||'Obligación'} · responsable: ${getOwnerLabel(debt.owner)}`,responsibleOwner:debt.owner});
+    try{window.saveState();}catch(error){console.error('Nexus: no se pudo guardar el abono.',error);if(typeof window.toast==='function')window.toast('No se pudo guardar el abono. Revisa la conexión e inténtalo de nuevo.');return;}
+    try{window.closeModal();}catch(_){}
+    try{window.renderAll?.();}catch(_){}
+    try{window.renderExtendedModules?.();}catch(_){}
+    try{window.renderPersonalModule?.();}catch(_){}
+    try{window.renderMobileUI?.();}catch(_){}
+    if(before&&typeof window.showUndoToast==='function')window.showUndoToast(debt.status==='paid'?'Deuda saldada y abono registrado':'Abono registrado',before,'fa-rotate-left');
+    else if(typeof window.toast==='function')window.toast('Abono registrado.');
+  };
+
+  /* Manual account transactions already existed in the file; this editor uses the same ledger, without adding a new type. */
+  window.editAccountMovementV19=function editAccountMovementV19(id){
+    const rec=arrays('transactions').find(x=>String(x.id)===String(id));if(!rec)return;
+    const account=String(rec.account||'home');
+    if((account==='me'||account==='partner')&&account!==activeProfile()){if(typeof window.toast==='function')window.toast('Esta cuenta personal es de solo lectura para el perfil actual.');return;}
+    const original=arrays('transactions').find(x=>String(x.id)===String(id));
+    window.openModal('<i class="fa-solid fa-pen-to-square"></i> Editar movimiento de cuenta',`<form id="nxV19AccountEditForm" onsubmit="saveAccountMovementEditV19(event,'${html(rec.id)}')"><div class="form-grid"><div class="field"><label>Fecha</label><input class="input" id="nxAmDate" type="date" value="${html(rec.date||dayToday())}" required></div><div class="field"><label>Cuenta</label><select class="select" id="nxAmAccount"><option value="home" ${account==='home'?'selected':''}>Cuenta hogar</option><option value="savings" ${account==='savings'?'selected':''}>Cuenta ahorros</option><option value="me" ${account==='me'?'selected':''}>Cuenta personal mía</option><option value="partner" ${account==='partner'?'selected':''}>Cuenta personal pareja</option></select></div><div class="field"><label>Tipo</label><select class="select" id="nxAmType"><option value="income" ${rec.type==='income'?'selected':''}>Ingreso / abono</option><option value="expense" ${rec.type!=='income'?'selected':''}>Egreso / retiro</option></select></div><div class="field"><label>Valor (COP)</label><input class="input money-input" id="nxAmAmount" inputmode="numeric" oninput="formatMoneyField(this)" value="${html(typeof window.fmtInput==='function'?window.fmtInput(rec.amount):rec.amount)}" required></div><div class="field full"><label>Descripción</label><input class="input" id="nxAmDescription" maxlength="180" value="${html(rec.description||'')}" required></div></div><div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary"><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button></div></form>`);
+  };
+  window.saveAccountMovementEditV19=function saveAccountMovementEditV19(event,id){
+    event?.preventDefault?.();const rec=arrays('transactions').find(x=>String(x.id)===String(id));if(!rec)return;
+    const account=$('#nxAmAccount')?.value||rec.account||'home';
+    if((account==='me'||account==='partner')&&account!==activeProfile()){if(typeof window.toast==='function')window.toast('No puedes modificar la cuenta personal de la otra persona.');return;}
+    const amount=typeof window.num==='function'?window.num($('#nxAmAmount')?.value):Number(String($('#nxAmAmount')?.value||'').replace(/[^0-9.-]/g,''));
+    if(!Number.isFinite(amount)||amount<=0){if(typeof window.toast==='function')window.toast('Ingresa un valor mayor que cero.');return;}
+    const before=typeof window.snapshotNexusState==='function'?window.snapshotNexusState():null;
+    Object.assign(rec,{date:$('#nxAmDate')?.value||rec.date,account,type:$('#nxAmType')?.value||rec.type,amount,description:($('#nxAmDescription')?.value||'').trim()});
+    window.saveState?.();window.closeModal?.();window.renderAll?.();window.renderAccounts?.();window.renderMobileUI?.();
+    if(before&&typeof window.showUndoToast==='function')window.showUndoToast('Movimiento de cuenta actualizado',before,'fa-pen-to-square');
+  };
+
+  function renderActionRowButtonsForSource(row){ return rowActions(row); }
+  function makeSafeSummarySection(root){
+    if(!['summary','home'].includes(mobileScreen))return;
+    const sections=$$('.m-v3-section',root);
+    const section=sections.find(s=>textNorm($('.m-v3-section-head h3',s)?.textContent||'').includes('actividad reciente'));
+    const card=section?.querySelector('.m-v3-card');if(!card)return;
+    const recent=buildActivities().slice(0,5);
+    card.innerHTML=`${recent.length?recent.map(r=>renderActivityRow(r,true)).join(''):'<div class="m-inline-empty"><i class="fa-solid fa-chart-line"></i> Tus movimientos aparecerán aquí.</div>'}<button type="button" class="m-secondary-btn full nx-v19-open-activities" data-nx-action="open-activities"><i class="fa-solid fa-list-check"></i> Ver Actividades</button>`;
+  }
+
+  /* Route that exists only as a drill-down from the button on the Summary card. */
+  const activityRouteKey=()=>`nexus_mobile_private_activities_v19_${encodeURIComponent(String(authUser?.id||authUser?.username||authUser?.email||activeProfile()).toLowerCase())}`;
+  function clearActivityRoute(){try{localStorage.removeItem(activityRouteKey());sessionStorage.removeItem(activityRouteKey());}catch(_){}}
+  function renderActivitiesRoute(){
+    mobileScreen='activities';
+    const root=$('#mobileApp'),content=$('#mContent');if(!root||!content)return;
+    root.style.display='block';
+    if($('#mTitle'))$('#mTitle').textContent='Actividades';
+    if($('#mSubtitle'))$('#mSubtitle').textContent='Historial completo de todas las cuentas';
+    if($('#mAvatar'))$('#mAvatar').textContent=personName(activeProfile()).trim().slice(0,1).toUpperCase();
+    content.innerHTML=renderActivitiesContents();
+    $$('.m-tab').forEach(button=>button.classList.remove('active'));
+    try{localStorage.setItem(activityRouteKey(),'activities');sessionStorage.setItem(activityRouteKey(),'activities');}catch(_){}
+    applyIdentityColors(content);
+    try{window.scrollTo({top:0,behavior:'smooth'});}catch(_){}
+  }
+
+  /* Fix identity-colored income tiles after the profile-first reordering has run. */
+  const previousRender=window.renderMobileUI;
+  window.renderMobileUI=function renderMobileUIV19(){
+    if(mobileScreen==='activities'){renderActivitiesRoute();return;}
+    const result=previousRender?.apply(this,arguments);
+    try{applyIdentityColors($('#mContent')||document);makeSafeSummarySection($('#mContent')||document);}catch(error){console.warn('Nexus V19 identity/activity render:',error);}
+    return result;
+  };
+  const previousSetScreen=window.mobileSetScreen;
+  window.mobileSetScreen=function mobileSetScreenV19(screen){
+    if(screen==='activities'){renderActivitiesRoute();return;}
+    clearActivityRoute();
+    const result=previousSetScreen?.apply(this,arguments);
+    try{applyIdentityColors($('#mContent')||document);makeSafeSummarySection($('#mContent')||document);}catch(_){}
+    return result;
+  };
+
+  /* Restore the dedicated activities view on refresh if it was the last in-app location. */
+  if(typeof window.bootstrapAuth==='function'){
+    const previousBootstrap=window.bootstrapAuth;
+    window.bootstrapAuth=async function bootstrapAuthV19(){
+      let wanted=false;try{wanted=localStorage.getItem(activityRouteKey())==='activities'||sessionStorage.getItem(activityRouteKey())==='activities';}catch(_){}
+      const hadSession=!!(authToken&&authUser);
+      const result=await previousBootstrap.apply(this,arguments);
+      if(hadSession&&wanted&&authToken&&authUser){renderActivitiesRoute();}
+      return result;
+    };
+  }
+
+  /* Activity interactions use event delegation so editing actions remain reliable after filtering/re-rendering. */
+  if(!window.__NEXUS_V19_ACTIVITY_EVENTS__){
+    window.__NEXUS_V19_ACTIVITY_EVENTS__=true;
+    document.addEventListener('click',function(event){
+      const filterButton=event.target.closest?.('[data-nx-filter]');
+      if(filterButton&&$('#mContent')?.contains(filterButton)){
+        event.preventDefault();window.__nexusV19ActivityFilter=filterButton.dataset.nxFilter||'all';
+        $$('.nx-v19-filter-chip').forEach(chip=>{const selected=chip.dataset.nxFilter===window.__nexusV19ActivityFilter;chip.classList.toggle('active',selected);chip.setAttribute('aria-pressed',String(selected));});refreshActivitiesRows();return;
+      }
+      const button=event.target.closest?.('[data-nx-action]');
+      if(!button||!$('#mContent')?.contains(button))return;
+      const action=button.dataset.nxAction,kind=button.dataset.nxKind,id=button.dataset.nxId;
+      if(action==='open-activities'){event.preventDefault();event.stopPropagation();window.mobileSetScreen('activities');return;}
+      if(action==='back-summary'){event.preventDefault();window.mobileSetScreen('summary');return;}
+      if(action==='edit'||action==='delete'||action==='pay-debt'||action==='details-debt'){
+        event.preventDefault();event.stopPropagation();
+        try{
+          if(action==='details-debt'){openDebtDetailsV19(id);return;}
+          if(action==='pay-debt'){window.payDebt(id);return;}
+          if(action==='edit'){
+            if(kind==='income'){const x=arrays('incomes').find(r=>String(r.id)===String(id));if(x)window.openIncome(x.person==='partner'?'partner':'me',x.id);else toast('No se encontró el ingreso.');return;}
+            if(kind==='expense'){const x=arrays('expenses').find(r=>String(r.id)===String(id));if(x)window.openExpense(x.category||'Otros',x.id);else toast('No se encontró el gasto.');return;}
+            if(kind==='saving'){const x=arrays('savings').find(r=>String(r.id)===String(id));if(x)window.openSaving(x.type||'financial',x.id,x.person==='partner'?'partner':'me');else toast('No se encontró el ahorro.');return;}
+            if(kind==='personal'){
+              const x=arrays('personalSpending').find(r=>String(r.id)===String(id));if(!x)return toast('No se encontró el movimiento personal.');
+              if(x.debtId)return openDebtDetailsV19(x.debtId);
+              if(x.person!==activeProfile())return toast('Este movimiento personal es de solo lectura para el perfil actual.');
+              window.editPersonalMovement(x.id);return;
+            }
+            if(kind==='debt'){const d=arrays('debts').find(r=>String(r.id)===String(id));if(d&&(d.owner==='home'||d.owner===activeProfile()))window.editDebt(d.id);else toast('Puedes abonar a esta deuda, pero solo su responsable puede editar sus datos.');return;}
+            if(kind==='task'){window.openTaskEdit(id);return;}
+            if(kind==='goal'){window.openGoal(id);return;}
+          }
+          if(action==='delete'){
+            if(kind==='income'||kind==='expense'||kind==='saving') {window.deleteRecord(kind,id);return;}
+            if(kind==='personal') {const x=arrays('personalSpending').find(r=>String(r.id)===String(id));if(!x)return;if(x.person!==activeProfile())return toast('Este movimiento personal es de solo lectura.');if(x.debtId)return toast('Los abonos vinculados se administran desde el detalle de la deuda.');window.deleteRecord('personal',id);return;}
+            if(kind==='debt'){const d=arrays('debts').find(r=>String(r.id)===String(id));if(d&&(d.owner==='home'||d.owner===activeProfile()))window.deleteDebt(id);else toast('Solo el responsable puede eliminar esta deuda.');return;}
+            if(kind==='task'){window.deleteTask(id);return;}
+          }
+        }catch(error){console.error('Nexus V19 action error:',error);if(typeof window.toast==='function')window.toast('No se pudo abrir esta acción. Inténtalo de nuevo.');}
+      }
+    });
+    document.addEventListener('input',function(event){if(event.target?.id==='nxV19ActivitySearch'){window.__nexusV19ActivitySearch=event.target.value||'';refreshActivitiesRows();}});
+    document.addEventListener('change',function(event){if(event.target?.id==='nxV19ActivityRange'){window.__nexusV19ActivityRange=event.target.value||'all';refreshActivitiesRows();}});
+  }
+
+  const style=document.createElement('style');style.id='nexus-v19-recovered-activities-and-fixes';style.textContent=`
+    .m-v3-person-tile.nx-v19-profile-tile{border:1px solid var(--owner-color,#38bdf8)!important;background:linear-gradient(145deg,color-mix(in srgb,var(--owner-color,#38bdf8) 12%,#12101a),#100d18)!important}
+    .m-v3-person-tile.nx-v19-profile-tile>span i{color:var(--owner-color,#38bdf8)!important}
+    .m-v3-person-tile[data-nx-owner="me"]{--owner-color:#38bdf8!important}
+    .m-v3-person-tile[data-nx-owner="partner"]{--owner-color:#fb7185!important}
+    .m-v19-owner-inline,.m-v17-income-owner{--owner-color:#38bdf8}
+    .nx-v19-activity-row{display:flex;align-items:center;gap:11px;min-width:0;padding:13px 0;border-bottom:1px solid #ffffff12}
+    .nx-v19-activity-row:last-child{border-bottom:0}
+    .nx-v19-activity-row.summary{padding:13px 0}
+    .nx-v19-act-icon{position:relative;display:grid;place-items:center;flex:0 0 39px;width:39px;height:39px;border-radius:13px;border:1px solid color-mix(in srgb,var(--nx-row-color,#a78bfa) 45%,transparent);background:color-mix(in srgb,var(--nx-row-color,#a78bfa) 17%,#14111e);color:var(--nx-row-color,#a78bfa);font-size:15px}
+    .nx-v19-owner-dot{position:absolute;right:-3px;bottom:-3px;width:11px;height:11px;border:2px solid #14111e;border-radius:50%;background:var(--nx-owner-color,var(--nx-row-color,#38bdf8))}
+    .nx-v19-act-main{display:grid;gap:4px;flex:1;min-width:0}
+    .nx-v19-act-main>b{font-size:11px;line-height:1.4;overflow-wrap:anywhere}
+    .nx-v19-act-main>small{font-size:9px;line-height:1.4;color:#a39ab4;overflow-wrap:anywhere}
+    .nx-v19-act-side{display:grid;justify-items:end;gap:6px;max-width:46%;min-width:0}
+    .nx-v19-act-amount{font-size:11px;line-height:1.3;white-space:nowrap;font-variant-numeric:tabular-nums}
+    .nx-v19-act-buttons{display:flex;justify-content:flex-end;gap:4px;flex-wrap:wrap}
+    .nx-v19-act-buttons .m-icon-btn{min-width:30px;min-height:30px}
+    .nx-v19-act-buttons .m-icon-btn span{font-size:9px}
+    .nx-v19-status{display:inline-flex;width:max-content;max-width:100%;padding:3px 7px;border-radius:99px;border:1px solid #443a50;font-size:9px;font-weight:800;line-height:1.3;background:#211b2b;color:#c4b5fd}
+    .nx-v19-status.done{background:#14382c;border-color:#28664d;color:#6ee7b7}
+    .nx-v19-status.pending{background:#3b321d;border-color:#72602a;color:#facc15}
+    .nx-v19-status.overdue{background:#451c2a;border-color:#84354b;color:#fda4af}
+    .nx-v19-filter-row{display:flex;gap:7px;overflow-x:auto;padding:1px 0 5px;margin:0 0 13px;scrollbar-width:none}
+    .nx-v19-filter-chip{flex:0 0 auto;padding:8px 12px;border:1px solid #393047;border-radius:999px;background:#191523;color:#c9bfd9;font-size:10px;font-weight:800;touch-action:manipulation}
+    .nx-v19-filter-chip.active{background:linear-gradient(135deg,#6d28d9,#8b5cf6);border-color:#a78bfa;color:#fff;box-shadow:0 4px 14px #8b5cf633}
+    .nx-v19-activity-toolbar{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:10px;margin-top:12px}
+    .nx-v19-activity-toolbar .field{min-width:0}.nx-v19-activity-toolbar .field>span{font-size:10px;color:#a79db8}.nx-v19-activity-explain{font-size:10px;color:#9f96af;line-height:1.5;margin:12px 0 0}
+    .nx-v19-readonly-tag{font-size:9px;color:#a79db8;white-space:nowrap}
+    .nx-v19-payment-history{display:grid;gap:7px;margin:12px 0}.nx-v19-payment-history>div{display:flex;justify-content:space-between;gap:12px;padding:9px;border-radius:10px;background:#0d0b14;font-size:11px}.nx-v19-debt-balance{display:grid;gap:4px;border:1px solid #43364f;border-radius:12px;background:#0d0b14;padding:12px}.nx-v19-debt-balance strong{font-size:22px}
+    @media(max-width:380px){.nx-v19-act-side{max-width:48%}.nx-v19-activity-toolbar{grid-template-columns:1fr}.nx-v19-act-buttons .m-icon-btn{min-width:28px;padding:0 6px}}
+  `;document.head.appendChild(style);
+
+  // Public test hooks; no state is changed at startup.
+  window.nexusV19BuildActivities=buildActivities;
+  window.nexusV19ApplyIdentityColors=applyIdentityColors;
+  window.nexusV19RenderActivities=renderActivitiesView;
+  window.nexusV19ActiveProfile=activeProfile;
+
+  // Apply immediately to the current view; every subsequent render runs through the wrappers above.
+  try{applyIdentityColors($('#mContent')||document);makeSafeSummarySection($('#mContent')||document);}catch(error){console.warn('Nexus V19 initial patch:',error);}
+})();
+
 </script>
 </body>
 </html>
