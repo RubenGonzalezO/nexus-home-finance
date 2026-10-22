@@ -5485,5 +5485,567 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
 })();
 </script>
 
+<style id="nexus-v21-styles">
+/* V21: paleta estable por identidad y actividad unificada */
+.m-v3-person-tile.v21-owner-me,.m-v2-person-card.v21-owner-me,.m-v2-available-card.v21-owner-me,.m-v3-profile-card.v21-owner-me{border-color:color-mix(in srgb,#38bdf8 48%,#332c43)!important;border-left-color:#38bdf8!important;border-top-color:#38bdf8!important;background:linear-gradient(150deg,#102c3a,#12101a)!important}
+.m-v3-person-tile.v21-owner-partner,.m-v2-person-card.v21-owner-partner,.m-v2-available-card.v21-owner-partner,.m-v3-profile-card.v21-owner-partner{border-color:color-mix(in srgb,#fb7185 48%,#332c43)!important;border-left-color:#fb7185!important;border-top-color:#fb7185!important;background:linear-gradient(150deg,#3b1e2a,#12101a)!important}
+.m-v3-person-tile.v21-owner-me>span,.m-v3-person-tile.v21-owner-me>span i,.m-v2-person-card.v21-owner-me>small,.m-v2-person-card.v21-owner-me .m-v2-person-icon,.m-v2-available-card.v21-owner-me .m-v2-available-top b,.m-v2-available-card.v21-owner-me .m-v2-person-icon,.m-v3-profile-card.v21-owner-me .m-v3-profile-title{color:#38bdf8!important}
+.m-v3-person-tile.v21-owner-partner>span,.m-v3-person-tile.v21-owner-partner>span i,.m-v2-person-card.v21-owner-partner>small,.m-v2-person-card.v21-owner-partner .m-v2-person-icon,.m-v2-available-card.v21-owner-partner .m-v2-available-top b,.m-v2-available-card.v21-owner-partner .m-v2-person-icon,.m-v3-profile-card.v21-owner-partner .m-v3-profile-title{color:#fb7185!important}
+.m-v2-person-card.v21-owner-me .m-v2-person-icon,.m-v2-available-card.v21-owner-me .m-v2-person-icon{background:#102c3a!important;color:#38bdf8!important}
+.m-v2-person-card.v21-owner-partner .m-v2-person-icon,.m-v2-available-card.v21-owner-partner .m-v2-person-icon{background:#3b1e2a!important;color:#fb7185!important}
+.v21-summary-activity-card{display:grid;gap:0;overflow:hidden}.v21-activity-row{display:grid;grid-template-columns:42px minmax(0,1fr) minmax(74px,auto);align-items:center;gap:11px;min-width:0;padding:13px 0;border-bottom:1px solid #2a2435;border-left:3px solid var(--v21-item-color,#94a3b8);padding-left:10px;margin:0 0 8px;border-radius:10px 0 0 10px}.v21-activity-row:last-of-type{border-bottom:0}.v21-activity-row[hidden]{display:none!important}.v21-activity-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;color:var(--v21-item-color,#94a3b8);background:color-mix(in srgb,var(--v21-item-color,#94a3b8) 15%,#12101a);border:1px solid color-mix(in srgb,var(--v21-item-color,#94a3b8) 33%,transparent);font-size:16px;flex-shrink:0}.v21-activity-icon.large{width:48px;height:48px;font-size:20px}.v21-activity-main{min-width:0;display:grid;gap:4px}.v21-activity-main>b{font-size:12px;line-height:1.4;overflow-wrap:anywhere}.v21-activity-main>small,.v21-activity-detail{font-size:10px;color:#aaa1ba;line-height:1.45;overflow-wrap:anywhere}.v21-activity-side{display:grid;justify-items:end;align-content:center;gap:7px;min-width:0}.v21-activity-amount{font-size:12px;white-space:nowrap;font-variant-numeric:tabular-nums;color:#e7e1f2}.v21-activity-amount.positive{color:#6ee7b7}.v21-activity-amount.pending{color:#fde68a}.v21-activity-amount.overdue{color:#fda4af}.v21-activity-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.v21-activity-action{width:31px;height:31px;border-radius:9px;background:#211c2d;color:#d8ccff;border:1px solid #393047;display:grid;place-items:center}.v21-activity-action.danger{background:#351d29;color:#fda4af;border-color:#613044}.v21-activity-status{display:inline-flex;align-items:center;gap:5px;width:max-content;max-width:100%;padding:3px 7px;border-radius:99px;font-size:9px;font-weight:800}.v21-activity-status.done{color:#6ee7b7;background:#34d39918;border:1px solid #34d39955}.v21-activity-status.pending{color:#fde68a;background:#facc1517;border:1px solid #facc1555}.v21-activity-status.overdue{color:#fda4af;background:#fb718517;border:1px solid #fb718555}.v21-readonly{font-size:9px;color:#aaa1ba;white-space:nowrap}.v21-activity-row.done{--v21-state-color:#34d399}.v21-activity-row.pending{--v21-state-color:#facc15}.v21-activity-row.overdue{--v21-state-color:#fb7185}.v21-activity-row.done{border-left-color:var(--v21-state-color)!important}.v21-activity-row.pending{border-left-color:var(--v21-state-color)!important}.v21-activity-row.overdue{border-left-color:var(--v21-state-color)!important}
+.v21-activities-page{display:grid;gap:16px;padding-bottom:22px}.v21-activities-intro{display:grid;grid-template-columns:48px minmax(0,1fr) 38px;gap:12px;align-items:center;padding:15px;border:1px solid var(--m-line,#332c43);border-radius:17px;background:linear-gradient(145deg,#1d172b,#12101a)}.v21-activities-intro h2{margin:0 0 5px;font-size:18px}.v21-activities-intro p{margin:0;color:var(--muted,#aaa1ba);font-size:11px;line-height:1.5}.v21-activity-controls{display:grid;gap:11px}.v21-search{display:flex;align-items:center;gap:10px;min-width:0;padding:11px 13px;border:1px solid #393047;border-radius:13px;background:#15111e;color:#a78bfa}.v21-search input{border:0!important;outline:0!important;background:transparent!important;color:#f6f3ff!important;width:100%;min-width:0;font:inherit;font-size:12px}.v21-scope-toggle{display:grid;grid-template-columns:1fr 1fr;gap:7px}.v21-scope-toggle button{display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid #393047;background:#171321;color:#c5badb;padding:10px 8px;border-radius:11px;font-size:10px;font-weight:750}.v21-scope-toggle button.active{border-color:#8b5cf6;background:#2b2140;color:#e3d8ff}.v21-activity-filters{display:flex;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;padding:2px 0 7px;scrollbar-width:thin}.v21-filter-chip{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;padding:8px 10px;border:1px solid #352d43;border-radius:999px;background:#15111e;color:#c4bbd5;font-size:10px;font-weight:700}.v21-filter-chip small{color:#9e94b2;font-size:9px}.v21-filter-check{width:15px;height:15px;display:grid;place-items:center;border:1px solid #655779;border-radius:4px;font-size:8px}.v21-filter-chip.active{border-color:#8b5cf6;background:#2c2142;color:#eee8ff}.v21-filter-chip.active .v21-filter-check{background:#8b5cf6;border-color:#a78bfa;color:white}.v21-activity-result-head{display:flex;justify-content:space-between;gap:10px;align-items:center;color:#ded6ec;font-size:11px}.v21-activity-result-head span{color:#a49ab6;font-size:10px}.v21-activity-list{border:1px solid #2e2739;border-radius:17px;padding:10px 12px;background:linear-gradient(160deg,#171321,#111019);min-width:0}.v21-empty-activities{display:grid;justify-items:center;gap:8px;padding:26px 12px;text-align:center;color:#aaa1ba}.v21-empty-activities>i{font-size:25px;color:#a78bfa}.v21-empty-activities>b{color:#eee7f8}.v21-empty-activities>small{font-size:10px}.v21-back-summary{margin-top:0}
+@media(max-width:430px){.v21-activity-row{grid-template-columns:36px minmax(0,1fr) auto;gap:8px;padding-left:7px}.v21-activity-icon{width:34px;height:34px;border-radius:10px;font-size:14px}.v21-activity-amount{font-size:10px}.v21-activity-action{width:28px;height:28px}.v21-activities-intro{padding:12px;gap:9px}.v21-activities-intro h2{font-size:16px}.v21-scope-toggle button{font-size:9px}.v21-activity-main>b{font-size:11px}}
+
+</style>
+<script id="nexus-v21-shared-activities-identity">
+/* Nexus Finance V21: conciliación de gastos compartidos, identidad estable y Centro de actividades. */
+(function(){
+  'use strict';
+  const PREFIX = typeof KEY === 'string' ? KEY : 'nexus_home_finance_v1';
+  const TOMBSTONE_KEY = PREFIX + '_shared_expense_tombstones_v21';
+  const COLOR_RUBEN = '#38bdf8';
+  const COLOR_MAUREN = '#fb7185';
+  const ICON_ME = (person) => person === 'partner' ? (state?.uiSettings?.partnerIcon || 'fa-person-dress') : (state?.uiSettings?.meIcon || 'fa-person');
+  let activityFilter = 'all';
+  let activityScope = 'all';
+  let activitySearch = '';
+  let insideReconcile = false;
+  let undoingV21 = false;
+
+  const norm = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+  const textEsc = value => typeof esc === 'function' ? esc(String(value ?? '')) : String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const safeJsonAttr = value => JSON.stringify(String(value ?? '')).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const isoToday = () => typeof dateNow === 'function' ? dateNow() : new Date().toISOString().slice(0,10);
+  const personName = key => String(state?.people?.[key] || (key === 'partner' ? 'Mauren' : 'Ruben'));
+  const personColor = key => key === 'partner' ? COLOR_MAUREN : COLOR_RUBEN;
+  const personIcon = key => ICON_ME(key);
+  const personOf = raw => raw === 'partner' ? 'partner' : 'me';
+  const moneyText = value => typeof money === 'function' ? money(Number(value)||0) : '$ ' + String(Number(value)||0);
+
+  /* ---------------- Shared home-expense reconciliation ----------------
+     Older versions only merged expenses marked as scheduled calendar payments.
+     Ordinary household expenses (for example Luz) were left in profile-specific
+     cloud snapshots and caused different totals. V21 reconciles every household
+     expense by stable id, preferring the newest updatedAt and honoring tombstones.
+  */
+  function parseStateCache(key){
+    try {
+      const obj = JSON.parse(localStorage.getItem(key) || 'null');
+      if (!obj || typeof obj !== 'object') return null;
+      if (!Array.isArray(obj.expenses) && !obj.people) return null;
+      return obj;
+    } catch (_) { return null; }
+  }
+  function readCachedSnapshots(){
+    const result=[];
+    try {
+      for(let i=0;i<localStorage.length;i++){
+        const key=localStorage.key(i);
+        if(!key || !key.startsWith(PREFIX+'_') || key===TOMBSTONE_KEY || key.endsWith('_calendar_task_tombstones')) continue;
+        const snapshot=parseStateCache(key);
+        if(snapshot) result.push({key,state:snapshot});
+      }
+    } catch (_) {}
+    return result;
+  }
+  function householdMatch(snapshot){
+    const p=snapshot?.people;
+    if(!p || !state?.people) return true;
+    const current=[norm(state.people.me),norm(state.people.partner)].filter(Boolean);
+    const stored=[norm(p.me),norm(p.partner)].filter(Boolean);
+    if(!current.length || !stored.length) return true;
+    // At least one stable household profile must match; this still tolerates a renamed profile
+    // while preventing accidental union with a completely different household cache.
+    return stored.some(name=>current.includes(name));
+  }
+  function parseTombstones(value){
+    if(!Array.isArray(value)) return [];
+    return value.filter(x=>x && x.id!=null).map(x=>({collection:String(x.collection||x.kind||'expenses'),id:String(x.id),deletedAt:String(x.deletedAt||x.at||'')}));
+  }
+  function allExpenseTombstones(snapshots){
+    let all=[];
+    try { all.push(...parseTombstones(JSON.parse(localStorage.getItem(TOMBSTONE_KEY)||'[]'))); } catch (_) {}
+    all.push(...parseTombstones(state?.sharedRecordTombstones));
+    for(const entry of snapshots){
+      const snap=entry?.state||{};
+      all.push(...parseTombstones(snap.sharedRecordTombstones));
+      // Compatibility with V19's calendar tombstone for scheduled home payments.
+      for(const t of (Array.isArray(snap.calendarTombstones)?snap.calendarTombstones:[])){
+        if(t && String(t.kind)==='homePayment' && t.id!=null) all.push({collection:'expenses',id:String(t.id),deletedAt:String(t.deletedAt||'')});
+      }
+    }
+    const map=new Map();
+    for(const t of all){
+      const col=norm(t.collection);
+      if(!['expense','expenses','homeexpense','homepayment'].includes(col)) continue;
+      const id=String(t.id), prev=map.get(id);
+      if(!prev || String(t.deletedAt)>String(prev.deletedAt)) map.set(id,{collection:'expenses',id,deletedAt:t.deletedAt||new Date(0).toISOString()});
+    }
+    return [...map.values()];
+  }
+  function timeOfRecord(row){
+    for(const key of ['updatedAt','modifiedAt','lastUpdated']){
+      const n=Date.parse(row?.[key]||'');
+      if(Number.isFinite(n)) return n;
+    }
+    return 0;
+  }
+  function addExpenseCandidate(map,row,sourcePriority){
+    if(!row || row.id==null || String(row.id)==='') return;
+    const id=String(row.id), previous=map.get(id);
+    if(!previous){ map.set(id,{row:{...row},priority:sourcePriority}); return; }
+    const a=timeOfRecord(previous.row), b=timeOfRecord(row);
+    if(b>a || (b===a && sourcePriority>previous.priority)) map.set(id,{row:{...row},priority:sourcePriority});
+  }
+  function writeTombstones(list){
+    const unique=new Map();
+    for(const t of list) unique.set(String(t.id),{collection:'expenses',id:String(t.id),deletedAt:String(t.deletedAt||new Date().toISOString())});
+    const final=[...unique.values()];
+    try{localStorage.setItem(TOMBSTONE_KEY,JSON.stringify(final));}catch(_){}
+    if(state && typeof state==='object') state.sharedRecordTombstones=final;
+    return final;
+  }
+  function mergeCachedExpenses(snapshots){
+    if(!state || typeof state!=='object') return false;
+    const before=JSON.stringify(state.expenses||[]);
+    const applicable=(snapshots||[]).filter(entry=>householdMatch(entry.state));
+    const tombstones=allExpenseTombstones(applicable);
+    const deleted=new Set(tombstones.map(t=>String(t.id)));
+    const candidates=new Map();
+    (state.expenses||[]).forEach(row=>addExpenseCandidate(candidates,row,1000));
+    applicable.forEach((entry,index)=>{
+      (Array.isArray(entry.state?.expenses)?entry.state.expenses:[]).forEach(row=>addExpenseCandidate(candidates,row,index+1));
+    });
+    state.expenses=[...candidates.entries()].filter(([id])=>!deleted.has(id)).map(([,v])=>v.row);
+    state.sharedRecordTombstones=tombstones;
+    writeTombstones(tombstones);
+    return before!==JSON.stringify(state.expenses);
+  }
+  function stampChangedExpenseRows(){
+    if(!authUser?.id || !Array.isArray(state?.expenses)) return;
+    const cached=parseStateCache(PREFIX+'_'+authUser.id);
+    if(!cached || !Array.isArray(cached.expenses)) return;
+    const oldById=new Map(cached.expenses.filter(x=>x?.id!=null).map(x=>[String(x.id),x]));
+    const now=new Date().toISOString();
+    const withoutStamp=row=>{const copy={...row};delete copy.updatedAt;delete copy.modifiedAt;delete copy.lastUpdated;return JSON.stringify(copy);};
+    for(const row of state.expenses){
+      if(!row || row.id==null) continue;
+      const previous=oldById.get(String(row.id));
+      if(!previous || withoutStamp(previous)!==withoutStamp(row)) row.updatedAt=now;
+    }
+  }
+  function removeExpenseTombstone(id){
+    const list=allExpenseTombstones(readCachedSnapshots()).filter(x=>String(x.id)!==String(id));
+    writeTombstones(list);
+  }
+  function addExpenseTombstone(id){
+    const list=allExpenseTombstones(readCachedSnapshots()).filter(x=>String(x.id)!==String(id));
+    list.push({collection:'expenses',id:String(id),deletedAt:new Date().toISOString()});
+    writeTombstones(list);
+  }
+  const previousSaveState = typeof saveState==='function' ? saveState : window.saveState;
+  if(typeof previousSaveState==='function'){
+    function saveStateV21(){
+      if(!insideReconcile && !undoingV21 && authUser){
+        try { stampChangedExpenseRows(); mergeCachedExpenses(readCachedSnapshots()); } catch(error){ console.warn('Nexus V21: no se pudo conciliar el historial del hogar antes de guardar.',error); }
+      }
+      return previousSaveState.apply(this,arguments);
+    }
+    window.saveState=saveStateV21;
+    try{saveState=saveStateV21;}catch(_){}
+  }
+  const previousLoadState = typeof loadStateCloud==='function' ? loadStateCloud : window.loadStateCloud;
+  if(typeof previousLoadState==='function'){
+    async function loadStateCloudV21(){
+      const snapshotsBefore=readCachedSnapshots();
+      const ok=await previousLoadState.apply(this,arguments);
+      if(ok && authUser){
+        try {
+          const changed=mergeCachedExpenses([...snapshotsBefore,...readCachedSnapshots()]);
+          if(changed){
+            insideReconcile=true;
+            try { await (typeof saveState==='function'?saveState():window.saveState()); }
+            finally { insideReconcile=false; }
+          }
+        } catch(error){ console.warn('Nexus V21: no se pudo sincronizar el historial compartido de gastos.',error); }
+      }
+      return ok;
+    }
+    window.loadStateCloud=loadStateCloudV21;
+    try{loadStateCloud=loadStateCloudV21;}catch(_){}
+  }
+
+  /* A household expense deletion must create a shared tombstone so an older profile cache
+     cannot silently resurrect it. All other delete flows continue using the existing logic. */
+  const previousDeleteRecord = typeof deleteRecord==='function' ? deleteRecord : window.deleteRecord;
+  if(typeof previousDeleteRecord==='function'){
+    function deleteRecordV21(type,id){
+      if(type!=='expense') return previousDeleteRecord.apply(this,arguments);
+      const record=(state.expenses||[]).find(x=>String(x.id)===String(id));
+      if(!record){ if(typeof toast==='function')toast('No se encontró el gasto.'); return; }
+      confirmInApp(`¿Quieres eliminar el gasto de ${record.category||'Hogar'}? Podrás deshacer esta acción durante 15 segundos.`,()=>{
+        const oldModalType=activeModal?.type, oldModalKey=activeModal?.key;
+        if(record.paymentScheduled && record.paymentDate){
+          try{
+            state.calendarTombstones=Array.isArray(state.calendarTombstones)?state.calendarTombstones:[];
+            state.calendarTombstones=state.calendarTombstones.filter(t=>!(String(t.kind)==='homePayment'&&String(t.id)===String(id)));
+            state.calendarTombstones.push({kind:'homePayment',id:String(id),deletedAt:new Date().toISOString()});
+            localStorage.setItem(PREFIX+'_calendar_task_tombstones',JSON.stringify(state.calendarTombstones));
+          }catch(_){}
+        }
+        addExpenseTombstone(id);
+        state.expenses=(state.expenses||[]).filter(x=>String(x.id)!==String(id));
+        saveState();
+        if(typeof renderAll==='function')renderAll();
+        if(typeof renderExtendedModules==='function')renderExtendedModules();
+        if(typeof renderMobileUI==='function')renderMobileUI();
+        if(oldModalType==='expense' && oldModalKey){openExpense(oldModalKey);} else if(typeof closeModal==='function')closeModal(true);
+        if(typeof toast==='function')toast('Gasto eliminado');
+      },{confirmLabel:'Eliminar',danger:true});
+    }
+    window.deleteRecord=deleteRecordV21;
+    try{deleteRecord=deleteRecordV21;}catch(_){}
+  }
+  const previousUndo = typeof undoLastNexusAction==='function' ? undoLastNexusAction : window.undoLastNexusAction;
+  if(typeof previousUndo==='function'){
+    function undoLastNexusActionV21(){
+      let snap=null;
+      try{snap=typeof nexusUndoSnapshot!=='undefined'&&nexusUndoSnapshot?JSON.parse(nexusUndoSnapshot):null;}catch(_){}
+      undoingV21=true;
+      let result;
+      try{result=previousUndo.apply(this,arguments);}finally{undoingV21=false;}
+      try{
+        const restored=new Set((snap?.expenses||[]).filter(x=>x?.id!=null).map(x=>String(x.id)));
+        if(restored.size){
+          const tombs=allExpenseTombstones(readCachedSnapshots()).filter(t=>!restored.has(String(t.id)));
+          writeTombstones(tombs);
+          const visible=new Set((state.expenses||[]).map(x=>String(x.id)));
+          state.sharedRecordTombstones=tombs.filter(t=>!visible.has(String(t.id)));
+          try{localStorage.setItem(TOMBSTONE_KEY,JSON.stringify(state.sharedRecordTombstones));}catch(_){}
+          insideReconcile=true;
+          try{if(typeof saveState==='function')saveState();}finally{insideReconcile=false;}
+          if(typeof renderMobileUI==='function')renderMobileUI();
+        }
+      }catch(error){console.warn('Nexus V21: no se pudo reconciliar el deshacer del gasto compartido.',error);}
+      return result;
+    }
+    window.undoLastNexusAction=undoLastNexusActionV21;
+    try{undoLastNexusAction=undoLastNexusActionV21;}catch(_){}
+  }
+
+  /* ---------------- Shared activity history ---------------- */
+  const SAVE_META={
+    financial:{label:'Ahorro Financiero',icon:'fa-chart-line',color:'#34d399'},
+    unexpected:{label:'Imprevistos',icon:'fa-shield-halved',color:'#60a5fa'},
+    emergency:{label:'Emergencias',icon:'fa-briefcase-medical',color:'#f472b6'}
+  };
+  function categoryIcon(category){
+    try{if(typeof mobileV4CatIcon==='function')return mobileV4CatIcon(category);}catch(_){}
+    const defaults={Arriendo:'fa-house',Mercado:'fa-cart-shopping',Luz:'fa-bolt',Agua:'fa-droplet',Gas:'fa-fire-flame-simple',Internet:'fa-wifi',Transporte:'fa-car-side',Otros:'fa-receipt'};
+    return defaults[category]||'fa-receipt';
+  }
+  function categoryTone(category){
+    try{if(typeof categoryColor==='function')return categoryColor(category);}catch(_){}
+    const defaults={Arriendo:'#8b5cf6',Mercado:'#fb923c',Luz:'#facc15',Agua:'#60a5fa',Gas:'#f97316',Internet:'#22d3ee',Transporte:'#f472b6',Otros:'#94a3b8'};
+    return defaults[category]||'#94a3b8';
+  }
+  function statusForExpense(x,date){
+    if(x?.status==='pending') return x.paymentScheduled && x.paymentDate && x.paymentDate<isoToday() ? 'overdue' : 'pending';
+    return 'done';
+  }
+  function pushActivity(rows,record){
+    if(!record || !record.title) return;
+    record.id=record.id==null?'':String(record.id);
+    record.date=String(record.date||'').slice(0,10);
+    record.search=norm([record.title,record.detail,record.ownerName,record.accountName,record.statusLabel].join(' '));
+    rows.push(record);
+  }
+  function buildAllActivities(){
+    const rows=[], today=isoToday();
+    for(const x of (state.incomes||[])){
+      const who=personOf(x.person),name=personName(who);
+      pushActivity(rows,{id:x.id,collection:'income',date:x.date,title:`Ingreso · ${name}`,detail:'Ingreso base del hogar',owner:who,ownerName:name,accountName:'Cuenta hogar',amount:Number(x.amount)||0,amountText:'+'+moneyText(x.amount),group:'income',groups:['income','home'],icon:personIcon(who),color:personColor(who),status:'done',statusLabel:'Registrado',edit:'income'});
+    }
+    for(const x of (state.expenses||[])){
+      const date=(x.status==='pending'&&x.paymentScheduled&&x.paymentDate)?x.paymentDate:((x.status==='paid'&&x.paidDate)||x.date||'');
+      const status=statusForExpense(x,date),cat=x.category||'Otros',title=cat;
+      const pending=status==='pending'||status==='overdue';
+      pushActivity(rows,{id:x.id,collection:'expense',date,title,detail:`Gasto del hogar · ${x.distribution==='manual'?'Distribución manual':'Distribución compartida'}`,owner:'home',ownerName:'Hogar',accountName:'Cuenta hogar',amount:Number(x.amount)||0,amountText:pending?`${status==='overdue'?'Vencido':'Pendiente'} · ${moneyText(x.amount)}`:'−'+moneyText(x.amount),group:'home',groups:['home','expense',...(x.paymentScheduled?['calendar']:[])],icon:categoryIcon(cat),color:categoryTone(cat),status,statusLabel:status==='done'?'Pagado':status==='overdue'?'Vencido':'Pendiente',edit:'expense',category:cat});
+    }
+    for(const x of (state.savings||[])){
+      const meta=SAVE_META[x.type]||{label:'Ahorro del hogar',icon:'fa-piggy-bank',color:'#34d399'};
+      const who=personOf(x.person);
+      pushActivity(rows,{id:x.id,collection:'saving',date:x.date,title:meta.label,detail:`Aporte de ${personName(who)} · Ahorro compartido`,owner:who,ownerName:personName(who),accountName:'Cuenta ahorros',amount:Number(x.amount)||0,amountText:'−'+moneyText(x.amount),group:'savings',groups:['savings','home'],icon:meta.icon,color:meta.color,status:'done',statusLabel:'Registrado',edit:'saving',savingType:x.type});
+    }
+    const personal=(state.personalSpending||[]);
+    const paymentIds=new Set(personal.filter(x=>x?.debtId).map(x=>String(x.id)));
+    for(const x of personal){
+      const who=personOf(x.person), type=typeof personalMovementType==='function'?personalMovementType(x):(x.type||'expense');
+      const date=(['expense','other-expense'].includes(type)&&x.status==='pending'&&x.paymentScheduled&&x.paymentDate)?x.paymentDate:((x.status==='paid'&&x.paidDate)||x.date||'');
+      const scheduled=['expense','other-expense'].includes(type)&&x.paymentScheduled;
+      let title='',detail='',group='personal',groups=['personal'],icon='fa-wallet',color=personColor(who),amountText='',status='done',statusLabel='Registrado',edit='personal',accountName=personName(who)+' · Cuenta personal';
+      const amount=Number(x.amount)||0;
+      if(type==='income'){
+        title=`Ingreso adicional · ${personName(who)}`;detail=x.desc||x.category||'Ingreso personal';groups=['income','personal'];icon=personIcon(who);amountText='+'+moneyText(amount);accountName=personName(who)+' · Cuenta personal';
+      }else if(type==='saving'){
+        title=x.savingBoxName||x.category||'Ahorro personal';detail=`Aporte de ${personName(who)} · ${x.desc||'Caja personal'}`;groups=['savings','personal'];icon=personIcon(who);amountText='−'+moneyText(amount);accountName=personName(who)+' · Cuenta personal';
+      }else if(type==='debt'){
+        const debt=(state.debts||[]).find(d=>String(d.id)===String(x.debtId));title=`Abono a deuda${debt?.name?' · '+debt.name:''}`;detail=`Pagado por ${personName(who)}${x.desc?' · '+x.desc:''}`;groups=['debts','personal'];icon='fa-file-invoice-dollar';color='#f472b6';amountText='−'+moneyText(amount);accountName=personName(who)+' · Cuenta personal';edit='debtPayment';
+      }else{
+        title=x.category||x.desc||'Gasto personal';detail=`${personName(who)} · ${x.desc||'Gasto personal'}`;groups=['expense','personal',...(scheduled?['calendar']:[])];icon=categoryIcon(x.category||'Otros');color=categoryTone(x.category||'Otros');accountName=personName(who)+' · Cuenta personal';
+        status=x.status==='pending'?(scheduled&&x.paymentDate&&x.paymentDate<today?'overdue':'pending'):'done';statusLabel=status==='done'?'Pagado':status==='overdue'?'Vencido':'Pendiente';amountText=status==='done'?'−'+moneyText(amount):`${status==='overdue'?'Vencido':'Pendiente'} · ${moneyText(amount)}`;
+      }
+      pushActivity(rows,{id:x.id,collection:'personal',date,title,detail,owner:who,ownerName:personName(who),accountName,amount,amountText,group,groups,icon,color,status,statusLabel,edit,personalType:type,linkedDebtId:x.debtId||null,scheduled});
+    }
+    for(const debt of (state.debts||[])){
+      const owner=debt.owner==='home'?'home':personOf(debt.owner), name=owner==='home'?'Hogar':personName(owner), balance=Number(debt.balance)||0;
+      const status=debt.status==='paid'||balance<=0?'done':(debt.due&&debt.due<today?'overdue':'pending');
+      const date=debt.createdAt||debt.date||debt.due||'';
+      pushActivity(rows,{id:debt.id,collection:'debt',date,title:`Deuda · ${debt.name||'Obligación'}`,detail:`Responsable: ${name} · Saldo pendiente ${moneyText(balance)}`,owner,ownerName:name,accountName:owner==='home'?'Cuenta hogar':name+' · Cuenta personal',amount:balance,amountText:`Saldo ${moneyText(balance)}`,group:'debts',groups:['debts',...(debt.due?['calendar']:[])],icon:'fa-file-invoice-dollar',color:'#f472b6',status,statusLabel:status==='done'?'Completado':status==='overdue'?'Vencido':'Pendiente',edit:'debt',due:debt.due});
+      for(const payment of (Array.isArray(debt.payments)?debt.payments:[])){
+        if(payment.id!=null && paymentIds.has(String(payment.id))) continue;
+        const payer=personOf(payment.person), amount=Number(payment.amount)||0;
+        pushActivity(rows,{id:payment.id||`${debt.id}-payment-${payment.date}-${amount}`,collection:'debtPayment',date:payment.date||debt.createdAt||'',title:`Abono a deuda · ${debt.name||'Obligación'}`,detail:`Pagado por ${personName(payer)} · ${name}`,owner:payer,ownerName:personName(payer),accountName:personName(payer)+' · Cuenta personal',amount,amountText:'−'+moneyText(amount),group:'debts',groups:['debts','personal'],icon:personIcon(payer),color:personColor(payer),status:'done',statusLabel:'Pagado',edit:'debtPayment',linkedDebtId:debt.id});
+      }
+    }
+    for(const task of (state.tasks||[])){
+      const owner=task.owner==='home'?'home':personOf(task.owner), name=owner==='home'?'Hogar':personName(owner);
+      const status=task.status==='done'?'done':(task.date&&task.date<today?'overdue':'pending');
+      pushActivity(rows,{id:task.id,collection:'task',date:task.date,title:task.title||'Recordatorio',detail:`${name}${task.time?' · '+task.time:''}${task.notes?' · '+task.notes:''}`,owner,ownerName:name,accountName:owner==='home'?'Hogar':name+' · Calendario',amount:null,amountText:'',group:'calendar',groups:['calendar',...(owner==='home'?['home']:['personal'])],icon:'fa-calendar-days',color:status==='done'?'#34d399':status==='overdue'?'#fb7185':'#facc15',status,statusLabel:status==='done'?'Completado':status==='overdue'?'Vencido':'Pendiente',edit:'task',time:task.time||''});
+    }
+    for(const transaction of (state.transactions||[])){
+      const account=String(transaction.account||'');
+      const accountMeta=(Array.isArray(ACCOUNT_TYPES)?ACCOUNT_TYPES.find(a=>String(a.id)===account):null)||{name:account||'Cuenta'};
+      const positive=transaction.type==='income';
+      const isSavings=account==='savings', isHome=account==='home', isPerson=['me','partner'].includes(account);
+      const owner=isPerson?account:'home';
+      const groups=[positive?'income':'expense',isSavings?'savings':isHome?'home':isPerson?'personal':'home'];
+      pushActivity(rows,{id:transaction.id,collection:'transaction',date:transaction.date,title:transaction.description||'Movimiento de cuenta',detail:`Libro de cuenta · ${accountMeta.name||account}`,owner,ownerName:isPerson?personName(owner):isHome?'Hogar':'Cuenta',accountName:accountMeta.name||account,amount:Number(transaction.amount)||0,amountText:(positive?'+':'−')+moneyText(transaction.amount),group:isSavings?'savings':isHome?'home':isPerson?'personal':'home',groups,icon:positive?(isPerson?personIcon(owner):'fa-arrow-trend-up'):isSavings?'fa-piggy-bank':isPerson?personIcon(owner):'fa-wallet',color:isPerson?personColor(owner):isSavings?'#34d399':isHome?'#facc15':'#94a3b8',status:'done',statusLabel:'Registrado',edit:'transaction'});
+    }
+    return rows.sort((a,b)=>(b.date||'').localeCompare(a.date||'') || String(b.time||'').localeCompare(String(a.time||'')));
+  }
+  const FILTERS=[['all','Todos'],['income','Ingresos'],['home','Hogar'],['savings','Ahorros'],['personal','Finanzas personales'],['expense','Gastos'],['debts','Deudas'],['calendar','Calendario']];
+  function activityMatchesScope(row){
+    if(activityScope!=='period')return true;
+    try{const f=getFilter();return !!row.date && inPeriod(row.date,Number(f.year),f.month);}catch(_){return true;}
+  }
+  function activityMatchesFilter(row){return activityFilter==='all'||(row.groups||[]).includes(activityFilter);}
+  function activityMatchesSearch(row){return !activitySearch || (row.search||'').includes(norm(activitySearch));}
+  function activityStatusHtml(row){
+    if(!row.statusLabel)return '';
+    const cls=row.status==='done'?'done':row.status==='overdue'?'overdue':'pending';
+    return `<span class="v21-activity-status ${cls}"><i class="fa-solid ${cls==='done'?'fa-circle-check':cls==='overdue'?'fa-triangle-exclamation':'fa-clock'}"></i>${textEsc(row.statusLabel)}</span>`;
+  }
+  function activityActions(row){
+    const id=safeJsonAttr(row.id), owner=safeJsonAttr(row.owner==='partner'?'partner':'me');
+    const button=(label,icon,onclick,danger=false)=>`<button type="button" class="v21-activity-action${danger?' danger':''}" title="${textEsc(label)}" aria-label="${textEsc(label)}" onclick="${onclick}"><i class="fa-solid ${icon}" aria-hidden="true"></i></button>`;
+    if(row.edit==='income' && row.id)return button('Editar ingreso','fa-pen-to-square',`openIncome(${owner},${id})`)+button('Eliminar ingreso','fa-trash-can',`deleteRecord('income',${id})`,true);
+    if(row.edit==='expense' && row.id)return button('Editar gasto','fa-pen-to-square',`openExpense(${safeJsonAttr(row.category)},${id})`)+button('Eliminar gasto','fa-trash-can',`deleteRecord('expense',${id})`,true);
+    if(row.edit==='saving' && row.id)return button('Editar ahorro','fa-pen-to-square',`openSaving(${safeJsonAttr(row.savingType)},${id},${owner})`)+button('Eliminar ahorro','fa-trash-can',`deleteRecord('saving',${id})`,true);
+    if(row.edit==='personal' && row.id){
+      const active=typeof window.nexusV17CurrentProfile==='function'?window.nexusV17CurrentProfile():(authUser?.role==='partner'?'partner':'me');
+      if(row.owner!==active)return `<span class="v21-readonly"><i class="fa-solid fa-lock"></i> Solo lectura</span>`;
+      return button('Editar movimiento','fa-pen-to-square',`editPersonalMovement(${id})`)+button('Eliminar movimiento','fa-trash-can',`deleteRecord('personal',${id})`,true);
+    }
+    if(row.edit==='debt' && row.id)return button('Ver deuda','fa-arrow-up-right-from-square',`mobileSetScreen('debts')`);
+    if(row.edit==='debtPayment' && row.id)return button('Ver deuda y abonos','fa-file-invoice-dollar',`mobileSetScreen('debts')`);
+    if(row.edit==='task' && row.id)return button('Editar evento','fa-pen-to-square',`openTaskEdit(${id})`)+button(row.status==='done'?'Volver a pendiente':'Marcar completado',row.status==='done'?'fa-rotate-left':'fa-check',`toggleTask(${id})`);
+    if(row.edit==='transaction' && row.id)return button('Eliminar movimiento manual','fa-trash-can',`deleteAccountMovement(${id})`,true);
+    return '';
+  }
+  function renderActivityRow(row,compact=false){
+    const status=activityStatusHtml(row), actions=activityActions(row);
+    const color=row.color||'#94a3b8', amount=row.amountText?`<strong class="v21-activity-amount ${row.status==='overdue'?'overdue':row.status==='pending'?'pending':String(row.amountText).startsWith('+')?'positive':''}">${textEsc(row.amountText)}</strong>`:'';
+    return `<article class="v21-activity-row ${compact?'compact':''} ${row.status||''}" data-v21-activity="1" data-v21-groups="${textEsc((row.groups||[]).join(','))}" data-v21-search="${textEsc(row.search||'')}" style="--v21-item-color:${textEsc(color)}"><span class="v21-activity-icon"><i class="fa-solid ${textEsc(row.icon||'fa-circle-dot')}" aria-hidden="true"></i></span><div class="v21-activity-main"><b>${textEsc(row.title)}</b><small>${textEsc(row.date? (typeof mobileV3DateLabel==='function'?mobileV3DateLabel(row.date):row.date):'Sin fecha')} · ${textEsc(row.accountName||'Cuenta')}</small><span class="v21-activity-detail">${textEsc(row.detail||'')}</span>${status}</div><div class="v21-activity-side">${amount}<div class="v21-activity-actions">${actions}</div></div></article>`;
+  }
+  function summaryActivitiesHtml(){
+    const rows=buildAllActivities().slice(0,8);
+    return `<section class="m-v3-section v21-summary-activities"><div class="m-v3-section-head"><div><h3><i class="fa-solid fa-clock-rotate-left"></i> Actividad reciente</h3><p>Últimos movimientos de todas las cuentas y perfiles.</p></div></div><article class="m-v3-card v21-summary-activity-card">${rows.length?rows.map(row=>renderActivityRow(row,true)).join(''):`<div class="m-inline-empty"><i class="fa-solid fa-chart-line"></i> Aún no hay actividades registradas.</div>`}<button type="button" class="m-secondary-btn full" onclick="mobileSetScreen('activities')"><i class="fa-solid fa-list-check"></i> Ver actividades</button></article></section>`;
+  }
+  function wrapHomeActivity(html){
+    if(typeof html!=='string')return html;
+    try{
+      const template=document.createElement('template');template.innerHTML=html;
+      const heading=Array.from(template.content.querySelectorAll('.m-v3-section-head h3')).find(el=>norm(el.textContent).includes('actividad reciente'));
+      const section=heading?.closest('section.m-v3-section');
+      if(section){const holder=document.createElement('template');holder.innerHTML=summaryActivitiesHtml();section.replaceWith(holder.content.firstElementChild);return template.innerHTML;}
+    }catch(error){console.warn('Nexus V21: no se pudo actualizar la tarjeta de actividad del resumen.',error);}
+    return html;
+  }
+  if(typeof renderMobileHome==='function'){
+    const previousHome=renderMobileHome;
+    function renderMobileHomeV21(){return wrapHomeActivity(previousHome.apply(this,arguments));}
+    window.renderMobileHome=renderMobileHomeV21;
+    try{renderMobileHome=renderMobileHomeV21;}catch(_){}
+  }
+  function renderActivitiesScreen(){
+    const all=buildAllActivities();
+    const scopeRows=all.filter(activityMatchesScope);
+    const filteredRows=scopeRows.filter(activityMatchesFilter).filter(activityMatchesSearch);
+    const chips=FILTERS.map(([key,label])=>`<button type="button" class="v21-filter-chip ${activityFilter===key?'active':''}" aria-pressed="${activityFilter===key?'true':'false'}" onclick="nexusV21SetActivityFilter('${key}')"><span class="v21-filter-check"><i class="fa-solid ${activityFilter===key?'fa-check':'fa-minus'}"></i></span>${label}<small>${scopeRows.filter(r=>key==='all'||(r.groups||[]).includes(key)).length}</small></button>`).join('');
+    const scopeLabel=activityScope==='all'?'Todo el historial':'Periodo seleccionado';
+    return `<section class="v21-activities-page"><div class="v21-activities-intro"><div class="v21-activity-icon large"><i class="fa-solid fa-list-check"></i></div><div><h2>Ver actividades</h2><p>Historial completo de los movimientos, compromisos y cuentas de ambos perfiles.</p></div><button type="button" class="m-icon-btn" title="Volver al resumen" aria-label="Volver al resumen" onclick="mobileSetScreen('summary')"><i class="fa-solid fa-arrow-left"></i></button></div><div class="v21-activity-controls"><label class="v21-search"><i class="fa-solid fa-magnifying-glass"></i><input type="search" placeholder="Buscar concepto, cuenta o persona" value="${textEsc(activitySearch)}" oninput="nexusV21ActivitySearch(this.value)"></label><div class="v21-scope-toggle"><button type="button" class="${activityScope==='all'?'active':''}" onclick="nexusV21SetActivityScope('all')"><i class="fa-solid fa-clock-rotate-left"></i> Todo el historial</button><button type="button" class="${activityScope==='period'?'active':''}" onclick="nexusV21SetActivityScope('period')"><i class="fa-solid fa-calendar-days"></i> Periodo seleccionado</button></div>${activityScope==='period'?mobilePeriodControls():''}</div><div class="v21-activity-filters" role="group" aria-label="Filtrar actividades">${chips}</div><div class="v21-activity-result-head"><b>${filteredRows.length} actividad(es)</b><span>${scopeLabel}</span></div><div id="v21ActivityList" class="v21-activity-list">${filteredRows.length?filteredRows.map(row=>renderActivityRow(row,false)).join(''):`<div class="m-v3-card v21-empty-activities"><i class="fa-solid fa-inbox"></i><b>No hay actividades para este filtro</b><small>Cambia el filtro o amplía el periodo.</small></div>`}</div><button type="button" class="m-secondary-btn full v21-back-summary" onclick="mobileSetScreen('summary')"><i class="fa-solid fa-arrow-left"></i> Volver al resumen</button></section>`;
+  }
+  window.nexusV21SetActivityFilter=function(key){activityFilter=FILTERS.some(x=>x[0]===key)?key:'all';try{renderMobileUI();}catch(_){};};
+  window.nexusV21SetActivityScope=function(scope){activityScope=scope==='period'?'period':'all';try{renderMobileUI();}catch(_){};};
+  window.nexusV21ActivitySearch=function(value){activitySearch=String(value||'');const q=norm(activitySearch);document.querySelectorAll('#v21ActivityList [data-v21-activity]').forEach(el=>{el.hidden=!!q&&!norm(el.getAttribute('data-v21-search')||'').includes(q);});const count=document.querySelector('#v21ActivityList');if(count){const visible=[...count.querySelectorAll('[data-v21-activity]')].filter(el=>!el.hidden).length;const label=document.querySelector('.v21-activity-result-head b');if(label)label.textContent=`${visible} actividad(es)`;}};
+  function personFromLabel(text){
+    const t=norm(text), me=norm(state?.people?.me||'Ruben'), partner=norm(state?.people?.partner||'Mauren');
+    if(partner && t.includes(partner))return 'partner';
+    if(me && t.includes(me))return 'me';
+    return null;
+  }
+  function ownerNodeLabel(node){
+    if(!node)return '';
+    const selectors=['.m-v3-person-title','.m-v3-profile-title','.m-v2-available-top b','.m-v2-person-card>small','.m-v3-person-tile>span','.m-v3-account-title','.m-v10-account-card-label b','.m-v10-income-title','.m-v17-income-owner'];
+    for(const selector of selectors){const el=node.matches?.(selector)?node:node.querySelector?.(selector);if(el?.textContent)return el.textContent;}
+    return node.textContent||'';
+  }
+  function setIdentity(node,person){
+    if(!node||!person)return;
+    const color=personColor(person);
+    node.classList.remove('v21-owner-me','v21-owner-partner');
+    node.classList.add(person==='partner'?'v21-owner-partner':'v21-owner-me');
+    node.dataset.v21Owner=person;
+    node.style.setProperty('--v21-owner-color',color);
+    if(node.matches('.m-v2-person-card,.m-v2-available-card,.m-v3-profile-card,.m-v3-person-tile')){
+      node.style.borderColor=color+'80';node.style.borderLeftColor=color;node.style.borderTopColor=color;
+      const icon=node.querySelector('.m-v2-person-icon i,.m-v3-profile-title i,.m-v3-person-tile>span i,.m-v2-available-top .m-v2-person-icon i');
+      if(icon){icon.style.color=color; if(node.matches('.m-v3-person-tile') && !icon.className.includes('fa-arrow-trend-up')) icon.className='fa-solid '+personIcon(person);}
+      const title=node.querySelector('.m-v2-available-top b,.m-v3-profile-title,.m-v3-person-tile>span');if(title)title.style.color=color;
+    }
+  }
+  function applyIdentityPalette(root=document){
+    try{
+      if(typeof PERSON_COLORS==='object'){PERSON_COLORS.me=COLOR_RUBEN;PERSON_COLORS.partner=COLOR_MAUREN;}
+      if(root===document || root===document.getElementById('mobileApp')){
+        const app=document.getElementById('mobileApp');if(app){app.style.setProperty('--m-person-me',COLOR_RUBEN);app.style.setProperty('--m-person-partner',COLOR_MAUREN);}
+      }
+      const specs=[
+        ['.m-v2-person-card',node=>node.querySelector(':scope > small')?.textContent||ownerNodeLabel(node)],
+        ['.m-v2-available-card',node=>node.querySelector('.m-v2-available-top b')?.textContent||ownerNodeLabel(node)],
+        ['.m-v3-profile-card',node=>node.querySelector('.m-v3-profile-title')?.textContent||ownerNodeLabel(node)],
+        ['.m-v3-person-tile',node=>node.querySelector(':scope > span')?.textContent||ownerNodeLabel(node)],
+        ['.m-v10-income-row',node=>ownerNodeLabel(node)],
+        ['.m-v17-income-owner',node=>ownerNodeLabel(node)]
+      ];
+      for(const [selector,getLabel] of specs){
+        (root.querySelectorAll?root.querySelectorAll(selector):[]).forEach(node=>{
+          const detected=personFromLabel(getLabel(node));
+          if(detected)setIdentity(node,detected);
+        });
+      }
+      // Apply stable identity colors to the older, already-rendered income rows as well.
+      root.querySelectorAll?.('.m-v3-row,.m-transaction,.m-v10-income-row').forEach(row=>{
+        const text=row.textContent||'';const detected=personFromLabel(text);
+        const isIncome=/ingreso|income/i.test(text) || row.querySelector('.m-transaction-icon.income,.m-v17-income-owner');
+        if(!detected||!isIncome)return;
+        const color=personColor(detected), icon=personIcon(detected), ownerIcon=row.querySelector('.m-transaction-icon.income i,.m-v3-row-icon i,.m-v10-income-row .m-v10-income-icon i');
+        row.style.setProperty('--v21-owner-color',color);
+        if(ownerIcon){ownerIcon.className='fa-solid '+icon;ownerIcon.style.color=color;}
+        const amount=row.querySelector('.m-v3-row-side strong,.m-transaction-side strong,.m-v10-income-amount');if(amount && amount.classList.contains('positive'))amount.style.color='#6ee7b7';
+      });
+      // Fix order-independent styling on the two household income profile tiles and other profile pairs.
+      const current=typeof window.nexusV17CurrentProfile==='function'?window.nexusV17CurrentProfile():(/partner|mauren/i.test([authUser?.role,authUser?.username,authUser?.name,authUser?.email].join(' '))?'partner':'me');
+      for(const selector of ['.m-v3-person-tile','.m-v2-person-card','.m-v2-available-card','.m-v3-profile-card']){
+        const groups=new Map();
+        root.querySelectorAll?.(selector).forEach(node=>{if(!node.parentElement)return;const arr=groups.get(node.parentElement)||[];arr.push(node);groups.set(node.parentElement,arr);});
+        for(const arr of groups.values()){
+          if(arr.length!==2)continue;
+          const a=arr.map(node=>({node,person:personFromLabel(ownerNodeLabel(node))}));
+          const own=a.find(x=>x.person===current),other=a.find(x=>x.person===(current==='partner'?'me':'partner'));
+          if(own&&other&&own.node.nextElementSibling!==other.node)own.node.parentElement.insertBefore(own.node,other.node);
+        }
+      }
+    }catch(error){console.warn('Nexus V21: no se pudo alinear la paleta por perfil.',error);}
+  }
+  function persistV21Route(route){
+    if(!authToken||!authUser)return;
+    const identity=String(authUser?.id||authUser?.username||authUser?.email||(typeof window.nexusV17CurrentProfile==='function'?window.nexusV17CurrentProfile():'default')).trim().toLowerCase();
+    const key='nexus_mobile_last_screen_v21_'+encodeURIComponent(identity);
+    try{localStorage.setItem(key,route);sessionStorage.setItem(key,route);}catch(_){}
+  }
+  function readV21Route(){
+    const identity=String(authUser?.id||authUser?.username||authUser?.email||(typeof window.nexusV17CurrentProfile==='function'?window.nexusV17CurrentProfile():'default')).trim().toLowerCase();
+    const key='nexus_mobile_last_screen_v21_'+encodeURIComponent(identity);
+    const oldKey='nexus_mobile_last_screen_v17_'+encodeURIComponent(identity);
+    const allowed=new Set(['summary','income','homeExpenses','savings','available','goals','more','debts','calendar','accounts','reports','personalMe','personalPartner','settings','activities']);
+    let route='';try{route=localStorage.getItem(key)||sessionStorage.getItem(key)||localStorage.getItem(oldKey)||sessionStorage.getItem(oldKey)||'';}catch(_){}
+    return allowed.has(route)?route:'summary';
+  }
+  const previousSetScreen=typeof mobileSetScreen==='function'?mobileSetScreen:window.mobileSetScreen;
+  if(typeof previousSetScreen==='function'){
+    function mobileSetScreenV21(name){
+      if(name==='activities'){
+        mobileScreen='activities';
+        persistV21Route('activities');
+        if(typeof renderMobileUI==='function')renderMobileUI();
+        try{window.scrollTo({top:0,behavior:'smooth'});}catch(_){}
+        return;
+      }
+      const result=previousSetScreen.apply(this,arguments);
+      persistV21Route(mobileScreen||name);
+      return result;
+    }
+    window.mobileSetScreen=mobileSetScreenV21;
+    try{mobileSetScreen=mobileSetScreenV21;}catch(_){}
+  }
+  const previousRenderMobileUI=typeof renderMobileUI==='function'?renderMobileUI:window.renderMobileUI;
+  if(typeof previousRenderMobileUI==='function'){
+    function renderMobileUIV21(){
+      const result=previousRenderMobileUI.apply(this,arguments);
+      try{
+        if(mobileScreen==='activities'){
+          const content=document.getElementById('mContent');
+          if(content)content.innerHTML=renderActivitiesScreen();
+          const title=document.getElementById('mTitle'), subtitle=document.getElementById('mSubtitle');
+          if(title)title.textContent='Ver actividades';
+          if(subtitle)subtitle.textContent='Historial de todas las cuentas y perfiles';
+          document.querySelectorAll('.m-tab').forEach(tab=>tab.classList.remove('active'));
+        }
+        applyIdentityPalette(document.getElementById('mContent')||document);
+      }catch(error){console.warn('Nexus V21 render:',error);}
+      if(authToken&&authUser)persistV21Route(mobileScreen||'summary');
+      return result;
+    }
+    window.renderMobileUI=renderMobileUIV21;
+    try{renderMobileUI=renderMobileUIV21;}catch(_){}
+  }
+  const previousRenderAll=typeof renderAll==='function'?renderAll:window.renderAll;
+  if(typeof previousRenderAll==='function'){
+    function renderAllV21(){const result=previousRenderAll.apply(this,arguments);try{applyIdentityPalette(document);}catch(_){}return result;}
+    window.renderAll=renderAllV21;try{renderAll=renderAllV21;}catch(_){}
+  }
+  const previousBootstrap=typeof bootstrapAuth==='function'?bootstrapAuth:window.bootstrapAuth;
+  if(typeof previousBootstrap==='function'){
+    async function bootstrapAuthV21(){
+      const hadSession=!!(authToken&&authUser), savedRoute=hadSession?readV21Route():'summary';
+      const result=await previousBootstrap.apply(this,arguments);
+      if(authToken&&authUser){mobileScreen=hadSession?savedRoute:'summary';if(typeof renderMobileUI==='function')renderMobileUI();persistV21Route(mobileScreen);}
+      return result;
+    }
+    window.bootstrapAuth=bootstrapAuthV21;try{bootstrapAuth=bootstrapAuthV21;}catch(_){}
+  }
+  const previousSubmitAuth=typeof submitAuth==='function'?submitAuth:window.submitAuth;
+  if(typeof previousSubmitAuth==='function'){
+    async function submitAuthV21(event){const result=await previousSubmitAuth.apply(this,arguments);if(authToken&&authUser){mobileScreen='summary';persistV21Route('summary');if(typeof renderMobileUI==='function')renderMobileUI();}return result;}
+    window.submitAuth=submitAuthV21;try{submitAuth=submitAuthV21;}catch(_){}
+  }
+  const oldTitle=window.MOBILE_TITLES|| (typeof MOBILE_TITLES!=='undefined'?MOBILE_TITLES:null);
+  if(oldTitle)oldTitle.activities=['Ver actividades','Historial de todas las cuentas y perfiles'];
+  document.addEventListener('DOMContentLoaded',()=>{try{applyIdentityPalette(document);if(authToken&&authUser&&mobileScreen==='activities')renderMobileUI();}catch(_){}},{once:true});
+  window.addEventListener('pageshow',()=>{try{if(authToken&&authUser){const changed=mergeCachedExpenses(readCachedSnapshots());if(changed){insideReconcile=true;try{if(typeof saveState==='function')saveState();}finally{insideReconcile=false;}if(typeof renderAll==='function')renderAll();if(typeof renderMobileUI==='function')renderMobileUI();}applyIdentityPalette(document.getElementById('mContent')||document);if(typeof paintGeneralBalance==='function')paintGeneralBalance();}}catch(error){console.warn('Nexus V21: actualización de páginashow.',error);}});
+
+  window.nexusV21Diagnostics={
+    mergeCachedExpenses:()=>mergeCachedExpenses(readCachedSnapshots()),
+    getExpenseCount:()=>Array.isArray(state?.expenses)?state.expenses.length:0,
+    listActivities:()=>buildAllActivities().map(({id,date,title,group,groups,status,owner,amountText})=>({id,date,title,group,groups,status,owner,amountText})),
+    colors:{ruben:COLOR_RUBEN,mauren:COLOR_MAUREN}
+  };
+})();
+</script>
+
+</script>
 </body>
 </html>
