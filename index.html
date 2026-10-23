@@ -558,7 +558,7 @@ button,input,select,textarea{-webkit-tap-highlight-color:transparent}button{touc
 </section>
 
 <section id="reportsModule" class="module-section hidden">
- <div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-chart-column"></i> Reportes</h2><span>Resumen financiero filtrable por año y periodo</span></div><button class="btn" onclick="exportReportCsv()">Exportar CSV</button></div><div class="filterbar report-filter"><div class="field"><label>Año del reporte</label><select class="select" id="reportYear" onchange="renderReports()"></select></div><div class="field"><label>Mes</label><select class="select" id="reportMonth" onchange="renderReports()"><option value="all">Año completo</option><option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option><option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option><option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option></select></div></div><div id="reportKpis" class="grid kpis"></div><div class="report-legend"><span>● Ingresos</span><span>● Gastos</span><span>● Ahorros</span></div><div id="reportChart" class="report-bars"></div></div><div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-wallet"></i> Saldos por cuenta</h2><span>Resumen automático de los movimientos registrados</span></div><button class="btn primary" onclick="openAccountMovement()"><i class="fa-solid fa-plus"></i> Movimiento</button></div><div class="grid savings-grid" id="accountsGrid"></div><div class="table-wrap" id="accountMovementTable"></div></div>
+ <div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-chart-column"></i> Reportes</h2><span>Resumen financiero filtrable por año y periodo</span></div><button class="btn" onclick="exportReportCsv()">Exportar CSV</button></div><div class="filterbar report-filter"><div class="field"><label>Año del reporte</label><select class="select" id="reportYear" onchange="renderReports()"></select></div><div class="field"><label>Mes</label><select class="select" id="reportMonth" onchange="renderReports()"><option value="all">Año completo</option><option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option><option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option><option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option><option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option></select></div></div><div id="reportKpis" class="grid kpis"></div><div class="report-legend"><span>● Ingresos</span><span>● Gastos</span><span>● Ahorros</span></div><div id="reportChart" class="report-bars"></div></div><div class="card"><div class="card-head"><div><h2><i class="fa-solid fa-wallet"></i> Saldos por cuenta</h2><span>Resumen automático de los movimientos registrados</span></div><button class="btn primary" onclick="openAccountMovement()"><i class="fa-solid fa-plus"></i> Movimiento</button></div><div class="grid savings-grid" id="reportAccountsGrid"></div><div class="table-wrap" id="reportAccountMovementTable"></div></div>
  <div class="module-grid"><div class="card"><h2>Resumen del periodo</h2><div id="reportSummary" class="list"></div></div><div class="card"><h2>Alertas financieras</h2><div id="financialAlerts" class="list"></div></div></div>
 </section>
 <section id="settingsModule" class="module-section hidden">
@@ -1344,7 +1344,17 @@ function accountPeriodSummary(id){
  const person=id==="me"?"me":"partner",assigned=personalAssigned(person,f.year,f.month),stats=personalStats(person,f.year,f.month),balance=assigned+stats.extraIncome-stats.spent-stats.saved;
  return {value:balance,detail:`Asignado ${money(assigned)} · Gastado ${money(stats.spent)} · Ahorrado ${money(stats.saved)}`};
 }
-function renderAccounts(){const grid=document.getElementById("accountsGrid");if(grid)grid.innerHTML=ACCOUNT_TYPES.map(a=>{const d=accountPeriodSummary(a.id),ledger=state.transactions.filter(t=>t.account===a.id);return `<div class="account-card"><h3>${esc(a.name)}</h3><div class="balance">${money(d.value)}</div><small>${esc(d.detail)}</small><div class="small" style="margin-top:8px">Libro manual: ${money(accountBalance(a.id))} · ${ledger.length} movimiento(s) total</div></div>`}).join("");const box=document.getElementById("accountMovementTable");if(!box)return;if(!state.transactions.length){box.innerHTML='<div class="empty">Aún no hay movimientos manuales de cuentas. Los valores superiores se calculan automáticamente con tus ingresos, gastos y ahorros del periodo.</div>';return}box.innerHTML=`<table class="data-table"><thead><tr><th>Fecha</th><th>Cuenta</th><th>Tipo</th><th>Descripción</th><th>Valor</th><th></th></tr></thead><tbody>${[...state.transactions].sort((a,b)=>(b.date||"").localeCompare(a.date||"")).map(t=>`<tr><td>${esc(t.date)}</td><td>${esc((ACCOUNT_TYPES.find(a=>a.id===t.account)||{}).name||t.account)}</td><td><span class="pill">${t.type==="income"?"Ingreso":"Egreso"}</span></td><td>${esc(t.description)}</td><td>${t.type==="income"?"+":"−"}${money(t.amount)}</td><td><button class="mini-btn" onclick="deleteAccountMovement('${t.id}')">Eliminar</button></td></tr>`).join("")}</tbody></table>`}
+function renderAccounts(){
+ const grids=[document.getElementById("accountsGrid"),document.getElementById("reportAccountsGrid")].filter(Boolean);
+ const cards=ACCOUNT_TYPES.map(a=>{const d=accountPeriodSummary(a.id),ledger=state.transactions.filter(t=>t.account===a.id);return `<div class="account-card"><h3>${esc(a.name)}</h3><div class="balance">${money(d.value)}</div><small>${esc(d.detail)}</small><div class="small" style="margin-top:8px">Libro manual: ${money(accountBalance(a.id))} · ${ledger.length} movimiento(s) total</div></div>`}).join("");
+ grids.forEach(grid=>grid.innerHTML=cards);
+ const tables=[document.getElementById("accountMovementTable"),document.getElementById("reportAccountMovementTable")].filter(Boolean);
+ if(!tables.length)return;
+ let tableHtml;
+ if(!state.transactions.length){tableHtml='<div class="empty">Aún no hay movimientos manuales de cuentas. Los valores superiores se calculan automáticamente con tus ingresos, gastos y ahorros del periodo.</div>';}
+ else{tableHtml=`<table class="data-table"><thead><tr><th>Fecha</th><th>Cuenta</th><th>Tipo</th><th>Descripción</th><th>Valor</th><th></th></tr></thead><tbody>${[...state.transactions].sort((a,b)=>(b.date||"").localeCompare(a.date||"")).map(t=>`<tr><td>${esc(t.date)}</td><td>${esc((ACCOUNT_TYPES.find(a=>a.id===t.account)||{}).name||t.account)}</td><td><span class="pill">${t.type==="income"?"Ingreso":"Egreso"}</span></td><td>${esc(t.description)}</td><td>${t.type==="income"?"+":"−"}${money(t.amount)}</td><td><button class="mini-btn" onclick="deleteAccountMovement('${t.id}')">Eliminar</button></td></tr>`).join("")}</tbody></table>`;}
+ tables.forEach(box=>box.innerHTML=tableHtml);
+}
 function openAccountMovement(){openModal("Nuevo movimiento de cuenta",`<form onsubmit="saveAccountMovement(event)">${editModeBanner(false,"movimiento de cuenta")}<div class="form-grid"><div class="field"><label>Fecha</label><input class="input" id="amDate" type="date" value="${dateNow()}" required></div><div class="field"><label>Cuenta</label><select class="select" id="amAccount">${ACCOUNT_TYPES.map(a=>`<option value="${a.id}">${a.name}</option>`).join("")}</select></div><div class="field"><label>Tipo</label><select class="select" id="amType"><option value="income">Ingreso / abono</option><option value="expense">Egreso / retiro</option></select></div><div class="field"><label>Valor</label><input class="input money-input" id="amAmount" type="text" inputmode="numeric" oninput="formatMoneyField(this)" required placeholder="Ej. 100.000"></div><div class="field full"><label>Descripción</label><input class="input" id="amDescription" required placeholder="Ej. transferencia, pago de servicio"></div></div><div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary">Guardar movimiento</button></div></form>`)}
 function saveAccountMovement(e){e.preventDefault();state.transactions.push({id:nexusUUID(),date:document.getElementById("amDate").value,account:document.getElementById("amAccount").value,type:document.getElementById("amType").value,amount:num(document.getElementById("amAmount").value),description:document.getElementById("amDescription").value.trim()});saveState();closeModal();renderAccounts();toast("Movimiento guardado")}
 function deleteAccountMovement(id){confirmInApp("¿Eliminar este movimiento de cuenta?",()=>{state.transactions=state.transactions.filter(t=>t.id!==id);saveState();renderAccounts();toast("Movimiento eliminado")})}
@@ -5616,11 +5626,11 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
 
 </script>
 
-<script id="nexus-mobile-v20-personal-categories-and-settings-feedback">
+<script id="nexus-mobile-v21-safe-personal-category-management">
 (function(){
   'use strict';
-  if(window.__NEXUS_V20_PERSONAL_CATS_PATCH__) return;
-  window.__NEXUS_V20_PERSONAL_CATS_PATCH__ = true;
+  if(window.__NEXUS_V21_SAFE_PERSONAL_CATS_PATCH__) return;
+  window.__NEXUS_V21_SAFE_PERSONAL_CATS_PATCH__ = true;
 
   const escHtml = value => typeof window.esc === 'function' ? window.esc(String(value ?? '')) : String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const normalized = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();
@@ -5634,6 +5644,11 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     try { if(typeof window.personalMovementType==='function') return window.personalMovementType(row); } catch(_) {}
     return row?.type || row?.kind || 'expense';
   };
+  let draftProfile = null;
+  let tokenCounter = 0;
+  const pendingDeletes = new Map();
+  const isPersonalExpense = row => ['expense','other-expense'].includes(currentPersonalType(row));
+
   function profileCategories(person){
     const key=person==='partner'?'partner':'me';
     const saved=state?.uiSettings?.personalExpenseCategories?.[key];
@@ -5642,49 +5657,109 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
       return clean.length?clean:categoryDefaults.slice();
     }
     const legacy=(Array.isArray(state?.personalSpending)?state.personalSpending:[])
-      .filter(x=>x.person===key && ['expense','other-expense'].includes(currentPersonalType(x)))
+      .filter(x=>x.person===key && isPersonalExpense(x))
       .map(x=>String(x.category||'').trim()).filter(Boolean);
     return [...new Set([...categoryDefaults,...legacy])];
   }
   function getProfileName(key){ return String(state?.people?.[key==='partner'?'partner':'me'] || (key==='partner'?'Mauren':'Ruben')); }
+  function personalExpensesInCategory(person, category){
+    const target=normalized(category);
+    return (Array.isArray(state?.personalSpending)?state.personalSpending:[]).filter(row=>row.person===person && isPersonalExpense(row) && normalized(row.category||'Otros')===target);
+  }
   function categoryRowMarkup(category, original=''){
-    return `<div class="nx-v20-personal-cat-row" data-nx-v20-cat-row><span class="nx-v20-personal-cat-icon"><i class="fa-solid fa-tag" aria-hidden="true"></i></span><div class="nx-v20-personal-cat-field"><label>Nombre de categoría</label><input class="input" data-nx-v20-personal-category data-original-category="${escHtml(original)}" maxlength="42" value="${escHtml(category)}" aria-label="Nombre de categoría personal"></div><button type="button" class="nx-v20-personal-cat-remove" onclick="nexusV20RemovePersonalCategory(this)" aria-label="Quitar categoría de la lista" title="Quitar de la lista"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></button></div>`;
+    const token=`nxpc-${++tokenCounter}`;
+    const initial=String(category??'').trim();
+    return `<div class="nx-v20-personal-cat-row" data-nx-v20-cat-row data-nx-v20-cat-token="${token}"><span class="nx-v20-personal-cat-icon"><i class="fa-solid fa-tag" aria-hidden="true"></i></span><div class="nx-v20-personal-cat-field"><label>Nombre de categoría</label><input class="input" data-nx-v20-personal-category data-nx-v20-cat-token="${token}" data-original-category="${escHtml(original)}" data-confirmed-name="${escHtml(original||initial)}" maxlength="42" value="${escHtml(initial)}" aria-label="Nombre de categoría personal" onchange="nexusV21ConfirmPersonalCategoryEdit(this)"></div><button type="button" class="nx-v20-personal-cat-remove" onclick="nexusV20RemovePersonalCategory(this)" aria-label="Quitar categoría de la lista" title="Quitar categoría"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></button></div>`;
   }
   function categorySettingsMarkup(){
-    const person=currentProfile(),cats=profileCategories(person);
-    return `<section class="m-v8-settings-block nx-v20-personal-categories"><div class="m-v8-block-heading"><span class="m-v8-block-icon orange"><i class="fa-solid fa-list-check" aria-hidden="true"></i></span><div><h4>Categorías de gastos personales</h4><p>Personalización de ${escHtml(getProfileName(person))}. Los cambios afectan solo a este perfil; no modifican las categorías ni los colores del hogar.</p></div></div><div class="nx-v20-personal-cat-list" id="nxV20PersonalCategoryList">${cats.map(c=>categoryRowMarkup(c,c)).join('')}</div><div class="nx-v20-personal-cat-add"><input class="input" id="nxV20NewPersonalCategory" maxlength="42" placeholder="Ej. Mascotas, Educación…" aria-label="Nueva categoría personal"><button type="button" class="m-secondary-btn" onclick="nexusV20AddPersonalCategory()"><i class="fa-solid fa-plus" aria-hidden="true"></i> Añadir</button></div><p class="nx-v20-personal-cat-note"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Renombrar una categoría actualiza su nombre en los movimientos históricos de este perfil. Quitarla de la lista no borra los movimientos anteriores.</p><p id="nxV20PersonalCategoryFeedback" class="nx-v20-settings-feedback" role="status" aria-live="polite"></p></section>`;
+    const person=currentProfile();
+    // Any fresh render starts a new, clean draft. Uncommitted removals must never leak across profiles/screens.
+    if(draftProfile!==person){pendingDeletes.clear();draftProfile=person;}
+    else pendingDeletes.clear();
+    const cats=profileCategories(person);
+    return `<section class="m-v8-settings-block nx-v20-personal-categories"><div class="m-v8-block-heading"><span class="m-v8-block-icon orange"><i class="fa-solid fa-list-check" aria-hidden="true"></i></span><div><h4>Categorías de gastos personales</h4><p>Personalización de ${escHtml(getProfileName(person))}. Los cambios afectan solo a este perfil; no modifican las categorías ni los colores del hogar.</p></div></div><div class="nx-v20-personal-cat-list" id="nxV20PersonalCategoryList">${cats.map(c=>categoryRowMarkup(c,c)).join('')}</div><div class="nx-v20-personal-cat-add"><input class="input" id="nxV20NewPersonalCategory" maxlength="42" placeholder="Ej. Mascotas, Educación…" aria-label="Nueva categoría personal"><button type="button" class="m-secondary-btn" onclick="nexusV20AddPersonalCategory()"><i class="fa-solid fa-plus" aria-hidden="true"></i> Añadir</button></div><p class="nx-v20-personal-cat-note"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Al renombrar se actualizan los registros históricos de este perfil. Al eliminar una categoría, primero elegirás otra para trasladar sus movimientos. Los cambios guardados se pueden deshacer durante 15 segundos.</p><p id="nxV20PersonalCategoryFeedback" class="nx-v20-settings-feedback" role="status" aria-live="polite"></p></section>`;
+  }
+  function setCategoryFeedback(message,kind='info'){
+    const el=document.getElementById('nxV20PersonalCategoryFeedback');if(!el)return;
+    el.textContent=message;el.className='nx-v20-settings-feedback '+kind;
+  }
+  function liveCategoryInputs(list=document.getElementById('nxV20PersonalCategoryList')){
+    return [...(list?.querySelectorAll('[data-nx-v20-personal-category]')||[])];
   }
   window.nexusV20AddPersonalCategory=function(){
     const input=document.getElementById('nxV20NewPersonalCategory'),list=document.getElementById('nxV20PersonalCategoryList');
     if(!input||!list)return;
     const name=String(input.value||'').trim().slice(0,42);
-    if(!name){input.focus();return;}
-    const present=[...list.querySelectorAll('[data-nx-v20-personal-category]')].some(field=>normalized(field.value)===normalized(name));
+    if(!name){setCategoryFeedback('Escribe un nombre para la nueva categoría.','error');input.focus();return;}
+    const present=liveCategoryInputs(list).some(field=>normalized(field.value)===normalized(name));
     if(present){setCategoryFeedback('Esa categoría ya está en la lista.','error');input.focus();return;}
-    list.insertAdjacentHTML('beforeend',categoryRowMarkup(name,''));input.value='';input.focus();setCategoryFeedback('Categoría añadida al formulario. Pulsa Guardar configuración para conservarla.','info');
+    list.insertAdjacentHTML('beforeend',categoryRowMarkup(name,''));input.value='';input.focus();setCategoryFeedback('Categoría añadida al borrador. Pulsa Guardar configuración para conservarla.','info');
   };
-  window.nexusV20RemovePersonalCategory=function(button){
-    const list=document.getElementById('nxV20PersonalCategoryList');
-    if(!button||!list)return;
-    if(list.querySelectorAll('[data-nx-v20-personal-category]').length<=1){setCategoryFeedback('Debe quedar al menos una categoría.','error');return;}
-    button.closest('[data-nx-v20-cat-row]')?.remove();setCategoryFeedback('Se quitará de las opciones disponibles al guardar. Los movimientos históricos se conservan.','info');
-  };
-  function setCategoryFeedback(message,kind='info'){
-    const el=document.getElementById('nxV20PersonalCategoryFeedback');if(!el)return;
-    el.textContent=message;el.className='nx-v20-settings-feedback '+kind;
-  }
 
-  // Inject personal categories into the primary settings form, not the separate username form.
+  window.nexusV21ConfirmPersonalCategoryEdit=function(input){
+    if(!input)return true;
+    const original=String(input.dataset.originalCategory||'').trim();
+    const proposed=String(input.value||'').trim().slice(0,42);
+    if(!original || proposed===original){input.dataset.confirmedName=proposed||original;return true;}
+    if(!proposed){setCategoryFeedback('El nombre no puede quedar vacío.','error');input.value=input.dataset.confirmedName||original;return false;}
+    if(input.dataset.confirmedName===proposed)return true;
+    const count=personalExpensesInCategory(currentProfile(),original).length;
+    const impact=count?` Se actualizarán ${count} registro(s) histórico(s) de esta categoría.`:' No hay movimientos históricos asociados.';
+    const accepted=window.confirm(`¿Confirmas cambiar la categoría “${original}” por “${proposed}”?${impact}\n\nAl guardar, la modificación podrá deshacerse durante 15 segundos.`);
+    if(!accepted){input.value=input.dataset.confirmedName||original;setCategoryFeedback('Se conservó el nombre anterior.','info');return false;}
+    input.value=proposed;input.dataset.confirmedName=proposed;setCategoryFeedback(`Cambio confirmado: “${original}” → “${proposed}”. Pulsa Guardar configuración para aplicarlo.`, 'info');return true;
+  };
+
+  window.nexusV20RemovePersonalCategory=function(button){
+    const row=button?.closest?.('[data-nx-v20-cat-row]');
+    const list=document.getElementById('nxV20PersonalCategoryList');
+    if(!row||!list)return;
+    if(list.querySelectorAll('[data-nx-v20-cat-row]').length<=1){setCategoryFeedback('Debe quedar al menos una categoría personal.','error');return;}
+    const input=row.querySelector('[data-nx-v20-personal-category]');if(!input)return;
+    const token=row.dataset.nxV20CatToken||input.dataset.nxV20CatToken;
+    const original=String(input.dataset.originalCategory||'').trim();
+    const draftName=String(input.value||'').trim();
+    if(!draftName){setCategoryFeedback('Asigna un nombre antes de quitar esta categoría.','error');input.focus();return;}
+    const source=original||draftName;
+    const count=personalExpensesInCategory(currentProfile(),source).length;
+    // Only one deletion panel per category at a time.
+    list.querySelectorAll('[data-nx-v20-delete-panel]').forEach(node=>node.remove());
+    const candidates=liveCategoryInputs(list).filter(field=>field!==input && String(field.value||'').trim() && normalized(field.value)!==normalized(draftName));
+    if(!candidates.length){setCategoryFeedback('No hay otra categoría disponible para recibir los movimientos.','error');return;}
+    const panel=document.createElement('div');
+    panel.className='nx-v20-cat-delete-panel';panel.setAttribute('data-nx-v20-delete-panel','');panel.dataset.sourceToken=token;
+    const options=candidates.map(field=>`<option value="${escHtml(field.dataset.nxV20CatToken||'')}" data-name="${escHtml(String(field.value||'').trim())}">${escHtml(String(field.value||'').trim())}</option>`).join('');
+    panel.innerHTML=`<div class="nx-v20-delete-panel-heading"><span class="nx-v20-delete-panel-icon"><i class="fa-solid fa-arrow-right-arrow-left" aria-hidden="true"></i></span><div><b>¿Eliminar “${escHtml(draftName)}”?</b><small>${count?`Hay ${count} registro(s) asociado(s). Elige la categoría a la que se moverán.`:'No hay registros asociados. Elige una categoría de destino para confirmar la eliminación.'}</small></div></div><div class="field"><label>Trasladar registros a</label><select class="select" data-nx-v20-delete-target>${options}</select></div><div class="nx-v20-delete-panel-actions"><button type="button" class="btn" data-nx-v20-delete-cancel><i class="fa-solid fa-xmark" aria-hidden="true"></i> Cancelar</button><button type="button" class="btn danger" data-nx-v20-delete-confirm><i class="fa-solid fa-trash-can" aria-hidden="true"></i> Eliminar y reasignar</button></div>`;
+    row.insertAdjacentElement('afterend',panel);
+    panel.querySelector('[data-nx-v20-delete-cancel]')?.addEventListener('click',()=>{panel.remove();setCategoryFeedback('Se canceló la eliminación; la categoría permanece en la lista.','info');});
+    panel.querySelector('[data-nx-v20-delete-confirm]')?.addEventListener('click',()=>{
+      const select=panel.querySelector('[data-nx-v20-delete-target]');
+      const targetToken=String(select?.value||'');
+      const targetField=liveCategoryInputs(list).find(field=>String(field.dataset.nxV20CatToken||'')===targetToken);
+      if(!targetField||targetField===input){setCategoryFeedback('Selecciona una categoría de destino válida.','error');return;}
+      const targetName=String(targetField.value||'').trim();
+      if(!targetName){setCategoryFeedback('La categoría de destino debe tener un nombre.','error');return;}
+      const confirmed=window.confirm(`Confirma eliminar “${draftName}” y trasladar ${count} registro(s) de ${getProfileName(currentProfile())} a “${targetName}”.\n\nLos importes no cambiarán y podrás deshacer la operación durante 15 segundos después de guardar.`);
+      if(!confirmed)return;
+      // A new, unsaved category has no persistent category key, but may still match legacy movements.
+      const sourceCategory=original||draftName;
+      pendingDeletes.set(token,{token,sourceCategory,sourceDraftName:draftName,targetToken,count,person:currentProfile()});
+      row.remove();panel.remove();
+      setCategoryFeedback(count?`Al guardar, ${count} registro(s) se moverán de “${draftName}” a “${targetName}”. Podrás deshacer el cambio durante 15 segundos.`:`La categoría “${draftName}” se quitará al guardar. Podrás deshacer el cambio durante 15 segundos.`, 'warning');
+    });
+    panel.scrollIntoView?.({block:'nearest',behavior:'smooth'});
+  };
+
+  // Inject the user-scoped personal categories in the primary settings form.
   const oldSettingsRenderer=window.renderMobileSettings || (typeof renderMobileSettings==='function'?renderMobileSettings:null);
   if(typeof oldSettingsRenderer==='function'){
-    const wrappedSettingsRenderer=function nexusV20RenderSettings(){
+    const wrappedSettingsRenderer=function nexusV21RenderSettings(){
       let markup=oldSettingsRenderer.apply(this,arguments);
       const firstSave=/<button class="m-primary-btn full" type="submit">[\s\S]*?<\/button>/.exec(markup);
       if(firstSave && !markup.includes('nxV20PersonalCategoryList')){
         const categoryBlock=categorySettingsMarkup();
         markup=markup.slice(0,firstSave.index)+categoryBlock+markup.slice(firstSave.index);
       }
-      // Add a reliable save-state indicator to the first form's save button.
       markup=markup.replace('<button class="m-primary-btn full" type="submit">','<button class="m-primary-btn full nx-v20-settings-save" data-nx-v20-settings-save type="submit">');
       markup=markup.replace(/(<button class="m-primary-btn full nx-v20-settings-save" data-nx-v20-settings-save type="submit">[\s\S]*?<\/button>)/, '$1<p class="nx-v20-settings-feedback" data-nx-v20-settings-feedback role="status" aria-live="polite"></p>');
       return markup;
@@ -5693,73 +5768,129 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     try{renderMobileSettings=wrappedSettingsRenderer;}catch(_){}
   }
 
-  // Categories are profile-scoped; renames update only that profile's personal expense labels, not amounts.
+  function categoryDraftForForm(form,person){
+    const fields=liveCategoryInputs(form?.querySelector('#nxV20PersonalCategoryList'));
+    const entries=fields.map(field=>({token:String(field.dataset.nxV20CatToken||''),name:String(field.value||'').trim().slice(0,42),original:String(field.dataset.originalCategory||'').trim(),confirmedName:String(field.dataset.confirmedName||'').trim(),field}));
+    if(entries.some(x=>!x.name))throw new Error('Completa todos los nombres o quita la fila vacía antes de guardar.');
+    const names=entries.map(x=>normalized(x.name));
+    if(new Set(names).size!==names.length)throw new Error('No se pueden repetir nombres de categoría en el mismo perfil.');
+    if(!entries.length)throw new Error('Debe quedar al menos una categoría personal.');
+    const deleted=[...pendingDeletes.values()].filter(item=>item.person===person);
+    return {entries,deleted};
+  }
+  function finalTargetName(token,entries,deletedByToken,seen=new Set()){
+    if(!token||seen.has(token))return null;
+    seen.add(token);
+    const deletion=deletedByToken.get(token);
+    if(deletion)return finalTargetName(deletion.targetToken,entries,deletedByToken,seen);
+    const entry=typeof entries?.get==='function'?entries.get(token):entries.find(item=>item.token===token);
+    return entry?.name||null;
+  }
+  function applyCategoryDraft(person,draft){
+    const {entries,deleted}=draft;
+    const entryByToken=new Map(entries.map(x=>[x.token,x]));
+    const deletedByToken=new Map(deleted.map(x=>[x.token,x]));
+    const deletionRemaps=new Map();
+    for(const item of deleted){
+      const targetName=finalTargetName(item.targetToken,entryByToken,deletedByToken);
+      if(!targetName)throw new Error('No se encontró una categoría de destino válida. Cancela y vuelve a elegir el destino.');
+      deletionRemaps.set(normalized(item.sourceCategory),targetName);
+    }
+    const renameRemaps=new Map();
+    for(const entry of entries){if(entry.original && entry.original!==entry.name)renameRemaps.set(normalized(entry.original),entry.name);}
+    // Move or rename only expense rows owned by this profile. Amounts, dates, status and ids are preserved.
+    if(Array.isArray(state.personalSpending)){
+      state.personalSpending=state.personalSpending.map(row=>{
+        if(row.person!==person||!isPersonalExpense(row))return row;
+        const key=normalized(row.category||'Otros');
+        if(deletionRemaps.has(key))return {...row,category:deletionRemaps.get(key)};
+        if(renameRemaps.has(key))return {...row,category:renameRemaps.get(key)};
+        return row;
+      });
+    }
+    if(!state.uiSettings||typeof state.uiSettings!=='object')state.uiSettings={};
+    const categories=state.uiSettings.personalExpenseCategories&&typeof state.uiSettings.personalExpenseCategories==='object'?state.uiSettings.personalExpenseCategories:{};
+    categories[person]=entries.map(entry=>entry.name);
+    state.uiSettings.personalExpenseCategories=categories;
+  }
+
   const oldSaveSettings=window.mobileV8SaveSettings;
   if(typeof oldSaveSettings==='function'){
-    window.mobileV8SaveSettings=async function nexusV20SaveSettings(event){
+    window.mobileV8SaveSettings=async function nexusV21SaveSettings(event){
+      event?.preventDefault?.();
       const form=event?.currentTarget || document.querySelector('.m-settings-form');
-      const categoryInputs=[...(form?.querySelectorAll('[data-nx-v20-personal-category]')||[])];
-      if(categoryInputs.length){
-        const person=currentProfile();
-        const entries=categoryInputs.map(field=>({name:String(field.value||'').trim().slice(0,42),original:String(field.dataset.originalCategory||'').trim()}));
-        if(entries.some(x=>!x.name)){setCategoryFeedback('Completa todos los nombres o quita la fila vacía antes de guardar.','error');return false;}
-        const names=entries.map(x=>normalized(x.name));
-        if(new Set(names).size!==names.length){setCategoryFeedback('No se pueden repetir nombres de categoría en el mismo perfil.','error');return false;}
-        if(!entries.length){setCategoryFeedback('Debe quedar al menos una categoría personal.','error');return false;}
-        if(!state.uiSettings||typeof state.uiSettings!=='object')state.uiSettings={};
-        const catSettings=state.uiSettings.personalExpenseCategories && typeof state.uiSettings.personalExpenseCategories==='object' ? state.uiSettings.personalExpenseCategories : {};
-        const renames=new Map();
-        for(const entry of entries){if(entry.original && entry.original!==entry.name)renames.set(entry.original,entry.name);}
-        if(renames.size && Array.isArray(state.personalSpending)){
-          state.personalSpending=state.personalSpending.map(row=>{
-            if(row.person!==person || !['expense','other-expense'].includes(currentPersonalType(row)))return row;
-            const next=renames.get(String(row.category||''));
-            return next ? {...row,category:next} : row;
-          });
-        }
-        catSettings[person]=[...new Set(entries.map(x=>x.name))];
-        state.uiSettings.personalExpenseCategories=catSettings;
+      const wasOnSettings=!!(form && document.querySelector('.m-v8-settings-page'));
+      const person=currentProfile();
+      let draft=null;
+      try{draft=categoryDraftForForm(form,person);}catch(error){setCategoryFeedback(error.message,'error');return false;}
+      const baseCategories=profileCategories(person);
+      const renames=draft.entries.filter(entry=>entry.original && entry.original!==entry.name);
+      const unconfirmed=renames.filter(entry=>entry.confirmedName!==entry.name);
+      if(unconfirmed.length){
+        const details=unconfirmed.map(entry=>`• ${entry.original} → ${entry.name} (${personalExpensesInCategory(person,entry.original).length} registro(s))`).join('\n');
+        if(!window.confirm(`¿Confirmas estos cambios de categoría?\n\n${details}\n\nLos movimientos conservarán sus importes. Después de guardar tendrás 15 segundos para deshacer.`))return false;
+        unconfirmed.forEach(entry=>{entry.field.dataset.confirmedName=entry.name;});
       }
-      const oldButton=form?.querySelector('[data-nx-v20-settings-save]');
-      if(oldButton){oldButton.disabled=true;oldButton.classList.add('is-saving');oldButton.innerHTML='<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Guardando…';}
-      const feedback=form?.querySelector('[data-nx-v20-settings-feedback]');if(feedback){feedback.textContent='Aplicando cambios y sincronizando…';feedback.className='nx-v20-settings-feedback info';}
+      const entriesComparable=draft.entries.map(x=>x.name);
+      const catsChanged=draft.deleted.length>0 || entriesComparable.length!==baseCategories.length || entriesComparable.some((name,i)=>name!==baseCategories[i]);
+      const shouldUndo=draft.deleted.length>0 || renames.length>0;
+      const button=form?.querySelector('[data-nx-v20-settings-save]');
+      if(button){button.disabled=true;button.classList.add('is-saving');button.innerHTML='<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Guardando…';}
+      const feedback=form?.querySelector('[data-nx-v20-settings-feedback]');if(feedback){feedback.textContent='Guardando configuración…';feedback.className='nx-v20-settings-feedback info';}
       try{
+        // Save the rest of settings first. The undo snapshot for categories is captured AFTER this
+        // step, so undoing a category change will not revert unrelated profile/preferences edits.
         const result=await oldSaveSettings.apply(this,arguments);
-        // The existing save routine redraws the screen; update the new button after it returns.
+        if(result===false)throw new Error('No se pudo guardar la configuración general.');
+        let categoryUndoSnapshot=null;
+        if(catsChanged){
+          if(shouldUndo)categoryUndoSnapshot=typeof snapshotNexusState==='function'?snapshotNexusState():JSON.stringify(state);
+          applyCategoryDraft(person,draft);
+          await Promise.resolve(saveState());
+          pendingDeletes.clear();
+          // Refresh only the settings screen so the persisted category list and readonly savings labels
+          // reflect the committed state. This does not change any financial movement or amount.
+          if(wasOnSettings && typeof window.mobileSetScreen==='function'){
+            try{window.mobileSetScreen('settings');}catch(error){console.warn('No se pudo refrescar Configuración después de guardar categorías:',error);}
+          }
+          // Mark any surviving fields as committed if the renderer kept the existing DOM.
+          const nextInputs=liveCategoryInputs(document.querySelector('#nxV20PersonalCategoryList'));
+          nextInputs.forEach(field=>{field.dataset.originalCategory=String(field.value||'').trim();field.dataset.confirmedName=String(field.value||'').trim();});
+          setCategoryFeedback('Categorías guardadas. Los importes de los movimientos no se modificaron.','success');
+          if(shouldUndo && categoryUndoSnapshot && typeof showUndoToast==='function'){
+            showUndoToast(draft.deleted.length?'Categorías eliminadas y movimientos reasignados':'Categorías personales actualizadas',categoryUndoSnapshot,draft.deleted.length?'fa-arrow-right-arrow-left':'fa-pen-to-square');
+            const toastUndo=document.querySelector('#toast .toast-undo');
+            if(toastUndo){toastUndo.onclick=function(){const stillOnSettings=!!document.querySelector('.m-v8-settings-page');window.undoLastNexusAction?.();if(stillOnSettings)setTimeout(()=>{try{if(typeof window.mobileSetScreen==='function')window.mobileSetScreen('settings');else if(typeof renderMobileSettings==='function'){const c=document.getElementById('mContent');if(c)c.innerHTML=renderMobileSettings();}}catch(_){}},0);};}
+          }
+        }
         const nextForm=document.querySelector('.m-settings-form');
-        const button=nextForm?.querySelector('[data-nx-v20-settings-save]');
+        const nextButton=nextForm?.querySelector('[data-nx-v20-settings-save]');
         const status=document.querySelector('#syncStatus');
         const offline=!!status?.classList.contains('offline');
         const syncing=!!status?.classList.contains('syncing');
-        if(button){
-          button.disabled=false;button.classList.remove('is-saving');
-          if(offline){button.classList.add('is-local-only');button.innerHTML='<i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i> Guardado localmente';}
-          else {button.classList.add('is-saved');button.innerHTML='<i class="fa-solid fa-circle-check" aria-hidden="true"></i> Guardado';}
-          setTimeout(()=>{
-            const current=document.querySelector('.m-settings-form [data-nx-v20-settings-save]');
-            if(current){current.disabled=false;current.classList.remove('is-saved','is-local-only','is-saving');current.innerHTML='<i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Guardar configuración';}
-          },2200);
+        if(nextButton){
+          nextButton.disabled=false;nextButton.classList.remove('is-saving');
+          if(offline){nextButton.classList.add('is-local-only');nextButton.innerHTML='<i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i> Guardado localmente';}
+          else {nextButton.classList.add('is-saved');nextButton.innerHTML='<i class="fa-solid fa-circle-check" aria-hidden="true"></i> Guardado';}
+          setTimeout(()=>{const current=document.querySelector('.m-settings-form [data-nx-v20-settings-save]');if(current){current.disabled=false;current.classList.remove('is-saved','is-local-only','is-saving');current.innerHTML='<i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Guardar configuración';}},2200);
         }
         const nextFeedback=document.querySelector('.m-settings-form [data-nx-v20-settings-feedback]');
-        if(nextFeedback){
-          nextFeedback.className='nx-v20-settings-feedback '+(offline?'warning':'success');
-          nextFeedback.textContent=offline?'Cambios guardados en este dispositivo; la nube no confirmó la sincronización.':syncing?'Cambios aplicados; sincronización en curso.':'Configuración guardada correctamente.';
-        }
+        if(nextFeedback){nextFeedback.className='nx-v20-settings-feedback '+(offline?'warning':'success');nextFeedback.textContent=offline?'Cambios guardados en este dispositivo; la nube no confirmó la sincronización.':syncing?'Cambios aplicados; sincronización en curso.':'Configuración guardada correctamente.';}
         return result;
       }catch(error){
-        const nextForm=document.querySelector('.m-settings-form'),button=nextForm?.querySelector('[data-nx-v20-settings-save]');
-        if(button){button.disabled=false;button.classList.remove('is-saving');button.classList.add('is-error');button.innerHTML='<i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> No se pudo guardar';}
-        const nextFeedback=document.querySelector('.m-settings-form [data-nx-v20-settings-feedback]');if(nextFeedback){nextFeedback.className='nx-v20-settings-feedback error';nextFeedback.textContent='No se pudo completar el guardado. Revisa la conexión e inténtalo de nuevo.';}
-        if(typeof window.toast==='function')window.toast('No se pudo guardar la configuración.');
+        const nextForm=document.querySelector('.m-settings-form'),nextButton=nextForm?.querySelector('[data-nx-v20-settings-save]');
+        if(nextButton){nextButton.disabled=false;nextButton.classList.remove('is-saving');nextButton.classList.add('is-error');nextButton.innerHTML='<i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> No se pudo guardar';}
+        const nextFeedback=document.querySelector('.m-settings-form [data-nx-v20-settings-feedback]');if(nextFeedback){nextFeedback.className='nx-v20-settings-feedback error';nextFeedback.textContent=error.message||'No se pudo completar el guardado. Revisa la conexión e inténtalo de nuevo.';}
+        if(typeof window.toast==='function')window.toast(error.message||'No se pudo guardar la configuración.');
         return false;
       }
     };
   }
 
-  // Keep user-scoped custom categories in the personal expense form. Preserve archived labels on historical rows.
+  // Keep profile-specific custom categories in the personal-expense form.
   const oldOpenPersonalMovement=window.openPersonalMovement || (typeof openPersonalMovement==='function'?openPersonalMovement:null);
   if(typeof oldOpenPersonalMovement==='function'){
-    const wrappedOpenPersonalMovement=function nexusV20OpenPersonalMovement(person,type,editId=null,boxId=null){
+    const wrappedOpenPersonalMovement=function nexusV21OpenPersonalMovement(person,type,editId=null,boxId=null){
       const result=oldOpenPersonalMovement.apply(this,arguments);
       try{
         const select=document.getElementById('pmCategory');
@@ -5769,26 +5900,23 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
         const requestedPerson=person==='partner'?'partner':person==='me'?'me':currentProfile();
         const target=record?.person || requestedPerson;
         const cats=profileCategories(target);
-        // For a new expense, select a category from the active profile's own list.
-        // Only retain a category outside that list when editing an existing historical record.
         const existingValue=String(select.value||'').trim();
         const selected=String(record?.category || (cats.find(c=>normalized(c)===normalized(existingValue)) || cats[0] || '')).trim();
         if(record&&selected&&!cats.some(c=>normalized(c)===normalized(selected)))cats.unshift(selected);
         select.innerHTML=cats.map(c=>`<option value="${escHtml(c)}" ${normalized(c)===normalized(selected)?'selected':''}>${escHtml(c)}</option>`).join('');
         if(selected)select.value=selected;
-      }catch(error){console.warn('Nexus V20 personal categories form:',error);}
+      }catch(error){console.warn('Nexus V21 personal categories form:',error);}
       return result;
     };
     window.openPersonalMovement=wrappedOpenPersonalMovement;
     try{openPersonalMovement=wrappedOpenPersonalMovement;}catch(_){}
   }
 
-  // Match the actual quick-access income action to the authenticated profile at click time.
+  // Keep the quick income access tied to the authenticated profile at click time.
   try{
     document.addEventListener('click',function(event){
       const btn=event.target?.closest?.('.m-v3-quick button, .m-quick-actions button');
       if(!btn || !btn.querySelector('.fa-arrow-trend-up,.fa-plus') || !/ingreso/i.test(btn.textContent||''))return;
-      // Inline handler already selects the active profile in the updated markup; this guard covers cached markup.
       const raw=btn.getAttribute('onclick')||'';
       if(/openIncome\(['"]me['"]\)/.test(raw)){
         event.preventDefault();event.stopImmediatePropagation();
@@ -5797,7 +5925,7 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     },true);
   }catch(_){}
 
-  const style=document.createElement('style');style.id='nexus-v20-personal-cats-settings-style';style.textContent=`
+  const style=document.createElement('style');style.id='nexus-v21-personal-categories-settings-style';style.textContent=`
     .nx-v20-personal-categories{gap:12px!important;border-color:#4a3b5d!important;background:linear-gradient(145deg,#191421,#100e17)!important}
     .nx-v20-personal-cat-list{display:grid;gap:9px}
     .nx-v20-personal-cat-row{display:grid;grid-template-columns:36px minmax(0,1fr) 38px;align-items:center;gap:9px;padding:10px;border:1px solid #322a40;border-radius:13px;background:#100e17;min-width:0}
@@ -5808,7 +5936,13 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     .nx-v20-personal-cat-note{display:flex;gap:7px;margin:0;color:#a99fb8;font-size:9px;line-height:1.55}.nx-v20-personal-cat-note i{color:#c4b5fd;margin-top:2px;flex:0 0 auto}
     .nx-v20-settings-feedback{font-size:10px;line-height:1.5;margin:8px 0 0;min-height:0;color:#b8aec8}.nx-v20-settings-feedback:empty{display:none}.nx-v20-settings-feedback.success{color:#6ee7b7}.nx-v20-settings-feedback.warning{color:#fdba74}.nx-v20-settings-feedback.error{color:#fda4af}.nx-v20-settings-feedback.info{color:#c4b5fd}
     .nx-v20-settings-save{transition:transform .18s ease,box-shadow .18s ease,background .18s ease,color .18s ease}.nx-v20-settings-save.is-saving{opacity:.88;transform:scale(.99);cursor:progress}.nx-v20-settings-save.is-saving i{margin-right:6px}.nx-v20-settings-save.is-saved{background:linear-gradient(135deg,#166534,#15803d)!important;color:#ecfdf5!important;box-shadow:0 0 0 2px #34d39933,0 8px 22px #10b98122}.nx-v20-settings-save.is-local-only{background:#422b1b!important;color:#ffddb8!important}.nx-v20-settings-save.is-error{background:#451c2a!important;color:#fecaca!important}
-    @media(max-width:420px){.nx-v20-personal-cat-row{grid-template-columns:31px minmax(0,1fr) 34px;gap:7px;padding:8px}.nx-v20-personal-cat-icon,.nx-v20-personal-cat-remove{width:32px;height:32px}.nx-v20-personal-cat-add{grid-template-columns:1fr}.nx-v20-personal-cat-add button{width:100%}}
+    .nx-v20-cat-delete-panel{display:grid;gap:10px;padding:13px;border:1px solid #7a3548;border-radius:13px;background:linear-gradient(145deg,#24141b,#151018);box-shadow:0 8px 22px #0003}
+    .nx-v20-delete-panel-heading{display:flex;align-items:flex-start;gap:10px}.nx-v20-delete-panel-heading>div{display:grid;gap:4px;min-width:0}.nx-v20-delete-panel-heading b{font-size:12px;color:#fecdd3;line-height:1.4}.nx-v20-delete-panel-heading small{font-size:10px;color:#c5b8c5;line-height:1.5}
+    .nx-v20-delete-panel-icon{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:10px;background:#451c2a;color:#fda4af}.nx-v20-delete-panel-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}.nx-v20-delete-panel-actions .btn{min-height:38px}.nx-v20-delete-panel-actions .btn.danger{background:#541d2d!important;border-color:#8a3b51!important;color:#ffe4e8!important}
+    /* The read-only label occupies the same stable grid slot as the original manage button. */
+    .m-v8-box-heading>.m-v17-readonly-chip{display:inline-flex;align-items:center;justify-content:center;justify-self:end;gap:6px;min-height:34px;max-width:100%;padding:7px 10px;border:1px solid #393047;border-radius:10px;background:#171421;color:#b5abc7;font-size:10px;line-height:1.35;white-space:nowrap;box-sizing:border-box}
+    .m-v8-box-heading>.m-v17-readonly-chip i{color:#a78bfa}
+    @media(max-width:420px){.nx-v20-personal-cat-row{grid-template-columns:31px minmax(0,1fr) 34px;gap:7px;padding:8px}.nx-v20-personal-cat-icon,.nx-v20-personal-cat-remove{width:32px;height:32px}.nx-v20-personal-cat-add{grid-template-columns:1fr}.nx-v20-personal-cat-add button{width:100%}.nx-v20-delete-panel-actions{display:grid;grid-template-columns:1fr}.nx-v20-delete-panel-actions .btn{width:100%}.m-v8-box-heading>.m-v17-readonly-chip{grid-column:1/-1;justify-self:stretch;width:100%;white-space:normal;min-height:36px;padding:9px 12px}}
     @media(prefers-reduced-motion:reduce){.nx-v20-settings-save{transition:none!important}}
   `;document.head.appendChild(style);
 })();
@@ -6135,27 +6269,53 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
   window.editDebt=function editDebtLoanV1(id){const debt=(state.debts||[]).find(x=>String(x.id)===String(id));if(!debt){toastSafe('No se encontró la obligación.');return;}debtEditModal(debt);};
   editDebt=window.editDebt;
   window.nxSaveDebtEdit=function nxSaveDebtEdit(event,id){
-    event?.preventDefault?.();const debt=(state.debts||[]).find(x=>String(x.id)===String(id));if(!debt)return;
+    event?.preventDefault?.();
+    const debt=(state.debts||[]).find(x=>String(x.id)===String(id));
+    if(!debt)return;
     if(!canManageDebt(debt)){toastSafe('Solo el responsable puede editar las condiciones de esta obligación.');return;}
-    const before=cloneSnapshot();const type=debtType(debt);const due=document.getElementById('nxDebtEditDue')?.value||'';const scheduled=!!document.getElementById('nxDebtEditSchedule')?.checked;
+    const type=debtType(debt);
+    const due=document.getElementById('nxDebtEditDue')?.value||'';
+    const scheduled=!!document.getElementById('nxDebtEditSchedule')?.checked;
+    const nextName=document.getElementById('nxDebtEditName')?.value?.trim()||'';
+    const nextNotes=document.getElementById('nxDebtEditNotes')?.value?.trim()||'';
     if(scheduled&&!due){toastSafe('Para programar el vencimiento, selecciona una fecha.');return;}
-    debt.name=document.getElementById('nxDebtEditName')?.value?.trim()||debt.name;
-    debt.due=due;debt.notes=document.getElementById('nxDebtEditNotes')?.value?.trim()||'';
+    if(!nextName){toastSafe('Escribe un nombre o motivo para la obligación.');document.getElementById('nxDebtEditName')?.focus();return;}
+
+    let creditFields=null;
     if(type==='credit'){
       const nextOwner=document.getElementById('nxDebtEditOwner')?.value||debt.owner;
+      if(!['home','me','partner'].includes(nextOwner)){toastSafe('Selecciona un responsable válido.');return;}
       if(['me','partner'].includes(nextOwner)&&nextOwner!==activePerson()){toastSafe('No puedes asignar una deuda personal al perfil de otra persona desde esta sesión.');return;}
       const original=toNum(document.getElementById('nxDebtEditOriginal')?.value);
       const balance=toNum(document.getElementById('nxDebtEditBalance')?.value);
-      const rate=Number(document.getElementById('nxDebtEditRate')?.value)||0;
+      const rate=Number(document.getElementById('nxDebtEditRate')?.value);
       const countRaw=document.getElementById('nxDebtEditInstallments')?.value;
-      const count=countRaw?Math.trunc(Number(countRaw)):null;
+      const count=countRaw?Number(countRaw):null;
       const installment=toNum(document.getElementById('nxDebtEditInstallment')?.value);
-      if(!(original>0)||balance<0||rate<0||rate>100||installment<0|| (countRaw&&(!Number.isInteger(count)||count<1||count>600))){toastSafe('Revisa los importes, la tasa o el número de cuotas.');return;}
-      debt.original=roundCOP(original);debt.balance=roundCOP(balance);debt.interestRateMonthly=rate;debt.installmentsCount=count;debt.installment=roundCOP(installment);debt.owner=nextOwner;debt.interestUpdatedAt=today();
+      if(!(original>0)||!Number.isFinite(balance)||balance<0||!Number.isFinite(rate)||rate<0||rate>100||!Number.isFinite(installment)||installment<0||(countRaw&&(!Number.isInteger(count)||count<1||count>600))){toastSafe('Revisa los importes, la tasa o el número de cuotas.');return;}
+      creditFields={nextOwner,original:roundCOP(original),balance:roundCOP(balance),rate,count,installment:roundCOP(installment)};
     }
-    debt.status=type==='credit'&&roundCOP(debt.balance)===0?'paid':(Number(debt.balance)===0?'paid':'pending');
+
+    // Capture an undo snapshot only after validation, then commit fields together.
+    const before=cloneSnapshot();
+    debt.name=nextName;
+    debt.due=due;
+    debt.notes=nextNotes;
+    if(creditFields){
+      debt.original=creditFields.original;
+      debt.balance=creditFields.balance;
+      debt.interestRateMonthly=creditFields.rate;
+      debt.installmentsCount=creditFields.count;
+      debt.installment=creditFields.installment;
+      debt.owner=creditFields.nextOwner;
+      debt.interestUpdatedAt=today();
+      debt.status=roundCOP(debt.balance)===0?'paid':'pending';
+    }
     syncDebtCalendar(debt,scheduled);
-    if(!refreshUI())return;window.closeModal?.();if(before&&typeof window.showUndoToast==='function')window.showUndoToast('Obligación actualizada',before,'fa-pen-to-square');else toastSafe('Obligación actualizada.');
+    if(!refreshUI())return;
+    window.closeModal?.();
+    if(before&&typeof window.showUndoToast==='function')window.showUndoToast('Obligación actualizada',before,'fa-pen-to-square');
+    else toastSafe('Obligación actualizada.');
   };
 
   window.mobileV3DebtCard=function mobileV3DebtCardLoanV1(debt,opts={}){
@@ -6247,6 +6407,7 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
     if(isLoan&&(payments.length||(Array.isArray(debt.payments)&&debt.payments.length))){toastSafe('Este préstamo ya tiene abonos. Para conservar la trazabilidad, no se puede eliminar: registra devoluciones hasta saldarlo.');return;}
     const msg=isLoan?'Eliminar este préstamo también retirará sus movimientos vinculados de desembolso e ingreso para deshacer la operación completa. ¿Continuar?':'¿Eliminar este crédito y el historial de sus abonos?';
     if(typeof window.confirmInApp==='function')window.confirmInApp(msg,()=>{
+      const before=cloneSnapshot();
       if(isLoan){
         state.incomes=state.incomes.filter(x=>String(x.internalLoanId||'')!==String(id)&&String(x.id||'')!==String(debt.destinationMovementId||''));
         state.savings=state.savings.filter(x=>String(x.internalLoanId||'')!==String(id)&&String(x.id||'')!==String(debt.sourceMovementId||''));
@@ -6256,7 +6417,10 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
         state.personalSpending=state.personalSpending.filter(x=>String(x.debtId||'')!==String(id));
         state.tasks=state.tasks.filter(t=>String(t.originDebtId||'')!==String(id));
       }
-      state.debts=state.debts.filter(x=>String(x.id)!==String(id));refreshUI();toastSafe('Obligación eliminada.');
+      state.debts=state.debts.filter(x=>String(x.id)!==String(id));
+      refreshUI();
+      if(before&&typeof window.showUndoToast==='function')window.showUndoToast(isLoan?'Préstamo interno eliminado':'Crédito externo eliminado',before,'fa-rotate-left');
+      else toastSafe('Obligación eliminada.');
     },{danger:true,confirmLabel:'Eliminar obligación'});
   };
   deleteDebt=window.deleteDebt;
