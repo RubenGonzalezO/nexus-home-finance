@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nexus Finance | Hogar y Finanzas Personales</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iIzhiNWNmNiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2ZiOTIzYyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE3IiBmaWxsPSIjMTEwZTE5Ii8+PHJlY3QgeD0iNiIgeT0iNiIgd2lkdGg9IjUyIiBoZWlnaHQ9IjUyIiByeD0iMTQiIGZpbGw9InVybCgjZykiLz48cGF0aCBkPSJNMTcgMjRoMjlhMyAzIDAgMCAxIDMgM3YxN2EzIDMgMCAwIDEtMyAzSDE4YTQgNCAwIDAgMS00LTRWMjJhNSA1IDAgMCAxIDUtNWgyMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik0zOSAzMmgxMnY5SDM5YTQuNSA0LjUgMCAwIDEgMC05WiIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgY3g9IjQwIiBjeT0iMzYuNSIgcj0iMS43IiBmaWxsPSIjOGI1Y2Y2Ii8+PC9zdmc+">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iIzhiNWNmNiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2ZiOTIzYyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE3IiBmaWxsPSJ1cmwoI2cpIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE2IDE3aDMxYTQgNCAwIDAgMSA0IDR2M0gxOGE1IDUgMCAwIDAtNSA1djE3YTUgNSAwIDAgMCA1IDVoMzFhNCA0IDAgMCAwIDQtNFYyOWE0IDQgMCAwIDAtNC00SDE4YTIgMiAwIDAgMS0yLTJ2LTZ6bTMxIDE3aC04YTUgNSAwIDAgMCAwIDEwaDhhMiAyIDAgMCAwIDItMnYtNmEyIDIgMCAwIDAtMi0yeiIvPjxjaXJjbGUgY3g9IjQxIiBjeT0iMzkiIHI9IjEuOCIgZmlsbD0iIzhiNWNmNiIvPjwvc3ZnPg==">
 <meta name="theme-color" content="#0b0a12">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
@@ -6517,5 +6517,81 @@ mobileOpenDebtForm = function mobileOpenDebtFormV3(ownerDefault=null) {
 })();
 </script>
 
+
+
+<!-- Nexus interaction repair: prevent floating/decorative layers from stealing taps on mobile. -->
+<style id="nexus-mobile-dead-zone-repair">
+  /* Chart details are informational, never a click shield over controls underneath. */
+  #chart-detail-popover { pointer-events: none !important; }
+  #mobileApp .m-balance-card::before,
+  #mobileApp .m-balance-card::after,
+  #mobileApp .m-panel::before,
+  #mobileApp .m-panel::after,
+  #mobileApp .m-stat::before,
+  #mobileApp .m-stat::after,
+  #mobileApp .m-tabbar::before,
+  #mobileApp .m-tabbar::after {
+    pointer-events: none !important;
+  }
+  /* A hidden overlay must not participate in hit testing, even if another style overrides display. */
+  #loadingOverlay:not(.show),
+  #modal:not(.show) {
+    pointer-events: none !important;
+  }
+  #loadingOverlay.show,
+  #modal.show {
+    pointer-events: auto;
+  }
+  @media (max-width: 800px) {
+    #mobileApp button,
+    #mobileApp a,
+    #mobileApp input,
+    #mobileApp select,
+    #mobileApp textarea,
+    #mobileApp [role="button"] {
+      touch-action: manipulation;
+    }
+  }
+</style>
+<script id="nexus-mobile-dead-zone-repair-runtime">
+(function(){
+  'use strict';
+  function repairMobileHitTesting(){
+    const mobile = document.getElementById('mobileApp');
+    if (!mobile || window.innerWidth > 800) return;
+
+    // A chart tooltip can be left behind after rerender/navigation; close stale instances.
+    const pop = document.getElementById('chart-detail-popover');
+    if (pop) {
+      const bar = document.querySelector('.interactive-bars .bar.tip-open');
+      if (!bar || !bar.isConnected) pop.remove();
+      else pop.style.pointerEvents = 'none';
+    }
+
+    // Hidden full-screen layers must never intercept touches.
+    const loader = document.getElementById('loadingOverlay');
+    if (loader && !loader.classList.contains('show')) loader.style.pointerEvents = 'none';
+    const modal = document.getElementById('modal');
+    if (modal && !modal.classList.contains('show')) modal.style.pointerEvents = 'none';
+  }
+  document.addEventListener('DOMContentLoaded', repairMobileHitTesting, {once:true});
+  window.addEventListener('resize', repairMobileHitTesting, {passive:true});
+  window.addEventListener('pageshow', repairMobileHitTesting);
+  document.addEventListener('click', function(){ setTimeout(repairMobileHitTesting, 0); }, true);
+})();
+</script>
+
+
+<style id="nexus-fix-hidden-toast-hit-area">
+/* Fix: an invisible fixed toast must never intercept taps over the app. */
+.toast:not(.show) {
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+.toast.show {
+  pointer-events: auto !important;
+  visibility: visible !important;
+}
+</style>
 </body>
 </html>
